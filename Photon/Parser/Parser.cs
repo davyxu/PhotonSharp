@@ -35,6 +35,7 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.RSqualBracket, "]"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.LBrace, "{"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.RBrace, "}"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
 
             _lexer.AddMatcher(new NumeralMatcher());
             _lexer.AddMatcher(new IdentifierMatcher());
@@ -44,6 +45,8 @@ namespace Photon.Parser
             _lexer.Start(source);
 
             Next();
+
+            InitScope();
         }
 
         public override string ToString()
@@ -68,49 +71,11 @@ namespace Photon.Parser
             Next();
         }
 
-        void ErrorExpect( string str )
+        void Error( string str )
         {
             throw new Exception(str);
         }
 
-        List<Stmt> ParseStatmentList( )
-        {
-            var list = new List<Stmt>();
 
-            while( _token.Type != TokenType.EOF &&
-                 _token.Type != TokenType.RBrace )
-            {
-                list.Add(ParseStatement());
-            }
-
-            return list;
-        }
-
-        public BlockStmt Dummy( )
-        {
-            var list = ParseStatmentList();
-
-            return new BlockStmt(list);
-        }
-
-        Stmt ParseStatement()
-        {
-            switch( _token.Type )
-            {
-                case TokenType.Func:
-                    return ParseFuncDecl();
-                case TokenType.Identifier:
-                case TokenType.Number:
-                case TokenType.QuotedString:
-                case TokenType.LBracket:
-                case TokenType.Add:
-                case TokenType.Sub:
-                    {
-                        return ParseSimpleStmt();
-                    }
-            }
-
-            return new BadStmt();
-        }
     }
 }

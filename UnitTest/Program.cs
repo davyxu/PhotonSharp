@@ -25,8 +25,12 @@ namespace UnitTest
             parser.Init(@"
 func foo( a, b ){
     a = b + 1
+    return a * 2
 }
 
+var x = 1
+
+foo( x, 2 )
 
 ");
 

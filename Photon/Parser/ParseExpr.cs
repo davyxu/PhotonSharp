@@ -1,5 +1,6 @@
 ﻿using Photon.AST;
 using Photon.Scanner;
+using System.Collections.Generic;
 
 namespace Photon.Parser
 {
@@ -44,19 +45,34 @@ namespace Photon.Parser
             return new Ident(name);
         }
 
-        
+        List<Ident> ParseIdentList( )
+        {
+            List<Ident> list = new List<Ident>();
+            list.Add(ParseIdent());
 
-        Expr ParseOperand()
+            while (_token.Type == TokenType.Comma)
+            {
+                Next();
+                list.Add(ParseIdent());
+            }
+
+            return list;
+        }
+
+        Expr ParseOperand(bool lhs)
         {
             switch (_token.Type)
             {
                 case TokenType.Identifier:
                     {
-                        var ident = ParseIdent();
+                        var x = ParseIdent();
 
-                        // TODO Resolve
+                        if (lhs)
+                        {
+                            Resolve(x);
+                        }
 
-                        return ident;
+                        return x;
                     }
                 case TokenType.Number:
                 case TokenType.QuotedString:
@@ -70,7 +86,7 @@ namespace Photon.Parser
 
                     }
                     break;
-                case TokenType.Func:
+                case TokenType.Func: // a = func( ) {}
                     {
 
                     }
@@ -89,14 +105,25 @@ namespace Photon.Parser
 
         Expr ParseIndex( Expr x )
         {
-            var index = ParseRHS( );
+            var index = ParseRHSList( );
 
-            return new IndexExpr(x, index);
+            return new IndexExpr(x, index[0]);
         }
 
-        Expr ParsePrimaryExpr()
+        CallExpr ParseCallExpr( Expr func )
         {
-            var x = ParseOperand();
+            Expect(TokenType.LBracket);
+
+            var args = ParseRHSList();
+
+            Expect(TokenType.RBracket);
+
+            return new CallExpr(func, args);
+        }
+
+        Expr ParsePrimaryExpr(bool lhs)
+        {
+            var x = ParseOperand(lhs);
 
             bool parsing = true;
 
@@ -109,7 +136,10 @@ namespace Photon.Parser
                         {
                             Next();
 
-                            // TODO Resolve x
+                            if ( lhs )
+                            {
+                                Resolve(x);
+                            }
 
                             switch (_token.Type)
                             {
@@ -119,7 +149,7 @@ namespace Photon.Parser
                                     }
                                     break;
                                 default:
-                                    ErrorExpect("expect selector");
+                                    Error("expect selector");
                                     break;
                             }
                         
@@ -128,13 +158,28 @@ namespace Photon.Parser
                         // a[index]
                     case TokenType.LSqualBracket:
                         {
-                            // TODO Resolve x
+                            if (lhs)
+                            {
+                                Resolve(x);
+                            }
 
                             Next();
 
                             x = ParseIndex(x);
 
                             Expect(TokenType.RSqualBracket);
+                        }
+                        break;
+                    case TokenType.LBracket:
+                        {
+                            if (lhs)
+                            {
+                                Resolve(x);
+                            }
+
+
+                            x = ParseCallExpr(x);
+
                         }
                         break;
                     default:
@@ -146,7 +191,7 @@ namespace Photon.Parser
 
             return x;
         }
-        Expr ParseUnaryExpr()
+        Expr ParseUnaryExpr(bool lhs)
         {
             switch (_token.Type)
             {
@@ -155,18 +200,18 @@ namespace Photon.Parser
                     {
                         var op = _token.Type;
                         Next();
-                        var x = ParsePrimaryExpr();
+                        var x = ParsePrimaryExpr( false );
 
                         return new UnaryExpr(x, op);
                     }
             }
 
-            return ParsePrimaryExpr();
+            return ParsePrimaryExpr(lhs);
         }
 
-        Expr ParseBinaryExpr(int prec1)
+        Expr ParseBinaryExpr(bool lhs, int prec1)
         {
-            Expr x = ParseUnaryExpr();
+            Expr x = ParseUnaryExpr( lhs );
 
             for (var prec = GetTokenPrecedence(); prec > prec1; prec--)
             {
@@ -180,7 +225,13 @@ namespace Photon.Parser
 
                     Next();
 
-                    var y = ParseBinaryExpr(prec + 1);
+                    if ( lhs )
+                    {
+                        Resolve(x);
+                        lhs = false;
+                    }
+
+                    var y = ParseBinaryExpr(false, prec + 1);
 
                     x = new BinaryExpr(x, y, op);
                 }
@@ -190,36 +241,60 @@ namespace Photon.Parser
             return x;
         }
 
-        Expr ParseExpr()
+        Expr ParseExpr( bool lhs )
         {
-            return ParseBinaryExpr(1);
+            return ParseBinaryExpr(lhs, 1);
         }
 
-        Expr ParseLHS()
+        List<Expr> ParseExprList(bool lhs)
         {
-            return ParseExpr();
+            List<Expr> list = new List<Expr>();
+            list.Add(ParseExpr(lhs));
+
+            while( _token.Type == TokenType.Comma )
+            {
+                Next();
+                list.Add(ParseExpr(lhs));
+            }
+
+            return list;
         }
 
-        Expr ParseRHS()
+        List<Expr> ParseLHSList()
         {
-            return ParseExpr();
+            var list = ParseExprList(true);
+
+            foreach( var x in list )
+            {
+                Resolve(x);
+            }
+
+            return list;
         }
+
+        List<Expr> ParseRHSList()
+        {
+            return ParseExprList(false);
+        }
+
+       
 
         Stmt ParseSimpleStmt()
         {
-            var x = ParseLHS();
+            var x = ParseLHSList();
 
 
             if (_token.Type == TokenType.Assign)
             {
                 Next();
 
-                var y = ParseRHS();
+                var y = ParseRHSList();
 
                 return new AssignStmt(x, y);
             }
 
-            return new BadStmt();
+            // 函数调用
+            return new ExprStmt( x );
         }
     }
 }

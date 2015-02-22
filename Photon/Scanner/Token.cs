@@ -34,6 +34,7 @@ namespace Photon.Scanner
         Func,           // func
         Nil,            // nil
         Var,            // var
+        Return,         // return
 
     }
     public class Token

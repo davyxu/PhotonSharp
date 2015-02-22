@@ -16,6 +16,8 @@ namespace Photon.AST
     {
         public string Name;
 
+        public ScopeMeta ScopeInfo; 
+
         public Ident( string n )
         {
             Name = n;
@@ -144,5 +146,30 @@ namespace Photon.AST
     }
 
 
+    public class CallExpr : Expr
+    {
+        public Expr Func;
+        public List<Expr> Args;
 
+        public CallExpr(Expr f, List<Expr> args)
+        {
+            Func = f;
+            Args = args;
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            yield return Func;
+
+            foreach( var e in Args)
+            {
+                yield return e;
+            }
+        }
+
+        public override string ToString()
+        {
+            return "CallExpr";
+        }
+    }
 }

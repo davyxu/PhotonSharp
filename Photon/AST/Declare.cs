@@ -46,4 +46,35 @@ namespace Photon.AST
         }
 
     }
+
+    public class VarDeclare : Stmt
+    {
+        public List<Ident> Names;
+        public List<Expr> Values;
+
+        public VarDeclare(List<Ident> names, List<Expr> values )
+        {
+            Names = names;
+            Values = values;
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            foreach (var e in Names)
+            {
+                yield return e;
+            }
+
+
+            foreach (var e in Values)
+            {
+                yield return e;
+            }
+        }
+
+        public override string ToString()
+        {
+            return "VarDeclare";
+        }
+    }
 }

@@ -44,7 +44,9 @@
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Stmt.cs" />
     <Compile Include="Parser\ParseExpr.cs" />
-    <Compile Include="Parser\ParseFunc.cs" />
+    <Compile Include="Parser\ParseDecl.cs" />
+    <Compile Include="Parser\ParseStmt.cs" />
+    <Compile Include="Parser\Resolve.cs" />
     <Compile Include="Scanner\IdentifierMatcher.cs" />
     <Compile Include="Scanner\KeywordMatcher.cs" />
     <Compile Include="Scanner\Lexer.cs" />

@@ -10,16 +10,22 @@ namespace Photon.Parser
         {
             Expect(TokenType.Func);
 
+            var scope = new Scope(_topScope);
+
             var ident = ParseIdent();
 
-            var paramlist = ParseParameters();
+            var paramlist = ParseParameters(scope);
 
-            var body = ParseBody();
+            var body = ParseBody(scope);
 
-            return new FuncDeclare(ident.Name, paramlist, body);
+            var decl = new FuncDeclare(ident.Name, paramlist, body);
+
+            Declare(decl, _global, ident.Name);
+
+            return decl;
         }
 
-        List<Ident> ParseParameters()
+        List<Ident> ParseParameters( Scope s )
         {
             Expect(TokenType.LBracket);
 
@@ -32,6 +38,8 @@ namespace Photon.Parser
                 {
                     var param = ParseIdent();
                     p.Add(param);
+
+                    Declare(param, s, param.Name);
 
                     if (_token.Type != TokenType.Comma)
                     {
@@ -47,16 +55,40 @@ namespace Photon.Parser
             return p;
         }
 
-        
-        BlockStmt ParseBody() 
+
+        BlockStmt ParseBody(Scope s) 
         {
             Expect(TokenType.LBrace);
 
+            _topScope = s;
+
             var list = ParseStatmentList();
+
+            CloseScope();
 
             Expect(TokenType.RBrace);
 
             return new BlockStmt(list);
         }
+
+        Stmt ParseVarDecl()
+        {
+            Expect(TokenType.Var);
+
+            var idents = ParseIdentList();
+
+            List<Expr> values = new List<Expr>();
+
+            if (_token.Type == TokenType.Assign)
+            {
+                Next();
+
+                values = ParseRHSList();
+            }
+
+            return new VarDeclare(idents, values);
+        }
+
+
     }
 }

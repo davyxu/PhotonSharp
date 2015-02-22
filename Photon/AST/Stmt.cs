@@ -14,11 +14,33 @@ namespace Photon.AST
 
     }
 
+    public class ExprStmt : Stmt
+    {
+        public List<Expr> X;
+        public ExprStmt(List<Expr> x)
+        {
+            X = x;
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            foreach (var e in X)
+            {
+                yield return e;
+            }
+        }
+
+        public override string ToString()
+        {
+            return "ExprStmt";
+        }
+    }
+
     public class AssignStmt : Stmt
     {
-        public Expr LHS;
-        public Expr RHS;
-        public AssignStmt(Expr lhs, Expr rhs)
+        public List<Expr> LHS;
+        public List<Expr> RHS;
+        public AssignStmt(List<Expr> lhs, List<Expr> rhs)
         {
             LHS = lhs;
             RHS = rhs;
@@ -26,9 +48,16 @@ namespace Photon.AST
 
         public override IEnumerable<Node> Child()
         {
-            yield return LHS;
+            foreach( var e in LHS )
+            {
+                yield return e;
+            }
 
-            yield return RHS;
+
+            foreach (var e in RHS)
+            {
+                yield return e;
+            }
         }
 
         public override string ToString()
@@ -57,6 +86,30 @@ namespace Photon.AST
         public override string ToString()
         {
             return "BlockStmt";
+        }
+    }
+
+
+    public class ReturnStmt : Stmt
+    {
+        public List<Expr> Results = new List<Expr>();
+
+        public ReturnStmt(List<Expr> list)
+        {
+            Results = list;
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            foreach (var s in Results)
+            {
+                yield return s;
+            }
+        }
+
+        public override string ToString()
+        {
+            return "ReturnStmt";
         }
     }
 }

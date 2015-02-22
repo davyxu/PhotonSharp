@@ -1,0 +1,71 @@
+PrimaryExpr =
+	Operand |
+	PrimaryExpr Selector |
+	PrimaryExpr Index |
+	PrimaryExpr Arguments .
+
+Selector       = "." identifier .
+Index          = "[" Expression "]" .
+Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
+
+Operand     = Literal | OperandName | MethodExpr | "(" Expression ")" .
+Literal     = BasicLit | CompositeLit | FunctionLit .
+BasicLit    = int_lit | float_lit | imaginary_lit | rune_lit | string_lit .
+OperandName = identifier .
+
+
+Expression = UnaryExpr | Expression binary_op UnaryExpr .
+UnaryExpr  = PrimaryExpr | unary_op UnaryExpr .
+
+binary_op  = "+" | "-"  | "*" | "/" .
+rel_op     = "==" | "!=" | "<" | "<=" | ">" | ">=" .
+
+unary_op   = "+" | "-" | "!" .
+
+TypeDecl     = "type" ( TypeSpec | "(" { TypeSpec ";" } ")" ) .
+TypeSpec     = identifier Type .
+
+VarDecl     = "var" ( VarSpec | "(" { VarSpec ";" } ")" ) .
+VarSpec     = IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList ) .
+
+
+Statement =
+	Declaration | LabeledStmt | SimpleStmt |
+	GoStmt | ReturnStmt | BreakStmt | ContinueStmt | GotoStmt | Block | IfStmt | ForStmt .
+
+Block = "{" StatementList "}" .
+StatementList = { Statement ";" } .
+
+FunctionDecl = "func" FunctionName ( Function | Signature ) .
+FunctionName = identifier .
+Function     = Signature FunctionBody .
+FunctionBody = Block .
+
+
+
+FunctionType   = "func" Signature .
+Signature      = Parameters [ Result ] .
+Result         = Parameters | Type .
+Parameters     = "(" [ ParameterList [ "," ] ] ")" .
+ParameterList  = ParameterDecl { "," ParameterDecl } .
+ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
+
+
+
+SimpleStmt = EmptyStmt | ExpressionStmt | Assignment | ShortVarDecl .
+
+
+IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
+
+
+ForStmt = "for" [ Condition | ForClause | RangeClause ] Block .
+Condition = Expression .
+
+ForClause = [ InitStmt ] ";" [ Condition ] ";" [ PostStmt ] .
+InitStmt = SimpleStmt .
+PostStmt = SimpleStmt .
+
+RangeClause = "var" IdentifierList "in" Expression .
+
+
+ReturnStmt = "return" [ ExpressionList ] .

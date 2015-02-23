@@ -6,13 +6,13 @@ namespace Photon.AST
 {
     public class FuncDeclare : Stmt
     {
-        public string Name;
+        public Ident Name;
 
         public List<Ident> Params;
 
         public BlockStmt Body;
 
-        public FuncDeclare( string name, List<Ident> param, BlockStmt body )
+        public FuncDeclare( Ident name, List<Ident> param, BlockStmt body )
         {
             Name = name;
             Params = param;

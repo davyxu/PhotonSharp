@@ -7,16 +7,19 @@ namespace Photon.AST
     {
         public string Name;
         public Node Decl;
+        public int Slot;
     }
 
     public class Scope
     {
         Scope _outter;
+        string _name;
         Dictionary<string, ScopeMeta> _objects = new Dictionary<string, ScopeMeta>();
 
-        public Scope( Scope outter )
+        public Scope( Scope outter, string name )
         {
             _outter = outter;
+            _name = name;
         }
 
         public Scope Outter
@@ -37,6 +40,8 @@ namespace Photon.AST
 
         public void Insert( ScopeMeta data )
         {
+            data.Slot = _objects.Count;
+
             _objects.Add(data.Name, data);
         }
     }

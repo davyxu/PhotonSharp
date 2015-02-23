@@ -10,7 +10,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.Func);
 
-            var scope = new Scope(_topScope);
+            var scope = new Scope(_topScope, "funcdecl");
 
             var ident = ParseIdent();
 
@@ -18,9 +18,9 @@ namespace Photon.Parser
 
             var body = ParseBody(scope);
 
-            var decl = new FuncDeclare(ident.Name, paramlist, body);
+            var decl = new FuncDeclare(ident, paramlist, body);
 
-            Declare(decl, _global, ident.Name);
+            ident.ScopeInfo = Declare(decl, _global, ident.Name);
 
             return decl;
         }
@@ -76,6 +76,11 @@ namespace Photon.Parser
             Expect(TokenType.Var);
 
             var idents = ParseIdentList();
+
+            foreach( var i in idents )
+            {
+                Declare(i, _topScope, i.Name);
+            }
 
             List<Expr> values = new List<Expr>();
 

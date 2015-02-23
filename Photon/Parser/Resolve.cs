@@ -11,13 +11,13 @@ namespace Photon.Parser
 
         void InitScope( )
         {
-            OpenScope( null );
+            OpenScope( null, "global" );
             _global = _topScope;
         }
 
-        void OpenScope( Scope outter )
+        void OpenScope( Scope outter, string name )
         {
-            _topScope = new Scope(outter);
+            _topScope = new Scope(outter, name);
         }
 
         void CloseScope( )
@@ -25,18 +25,27 @@ namespace Photon.Parser
             _topScope = _topScope.Outter;
         }
 
-        void Declare( Node n, Scope s, string ident)
+        ScopeMeta Declare(Node n, Scope s, string name)
         {
-            if ( s.Lookup(ident) != null )
+            if ( s.Lookup(name) != null )
             {
-                Error( string.Format("{0} redeclared", ident ));
+                Error( string.Format("{0} redeclared", name ));
             }
 
             ScopeMeta data = new ScopeMeta();
-            data.Name = ident;
+            data.Name = name;
             data.Decl = n;
 
             s.Insert(data);
+
+            var ident = n as Ident;
+
+            if (ident == null)
+                return data;
+
+            ident.ScopeInfo = data;
+
+            return data;
         }
 
         void Resolve( Node x )

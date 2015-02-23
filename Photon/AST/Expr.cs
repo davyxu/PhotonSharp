@@ -25,7 +25,13 @@ namespace Photon.AST
 
         public override string ToString( )
         {
+            if ( ScopeInfo != null )
+            {
+                return string.Format("{0} @ {1}", Name, ScopeInfo.Slot);
+            }
+
             return Name;
+            
         }
     }
 
@@ -87,11 +93,13 @@ namespace Photon.AST
         public override IEnumerable<Node> Child()
         {
             yield return X;
+
+            yield return Selector;
         }
 
         public override string ToString()
         {
-            return string.Format("SelectorExpr {0}", Selector.ToString());
+            return "SelectorExpr";
         }
     }
 

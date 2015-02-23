@@ -20,11 +20,11 @@ namespace Photon.Parser
             return list;
         }
 
-        public BlockStmt Dummy()
+        public Chunk ParseChunk()
         {
             var list = ParseStatmentList();
 
-            return new BlockStmt(list);
+            return new Chunk( new BlockStmt(list) );
         }
 
         ReturnStmt ParseReturnStmt()

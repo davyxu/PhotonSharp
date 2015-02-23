@@ -8,6 +8,7 @@ namespace Photon.Scanner
         Whitespace,
         EOF,
 
+        Comment,
         Identifier,
         Number,
         QuotedString,

@@ -67,10 +67,7 @@ namespace Photon.Parser
                     {
                         var x = ParseIdent();
 
-                        if (lhs)
-                        {
-                            Resolve(x);
-                        }
+                        Resolve(x);
 
                         return x;
                     }
@@ -136,10 +133,7 @@ namespace Photon.Parser
                         {
                             Next();
 
-                            if ( lhs )
-                            {
-                                Resolve(x);
-                            }
+                            Resolve(x);
 
                             switch (_token.Type)
                             {
@@ -158,10 +152,7 @@ namespace Photon.Parser
                         // a[index]
                     case TokenType.LSqualBracket:
                         {
-                            if (lhs)
-                            {
-                                Resolve(x);
-                            }
+                            Resolve(x);
 
                             Next();
 
@@ -172,11 +163,8 @@ namespace Photon.Parser
                         break;
                     case TokenType.LBracket:
                         {
-                            if (lhs)
-                            {
-                                Resolve(x);
-                            }
 
+                            Resolve(x);
 
                             x = ParseCallExpr(x);
 
@@ -225,13 +213,12 @@ namespace Photon.Parser
 
                     Next();
 
-                    if ( lhs )
-                    {
-                        Resolve(x);
-                        lhs = false;
-                    }
+                    Resolve(x);
 
                     var y = ParseBinaryExpr(false, prec + 1);
+                    
+                    
+                    Resolve(y);
 
                     x = new BinaryExpr(x, y, op);
                 }
@@ -274,7 +261,14 @@ namespace Photon.Parser
 
         List<Expr> ParseRHSList()
         {
-            return ParseExprList(false);
+            var list = ParseExprList(false);
+
+            foreach (var x in list)
+            {
+                Resolve(x);
+            }
+
+            return list;
         }
 
        

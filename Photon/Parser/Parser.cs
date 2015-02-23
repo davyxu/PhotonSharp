@@ -13,6 +13,11 @@ namespace Photon.Parser
 
         public void Init( string source )
         {
+            _lexer.AddMatcher(new NumeralMatcher());
+           
+            _lexer.AddMatcher(new WhitespaceMatcher().Ignore());
+            _lexer.AddMatcher(new CommentMatcher().Ignore());
+
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Nil, "nil"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Assign, "="));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Equal, "=="));
@@ -37,9 +42,7 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.RBrace, "}"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
 
-            _lexer.AddMatcher(new NumeralMatcher());
             _lexer.AddMatcher(new IdentifierMatcher());
-            _lexer.AddMatcher(new WhitespaceMatcher().Ignore());
             _lexer.AddMatcher(new UnknownMatcher());
 
             _lexer.Start(source);

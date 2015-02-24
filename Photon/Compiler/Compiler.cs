@@ -35,6 +35,8 @@ namespace Photon.Compiler
 
             CompileNode(_currSet, c.Block, false);
 
+            _currSet.Add(new Command(Opcode.Exit));
+
             return _exe;
         }
 

@@ -271,6 +271,11 @@ namespace Photon.Parser
             return list;
         }
 
+        Expr ParseRHS()
+        {
+            return ParseExpr(false);
+        }
+
        
 
         Stmt ParseSimpleStmt()

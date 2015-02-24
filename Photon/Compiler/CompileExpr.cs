@@ -32,6 +32,24 @@ namespace Photon.Compiler
                     case TokenType.Div:
                         cm.Add(new Command(Opcode.Div));
                         break;
+                    case TokenType.GreatThan:
+                        cm.Add(new Command(Opcode.GT));
+                        break;
+                    case TokenType.GreatEqual:
+                        cm.Add(new Command(Opcode.GE));
+                        break;
+                    case TokenType.LessThan:
+                        cm.Add(new Command(Opcode.LT));
+                        break;
+                    case TokenType.LessEqual:
+                        cm.Add(new Command(Opcode.LE));
+                        break;
+                    case TokenType.Equal:
+                        cm.Add(new Command(Opcode.EQ));
+                        break;
+                    case TokenType.NotEqual:
+                        cm.Add(new Command(Opcode.NE));
+                        break;
                 }
 
                 return true;

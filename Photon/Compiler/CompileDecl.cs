@@ -37,8 +37,12 @@ namespace Photon.Compiler
             {
                 var v = n as VarDeclare;
 
-                CompileNode(cm, v.Values[0], false);
-                CompileNode(cm, v.Names[0], true);
+                if ( v.Values.Count > 0 )
+                {
+                    CompileNode(cm, v.Values[0], false);
+                    CompileNode(cm, v.Names[0], true);
+                }
+                
                 return true;
             }
 

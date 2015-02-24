@@ -16,6 +16,7 @@ namespace Photon.AST
     {
         Global,
         Function,
+        Block,
     }
 
     public class Scope

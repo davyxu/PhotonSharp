@@ -19,13 +19,13 @@ namespace Photon.Parser
             _lexer.AddMatcher(new CommentMatcher().Ignore());
 
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Nil, "nil"));
-            _lexer.AddMatcher(new KeywordMatcher(TokenType.Assign, "="));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Equal, "=="));
-            _lexer.AddMatcher(new KeywordMatcher(TokenType.NotEqual, "!="));
-            _lexer.AddMatcher(new KeywordMatcher(TokenType.GreatThan, ">"));
-            _lexer.AddMatcher(new KeywordMatcher(TokenType.LessThan, "<"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.GreatEqual, ">="));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.LessEqual, "<="));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.NotEqual, "!="));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Assign, "="));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.GreatThan, ">"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.LessThan, "<"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Add, "+"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Sub, "-"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Mul, "*"));
@@ -41,6 +41,8 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.LBrace, "{"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.RBrace, "}"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));
 
             _lexer.AddMatcher(new IdentifierMatcher());
             _lexer.AddMatcher(new UnknownMatcher());

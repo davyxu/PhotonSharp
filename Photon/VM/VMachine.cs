@@ -42,7 +42,7 @@ namespace Photon.VM
             _env.Reset(exe.CmdSet[0],0 );
 
 
-            while (_env.PC < _env.CmdSet.Commands.Count)
+            while (_env.PC < _env.CmdSet.Commands.Count && _env.PC != -1 )
             {
                 var cmd = _env.CmdSet.Commands[_env.PC];
 
@@ -76,6 +76,31 @@ namespace Photon.VM
             }
         }
 
+        bool IsValueNoneZero( DataValue d )
+        {
+            if (d == null)
+                return false;
+
+            var nv = d as NumberValue;
+
+            if ( nv != null )
+            {
+                return nv.Number != 0;
+            }
+
+            var fv = d as FuncValue;
+
+            if ( fv != null )
+            {
+                return true;
+            }
+
+
+            Error("unknown value type");
+
+
+            return false;
+        }
 
         void ExecCommand( Command cmd )
         {
@@ -102,6 +127,28 @@ namespace Photon.VM
                         _reg.Set(offset, d);
                     }
                     break;
+                case Opcode.Jnz:
+                    {
+                        var targetPC = cmd.DataA;
+
+                        var d = _dataStack.Pop();
+
+                        if (!IsValueNoneZero(d))
+                        {
+                            _env.PC = targetPC;
+                            return;
+                        }
+
+                    }
+                    break;
+                case Opcode.Jmp:
+                    {
+                        var targetPC = cmd.DataA;
+
+
+                        _env.PC = targetPC;
+                        return;
+                    }
                 case Opcode.Call:
                     {
                         var argCount = cmd.DataA;
@@ -169,6 +216,60 @@ namespace Photon.VM
                         _dataStack.Push(new NumberValue(a / b));
                     }
                     break;
+                case Opcode.GT:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a > b ? 1:0));
+                    }
+                    break;
+                case Opcode.GE:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a >= b ? 1 : 0));
+                    }
+                    break;
+                case Opcode.LT:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a < b ? 1 : 0));
+                    }
+                    break;
+                case Opcode.LE:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a <= b ? 1 : 0));
+                    }
+                    break;
+                case Opcode.EQ:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a == b ? 1 : 0));
+                    }
+                    break;
+                case Opcode.NE:
+                    {
+                        var a = CastNumber(_dataStack.Pop());
+                        var b = CastNumber(_dataStack.Pop());
+
+                        _dataStack.Push(new NumberValue(a != b ? 1 : 0));
+                    }
+                    break;
+                case Opcode.Exit:
+                    {
+                        _env.PC = -1;
+                        return;
+                    }
+                    
             }
 
             _env.PC++;

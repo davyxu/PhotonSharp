@@ -34,6 +34,50 @@ namespace Photon.Compiler
                 return true;
             }
 
+            if (n is AssignStmt)
+            {
+                var v = n as AssignStmt;
+
+                foreach( var e in v.RHS)
+                {
+                    CompileNode(cm, e, false);
+                }
+
+                foreach (var e in v.LHS)
+                {
+                    CompileNode(cm, e, true);
+                }
+
+                return true;
+            }
+
+            if ( n is IfStmt )
+            {
+                var v = n as IfStmt;
+
+                CompileNode(cm, v.Condition, false);
+
+                var jnzCmd = cm.Add(new Command(Opcode.Jnz, 0));
+
+                CompileNode(cm, v.Body, false);
+
+                var jmpCmd = cm.Add(new Command(Opcode.Jmp, 0));
+
+                // false body跳入
+                jnzCmd.DataA = cm.CurrGenIndex;
+
+                if ( v.ElseBody.Stmts.Count > 0 )
+                {
+                    CompileNode(cm, v.ElseBody, false);
+                }
+
+                // true body执行完毕跳出
+                jmpCmd.DataA = cm.CurrGenIndex;
+
+                
+                return true;
+            }
+
             return false;
         }
     }

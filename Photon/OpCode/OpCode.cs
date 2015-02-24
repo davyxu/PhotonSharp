@@ -9,6 +9,12 @@ namespace Photon.OpCode
         Sub,    // S[Top] = S[I] - S[I+1]
         Mul,    // S[Top] = S[I] * S[I+1]
         Div,    // S[Top] = S[I] / S[I+1]
+        GT,     // S[Top] = S[I] > S[I+1]
+        GE,     // S[Top] = S[I] >= S[I+1]
+        LT,     // S[Top] = S[I] < S[I+1]
+        LE,     // S[Top] = S[I] <= S[I+1]
+        EQ,     // S[Top] = S[I] == S[I+1]
+        NE,     // S[Top] = S[I] != S[I+1]
         SetG,   // G[I] = S[I+1]
         LoadG,  // S[Top] = G[I]
         LoadC,  // S[Top] = C[I]
@@ -16,6 +22,9 @@ namespace Photon.OpCode
         SetR,   // R[I] = S[I+1]
         Call,   // S[I](S[I+1], ... )
         Ret,    // 
+        Jnz,    // S[Top] != 0
+        Jmp,    // 无条件
+        Exit,
     }
 
 

@@ -16,7 +16,7 @@ namespace UnitTest
 
             var parser = new Parser();
 
-            var src = @"
+            var src_multicall = @"
 func mul( a, b ){
     return a * b
 }
@@ -31,6 +31,22 @@ func foo( a, b ){
 var y = foo( 1, 2 )
 
 ";
+
+            var src_if = @"
+
+var x = 1
+var y
+if x == 1 {
+    y = 1
+}else{
+    y = 2
+}
+
+
+";
+
+            var src = src_if;
+
             Debug.WriteLine(src);
 
             parser.Init( src );

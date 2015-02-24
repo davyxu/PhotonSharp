@@ -41,29 +41,67 @@ namespace Photon.Parser
             return new ReturnStmt(results);
         }
 
+        BlockStmt ParseBlockStmt()
+        {
+            Expect(TokenType.LBrace);
+
+            OpenScope( _topScope, ScopeType.Block);
+
+            var list = ParseStatmentList();
+
+            CloseScope();
+
+            Expect(TokenType.RBrace);
+
+            return new BlockStmt(list);
+        }
+
         Stmt ParseStatement()
         {
             switch (_token.Type)
             {
-
                 case TokenType.Identifier:
                 case TokenType.Number:
                 case TokenType.QuotedString:
                 case TokenType.LBracket:
                 case TokenType.Add:
                 case TokenType.Sub:
-                    {
-                        return ParseSimpleStmt();
-                    }
+                    return ParseSimpleStmt();
                 case TokenType.Func:
                     return ParseFuncDecl();
                 case TokenType.Return:
                     return ParseReturnStmt();
+                case TokenType.If:
+                    return ParseIfStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
             }
 
             return new BadStmt();
+        }
+
+        IfStmt ParseIfStmt()
+        {
+            Expect(TokenType.If);
+
+            var condition = ParseRHS();
+
+            var body = ParseBlockStmt();
+
+            BlockStmt elseBody;
+
+            if (_token.Type == TokenType.Else)
+            {
+                Next();
+                elseBody = ParseBlockStmt();
+            }
+            else
+            {
+                elseBody = new BlockStmt();
+            }
+
+            return new IfStmt(condition, body, elseBody);
+
         }
     }
 }

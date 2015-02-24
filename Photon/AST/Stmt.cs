@@ -89,6 +89,11 @@ namespace Photon.AST
     {
         public List<Stmt> Stmts = new List<Stmt>();
 
+        public BlockStmt( )
+        {
+
+        }
+
         public BlockStmt(List<Stmt> list)
         {
             Stmts = list;
@@ -130,5 +135,38 @@ namespace Photon.AST
         {
             return "ReturnStmt";
         }
+    }
+
+
+    public class IfStmt : Stmt
+    {
+        public Expr Condition;
+
+        public BlockStmt Body;
+
+        public BlockStmt ElseBody;
+
+        public IfStmt(Expr con, BlockStmt body, BlockStmt elsebody)
+        {
+            Condition = con;
+            Body = body;
+            ElseBody = elsebody;
+        }
+
+
+        public override string ToString()
+        {
+            return "IfStmt";
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            yield return Condition;
+
+            yield return Body;
+
+            yield return ElseBody;
+        }
+
     }
 }

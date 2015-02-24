@@ -39,8 +39,16 @@ namespace Photon.Compiler
 
                 if ( v.Values.Count > 0 )
                 {
-                    CompileNode(cm, v.Values[0], false);
-                    CompileNode(cm, v.Names[0], true);
+                    foreach( var e in v.Values)
+                    {
+                        CompileNode(cm, e, false);
+                    }
+
+                    foreach (var e in v.Names)
+                    {
+                        CompileNode(cm, e, true);
+                    }
+   
                 }
                 
                 return true;

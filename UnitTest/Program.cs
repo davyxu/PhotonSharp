@@ -45,7 +45,12 @@ if x == 1 {
 
 ";
 
-            var src = src_if;
+            var src_swap = @"
+var x, y = 1, 2
+x, y = y, x
+";
+
+            var src = src_swap;
 
             Debug.WriteLine(src);
 

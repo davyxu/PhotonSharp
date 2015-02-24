@@ -1,7 +1,7 @@
 ﻿using Photon.Scanner;
 using Photon.AST;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Photon.Parser
 {
@@ -79,6 +79,19 @@ namespace Photon.Parser
             throw new Exception(str);
         }
 
+        public static void DebugPrint( Node n)
+        {
+            PrintAST(n, "");
+        }
 
+        static void PrintAST(Node n, string indent)
+        {
+            Debug.WriteLine(indent + n.ToString());
+
+            foreach (var c in n.Child())
+            {
+                PrintAST(c, indent + "\t");
+            }
+        }
     }
 }

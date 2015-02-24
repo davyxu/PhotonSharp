@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Photon.Scanner;
 using System.Text;
 
 namespace Photon.AST

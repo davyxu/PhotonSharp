@@ -115,7 +115,7 @@ namespace Photon.Parser
 
             Expect(TokenType.RBracket);
 
-            return new CallExpr(func, args);
+            return new CallExpr(func, args, _topScope.AllocatedReg );
         }
 
         Expr ParsePrimaryExpr(bool lhs)

@@ -21,7 +21,7 @@ namespace Photon.OpCode
         
         public void DebugPrint( )
         {
-            _constSet.DebugPrint();
+            _constSet.DebugPrint(  );
 
             foreach( var cs in _cmdset )
             {
@@ -29,10 +29,16 @@ namespace Photon.OpCode
             }
         }
 
-        public CommandSet Add(CommandSet f)
+        public int AddCmdSet(CommandSet f)
         {
             _cmdset.Add(f);
-            return f;
+
+            return _cmdset.Count - 1;
+        }
+
+        public CommandSet GetCmdSet(int index )
+        {
+            return _cmdset[index];
         }
     }
 }

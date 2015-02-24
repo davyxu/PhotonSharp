@@ -32,11 +32,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Declare.cs" />
@@ -44,6 +42,9 @@
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Stmt.cs" />
     <Compile Include="Compiler\Compiler.cs" />
+    <Compile Include="Compiler\CompileExpr.cs" />
+    <Compile Include="Compiler\CompileDecl.cs" />
+    <Compile Include="Compiler\CompileStmt.cs" />
     <Compile Include="OpCode\Command.cs" />
     <Compile Include="OpCode\Constant.cs" />
     <Compile Include="OpCode\Executable.cs" />
@@ -64,10 +65,12 @@
     <Compile Include="Scanner\Token.cs" />
     <Compile Include="Scanner\Tokenizer.cs" />
     <Compile Include="OpCode\OpCode.cs" />
+    <Compile Include="VM\DataStack.cs" />
+    <Compile Include="OpCode\DataValue.cs" />
+    <Compile Include="VM\Register.cs" />
+    <Compile Include="VM\VMachine.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VM\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

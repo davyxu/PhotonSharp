@@ -158,11 +158,13 @@ namespace Photon.AST
     {
         public Expr Func;
         public List<Expr> Args;
+        public int RegBase;
 
-        public CallExpr(Expr f, List<Expr> args)
+        public CallExpr(Expr f, List<Expr> args, int regbase )
         {
             Func = f;
             Args = args;
+            RegBase = regbase;
         }
 
         public override IEnumerable<Node> Child()

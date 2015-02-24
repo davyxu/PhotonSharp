@@ -8,6 +8,8 @@ namespace Photon.AST
         public string Name;
         public Node Decl;
         public int Slot;
+
+        public Scope Parent;
     }
 
     public class Scope
@@ -38,9 +40,15 @@ namespace Photon.AST
            return null;
         }
 
+        public int AllocatedReg
+        {
+            get { return _objects.Count; }
+        }
+
         public void Insert( ScopeMeta data )
         {
             data.Slot = _objects.Count;
+            data.Parent = this;
 
             _objects.Add(data.Name, data);
         }

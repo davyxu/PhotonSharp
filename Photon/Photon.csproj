@@ -51,7 +51,7 @@
     <Compile Include="Parser\ParseExpr.cs" />
     <Compile Include="Parser\ParseDecl.cs" />
     <Compile Include="Parser\ParseStmt.cs" />
-    <Compile Include="Parser\Resolve.cs" />
+    <Compile Include="Parser\ScopeMgr.cs" />
     <Compile Include="Scanner\CommentMatcher.cs" />
     <Compile Include="Scanner\IdentifierMatcher.cs" />
     <Compile Include="Scanner\KeywordMatcher.cs" />

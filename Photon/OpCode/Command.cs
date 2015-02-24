@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Photon.AST;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Photon.OpCode
@@ -64,14 +65,22 @@ namespace Photon.OpCode
         List<Command> _cmds = new List<Command>();
 
         string _name;
-        public CommandSet( string name )
+        Scope _scope;
+
+        public CommandSet( string name, Scope s )
         {
             _name = name;
+            _scope = s;
         }
 
         public string Name
         {
             get { return _name;  }
+        }
+
+        public Scope ScopeInfo
+        {
+            get { return _scope; }
         }
 
         public List<Command> Commands

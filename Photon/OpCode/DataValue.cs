@@ -12,6 +12,11 @@ namespace Photon.OpCode
         {
             return "unknown";
         }
+
+        public override string ToString()
+        {
+            return GetDesc();
+        }
     }
 
 
@@ -38,10 +43,7 @@ namespace Photon.OpCode
             return otherT._number == _number;
         }
 
-        public override string ToString()
-        {
-            return _number.ToString();
-        }
+
 
         public override string GetDesc()
         {
@@ -72,10 +74,6 @@ namespace Photon.OpCode
             return otherT._index == _index;
         }
 
-        public override string ToString()
-        {
-            return _index.ToString();
-        }
 
         public override string GetDesc()
         {

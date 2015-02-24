@@ -2,6 +2,7 @@
 using Photon.OpCode;
 using System;
 using System.Diagnostics;
+using Photon.AST;
 
 namespace Photon.VM
 {
@@ -19,7 +20,7 @@ namespace Photon.VM
 
         public override string ToString()
         {
-            return string.Format("pc:{0} regbase:{1}",PC, RegBase);
+            return string.Format("pc:{0}",PC );
         }
     }
 
@@ -38,22 +39,41 @@ namespace Photon.VM
         public void Run( Executable exe )
         {
             _exe = exe;
-            _env.Reset(exe.CmdSet[0], 0);
+            _env.Reset(exe.CmdSet[0],0 );
 
 
             while (_env.PC < _env.CmdSet.Commands.Count)
             {
                 var cmd = _env.CmdSet.Commands[_env.PC];
+
+                Debug.WriteLine("{0} {1}: {2}", _env.CmdSet.Name, _env.PC, cmd.ToString());
+
                 ExecCommand(cmd);
+
             }
         }
 
         public void DebugPrint( )
         {
-            Debug.WriteLine("");
+            
             _dataStack.DebugPrint();
 
             _reg.DebugPrint();
+        }
+
+        int GetRegOffset( int regIndex, int scopeIndex )
+        {
+            // 当前作用域
+            if (_env.CmdSet.ScopeInfo.Index == scopeIndex)
+            {
+                return _env.RegBase + regIndex;
+            }
+            else
+            {
+                var regbase = _exe.ScopeInfoSet.Get(scopeIndex).RegBase;
+
+                return regbase + regIndex;
+            }
         }
 
 
@@ -69,24 +89,29 @@ namespace Photon.VM
                     break;
                 case Opcode.LoadR:
                     {
-                        var r = _reg.Get(_env.RegBase + cmd.DataA);
+                        var offset = GetRegOffset(cmd.DataA, cmd.DataB);
+                        DataValue r = _reg.Get(offset);
+
                         _dataStack.Push(r);
                     }
                     break;
                 case Opcode.SetR:
                     {
+                        var offset = GetRegOffset(cmd.DataA, cmd.DataB);
                         var d = _dataStack.Pop();
-                        _reg.Set(_env.RegBase + cmd.DataA, d);
+                        _reg.Set(offset, d);
                     }
                     break;
                 case Opcode.Call:
                     {
                         var argCount = cmd.DataA;
-                        var regbase = cmd.DataB;
+                       
 
                         var funcIndex = CastFuncIndex(_dataStack.Peek(-argCount - 1));
                         var cs = _exe.GetCmdSet(funcIndex);
 
+                        // 被调用函数的regbase=当前函数的最大分配量+当前基础偏移
+                        int regbase = _env.CmdSet.ScopeInfo.AllocatedReg + _env.RegBase;
 
                         // 将栈转为被调用函数的寄存器
                         for( int i = 0;i< argCount ;i++)
@@ -97,10 +122,11 @@ namespace Photon.VM
 
                         // 清空栈
                         _dataStack.PopMulti(argCount + 1);
-
+                         
+                        // 更换当前环境
                         _envStack.Push(_env);
 
-                        _env.Reset(cs,  regbase);
+                        _env.Reset(cs, regbase );
                         return;
                         
                     }

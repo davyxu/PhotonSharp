@@ -6,6 +6,7 @@ namespace Photon.Scanner
     {
         IList<TokenMatcher> _tokenmatcher = new List<TokenMatcher>();
         IEnumerator<Token> _tokeniter;
+        int _index;
 
         public void AddMatcher(TokenMatcher matcher)
         {
@@ -15,7 +16,7 @@ namespace Photon.Scanner
         public override string ToString()
         {
             if (_tokeniter != null)
-                return Peek().ToString();
+                return string.Format("{0} @ {1}",Peek().ToString(), _index);
 
             return base.ToString();
         }
@@ -56,6 +57,7 @@ namespace Photon.Scanner
             _tokeniter = Tokenize(src).GetEnumerator();
 
             _tokeniter.MoveNext();
+
         }
 
         public Token Read( )
@@ -63,6 +65,7 @@ namespace Photon.Scanner
             var tk = _tokeniter.Current;
 
             _tokeniter.MoveNext();
+            _index++;
 
             return tk;
         }

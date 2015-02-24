@@ -15,7 +15,7 @@ namespace Photon.Compiler
             {
                 var v = n as FuncDeclare;
 
-                var newset = new CommandSet(v.Name.Name);
+                var newset = new CommandSet(v.Name.Name, v.ScopeInfo);
 
                 var funcIndex = _exe.AddCmdSet(newset);
 
@@ -23,7 +23,10 @@ namespace Photon.Compiler
                 var ci = _exe.Constants.Add(c);
 
                 cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.GetDesc();
-                cm.Add(new Command(Opcode.SetR, v.Name.ScopeInfo.Slot)).Comment = v.Name.Name;
+
+                var scopeIndex = v.Name.ScopeInfo.Parent.Index;
+
+                cm.Add(new Command(Opcode.SetR, v.Name.ScopeInfo.Slot, scopeIndex)).Comment = v.Name.Name;
 
                 CompileNode(newset, v.Body, false);
 

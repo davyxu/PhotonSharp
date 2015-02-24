@@ -23,6 +23,15 @@ namespace Photon.Compiler
                     case TokenType.Add:
                         cm.Add(new Command(Opcode.Add));
                         break;
+                    case TokenType.Mul:
+                        cm.Add(new Command(Opcode.Mul));
+                        break;
+                    case TokenType.Sub:
+                        cm.Add(new Command(Opcode.Sub));
+                        break;
+                    case TokenType.Div:
+                        cm.Add(new Command(Opcode.Div));
+                        break;
                 }
 
                 return true;
@@ -44,13 +53,15 @@ namespace Photon.Compiler
             {
                 var v = n as Ident;
 
+                var scopeIndex = v.ScopeInfo.Parent.Index;
+
                 if (lhs)
                 {
-                    cm.Add(new Command(Opcode.SetR, v.ScopeInfo.Slot)).Comment = v.Name;
+                    cm.Add(new Command(Opcode.SetR, v.ScopeInfo.Slot, scopeIndex)).Comment = v.Name;
                 }
                 else
                 {
-                    cm.Add(new Command(Opcode.LoadR, v.ScopeInfo.Slot)).Comment = v.Name;
+                    cm.Add(new Command(Opcode.LoadR, v.ScopeInfo.Slot, scopeIndex)).Comment = v.Name;
                 }
 
                 return true;
@@ -66,8 +77,7 @@ namespace Photon.Compiler
                     CompileNode(cm, arg, false);
                 }
 
-
-                cm.Add(new Command(Opcode.Call, v.Args.Count, v.RegBase));
+                cm.Add(new Command(Opcode.Call, v.Args.Count));
                 return true;
             }
 

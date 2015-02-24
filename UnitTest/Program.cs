@@ -16,25 +16,33 @@ namespace UnitTest
 
             var parser = new Parser();
 
-            parser.Init(@"
-func foo( a, b ){
-    return a + b
+            var src = @"
+func mul( a, b ){
+    return a * b
 }
 
-var x = 1
+func foo( a, b ){
 
-var y = x + foo( 1, 2 )
 
-");
+    return a + mul( b, 2 )
+}
+
+
+var y = foo( 1, 2 )
+
+";
+            Debug.WriteLine(src);
+
+            parser.Init( src );
 
             var chunk = parser.ParseChunk();
-            Parser.DebugPrint(chunk );
+            Parser.DebugPrint(chunk);
 
             var compiler = new Compiler();
-            var exe = compiler.Walk(chunk);
+            var exe = compiler.Walk(chunk, parser.ScopeInfoSet );
             exe.DebugPrint();
 
-            
+            Debug.WriteLine("");
 
             var vm = new VMachine();
             vm.Run(exe);

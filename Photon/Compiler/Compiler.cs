@@ -14,9 +14,7 @@ namespace Photon.Compiler
 
         public Compiler()
         {
-            _currSet = _globalSet = new CommandSet("global");
-            
-            _exe.AddCmdSet(_currSet);
+           
         }
 
 
@@ -25,8 +23,16 @@ namespace Photon.Compiler
             throw new Exception(str);
         }
 
-        public Executable Walk( Chunk c )
+        public Executable Walk( Chunk c, ScopeSet ss )
         {
+            _currSet = _globalSet = new CommandSet("global", ss.Get(0));
+            
+            _exe.AddCmdSet(_currSet);
+
+
+            ss.BuildRegbase();
+            _exe.ScopeInfoSet = ss;
+
             CompileNode(_currSet, c.Block, false);
 
             return _exe;

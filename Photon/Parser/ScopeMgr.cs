@@ -8,16 +8,24 @@ namespace Photon.Parser
     {
         Scope _topScope;
         Scope _global;
+        ScopeSet _scopeSet = new ScopeSet();
+
+        public ScopeSet ScopeInfoSet
+        {
+            get { return _scopeSet; }
+        }
 
         void InitScope( )
         {
-            OpenScope( null, "global" );
+            OpenScope( null, ScopeType.Global );
             _global = _topScope;
         }
 
-        void OpenScope( Scope outter, string name )
+        void OpenScope( Scope outter, ScopeType type)
         {
-            _topScope = new Scope(outter, name);
+            var s = new Scope(outter, type );
+            _topScope = s;
+            _scopeSet.Add( s );
         }
 
         void CloseScope( )

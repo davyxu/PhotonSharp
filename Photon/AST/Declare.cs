@@ -11,12 +11,16 @@ namespace Photon.AST
 
         public BlockStmt Body;
 
-        public FuncDeclare( Ident name, List<Ident> param, BlockStmt body )
+        public Scope ScopeInfo;
+
+        public FuncDeclare( Ident name, List<Ident> param, BlockStmt body, Scope s )
         {
             Name = name;
             Params = param;
             Body = body;
+            ScopeInfo = s;
         }
+
 
         public override string ToString()
         {

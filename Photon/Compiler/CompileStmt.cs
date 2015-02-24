@@ -78,6 +78,27 @@ namespace Photon.Compiler
                 return true;
             }
 
+            if (n is ForStmt)
+            {
+                var v = n as ForStmt;
+
+                var loopStart = cm.CurrGenIndex;
+
+                CompileNode(cm, v.Condition, false);
+
+                var jnzCmd = cm.Add(new Command(Opcode.Jnz, 0));
+
+                CompileNode(cm, v.Body, false);
+
+                cm.Add(new Command(Opcode.Jmp, loopStart));
+
+                // false body跳入
+                jnzCmd.DataA = cm.CurrGenIndex;
+
+
+                return true;
+            }
+
             return false;
         }
     }

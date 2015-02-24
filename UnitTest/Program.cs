@@ -36,8 +36,9 @@ var y = foo( 1, 2 )
 
 var x = 1
 var y
-if x == 1 {
-    y = 1
+if x >= 1 {
+    var c = 5
+    y = c
 }else{
     y = 2
 }
@@ -50,7 +51,25 @@ var x, y = 1, 2
 x, y = y, x
 ";
 
-            var src = src_swap;
+            var src_simpleloop = @"
+var x = 1
+
+for x < 3 {
+    x = x + 1
+}
+
+";
+
+            var src_forloop = @"
+
+var x = 10
+for i = 1;i < 3;i=i+1 {
+    x = x - 1
+}
+
+";
+
+            var src = src_simpleloop;
 
             Debug.WriteLine(src);
 

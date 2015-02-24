@@ -38,6 +38,10 @@ namespace Photon.Scanner
         Return,         // return
         If,             // if
         Else,           // else
+        For,            // for
+        Break,          // break
+        Continue,       // continue
+        
 
     }
     public class Token

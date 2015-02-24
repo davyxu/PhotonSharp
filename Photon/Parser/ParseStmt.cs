@@ -73,6 +73,8 @@ namespace Photon.Parser
                     return ParseReturnStmt();
                 case TokenType.If:
                     return ParseIfStmt();
+                case TokenType.For:
+                    return ParseForStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
             }
@@ -101,7 +103,17 @@ namespace Photon.Parser
             }
 
             return new IfStmt(condition, body, elseBody);
+        }
 
+        ForStmt ParseForStmt()
+        {
+            Expect(TokenType.For);
+
+            var condition = ParseRHS();
+
+            var body = ParseBlockStmt();
+
+            return new ForStmt(condition, body );
         }
     }
 }

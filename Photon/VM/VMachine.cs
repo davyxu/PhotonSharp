@@ -218,32 +218,32 @@ namespace Photon.VM
                     break;
                 case Opcode.GT:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a > b ? 1:0));
                     }
                     break;
                 case Opcode.GE:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a >= b ? 1 : 0));
                     }
                     break;
                 case Opcode.LT:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a < b ? 1 : 0));
                     }
                     break;
                 case Opcode.LE:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a <= b ? 1 : 0));
                     }

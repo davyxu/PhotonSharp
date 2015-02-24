@@ -43,6 +43,9 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.For, "for"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Break, "break"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Continue, "continue"));
 
             _lexer.AddMatcher(new IdentifierMatcher());
             _lexer.AddMatcher(new UnknownMatcher());

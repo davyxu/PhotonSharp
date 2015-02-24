@@ -169,4 +169,31 @@ namespace Photon.AST
         }
 
     }
+
+    public class ForStmt : Stmt
+    {
+        public Expr Condition;
+
+        public BlockStmt Body;
+
+        public ForStmt(Expr con, BlockStmt body )
+        {
+            Condition = con;
+            Body = body;
+        }
+
+
+        public override string ToString()
+        {
+            return "ForStmt";
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            yield return Condition;
+
+            yield return Body;
+        }
+
+    }
 }

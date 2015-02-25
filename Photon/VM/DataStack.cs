@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Photon.VM
 {
-    class DataStack
+    public class DataStack
     {
         DataValue[] _values;
         int _count = 0;
@@ -11,6 +11,21 @@ namespace Photon.VM
         public DataStack( int max )
         {
             _values = new DataValue[max];
+        }
+
+        public int Count
+        {
+            get { return _count; }
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < _values.Length;i++ )
+            {
+                _values[i] = null;
+            }
+
+            _count = 0;
         }
 
         public void Push( DataValue v )

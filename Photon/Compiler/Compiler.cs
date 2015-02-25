@@ -5,17 +5,12 @@ using Photon.Scanner;
 
 namespace Photon.Compiler
 {
-    public partial class Compiler
+    public partial class ScriptCompiler
     {
         Executable _exe = new Executable();
 
         CommandSet _globalSet;
         CommandSet _currSet;
-
-        public Compiler()
-        {
-           
-        }
 
 
         void Error(string str)

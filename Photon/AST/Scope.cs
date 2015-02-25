@@ -17,6 +17,7 @@ namespace Photon.AST
         Global,
         Function,
         Block,
+        For,
     }
 
     public class Scope
@@ -109,6 +110,11 @@ namespace Photon.AST
             _scopeset.Add(s);
 
             return s;
+        }
+
+        public void Clear( )
+        {
+            _scopeset.Clear();
         }
 
         public void BuildRegbase( )

@@ -26,6 +26,7 @@ namespace Photon.Scanner
         Div,            // /
         Comma,          // ,
         Dot,            // .
+        SemiColon,      // ;
         LBracket,       // (
         RBracket,       // )
         LSqualBracket,  // [
@@ -39,6 +40,8 @@ namespace Photon.Scanner
         If,             // if
         Else,           // else
         For,            // for
+        Foreach,        // foreach
+        While,          // while
         Break,          // break
         Continue,       // continue
         

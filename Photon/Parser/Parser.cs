@@ -5,16 +5,16 @@ using System.Diagnostics;
 
 namespace Photon.Parser
 {
-    public partial class Parser
+    public partial class ScriptParser
     {
         Lexer _lexer = new Lexer();
 
         Token _token;
 
-        public void Init( string source )
+        public ScriptParser( )
         {
             _lexer.AddMatcher(new NumeralMatcher());
-           
+
             _lexer.AddMatcher(new WhitespaceMatcher().Ignore());
             _lexer.AddMatcher(new CommentMatcher().Ignore());
 
@@ -34,6 +34,7 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.RBracket, ")"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Comma, ","));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Dot, "."));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.SemiColon, ";"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Func, "func"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Var, "var"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.LSqualBracket, "["));
@@ -44,17 +45,24 @@ namespace Photon.Parser
             _lexer.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.For, "for"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.Foreach, "foreach"));
+            _lexer.AddMatcher(new KeywordMatcher(TokenType.While, "while"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Break, "break"));
             _lexer.AddMatcher(new KeywordMatcher(TokenType.Continue, "continue"));
 
             _lexer.AddMatcher(new IdentifierMatcher());
             _lexer.AddMatcher(new UnknownMatcher());
+        }
+
+        public Chunk ParseSource( string source )
+        {
+            InitScope();
 
             _lexer.Start(source);
 
             Next();
 
-            InitScope();
+            return ParseChunk();
         }
 
         public override string ToString()

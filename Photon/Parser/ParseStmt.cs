@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon.Parser
 {
-    public partial class Parser
+    public partial class ScriptParser
     {
 
         List<Stmt> ParseStatmentList()
@@ -20,7 +20,7 @@ namespace Photon.Parser
             return list;
         }
 
-        public Chunk ParseChunk()
+        Chunk ParseChunk()
         {
             var list = ParseStatmentList();
 
@@ -73,6 +73,8 @@ namespace Photon.Parser
                     return ParseReturnStmt();
                 case TokenType.If:
                     return ParseIfStmt();
+                case TokenType.While:
+                    return ParseWhileStmt();
                 case TokenType.For:
                     return ParseForStmt();
                 case TokenType.Var:
@@ -105,15 +107,55 @@ namespace Photon.Parser
             return new IfStmt(condition, body, elseBody);
         }
 
+        Stmt ParseForInit( )
+        {
+            var ident = ParseIdent();
+
+            Declare( ident, _topScope, ident.Name );
+
+            Expect( TokenType.Assign );
+
+            var expr = ParseRHS();
+
+            return new AssignStmt( ident, expr );
+        }
+
         ForStmt ParseForStmt()
         {
             Expect(TokenType.For);
+
+            OpenScope(_topScope, ScopeType.For);
+
+            var init = ParseForInit();
+           
+            Expect(TokenType.SemiColon);
+
+
+            var conStmt = ParseSimpleStmt();
+
+            Expect(TokenType.SemiColon);
+
+            var post = ParseSimpleStmt();
+
+            var body = ParseBlockStmt();
+
+            CloseScope();
+
+            var condtion = conStmt as ExprStmt;
+
+            return new ForStmt( init, condtion.X[0], post, body );
+            
+        }
+
+        WhileStmt ParseWhileStmt()
+        {
+            Expect(TokenType.While);
 
             var condition = ParseRHS();
 
             var body = ParseBlockStmt();
 
-            return new ForStmt(condition, body );
+            return new WhileStmt(condition, body);
         }
     }
 }

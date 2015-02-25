@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon.Parser
 {
-    public partial class Parser
+    public partial class ScriptParser
     {
         Scope _topScope;
         Scope _global;
@@ -17,6 +17,7 @@ namespace Photon.Parser
 
         void InitScope( )
         {
+            _scopeSet.Clear();
             OpenScope( null, ScopeType.Global );
             _global = _topScope;
         }

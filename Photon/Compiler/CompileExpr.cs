@@ -6,7 +6,7 @@ using Photon.Scanner;
 
 namespace Photon.Compiler
 {
-    public partial class Compiler
+    public partial class ScriptCompiler
     {
 
         bool CompileExpr(CommandSet cm, Node n, bool lhs)

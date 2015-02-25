@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon.Parser
 {
-    public partial class Parser
+    public partial class ScriptParser
     {
         FuncDeclare ParseFuncDecl( )
         {

@@ -65,6 +65,15 @@ namespace Photon.AST
             RHS = rhs;
         }
 
+        public AssignStmt( Expr lhs, Expr rhs )
+        {
+            LHS = new List<Expr>();
+            LHS.Add(lhs);
+
+            RHS = new List<Expr>();
+            RHS.Add(rhs);
+        }
+
         public override IEnumerable<Node> Child()
         {
             foreach( var e in LHS )
@@ -170,16 +179,49 @@ namespace Photon.AST
 
     }
 
+    public class WhileStmt : Stmt
+    {
+        public Expr Condition;
+
+        public BlockStmt Body;
+
+        public WhileStmt(Expr con, BlockStmt body)
+        {
+            Condition = con;
+            Body = body;
+        }
+
+        public override string ToString()
+        {
+            return "WhileStmt";
+        }
+
+        public override IEnumerable<Node> Child()
+        {
+            yield return Condition;
+
+            yield return Body;
+        }
+
+    }
+
+
     public class ForStmt : Stmt
     {
         public Expr Condition;
 
         public BlockStmt Body;
 
-        public ForStmt(Expr con, BlockStmt body )
+
+        public Stmt Init;
+        public Stmt Post;
+
+        public ForStmt(Stmt init, Expr con, Stmt post, BlockStmt body)
         {
             Condition = con;
             Body = body;
+            Init = init;
+            Post = post;
         }
 
 
@@ -190,7 +232,17 @@ namespace Photon.AST
 
         public override IEnumerable<Node> Child()
         {
+            if (Init != null )
+            {
+                yield return Init;
+            }
+
             yield return Condition;
+
+            if (Post != null)
+            {
+                yield return Post;
+            }
 
             yield return Body;
         }

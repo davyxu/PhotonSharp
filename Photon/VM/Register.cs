@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Photon.VM
 {
-    class Register
+    public class Register
     {
         DataValue[] _data;
         int _usedSlot;
@@ -24,7 +24,7 @@ namespace Photon.VM
             return _data[index];
         }
 
-        public void Clear( int index )
+        public void ClearTo( int index )
         {
             for (int i = index; i <= _usedSlot;i++ )
             {
@@ -32,6 +32,16 @@ namespace Photon.VM
             }
 
             _usedSlot = index;
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                _data[i] = null;
+            }
+
+            _usedSlot = 0;
         }
 
         public void DebugPrint()

@@ -26,18 +26,43 @@ namespace Photon.VM
 
     public class VMachine
     {
-        const int MaxReg = 10;
-        const int MaxStack = 10;
-        DataStack _dataStack = new DataStack(MaxStack);
-        Register _reg = new Register(MaxReg);
+        DataStack _dataStack;
+        Register _reg;
         Stack<RunEnv> _envStack = new Stack<RunEnv>();
 
         RunEnv _env;
 
         Executable _exe;
 
+        public VMachine( int maxreg = 10, int maxstack = 10)
+        {
+            _dataStack = new DataStack(maxstack);
+            _reg = new Register(maxreg);
+        }
+
+        public bool DebugRun
+        {
+            get;
+            set;
+        }
+
+        public Register Reg
+        {
+            get { return _reg; }
+        }
+
+        public DataStack Stack
+        {
+            get { return _dataStack; }
+        }
+
         public void Run( Executable exe )
         {
+            _envStack.Clear();
+            _dataStack.Clear();
+            _reg.Clear();
+            _envStack.Clear();
+
             _exe = exe;
             _env.Reset(exe.CmdSet[0],0 );
 
@@ -46,7 +71,10 @@ namespace Photon.VM
             {
                 var cmd = _env.CmdSet.Commands[_env.PC];
 
-                Debug.WriteLine("{0} {1}: {2}", _env.CmdSet.Name, _env.PC, cmd.ToString());
+                if (DebugRun)
+                {
+                    Debug.WriteLine("{0} {1}: {2}", _env.CmdSet.Name, _env.PC, cmd.ToString());
+                }
 
                 ExecCommand(cmd);
 
@@ -180,7 +208,7 @@ namespace Photon.VM
                 case Opcode.Ret:
                     {
                         // 调试功能, 清空寄存器, 看起来清爽
-                        _reg.Clear(_env.RegBase);
+                        _reg.ClearTo(_env.RegBase);
                         _env = _envStack.Pop();
                     }
                     break;
@@ -194,8 +222,8 @@ namespace Photon.VM
                     break;
                 case Opcode.Sub:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a - b));
                     }
@@ -210,8 +238,8 @@ namespace Photon.VM
                     break;
                 case Opcode.Div:
                     {
-                        var a = CastNumber(_dataStack.Pop());
                         var b = CastNumber(_dataStack.Pop());
+                        var a = CastNumber(_dataStack.Pop());
 
                         _dataStack.Push(new NumberValue(a / b));
                     }

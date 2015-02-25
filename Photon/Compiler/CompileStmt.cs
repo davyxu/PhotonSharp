@@ -6,7 +6,7 @@ using Photon.Scanner;
 
 namespace Photon.Compiler
 {
-    public partial class Compiler
+    public partial class ScriptCompiler
     {
 
         bool CompileStmt(CommandSet cm, Node n, bool lhs)
@@ -78,9 +78,9 @@ namespace Photon.Compiler
                 return true;
             }
 
-            if (n is ForStmt)
+            if (n is WhileStmt)
             {
-                var v = n as ForStmt;
+                var v = n as WhileStmt;
 
                 var loopStart = cm.CurrGenIndex;
 
@@ -89,6 +89,31 @@ namespace Photon.Compiler
                 var jnzCmd = cm.Add(new Command(Opcode.Jnz, 0));
 
                 CompileNode(cm, v.Body, false);
+
+                cm.Add(new Command(Opcode.Jmp, loopStart));
+
+                // false body跳入
+                jnzCmd.DataA = cm.CurrGenIndex;
+
+
+                return true;
+            }
+
+            if (n is ForStmt)
+            {
+                var v = n as ForStmt;
+
+                CompileNode(cm, v.Init, false);
+
+                var loopStart = cm.CurrGenIndex;
+
+                CompileNode(cm, v.Condition, false);
+
+                var jnzCmd = cm.Add(new Command(Opcode.Jnz, 0));
+
+                CompileNode(cm, v.Body, false);
+
+                CompileNode(cm, v.Post, false);
 
                 cm.Add(new Command(Opcode.Jmp, loopStart));
 

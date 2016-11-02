@@ -33,6 +33,8 @@ namespace Photon.API
             {
                 Debug.WriteLine(src);
             }
+
+            // 编译生成AST
             var chunk = _parser.ParseSource(src);
 
             if (_debugMode)
@@ -40,6 +42,7 @@ namespace Photon.API
                 ScriptParser.DebugPrint(chunk);
             }
 
+            // 遍历AST,生成代码
             var exe = _compiler.Walk(chunk, _parser.ScopeInfoSet);
 
             if (_debugMode)

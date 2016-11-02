@@ -38,14 +38,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Script.cs" />
-    <Compile Include="AST\Declare.cs" />
-    <Compile Include="AST\Expr.cs" />
+    <Compile Include="AST\VarDeclare.cs" />
+    <Compile Include="AST\CallExpr.cs" />
+    <Compile Include="AST\FuncDeclare.cs" />
+    <Compile Include="AST\BasicLitExpr.cs" />
+    <Compile Include="AST\SelectorExpr.cs" />
+    <Compile Include="AST\BinaryExpr.cs" />
+    <Compile Include="AST\IndexExpr.cs" />
+    <Compile Include="AST\UnaryExpr.cs" />
+    <Compile Include="AST\Ident.cs" />
+    <Compile Include="AST\Chunk.cs" />
+    <Compile Include="AST\ExprStmt.cs" />
+    <Compile Include="AST\AssignStmt.cs" />
+    <Compile Include="AST\BlockStmt.cs" />
+    <Compile Include="AST\ReturnStmt.cs" />
+    <Compile Include="AST\ForStmt.cs" />
+    <Compile Include="AST\WhileStmt.cs" />
+    <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
-    <Compile Include="AST\Stmt.cs" />
+    <Compile Include="AST\Node.cs" />
     <Compile Include="Compiler\Compiler.cs" />
-    <Compile Include="Compiler\CompileExpr.cs" />
-    <Compile Include="Compiler\CompileDecl.cs" />
-    <Compile Include="Compiler\CompileStmt.cs" />
     <Compile Include="OpCode\Command.cs" />
     <Compile Include="OpCode\Constant.cs" />
     <Compile Include="OpCode\Executable.cs" />
@@ -68,6 +80,7 @@
     <Compile Include="OpCode\OpCode.cs" />
     <Compile Include="VM\DataStack.cs" />
     <Compile Include="OpCode\DataValue.cs" />
+    <Compile Include="VM\Frame.cs" />
     <Compile Include="VM\Register.cs" />
     <Compile Include="VM\VMachine.cs" />
   </ItemGroup>

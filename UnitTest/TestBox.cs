@@ -55,7 +55,7 @@ namespace UnitTest
             var nv = v as NumberValue;
             if (nv == null)
             {
-                Error(string.Format("value type error on index: {0}, expect 'number'", index));
+                Error(string.Format("value type error on index: {0}, expect 'number', have '{1}'", index, v.GetType().Name));
                 return this;
             }
 

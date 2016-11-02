@@ -74,7 +74,7 @@ namespace Photon.Parser
                 case TokenType.Number:
                 case TokenType.QuotedString:
                     {
-                        var x = new BasicLit(_token.Value, _token.Type);
+                        var x = new BasicLitExpr(_token.Value, _token.Type);
                         Next();
                         return x;
                     }

@@ -6,31 +6,13 @@ using Photon.AST;
 
 namespace Photon.VM
 {
-    struct RunEnv
-    {
-        public int PC;
-        public int RegBase;
-        public CommandSet CmdSet;
-        public void Reset( CommandSet cs, int regbase )
-        {
-            PC = 0;
-            CmdSet = cs;
-            RegBase = regbase;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("pc:{0}",PC );
-        }
-    }
-
     public class VMachine
     {
         DataStack _dataStack;
         Register _reg;
-        Stack<RunEnv> _envStack = new Stack<RunEnv>();
+        Stack<Frame> _frameStack = new Stack<Frame>();
 
-        RunEnv _env;
+        Frame _currFrame;
 
         Executable _exe;
 
@@ -58,22 +40,22 @@ namespace Photon.VM
 
         public void Run( Executable exe )
         {
-            _envStack.Clear();
+            _frameStack.Clear();
             _dataStack.Clear();
             _reg.Clear();
-            _envStack.Clear();
+            _frameStack.Clear();
 
             _exe = exe;
-            _env.Reset(exe.CmdSet[0],0 );
+            _currFrame.Reset(exe.CmdSet[0],0 );
 
 
-            while (_env.PC < _env.CmdSet.Commands.Count && _env.PC != -1 )
+            while (_currFrame.PC < _currFrame.CmdSet.Commands.Count && _currFrame.PC != -1 )
             {
-                var cmd = _env.CmdSet.Commands[_env.PC];
+                var cmd = _currFrame.CmdSet.Commands[_currFrame.PC];
 
                 if (DebugRun)
                 {
-                    Debug.WriteLine("{0} {1}: {2}", _env.CmdSet.Name, _env.PC, cmd.ToString());
+                    Debug.WriteLine("{0} {1}: {2}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.ToString());
                 }
 
                 ExecCommand(cmd);
@@ -92,9 +74,9 @@ namespace Photon.VM
         int GetRegOffset( int regIndex, int scopeIndex )
         {
             // 当前作用域
-            if (_env.CmdSet.ScopeInfo.Index == scopeIndex)
+            if (_currFrame.CmdSet.ScopeInfo.Index == scopeIndex)
             {
-                return _env.RegBase + regIndex;
+                return _currFrame.RegBase + regIndex;
             }
             else
             {
@@ -163,7 +145,7 @@ namespace Photon.VM
 
                         if (!IsValueNoneZero(d))
                         {
-                            _env.PC = targetPC;
+                            _currFrame.PC = targetPC;
                             return;
                         }
 
@@ -174,7 +156,7 @@ namespace Photon.VM
                         var targetPC = cmd.DataA;
 
 
-                        _env.PC = targetPC;
+                        _currFrame.PC = targetPC;
                         return;
                     }
                 case Opcode.Call:
@@ -186,7 +168,7 @@ namespace Photon.VM
                         var cs = _exe.GetCmdSet(funcIndex);
 
                         // 被调用函数的regbase=当前函数的最大分配量+当前基础偏移
-                        int regbase = _env.CmdSet.ScopeInfo.AllocatedReg + _env.RegBase;
+                        int regbase = _currFrame.CmdSet.ScopeInfo.AllocatedReg + _currFrame.RegBase;
 
                         // 将栈转为被调用函数的寄存器
                         for( int i = 0;i< argCount ;i++)
@@ -199,17 +181,17 @@ namespace Photon.VM
                         _dataStack.PopMulti(argCount + 1);
                          
                         // 更换当前环境
-                        _envStack.Push(_env);
+                        _frameStack.Push(_currFrame);
 
-                        _env.Reset(cs, regbase );
+                        _currFrame.Reset(cs, regbase );
                         return;
                         
                     }
                 case Opcode.Ret:
                     {
                         // 调试功能, 清空寄存器, 看起来清爽
-                        _reg.ClearTo(_env.RegBase);
-                        _env = _envStack.Pop();
+                        _reg.ClearTo(_currFrame.RegBase);
+                        _currFrame = _frameStack.Pop();
                     }
                     break;
                 case Opcode.Add:
@@ -294,13 +276,13 @@ namespace Photon.VM
                     break;
                 case Opcode.Exit:
                     {
-                        _env.PC = -1;
+                        _currFrame.PC = -1;
                         return;
                     }
                     
             }
 
-            _env.PC++;
+            _currFrame.PC++;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using Photon.AST;
 using Photon.Scanner;
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon.Parser
@@ -11,14 +12,15 @@ namespace Photon.Parser
 
         void InitScope( )
         {
-            OpenScope( null, ScopeType.Global );
+            OpenScope( ScopeType.Global );
             _global = _topScope;
         }
 
-        void OpenScope( Scope outter, ScopeType type)
+        Scope OpenScope( ScopeType type)
         {
-            var s = new Scope(outter, type );
+            var s = new Scope(_topScope, type);
             _topScope = s;
+            return s;
         }
 
         void CloseScope( )
@@ -26,16 +28,18 @@ namespace Photon.Parser
             _topScope = _topScope.Outter;
         }
 
-        Symbol Declare(Node n, Scope s, string name)
+        Symbol Declare(Node n, Scope s, string name, TokenPos pos )
         {
-            if ( s.Lookup(name) != null )
+            var pre = s.Lookup(name);
+            if ( pre != null )
             {
-                Error( string.Format("{0} redeclared", name ));
+                Error(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
             }
 
             Symbol data = new Symbol();
             data.Name = name;
             data.Decl = n;
+            data.DefinePos = pos;
 
             s.Insert(data);
 

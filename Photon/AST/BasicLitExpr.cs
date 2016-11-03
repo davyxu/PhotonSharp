@@ -41,6 +41,8 @@ namespace Photon.AST
                         c = new NumberValue(v);
                     }
                     break;
+                default:
+                    break;
             }
 
 

@@ -1,4 +1,5 @@
 ﻿using Photon.OpCode;
+using System;
 using System.Diagnostics;
 
 namespace Photon.VM
@@ -42,6 +43,7 @@ namespace Photon.VM
 
         public void Push( DataValue v )
         {
+
             _values[_count] = v;
             _count++;
         }
@@ -84,10 +86,18 @@ namespace Photon.VM
         {            
             for( int i = 0;i < _count;i++)
             {
-                if (_values[i] == null)
-                    break;
+ 
+                var v = _values[i];
 
-                Debug.WriteLine("[stack] {0}: {1}", i, _values[i].GetDesc());
+                string str = "null";
+                if ( v != null )
+                {
+                    str = v.GetDesc();
+                }
+
+
+
+                Debug.WriteLine("[stack] {0}: {1}", i, str);
             }
         }
     }

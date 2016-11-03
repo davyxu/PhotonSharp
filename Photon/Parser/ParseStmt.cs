@@ -45,7 +45,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.LBrace);
 
-            OpenScope( _topScope, ScopeType.Block);
+            OpenScope( ScopeType.Block);
 
             var list = ParseStatmentList();
 
@@ -111,7 +111,7 @@ namespace Photon.Parser
         {
             var ident = ParseIdent();
 
-            Declare( ident, _topScope, ident.Name );
+            Declare( ident, _topScope, ident.Name, ident.DefinePos );
 
             Expect( TokenType.Assign );
 
@@ -124,7 +124,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.For);
 
-            OpenScope(_topScope, ScopeType.For);
+            OpenScope( ScopeType.For);
 
             var init = ParseForInit();
            

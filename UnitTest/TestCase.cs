@@ -5,14 +5,21 @@ namespace UnitTest
     {
         static void TestCase( )
         {
+            (new TestBox("xx")).Run(@"
+var a = 0
+a = a + 1
+
+").TestStackClear();
+
+
             (new TestBox("Scope")).Run(@"
 var a = 1
 
 func foo( a ){
 
-    var c = a
+    var x = a
 
-    return c
+    return x
 }
 
 var c = foo( a )

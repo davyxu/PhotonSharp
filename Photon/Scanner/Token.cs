@@ -3,11 +3,10 @@ namespace Photon.Scanner
 {
     public enum TokenType
     {
-        None,
+        EOF,
         Unknown,
         Whitespace,
-        LineEnd,
-        EOF,
+        LineEnd,        
 
         Comment,
         Identifier,

@@ -10,7 +10,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.Func);
 
-            var scope = new Scope(_topScope, ScopeType.Function);            
+            var scope = OpenScope(ScopeType.Function);           
 
             var ident = ParseIdent();
 
@@ -20,7 +20,7 @@ namespace Photon.Parser
 
             var decl = new FuncDeclare(ident, paramlist, body, scope);
 
-            ident.ScopeInfo = Declare(decl, _global, ident.Name );
+            ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos );
 
             return decl;
         }
@@ -39,7 +39,7 @@ namespace Photon.Parser
                     var param = ParseIdent();
                     p.Add(param);
 
-                    Declare(param, s, param.Name);
+                    Declare(param, s, param.Name, param.DefinePos);
 
                     if (CurrTokenType != TokenType.Comma)
                     {
@@ -79,7 +79,7 @@ namespace Photon.Parser
 
             foreach( var i in idents )
             {
-                Declare(i, _topScope, i.Name);
+                Declare(i, _topScope, i.Name, i.DefinePos);
             }
 
             List<Expr> values = new List<Expr>();

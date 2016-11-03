@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using SharpLexer;
 
 namespace Photon.AST
 {
     public class Symbol
     {
         public string Name;
+        public TokenPos DefinePos;
         public Node Decl;
         public int RegIndex;
 

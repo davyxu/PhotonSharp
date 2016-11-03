@@ -1,4 +1,5 @@
 ﻿using Photon.OpCode;
+using System;
 using System.Diagnostics;
 
 namespace Photon.VM
@@ -6,7 +7,7 @@ namespace Photon.VM
     public class Register
     {
         DataValue[] _data;
-        int _usedSlot;
+        int _usedSlot = -1;
         string _usage;
 
         public Register( string usage, int maxReg )
@@ -15,9 +16,9 @@ namespace Photon.VM
             _data = new DataValue[maxReg];
         }
 
-        public void Set( int index, DataValue data )
+        public void Set( int index, DataValue v )
         {
-            _data[index] = data;
+            _data[index] = v;
             _usedSlot = index;
         }
 
@@ -50,10 +51,15 @@ namespace Photon.VM
         {            
             for (int i = 0; i <= _usedSlot; i++)
             {
-                if (_data[i] == null)
-                    continue;
+                var v = _data[i];
 
-                Debug.WriteLine("[{0}] {1}: {2}", _usage, i, _data[i].GetDesc());
+                string str = "null";
+                if (v != null)
+                {
+                    str = v.GetDesc();
+                }
+
+                Debug.WriteLine("[{0}] {1}: {2}", _usage, i, str);
             }
         }
     }

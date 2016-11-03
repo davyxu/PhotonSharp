@@ -90,7 +90,7 @@ namespace Photon.Parser
             if ( CurrTokenType  == TokenType.Unknown )
             {
                 Error("unknown token");
-            }
+            }            
         }
 
         TokenType CurrTokenType

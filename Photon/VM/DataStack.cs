@@ -28,6 +28,18 @@ namespace Photon.VM
             _count = 0;
         }
 
+
+        // 设置到希望的高度
+        public void Set( int top )
+        {
+            for( int i = top;i < _count;i++)
+            {
+                _values[i] = null;
+            }
+
+            _count = top;
+        }
+
         public void Push( DataValue v )
         {
             _values[_count] = v;
@@ -74,6 +86,9 @@ namespace Photon.VM
 
             for( int i = 0;i < _count;i++)
             {
+                if (_values[i] == null)
+                    break;
+
                 Debug.WriteLine("{0}: {1}", i, _values[i].GetDesc());
             }
         }

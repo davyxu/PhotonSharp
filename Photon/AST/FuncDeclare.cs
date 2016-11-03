@@ -20,6 +20,8 @@ namespace Photon.AST
             Params = param;
             Body = body;
             ScopeInfo = s;
+
+            BuildRelation();
         }
 
 
@@ -52,7 +54,7 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-            var newset = new CommandSet(Name.Name, ScopeInfo);
+            var newset = new CommandSet(Name.Name );
 
             var funcIndex = exe.AddCmdSet(newset);
 
@@ -61,11 +63,31 @@ namespace Photon.AST
 
             cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.GetDesc();
 
-            var scopeIndex = Name.ScopeInfo.Parent.Index;
-
-            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.Slot, scopeIndex)).Comment = Name.Name;
+            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
 
             Body.Compile(exe, newset, false);
+
+            newset.InputValueCount = Params.Count;
+
+            newset.OutputValueCount = CalcReturnValueCount();
+            
         }
+
+        int CalcReturnValueCount( )
+        {            
+            foreach (var c in Body.Child())
+            {
+                var retStmt = c as ReturnStmt;
+                if (retStmt == null)
+                {
+                    continue;
+                }
+
+                return retStmt.Results.Count;
+            }
+
+            return 0;
+        }
+
     }
 }

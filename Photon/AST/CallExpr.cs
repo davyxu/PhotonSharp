@@ -16,6 +16,8 @@ namespace Photon.AST
             Func = f;
             Args = args;
             S = s;
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()
@@ -42,7 +44,15 @@ namespace Photon.AST
                 arg.Compile(exe, cm, false);                
             }
 
-            cm.Add(new Command(Opcode.Call, Args.Count));
+            // 单独的一句时, 需要平衡数据栈
+            int needBalanceDataStack = 0 ;
+            if ( Parent is ExprStmt )
+            {
+                needBalanceDataStack = 1;
+            }
+
+
+            cm.Add(new Command(Opcode.Call, Args.Count, needBalanceDataStack));
         }
     }
 }

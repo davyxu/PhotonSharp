@@ -5,21 +5,23 @@ namespace Photon.AST
 {
     public class AssignStmt : Stmt
     {
-        public List<Expr> LHS;
-        public List<Expr> RHS;
+        public List<Expr> LHS = new List<Expr>();
+        public List<Expr> RHS = new List<Expr>();
         public AssignStmt(List<Expr> lhs, List<Expr> rhs)
         {
             LHS = lhs;
             RHS = rhs;
+
+            BuildRelation();
         }
 
         public AssignStmt(Expr lhs, Expr rhs)
-        {
-            LHS = new List<Expr>();
+        {            
             LHS.Add(lhs);
-
-            RHS = new List<Expr>();
+         
             RHS.Add(rhs);
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()

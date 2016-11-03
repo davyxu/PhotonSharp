@@ -15,6 +15,8 @@ namespace Photon.AST
         {
             X = x;
             Selector = i;
+            BuildRelation();
+
         }
 
         public override IEnumerable<Node> Child()

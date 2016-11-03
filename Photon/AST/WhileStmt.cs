@@ -17,6 +17,8 @@ namespace Photon.AST
         {
             Condition = con;
             Body = body;
+
+            BuildRelation();
         }
 
         public override string ToString()

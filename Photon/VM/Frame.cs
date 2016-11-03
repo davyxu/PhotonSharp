@@ -2,17 +2,25 @@
 
 namespace Photon.VM
 {
-    struct Frame
+    class RuntimeFrame
     {
         public int PC;
-        public int RegBase;
+
+        public Register Reg;
+
         public CommandSet CmdSet;
-        public void Reset(CommandSet cs, int regbase)
+
+        public int DataStackBase;
+
+        // 结束运行后, 需要恢复数据栈
+        public bool RestoreDataStack;
+
+
+        public RuntimeFrame(CommandSet cs)
         {
-            PC = 0;
-            CmdSet = cs;
-            RegBase = regbase;
-        }
+            Reg = new Register(10);
+            CmdSet = cs; 
+        }        
 
         public override string ToString()
         {

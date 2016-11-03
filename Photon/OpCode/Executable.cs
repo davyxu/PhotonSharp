@@ -8,7 +8,6 @@ namespace Photon.OpCode
     {
         List<CommandSet> _cmdset = new List<CommandSet>();
         ConstantSet _constSet = new ConstantSet();
-        ScopeSet _scopeSet;
 
         public List<CommandSet> CmdSet
         {
@@ -20,13 +19,6 @@ namespace Photon.OpCode
             get { return _constSet; }
         }
 
-        public ScopeSet ScopeInfoSet
-        {
-            get { return _scopeSet; }
-            set { _scopeSet = value; }
-        }
-
-        
         public void DebugPrint( )
         {
             _constSet.DebugPrint(  );

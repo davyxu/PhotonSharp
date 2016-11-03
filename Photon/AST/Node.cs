@@ -6,6 +6,8 @@ namespace Photon.AST
 {
     public class Node
     {
+        public Node Parent;
+
         public virtual IEnumerable<Node> Child()
         {
             yield break;
@@ -14,6 +16,14 @@ namespace Photon.AST
         public virtual void Compile(Executable exe, CommandSet cm, bool lhs)
         {
 
+        }
+
+        public void BuildRelation( )
+        {
+            foreach( var c in Child() )
+            {
+                c.Parent = this;
+            }
         }
     }
 

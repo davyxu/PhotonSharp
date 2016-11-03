@@ -1,24 +1,11 @@
-多重赋值
+# 多重赋值
 a, b, c = 1, "hello", e
 
 
-多返回值
+# 多返回值
 func foo( a, b, c)
 {
 	return d, e, f
-}
-
-
-直接导出为json或pbb/pbt
-
-映射
-a = {
-	b: 2,
-	c: "hello",
-	e: { 2, 3, 4 },
-
-	f: func( p1 ){ 
-	}
 }
 
 数组
@@ -31,7 +18,6 @@ for k, v in target
 {
 
 }
-
 
 
 if expr {

@@ -13,8 +13,8 @@ namespace Photon.AST
 
         public BlockStmt Body;
 
-
         public Stmt Init;
+
         public Stmt Post;
 
         public ForStmt(Stmt init, Expr con, Stmt post, BlockStmt body)
@@ -23,6 +23,8 @@ namespace Photon.AST
             Body = body;
             Init = init;
             Post = post;
+
+            BuildRelation();
         }
 
 

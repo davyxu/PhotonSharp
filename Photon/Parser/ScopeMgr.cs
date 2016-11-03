@@ -8,16 +8,9 @@ namespace Photon.Parser
     {
         Scope _topScope;
         Scope _global;
-        ScopeSet _scopeSet = new ScopeSet();
-
-        public ScopeSet ScopeInfoSet
-        {
-            get { return _scopeSet; }
-        }
 
         void InitScope( )
         {
-            _scopeSet.Clear();
             OpenScope( null, ScopeType.Global );
             _global = _topScope;
         }
@@ -26,7 +19,6 @@ namespace Photon.Parser
         {
             var s = new Scope(outter, type );
             _topScope = s;
-            _scopeSet.Add( s );
         }
 
         void CloseScope( )
@@ -34,14 +26,14 @@ namespace Photon.Parser
             _topScope = _topScope.Outter;
         }
 
-        ScopeMeta Declare(Node n, Scope s, string name)
+        Symbol Declare(Node n, Scope s, string name)
         {
             if ( s.Lookup(name) != null )
             {
                 Error( string.Format("{0} redeclared", name ));
             }
 
-            ScopeMeta data = new ScopeMeta();
+            Symbol data = new Symbol();
             data.Name = name;
             data.Decl = n;
 

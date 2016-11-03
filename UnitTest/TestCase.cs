@@ -5,14 +5,14 @@ namespace UnitTest
     {
         static void TestCase( )
         {
-//            (new TestBox("func var assign")).Run(@"
-//
-//func add( a, b ){
-//    return a+b
-//}
-//
-//add(1, 2)
-//").TestStackClear();
+            (new TestBox("func var assign")).Run(@"
+
+func add( a, b ){
+    return a+b
+}
+
+add(1, 2)
+").TestStackClear();
 
 
             (new TestBox("multicall")).Run(@"

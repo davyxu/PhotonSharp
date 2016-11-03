@@ -44,7 +44,7 @@ namespace UnitTest
 
         public TestBox TestRegEqual(int index, float num)
         {
-            var v = _script.VM.Reg.Get( index );
+            var v = _script.VM.GetFrameReg( index );
 
             if ( v == null )
             {

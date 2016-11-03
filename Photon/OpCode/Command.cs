@@ -65,22 +65,16 @@ namespace Photon.OpCode
         List<Command> _cmds = new List<Command>();
 
         string _name;
-        Scope _scope;
 
-        public CommandSet( string name, Scope s )
+
+        public CommandSet( string name )
         {
             _name = name;
-            _scope = s;
         }
 
         public string Name
         {
             get { return _name;  }
-        }
-
-        public Scope ScopeInfo
-        {
-            get { return _scope; }
         }
 
         public List<Command> Commands
@@ -103,6 +97,13 @@ namespace Photon.OpCode
         {
             get { return _cmds.Count; }
         }
+
+        // 传入参数数量
+        public int InputValueCount { get; set; }
+
+        // 返回值数量
+        public int OutputValueCount { get; set; }
+        
 
         public void DebugPrint( )
         {

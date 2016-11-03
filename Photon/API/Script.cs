@@ -43,7 +43,7 @@ namespace Photon.API
             }
 
             // 遍历AST,生成代码
-            var exe = _compiler.Walk(chunk, _parser.ScopeInfoSet);
+            var exe = _compiler.Walk(chunk );
 
             if (_debugMode)
             {

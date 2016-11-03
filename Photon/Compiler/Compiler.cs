@@ -1,8 +1,6 @@
 ﻿using System;
 using Photon.AST;
 using Photon.OpCode;
-using Photon.Scanner;
-using System.Collections.Generic;
 
 namespace Photon.Compiler
 {
@@ -19,14 +17,11 @@ namespace Photon.Compiler
             throw new Exception(str);
         }
 
-        public Executable Walk( Chunk c, ScopeSet ss )
+        public Executable Walk( Chunk c )
         {
-            _currSet = _globalSet = new CommandSet("global", ss.Get(0));
+            _currSet = _globalSet = new CommandSet("global" );
             
             _exe.AddCmdSet(_currSet);
-
-            ss.BuildRegbase();
-            _exe.ScopeInfoSet = ss;
 
             c.Block.Compile(_exe, _currSet, false);            
 

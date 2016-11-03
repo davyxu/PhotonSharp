@@ -10,8 +10,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.Func);
 
-            var scope = new Scope(_topScope, ScopeType.Function);
-            _scopeSet.Add(scope);
+            var scope = new Scope(_topScope, ScopeType.Function);            
 
             var ident = ParseIdent();
 
@@ -90,9 +89,17 @@ namespace Photon.Parser
                 Next();
 
                 values = ParseRHSList();
+
+                var lhs = new List<Expr>();
+                foreach( var id in idents )
+                {
+                    lhs.Add( id );
+                }
+
+                return new AssignStmt(lhs, values);
             }
 
-            return new VarDeclare(idents, values);
+            return new VarDeclareStmt(idents );
         }
 
 

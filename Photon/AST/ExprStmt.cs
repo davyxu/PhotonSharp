@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace Photon.AST
 {
+    // 单独的一句表达式(例如: 纯函数调用)
     public class ExprStmt : Stmt
     {
         public List<Expr> X;
         public ExprStmt(List<Expr> x)
         {
             X = x;
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()

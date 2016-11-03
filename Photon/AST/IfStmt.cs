@@ -20,6 +20,8 @@ namespace Photon.AST
             Condition = con;
             Body = body;
             ElseBody = elsebody;
+
+            BuildRelation();
         }
 
 

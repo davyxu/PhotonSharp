@@ -15,6 +15,8 @@ namespace Photon.AST
         public BlockStmt(List<Stmt> list)
         {
             Stmts = list;
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()

@@ -6,7 +6,7 @@ namespace Photon.AST
     {
         public string Name;
 
-        public ScopeMeta ScopeInfo;
+        public Symbol ScopeInfo;
 
         public Ident(string n)
         {
@@ -17,7 +17,7 @@ namespace Photon.AST
         {
             if (ScopeInfo != null)
             {
-                return string.Format("{0} @ {1}", Name, ScopeInfo.Slot);
+                return string.Format("{0} R({1})", Name, ScopeInfo.RegIndex);
             }
 
             return Name;
@@ -25,16 +25,15 @@ namespace Photon.AST
         }
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
-        {
-            var scopeIndex = ScopeInfo.Parent.Index;
+        {            
 
             if (lhs)
             {
-                cm.Add(new Command(Opcode.SetR, ScopeInfo.Slot, scopeIndex)).Comment = Name;
+                cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex )).Comment = Name;
             }
             else
             {
-                cm.Add(new Command(Opcode.LoadR, ScopeInfo.Slot, scopeIndex)).Comment = Name;
+                cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex )).Comment = Name;
             }
         }
     }

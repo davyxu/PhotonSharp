@@ -9,6 +9,8 @@ namespace Photon.AST
         public Chunk(BlockStmt block)
         {
             Block = block;
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()

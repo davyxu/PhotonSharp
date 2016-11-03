@@ -15,6 +15,8 @@ namespace Photon.AST
         public ReturnStmt(List<Expr> list)
         {
             Results = list;
+
+            BuildRelation();
         }
 
         public override IEnumerable<Node> Child()

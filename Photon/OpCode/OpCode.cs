@@ -15,8 +15,6 @@ namespace Photon.OpCode
         LE,     // S[Top] = S[I] <= S[I+1]
         EQ,     // S[Top] = S[I] == S[I+1]
         NE,     // S[Top] = S[I] != S[I+1]
-        SetG,   // G[I] = S[I+1]
-        LoadG,  // S[Top] = G[I]
         LoadC,  // S[Top] = C[I]
         LoadR,  // S[Top] = R[I]
         SetR,   // R[I] = S[I+1]

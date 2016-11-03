@@ -16,16 +16,31 @@ namespace Photon.VM
                     break;
                 case Opcode.LoadR:
                     {
-                        DataValue r = GetFrameReg(cmd.DataA);
+                        DataValue v = LocalRegister.Get(cmd.DataA);
 
-                        _dataStack.Push(r);
+                        _dataStack.Push(v);
                     }
                     break;
+
                 case Opcode.SetR:
                     {
                         var regIndex = cmd.DataA;
                         var d = _dataStack.Pop();
-                        SetFrameReg(regIndex, d);
+                        LocalRegister.Set(regIndex, d);
+                    }
+                    break;
+                case Opcode.LoadG:
+                    {
+                        DataValue v = _globalReg.Get(cmd.DataA);
+
+                        _dataStack.Push(v);
+                    }
+                    break;
+                case Opcode.SetG:
+                    {
+                        var regIndex = cmd.DataA;
+                        var d = _dataStack.Pop();
+                        _globalReg.Set(regIndex, d);
                     }
                     break;
                 case Opcode.Jnz:
@@ -39,13 +54,11 @@ namespace Photon.VM
                             _currFrame.PC = targetPC;
                             return;
                         }
-
                     }
                     break;
                 case Opcode.Jmp:
                     {
                         var targetPC = cmd.DataA;
-
 
                         _currFrame.PC = targetPC;
                         return;
@@ -69,7 +82,7 @@ namespace Photon.VM
                         for (int i = 0; i < argCount; i++)
                         {
                             var arg = _dataStack.Peek(-argCount + i);
-                            SetFrameReg(i, arg);
+                            LocalRegister.Set(i, arg);
                         }
 
                         // 清空栈
@@ -86,8 +99,6 @@ namespace Photon.VM
                 case Opcode.Ret:
                     {
                         PopFrame();
-
-
                     }
                     break;
                 case Opcode.Add:

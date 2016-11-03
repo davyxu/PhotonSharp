@@ -14,6 +14,9 @@ namespace Photon.VM
 
         RuntimeFrame _currFrame;
 
+        Register _globalReg = new Register("G", 10);
+
+
         Executable _exe;
 
         public VMachine( int maxstack = 10)
@@ -54,14 +57,14 @@ namespace Photon.VM
             _currFrame = _frameStack.Pop();
         }
 
-        void SetFrameReg(int regIndex, DataValue v)
+        public Register GlobalRegister
         {
-            _currFrame.Reg.Set(regIndex, v);
+            get{return _globalReg;}
         }
 
-        public DataValue GetFrameReg( int regIndex )
+        public Register LocalRegister
         {
-            return _currFrame.Reg.Get(regIndex);
+            get { return _currFrame.Reg; }
         }
 
         public void Run( Executable exe )
@@ -92,6 +95,10 @@ namespace Photon.VM
 
                     // 寄存器信息
                     _currFrame.Reg.DebugPrint();
+
+                    // 全局寄存器
+                    _globalReg.DebugPrint();
+
                     Debug.WriteLine("");
                 }
 

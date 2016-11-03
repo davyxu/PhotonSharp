@@ -18,7 +18,7 @@ namespace Photon.VM
 
         public RuntimeFrame(CommandSet cs)
         {
-            Reg = new Register(10);
+            Reg = new Register("reg",10);
             CmdSet = cs; 
         }        
 

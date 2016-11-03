@@ -2,6 +2,7 @@
 using Photon.VM;
 using Photon.OpCode;
 using System.Diagnostics;
+using System;
 
 namespace UnitTest
 {
@@ -30,6 +31,7 @@ namespace UnitTest
         public void Error( string info )
         {
             Debug.WriteLine("[{0}] failed, {1}", _caseName, info);
+            throw new Exception(info);
         }
 
         public TestBox TestStackClear()
@@ -40,11 +42,21 @@ namespace UnitTest
             }
 
             return this;
+        }        
+
+        public TestBox TestGlobalRegEqual(int index, float num)
+        {
+            return TestRegEqual(index, num, _script.VM.GlobalRegister);
         }
 
-        public TestBox TestRegEqual(int index, float num)
+        public TestBox TestLocalRegEqual(int index, float num)
         {
-            var v = _script.VM.GetFrameReg( index );
+            return TestRegEqual(index, num, _script.VM.LocalRegister);
+        }
+
+        TestBox TestRegEqual(int index, float num, Register reg )
+        {
+            var v = reg.Get( index );
 
             if ( v == null )
             {

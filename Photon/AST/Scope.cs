@@ -10,6 +10,14 @@ namespace Photon.AST
         public int RegIndex;
 
         public Scope Belong;
+
+        public bool IsGlobal
+        {
+            get
+            {
+                return Belong.Type == ScopeType.Global;
+            }
+        }
     }
 
     public enum ScopeType
@@ -32,6 +40,11 @@ namespace Photon.AST
             this.outter = outter;
 
             this.type = type;
+        }
+
+        public ScopeType Type
+        {
+            get { return this.type; }
         }
 
         public Scope Outter

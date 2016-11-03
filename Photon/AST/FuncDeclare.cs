@@ -63,7 +63,7 @@ namespace Photon.AST
 
             cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.GetDesc();
 
-            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
+            cm.Add(new Command(Opcode.SetG, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
 
             Body.Compile(exe, newset, false);
 

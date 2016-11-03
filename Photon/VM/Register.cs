@@ -7,9 +7,11 @@ namespace Photon.VM
     {
         DataValue[] _data;
         int _usedSlot;
+        string _usage;
 
-        public Register( int maxReg )
+        public Register( string usage, int maxReg )
         {
+            _usage = usage;
             _data = new DataValue[maxReg];
         }
 
@@ -45,15 +47,13 @@ namespace Photon.VM
         }
 
         public void DebugPrint()
-        {
-            Debug.WriteLine("reg:");
-
+        {            
             for (int i = 0; i <= _usedSlot; i++)
             {
                 if (_data[i] == null)
                     continue;
 
-                Debug.WriteLine("{0}: {1}", i, _data[i].GetDesc());
+                Debug.WriteLine("[{0}] {1}: {2}", _usage, i, _data[i].GetDesc());
             }
         }
     }

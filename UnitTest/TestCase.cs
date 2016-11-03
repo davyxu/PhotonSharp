@@ -5,7 +5,7 @@ namespace UnitTest
     {
         static void TestCase( )
         {
-            (new TestBox("func var assign")).Run(@"
+            (new TestBox("DataStackBalance")).Run(@"
 
 func add( a, b ){
     return a+b
@@ -15,7 +15,7 @@ add(1, 2)
 ").TestStackClear();
 
 
-            (new TestBox("multicall")).Run(@"
+            (new TestBox("MultiCall")).Run(@"
 func mul( a, b ){
     return a * b
 }
@@ -27,9 +27,9 @@ func foo( a, b ){
 }
 
 var y = foo( 1, 2 )
-").TestStackClear().TestRegEqual(2, 5);
+").TestStackClear().TestGlobalRegEqual(2, 5);
 
-            (new TestBox("if")).Run(@"
+            (new TestBox("IfStatement")).Run(@"
 var x = 1
 var y
 if x >= 1 {
@@ -38,28 +38,28 @@ if x >= 1 {
 }else{
     y = 2
 }
-").TestStackClear().TestRegEqual(0, 1).TestRegEqual(1, 5);
+").TestStackClear().TestGlobalRegEqual(0, 1).TestGlobalRegEqual(1, 5);
 
-            (new TestBox("swap var")).Run(@"
+            (new TestBox("SwapVar")).Run(@"
 var x, y = 1, 2
 x, y = y, x
-").TestStackClear().TestRegEqual(0, 2).TestRegEqual(1, 1);
+").TestStackClear().TestGlobalRegEqual(0, 2).TestGlobalRegEqual(1, 1);
 
 
-            (new TestBox("simple loop")).Run(@"
+            (new TestBox("WhileLoop")).Run(@"
 var x = 1
 
 while x < 3 {
     x = x + 1
 }
-").TestStackClear().TestRegEqual(0, 3);
+").TestStackClear().TestGlobalRegEqual(0, 3);
 
-            (new TestBox("for loop")).Run(@"
+            (new TestBox("ForLoop")).Run(@"
 var x = 10
 for i = 1;i < 3;i=i+1 {
     x = x - 1
 }
-").TestStackClear().TestRegEqual(0, 8).TestRegEqual(1, 3);
+").TestStackClear().TestGlobalRegEqual(0, 8).TestLocalRegEqual(0, 3);
 
 
         }

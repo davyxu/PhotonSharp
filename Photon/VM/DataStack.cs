@@ -81,15 +81,13 @@ namespace Photon.VM
         }
 
         public void DebugPrint( )
-        {
-            Debug.WriteLine("stack:");
-
+        {            
             for( int i = 0;i < _count;i++)
             {
                 if (_values[i] == null)
                     break;
 
-                Debug.WriteLine("{0}: {1}", i, _values[i].GetDesc());
+                Debug.WriteLine("[stack] {0}: {1}", i, _values[i].GetDesc());
             }
         }
     }

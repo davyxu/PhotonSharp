@@ -29,11 +29,27 @@ namespace Photon.AST
 
             if (lhs)
             {
-                cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex )).Comment = Name;
+                if (ScopeInfo.IsGlobal)
+                {
+                    cm.Add(new Command(Opcode.SetG, ScopeInfo.RegIndex)).Comment = Name;
+                }
+                else
+                {
+                    cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex)).Comment = Name;
+                }
+                
             }
             else
             {
-                cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex )).Comment = Name;
+                if (ScopeInfo.IsGlobal )
+                {
+                    cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex)).Comment = Name;
+                }
+                else
+                {
+                    cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex)).Comment = Name;
+                }
+                
             }
         }
     }

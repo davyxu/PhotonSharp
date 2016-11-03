@@ -67,7 +67,7 @@ namespace Photon.Parser
                 }
             }
 
-            Error(string.Format("undeclared symbol {0}", ident.Name));
+            Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );
 
         }
     }

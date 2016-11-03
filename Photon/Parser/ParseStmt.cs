@@ -11,8 +11,8 @@ namespace Photon.Parser
         {
             var list = new List<Stmt>();
 
-            while (_token.Type != TokenType.EOF &&
-                 _token.Type != TokenType.RBrace)
+            while (CurrTokenType != TokenType.EOF &&
+                 CurrTokenType != TokenType.RBrace)
             {
                 list.Add(ParseStatement());
             }
@@ -33,7 +33,7 @@ namespace Photon.Parser
 
             List<Expr> results = new List<Expr>();
 
-            if (_token.Type != TokenType.RBrace)
+            if (CurrTokenType != TokenType.RBrace)
             {
                 results = ParseRHSList();
             }
@@ -58,7 +58,7 @@ namespace Photon.Parser
 
         Stmt ParseStatement()
         {
-            switch (_token.Type)
+            switch (CurrTokenType)
             {
                 case TokenType.Identifier:
                 case TokenType.Number:
@@ -94,7 +94,7 @@ namespace Photon.Parser
 
             BlockStmt elseBody;
 
-            if (_token.Type == TokenType.Else)
+            if (CurrTokenType == TokenType.Else)
             {
                 Next();
                 elseBody = ParseBlockStmt();

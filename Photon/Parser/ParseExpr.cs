@@ -1,5 +1,6 @@
 ﻿using Photon.AST;
 using Photon.Scanner;
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon.Parser
@@ -8,7 +9,7 @@ namespace Photon.Parser
     {
         int GetTokenPrecedence()
         {
-            switch (_token.Type)
+            switch (CurrTokenType)
             {
                 case TokenType.Equal:
                 case TokenType.NotEqual:
@@ -30,19 +31,20 @@ namespace Photon.Parser
 
         Ident ParseIdent( )
         {
-            var name = "_";
+            //var name = "_";
+            
 
-            if ( _token.Type == TokenType.Identifier )
+            if ( CurrTokenType == TokenType.Identifier )
             {
-                name = _token.Value;
+                var token = _token;
                 Next();
-            }
-            else
-            {
-                Expect(TokenType.Identifier);
-            }
 
-            return new Ident(name);
+                return new Ident(token);
+            }
+   
+            Expect(TokenType.Identifier);
+
+           return null;
         }
 
         List<Ident> ParseIdentList( )
@@ -50,7 +52,7 @@ namespace Photon.Parser
             List<Ident> list = new List<Ident>();
             list.Add(ParseIdent());
 
-            while (_token.Type == TokenType.Comma)
+            while (CurrTokenType == TokenType.Comma)
             {
                 Next();
                 list.Add(ParseIdent());
@@ -61,7 +63,7 @@ namespace Photon.Parser
 
         Expr ParseOperand(bool lhs)
         {
-            switch (_token.Type)
+            switch (CurrTokenType)
             {
                 case TokenType.Identifier:
                     {
@@ -74,7 +76,7 @@ namespace Photon.Parser
                 case TokenType.Number:
                 case TokenType.QuotedString:
                     {
-                        var x = new BasicLitExpr(_token.Value, _token.Type);
+                        var x = new BasicLitExpr(_token.Value, CurrTokenType);
                         Next();
                         return x;
                     }
@@ -126,7 +128,7 @@ namespace Photon.Parser
 
             while (parsing)
             {
-                switch( _token.Type )
+                switch( CurrTokenType )
                 {
                         // a.b
                     case TokenType.Dot:
@@ -135,7 +137,7 @@ namespace Photon.Parser
 
                             Resolve(x);
 
-                            switch (_token.Type)
+                            switch (CurrTokenType)
                             {
                                 case TokenType.Identifier:
                                     {
@@ -181,12 +183,12 @@ namespace Photon.Parser
         }
         Expr ParseUnaryExpr(bool lhs)
         {
-            switch (_token.Type)
+            switch (CurrTokenType)
             {
                 case TokenType.Add:
                 case TokenType.Sub:
                     {
-                        var op = _token.Type;
+                        var op = CurrTokenType;
                         Next();
                         var x = ParsePrimaryExpr( false );
 
@@ -209,7 +211,7 @@ namespace Photon.Parser
                     if (opprec != prec)
                         break;
 
-                    var op = _token.Type;
+                    var op = CurrTokenType;
 
                     Next();
 
@@ -238,7 +240,7 @@ namespace Photon.Parser
             List<Expr> list = new List<Expr>();
             list.Add(ParseExpr(lhs));
 
-            while( _token.Type == TokenType.Comma )
+            while( CurrTokenType == TokenType.Comma )
             {
                 Next();
                 list.Add(ParseExpr(lhs));
@@ -283,7 +285,7 @@ namespace Photon.Parser
             var x = ParseLHSList();
 
 
-            if (_token.Type == TokenType.Assign)
+            if (CurrTokenType == TokenType.Assign)
             {
                 Next();
 

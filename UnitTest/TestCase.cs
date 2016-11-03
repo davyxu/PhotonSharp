@@ -5,6 +5,23 @@ namespace UnitTest
     {
         static void TestCase( )
         {
+            (new TestBox("Scope")).Run(@"
+var a = 1
+
+func foo( a ){
+
+    var c = a
+
+    return c
+}
+
+var c = foo( a )
+
+
+").TestStackClear();
+
+
+
             (new TestBox("DataStackBalance")).Run(@"
 
 func add( a, b ){

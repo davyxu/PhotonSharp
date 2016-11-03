@@ -3,6 +3,7 @@ using Photon.Compiler;
 using Photon.VM;
 using Photon.OpCode;
 using System.Diagnostics;
+using System.IO;
 
 namespace Photon.API
 {
@@ -27,11 +28,30 @@ namespace Photon.API
             get { return _vm; }
         }
 
+        public static void PrintSource( string src )
+        {
+            var lines = src.Split('\r');
+            int lineCount  = 1;
+            foreach( var line in lines )
+            {
+                string trimedLine;
+                if (line.Length > 0 && line[0] == '\n' )
+                {
+                    trimedLine  = line.Substring(1);
+                }else{
+                    trimedLine  = line;
+                }
+
+                Debug.Print("{0} {1}", lineCount, trimedLine);
+                lineCount ++;
+            }
+        }
+
         public Executable Compile( string src )
         {
             if (_debugMode)
             {
-                Debug.WriteLine(src);
+                PrintSource(src);
             }
 
             // 编译生成AST

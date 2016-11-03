@@ -1,16 +1,27 @@
 ﻿
 using Photon.OpCode;
+using SharpLexer;
 namespace Photon.AST
 {
     public class Ident : Expr
     {
-        public string Name;
+        Token _token;
 
         public Symbol ScopeInfo;
 
-        public Ident(string n)
+        public Ident(Token t)
         {
-            Name = n;
+            _token = t;
+        }
+
+        public TokenPos DefinePos
+        {
+            get { return _token.Pos; }
+        }
+
+        public string Name
+        {
+            get { return _token.Value; }
         }
 
         public override string ToString()

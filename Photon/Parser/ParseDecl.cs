@@ -32,7 +32,7 @@ namespace Photon.Parser
             List<Ident> p = new List<Ident>();
 
 
-            if (_token.Type != TokenType.RBracket )
+            if (CurrTokenType != TokenType.RBracket )
             {
                 while (true)
                 {
@@ -41,7 +41,7 @@ namespace Photon.Parser
 
                     Declare(param, s, param.Name);
 
-                    if (_token.Type != TokenType.Comma)
+                    if (CurrTokenType != TokenType.Comma)
                     {
                         break;
                     }
@@ -84,7 +84,7 @@ namespace Photon.Parser
 
             List<Expr> values = new List<Expr>();
 
-            if (_token.Type == TokenType.Assign)
+            if (CurrTokenType == TokenType.Assign)
             {
                 Next();
 

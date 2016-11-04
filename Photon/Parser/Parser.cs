@@ -25,7 +25,7 @@ namespace Photon.Parser
 
         public ScriptParser( )
         {
-            _lexer.AddMatcher(new NumeralMatcher(TokenType.Number));
+            _lexer.AddMatcher(new PositiveNumeralMatcher(TokenType.Number));
 
             _lexer.AddMatcher(new WhitespaceMatcher(TokenType.Whitespace).Ignore());
             _lexer.AddMatcher(new LineEndMatcher(TokenType.LineEnd).Ignore());

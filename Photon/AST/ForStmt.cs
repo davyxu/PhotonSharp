@@ -9,13 +9,13 @@ namespace Photon.AST
 {
     public class ForStmt : Stmt
     {
-        public Expr Condition;
-
-        public BlockStmt Body;
-
         public Stmt Init;
 
+        public Expr Condition;
+
         public Stmt Post;
+
+        public BlockStmt Body;
 
         public ForStmt(Stmt init, Expr con, Stmt post, BlockStmt body)
         {

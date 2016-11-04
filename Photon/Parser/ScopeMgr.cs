@@ -2,6 +2,7 @@
 using Photon.Scanner;
 using SharpLexer;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Photon.Parser
 {
@@ -73,6 +74,14 @@ namespace Photon.Parser
 
             Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );
 
+        }
+
+        public void PrintScopeSymbol( )
+        {
+
+            Debug.WriteLine("symbols:");
+
+            _global.DebugPrint("");
         }
     }
 }

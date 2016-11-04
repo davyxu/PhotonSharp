@@ -1,0 +1,10 @@
+var a = 1
+
+func foo( a ){
+
+    var x = a
+
+    return x
+}
+
+var c = foo( a )

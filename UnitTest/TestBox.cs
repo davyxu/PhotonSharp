@@ -3,6 +3,7 @@ using Photon.VM;
 using Photon.OpCode;
 using System.Diagnostics;
 using System;
+using System.IO;
 
 namespace UnitTest
 {
@@ -10,15 +11,12 @@ namespace UnitTest
     {
         Script _script = new Script();
 
-        string _caseName;
+        string _caseName;        
 
-        public TestBox( string caseName )
+        public TestBox Run( string caseName, string src )
         {
             _caseName = caseName;
-        }
 
-        public TestBox Run( string src )
-        {
             _script.DebugMode = true;
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
@@ -26,6 +24,14 @@ namespace UnitTest
             _script.Run(_script.Compile(src));
 
             return this;
+        }
+
+        public TestBox RunFile( string filename )
+        {            
+
+            var content = File.ReadAllText(filename);
+
+            return Run(filename, content).TestStackClear();
         }
 
         public void Error( string info )

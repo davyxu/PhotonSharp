@@ -1,0 +1,10 @@
+func mul( a, b ){
+    return a * b
+}
+
+func foo( a, b ){
+
+    return a + mul( b, 2 )
+}
+
+var y = foo( 1, 2 )

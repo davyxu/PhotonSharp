@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using SharpLexer;
+using System.Diagnostics;
 
 namespace Photon.AST
 {
@@ -20,6 +21,11 @@ namespace Photon.AST
                 return Belong.Type == ScopeType.Global;
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} R{1}  {2}", Name, RegIndex, DefinePos);
+        }
     }
 
     public enum ScopeType
@@ -32,37 +38,44 @@ namespace Photon.AST
 
     public class Scope
     {
-        Scope outter;
-        ScopeType type;        
+        Scope _outter;
+        ScopeType _type;        
         
-        Dictionary<string, Symbol> symbolByName = new Dictionary<string, Symbol>();
+        Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
+
+        List<Scope> _child = new List<Scope>();
 
         public Scope(Scope outter, ScopeType type)
         {
-            this.outter = outter;
+            if (outter != null )
+            {
+                outter._child.Add(this);
+            }
+            
+            _outter = outter;
 
-            this.type = type;
+            _type = type;
         }
 
         public ScopeType Type
         {
-            get { return this.type; }
+            get { return this._type; }
         }
 
         public Scope Outter
         {
-            get { return outter; }
+            get { return _outter; }
         }
 
         public override string ToString()
         {
-            return type.ToString();
+            return _type.ToString();
         }
 
         public Symbol Lookup( string name ) 
         {
            Symbol ret;
-           if ( symbolByName.TryGetValue( name, out ret ) )
+           if ( _symbolByName.TryGetValue( name, out ret ) )
            {
                return ret;
            }
@@ -74,23 +87,38 @@ namespace Photon.AST
         {
             get{
 
-                if (outter != null)
+                if (_outter != null)
                 {
-                    return outter.RegBase;
+                    return _outter.RegBase;
                 }
 
-                return symbolByName.Count;
+                return _symbolByName.Count;
             }
            
         }
 
+        public void DebugPrint( string indent )
+        {
+            Debug.WriteLine(indent + _type.ToString());
+
+            foreach( var kv in _symbolByName )
+            {
+                Debug.WriteLine(string.Format("{0} {1}", indent,kv.Value ));                
+            }
+
+
+            foreach( var c in _child )
+            {
+                c.DebugPrint(indent + "\t");
+            }
+        }
 
         public void Insert( Symbol data )
         {
-            data.RegIndex = symbolByName.Count;
+            data.RegIndex = _symbolByName.Count;
             data.Belong = this;
 
-            symbolByName.Add(data.Name, data);
+            _symbolByName.Add(data.Name, data);
         }
     }
 }

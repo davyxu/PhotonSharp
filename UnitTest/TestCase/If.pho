@@ -1,0 +1,8 @@
+var x = 1
+var y
+if x >= 1 {
+    var c = 5
+    y = c
+}else{
+    y = 2
+}

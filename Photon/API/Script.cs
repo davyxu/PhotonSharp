@@ -60,6 +60,8 @@ namespace Photon.API
             if (_debugMode)
             {
                 ScriptParser.DebugPrint(chunk);
+
+                _parser.PrintScopeSymbol();
             }
 
             // 遍历AST,生成代码

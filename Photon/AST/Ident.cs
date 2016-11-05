@@ -1,5 +1,5 @@
 ﻿
-using Photon.OpCode;
+using Photon.Model;
 using SharpLexer;
 namespace Photon.AST
 {

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.OpCode
+namespace Photon.Model
 {
     public class ConstantSet
     {
-        List<DataValue> _cset = new List<DataValue>();
+        List<Value> _cset = new List<Value>();
 
-        public int Add(DataValue inc)
+        public int Add(Value inc)
         {
             int index = 0;
             foreach( var c in _cset )
@@ -23,7 +23,7 @@ namespace Photon.OpCode
             return _cset.Count - 1;
         }
 
-        public DataValue Get(int index)
+        public Value Get(int index)
         {
             return _cset[index];
         }
@@ -45,7 +45,7 @@ namespace Photon.OpCode
             int index = 0;
             foreach (var c in _cset)
             {
-                Debug.WriteLine("C[{0}]={1}", index, c.GetDesc());
+                Debug.WriteLine("C[{0}]={1}", index, c.ToString());
                 index++;
             }
 

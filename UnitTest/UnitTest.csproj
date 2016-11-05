@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="TestCase\Class.pho" />
     <None Include="TestCase\DataStackBalance.pho" />
     <None Include="TestCase\ForLoop.pho" />
     <None Include="TestCase\If.pho" />

@@ -1,5 +1,5 @@
 ﻿
-namespace Photon.Scanner
+namespace Photon.Model
 {
     public enum TokenType
     {

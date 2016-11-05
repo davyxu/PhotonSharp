@@ -1,6 +1,6 @@
 ﻿
-using Photon.OpCode;
-using Photon.Scanner;
+using Photon.Model;
+using Photon.Model;
 namespace Photon.AST
 {
     public class BasicLitExpr : Expr
@@ -23,12 +23,12 @@ namespace Photon.AST
             var c = Lit2Const( );
             var ci = exe.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.GetDesc();
+            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
         }
 
-        DataValue Lit2Const()
+        Value Lit2Const()
         {
-            DataValue c = null;
+            Value c = null;
 
             switch (Type)
             {
@@ -38,7 +38,7 @@ namespace Photon.AST
                         if (!float.TryParse(Value, out v))
                             return null;
 
-                        c = new NumberValue(v);
+                        c = new ValueNumber(v);
                     }
                     break;
                 default:

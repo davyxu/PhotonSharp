@@ -1,5 +1,5 @@
 ﻿using Photon.AST;
-using Photon.Scanner;
+using Photon.Model;
 using SharpLexer;
 using System.Collections.Generic;
 using System.Diagnostics;

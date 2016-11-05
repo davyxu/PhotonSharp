@@ -1,5 +1,5 @@
-﻿using Photon.OpCode;
-using Photon.Scanner;
+﻿using Photon.Model;
+using Photon.Model;
 using System.Collections.Generic;
 
 namespace Photon.AST

@@ -1,6 +1,6 @@
 ﻿using Photon.API;
 using Photon.VM;
-using Photon.OpCode;
+using Photon.Model;
 using System.Diagnostics;
 using System;
 using System.IO;
@@ -70,7 +70,7 @@ namespace UnitTest
                 return this;
             }
 
-            var nv = v as NumberValue;
+            var nv = v as ValueNumber;
             if (nv == null)
             {
                 Error(string.Format("value type error on index: {0}, expect 'number', have '{1}'", index, v.GetType().Name));

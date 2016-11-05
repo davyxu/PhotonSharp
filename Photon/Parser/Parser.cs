@@ -1,4 +1,4 @@
-﻿using Photon.Scanner;
+﻿using Photon.Model;
 using Photon.AST;
 using System;
 using System.Diagnostics;

@@ -1,4 +1,4 @@
-﻿using Photon.OpCode;
+﻿using Photon.Model;
 using System.Collections.Generic;
 using System.Text;
 
@@ -58,10 +58,10 @@ namespace Photon.AST
 
             var funcIndex = exe.AddCmdSet(newset);
 
-            var c = new FuncValue(funcIndex);
+            var c = new ValueFunc(funcIndex);
             var ci = exe.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.GetDesc();
+            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
 
             cm.Add(new Command(Opcode.SetG, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
 

@@ -1,4 +1,4 @@
-﻿using Photon.OpCode;
+﻿using Photon.Model;
 
 namespace Photon.VM
 {
@@ -10,7 +10,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(a + b));
+            vm.Stack.Push(new ValueNumber(a + b));
 
             return true;
         }
@@ -28,7 +28,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b - a));
+            vm.Stack.Push(new ValueNumber(b - a));
 
             return true;
         }
@@ -47,7 +47,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(a * b));
+            vm.Stack.Push(new ValueNumber(a * b));
 
             return true;
         }
@@ -66,7 +66,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b / a));
+            vm.Stack.Push(new ValueNumber(b / a));
 
             return true;
         }
@@ -85,7 +85,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b > a ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(b > a ? 1 : 0));
 
             return true;
         }
@@ -104,7 +104,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b >= a ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(b >= a ? 1 : 0));
 
             return true;
         }
@@ -123,7 +123,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b < a ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(b < a ? 1 : 0));
 
             return true;
         }
@@ -142,7 +142,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(b <= a ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(b <= a ? 1 : 0));
 
             return true;
         }
@@ -161,7 +161,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(a == b ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(a == b ? 1 : 0));
 
             return true;
         }
@@ -180,7 +180,7 @@ namespace Photon.VM
             var a = VMachine.CastNumber(vm.Stack.Pop());
             var b = VMachine.CastNumber(vm.Stack.Pop());
 
-            vm.Stack.Push(new NumberValue(a != b ? 1 : 0));
+            vm.Stack.Push(new ValueNumber(a != b ? 1 : 0));
 
             return true;
         }

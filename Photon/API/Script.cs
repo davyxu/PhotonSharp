@@ -1,6 +1,6 @@
 ﻿using Photon.Parser;
 using Photon.VM;
-using Photon.OpCode;
+using Photon.Model;
 using System.Diagnostics;
 using System.IO;
 
@@ -100,7 +100,7 @@ namespace Photon.API
 
             if ( _debugMode )
             {
-                _vm.DebugPrint();
+                _vm.Stack.DebugPrint();
             }
             
         }

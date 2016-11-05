@@ -1,4 +1,4 @@
-﻿using Photon.OpCode;
+﻿using Photon.Model;
 
 namespace Photon.VM
 {
@@ -24,7 +24,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            DataValue v = vm.LocalRegister.Get(cmd.DataA);
+            Value v = vm.LocalRegister.Get(cmd.DataA);
             vm.Stack.Push(v);
 
             return true;  
@@ -62,7 +62,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            DataValue v = vm.GlobalRegister.Get(cmd.DataA);
+            Value v = vm.GlobalRegister.Get(cmd.DataA);
 
             vm.Stack.Push(v);
 

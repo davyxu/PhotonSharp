@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.OpCode
+namespace Photon.Model
 {
 
     public class Executable

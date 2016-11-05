@@ -1,17 +1,16 @@
-﻿using Photon.OpCode;
-using System;
+﻿using Photon.Model;
 using System.Diagnostics;
 
 namespace Photon.VM
 {
     public class DataStack
     {
-        DataValue[] _values;
+        Value[] _values;
         int _count = 0;
 
         public DataStack( int max )
         {
-            _values = new DataValue[max];
+            _values = new Value[max];
         }
 
         public int Count
@@ -31,7 +30,7 @@ namespace Photon.VM
 
 
         // 设置到希望的高度
-        public void Set( int top )
+        public void SetTop( int top )
         {
             for( int i = top;i < _count;i++)
             {
@@ -41,14 +40,14 @@ namespace Photon.VM
             _count = top;
         }
 
-        public void Push( DataValue v )
+        public void Push( Value v )
         {
 
             _values[_count] = v;
             _count++;
         }
 
-        public DataValue Pop( )
+        public Value Pop( )
         {
             var v = _values[_count - 1];
 
@@ -71,7 +70,7 @@ namespace Photon.VM
             _count -= count;
         }
 
-        public DataValue Get( int index = -1 )
+        public Value Get( int index = -1 )
         {
             if ( index >=0 )
             {
@@ -103,7 +102,7 @@ namespace Photon.VM
                 string str = "null";
                 if ( v != null )
                 {
-                    str = v.GetDesc();
+                    str = v.ToString();
                 }
 
 

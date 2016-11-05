@@ -1,4 +1,4 @@
-﻿using Photon.OpCode;
+﻿using Photon.Model;
 
 namespace Photon.VM
 {

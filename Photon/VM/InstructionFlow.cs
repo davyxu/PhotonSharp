@@ -1,4 +1,4 @@
-﻿using Photon.OpCode;
+﻿using Photon.Model;
 
 namespace Photon.VM
 {
@@ -52,7 +52,7 @@ namespace Photon.VM
             var funcIndex = VMachine.CastFuncIndex(vm.Stack.Get(-argCount - 1));
 
             // 更换当前上下文
-            vm.PushFrame(funcIndex);
+            vm.EnterFrame(funcIndex);
 
             // 调用结束时需要平衡栈
             if (cmd.DataB != 0)
@@ -88,7 +88,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            vm.PopFrame();
+            vm.LaveFrame();
 
             return true;
         }

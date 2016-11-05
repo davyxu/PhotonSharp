@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Photon.OpCode;
+using Photon.Model;
 using System;
 using System.Diagnostics;
 using Photon.AST;
@@ -44,6 +44,26 @@ namespace Photon.VM
         public DataStack Stack
         {
             get { return _dataStack; }
+        }
+
+        public Register GlobalRegister
+        {
+            get { return _globalReg; }
+        }
+
+        public Register LocalRegister
+        {
+            get { return _currFrame.Reg; }
+        }
+
+        public Executable Executable
+        {
+            get { return _exe; }
+        }
+
+        public RuntimeFrame CurrFrame
+        {
+            get { return _currFrame; }
         }
 
         public VMachine()
@@ -99,7 +119,7 @@ namespace Photon.VM
             return inc(this, cmd);
         }
 
-        public void PushFrame( int funcIndex )
+        public void EnterFrame( int funcIndex )
         {
             var newFrame = new RuntimeFrame(_exe.CmdSet[funcIndex] );
 
@@ -111,35 +131,17 @@ namespace Photon.VM
             _currFrame = newFrame;
         }
 
-        public void PopFrame( )
+        public void LaveFrame( )
         {
             if ( _currFrame.RestoreDataStack )
             {
-                _dataStack.Set(_currFrame.DataStackBase);
+                _dataStack.SetTop(_currFrame.DataStackBase);
             }
 
             _currFrame = _frameStack.Pop();
         }
 
-        public Register GlobalRegister
-        {
-            get{return _globalReg;}
-        }
 
-        public Register LocalRegister
-        {
-            get { return _currFrame.Reg; }
-        }
-
-        public Executable Executable
-        {
-            get { return _exe; }
-        }
-
-        public RuntimeFrame CurrFrame
-        {
-            get { return _currFrame; }            
-        }
 
         public void Run( Executable exe )
         {
@@ -148,7 +150,7 @@ namespace Photon.VM
 
             _exe = exe;
 
-            PushFrame(0);
+            EnterFrame(0);
 
             while (_currFrame.PC < _currFrame.CmdSet.Commands.Count && _currFrame.PC != -1 )
             {
@@ -183,19 +185,19 @@ namespace Photon.VM
         }
 
 
-        public static bool IsValueNoneZero( DataValue d )
+        public static bool IsValueNoneZero( Value d )
         {
             if (d == null)
                 return false;
 
-            var nv = d as NumberValue;
+            var nv = d as ValueNumber;
 
             if ( nv != null )
             {
                 return nv.Number != 0;
             }
 
-            var fv = d as FuncValue;
+            var fv = d as ValueFunc;
 
             if ( fv != null )
             {
@@ -210,9 +212,9 @@ namespace Photon.VM
         }
 
 
-        public static float CastNumber( DataValue d )
+        public static float CastNumber( Value d )
         {
-            var nv = d as NumberValue;
+            var nv = d as ValueNumber;
             if (nv == null)
             {
                 Error("expect number");
@@ -222,9 +224,9 @@ namespace Photon.VM
             return nv.Number;
         }
 
-        public static int CastFuncIndex( DataValue d )
+        public static int CastFuncIndex( Value d )
         {
-            var fv = d as FuncValue;
+            var fv = d as ValueFunc;
             if ( fv == null )
             {
                 Error("expect function");

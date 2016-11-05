@@ -71,7 +71,7 @@ namespace Photon.VM
             _count -= count;
         }
 
-        public DataValue Peek( int index = -1 )
+        public DataValue Get( int index = -1 )
         {
             if ( index >=0 )
             {
@@ -80,6 +80,17 @@ namespace Photon.VM
 
             
             return _values[_count + index];
+        }
+
+        public string ValueToString(int index = -1)
+        {
+            var v = Get(index);
+            if (v == null)
+            {
+                return "null";
+            }
+
+            return v.ToString();
         }
 
         public void DebugPrint( )

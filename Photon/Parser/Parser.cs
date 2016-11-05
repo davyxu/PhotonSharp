@@ -7,12 +7,12 @@ using SharpLexer;
 namespace Photon.Parser
 {
     public class ParseException : Exception
-    {        
+    {
         public TokenPos Pos;
 
-        public ParseException( string msg, TokenPos pos )
-            : base(msg )
-        {            
+        public ParseException(string msg, TokenPos pos)
+            : base(msg)
+        {
             Pos = pos;
         }
     }
@@ -23,7 +23,7 @@ namespace Photon.Parser
 
         Token _token;
 
-        public ScriptParser( )
+        public ScriptParser()
         {
             _lexer.AddMatcher(new PositiveNumeralMatcher(TokenType.Number));
 
@@ -67,7 +67,7 @@ namespace Photon.Parser
             _lexer.AddMatcher(new UnknownMatcher(TokenType.Unknown));
         }
 
-        public Chunk ParseSource( string source )
+        public Chunk ParseSource(string source)
         {
             InitScope();
 
@@ -86,11 +86,11 @@ namespace Photon.Parser
         void Next()
         {
             _token = _lexer.Read();
-            
-            if ( CurrTokenType  == TokenType.Unknown )
+
+            if (CurrTokenType == TokenType.Unknown)
             {
                 Error("unknown token");
-            }            
+            }
         }
 
         TokenType CurrTokenType
@@ -98,32 +98,28 @@ namespace Photon.Parser
             get { return (TokenType)_token.MatcherID; }
         }
 
-        void Expect( TokenType t )
+        void Expect(TokenType t)
         {
             if (CurrTokenType != t)
             {
-                Error(string.Format("expect token: {0}", t.ToString()));                
+                Error(string.Format("expect token: {0}", t.ToString()));
             }
 
             Next();
         }
 
-        void Error( string str )
+        void Error(string str)
         {
             throw new ParseException(str, _token.Pos);
         }
 
-        void Error(string str, TokenPos pos )
+        void Error(string str, TokenPos pos)
         {
             throw new ParseException(str, pos);
         }
 
-        public static void DebugPrint( Node n)
-        {
-            PrintAST(n, "");
-        }
 
-        static void PrintAST(Node n, string indent)
+        public static void PrintAST(Node n, string indent = "")
         {
             Debug.WriteLine(indent + n.ToString());
 

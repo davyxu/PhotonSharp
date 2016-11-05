@@ -25,6 +25,7 @@ namespace Photon.OpCode
         Jnz,    // S[Top] != 0
         Jmp,    // 无条件
         Exit,
+        MAX,
     }
 
 

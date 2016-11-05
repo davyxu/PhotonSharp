@@ -6,9 +6,23 @@ using Photon.AST;
 
 namespace Photon.VM
 {
+    using InstructionExecFunc = Func<VMachine, Command, bool>;
+    using InstructionPrintFunc = Func<VMachine, Command, string>;
+    using System.Reflection;
+
+    class InstructionAttribute : Attribute
+    {
+        public Opcode Cmd
+        {
+            get;
+            set;
+        }
+    }
+
+
     public partial class VMachine
     {
-        DataStack _dataStack;
+        DataStack _dataStack = new DataStack(10);       
 
         Stack<RuntimeFrame> _frameStack = new Stack<RuntimeFrame>();
 
@@ -16,13 +30,10 @@ namespace Photon.VM
 
         Register _globalReg = new Register("G", 10);
 
-
         Executable _exe;
 
-        public VMachine( int maxstack = 10)
-        {
-            _dataStack = new DataStack(maxstack);            
-        }
+        InstructionExecFunc[] _instructionExec = new InstructionExecFunc[(int)Opcode.MAX];
+        InstructionPrintFunc[] _instructionPrint = new InstructionPrintFunc[(int)Opcode.MAX];
 
         public bool DebugRun
         {
@@ -35,7 +46,60 @@ namespace Photon.VM
             get { return _dataStack; }
         }
 
-        void PushFrame( int funcIndex )
+        public VMachine()
+        {
+            StaticRegisterAssemblyInstructions();
+        }
+
+        void StaticRegisterAssemblyInstructions()
+        {
+            var ass = Assembly.GetExecutingAssembly();
+
+            foreach (var t in ass.GetTypes())
+            {
+                var att = t.GetCustomAttribute<InstructionAttribute>();
+                if (att == null)
+                    continue;
+
+                MethodInfo exe = t.GetMethod("Execute", BindingFlags.Public | BindingFlags.Static);
+                _instructionExec[(int)att.Cmd] = exe.CreateDelegate(typeof(InstructionExecFunc)) as InstructionExecFunc;
+
+                MethodInfo pt = t.GetMethod("Print", BindingFlags.Public | BindingFlags.Static);
+                if (pt != null )
+                {
+                    _instructionPrint[(int)att.Cmd] = pt.CreateDelegate(typeof(InstructionPrintFunc)) as InstructionPrintFunc;
+                }
+                
+            }
+        }
+
+        string InstructToString( Command cmd )
+        {
+            var inc = _instructionPrint[(int)cmd.Op];
+
+            if (inc == null)
+            {            
+                return string.Empty;
+            }
+
+            return inc( this, cmd );
+        }
+
+        bool ExecCode(Command cmd)
+        {
+            var inc = _instructionExec[(int)cmd.Op];
+
+            if (inc == null)
+            {
+                Error("invalid instruction");
+                return false;
+            }
+
+
+            return inc(this, cmd);
+        }
+
+        public void PushFrame( int funcIndex )
         {
             var newFrame = new RuntimeFrame(_exe.CmdSet[funcIndex] );
 
@@ -47,7 +111,7 @@ namespace Photon.VM
             _currFrame = newFrame;
         }
 
-        void PopFrame( )
+        public void PopFrame( )
         {
             if ( _currFrame.RestoreDataStack )
             {
@@ -67,6 +131,16 @@ namespace Photon.VM
             get { return _currFrame.Reg; }
         }
 
+        public Executable Executable
+        {
+            get { return _exe; }
+        }
+
+        public RuntimeFrame CurrFrame
+        {
+            get { return _currFrame; }            
+        }
+
         public void Run( Executable exe )
         {
             _frameStack.Clear();
@@ -82,10 +156,13 @@ namespace Photon.VM
 
                 if (DebugRun)
                 {
-                    Debug.WriteLine("{0} {1}: {2}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.ToString());
+                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }
 
-                ExecCommand(cmd);
+                if ( ExecCode(cmd) )
+                {
+                    _currFrame.PC++;
+                }
 
                 // 打印执行完后的信息
                 if (DebugRun)
@@ -105,12 +182,8 @@ namespace Photon.VM
             }
         }
 
-        public void DebugPrint( )
-        {   
-            _dataStack.DebugPrint();            
-        }
 
-        static bool IsValueNoneZero( DataValue d )
+        public static bool IsValueNoneZero( DataValue d )
         {
             if (d == null)
                 return false;
@@ -137,7 +210,7 @@ namespace Photon.VM
         }
 
 
-        static float CastNumber( DataValue d )
+        public static float CastNumber( DataValue d )
         {
             var nv = d as NumberValue;
             if (nv == null)
@@ -149,7 +222,7 @@ namespace Photon.VM
             return nv.Number;
         }
 
-        static int CastFuncIndex( DataValue d )
+        public static int CastFuncIndex( DataValue d )
         {
             var fv = d as FuncValue;
             if ( fv == null )

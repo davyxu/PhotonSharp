@@ -27,15 +27,29 @@ namespace Photon.OpCode
         {
             return _cset[index];
         }
+        public string ValueToString(int index)
+        {
+            var v = Get(index);
+            if (v == null)
+            {
+                return "null";
+            }
+
+            return v.ToString();
+        }
 
         public void DebugPrint( )
         {
+            Debug.WriteLine("constant:");
+
             int index = 0;
             foreach (var c in _cset)
             {
                 Debug.WriteLine("C[{0}]={1}", index, c.GetDesc());
                 index++;
             }
+
+            Debug.WriteLine("");
         }
     }
 }

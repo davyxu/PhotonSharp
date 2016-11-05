@@ -2,7 +2,7 @@
 
 namespace Photon.VM
 {
-    class RuntimeFrame
+    public class RuntimeFrame
     {
         public int PC;
 

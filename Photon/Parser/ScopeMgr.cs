@@ -82,6 +82,8 @@ namespace Photon.Parser
             Debug.WriteLine("symbols:");
 
             _global.DebugPrint("");
+
+            Debug.WriteLine("");
         }
     }
 }

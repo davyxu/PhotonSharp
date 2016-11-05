@@ -107,12 +107,16 @@ namespace Photon.OpCode
 
         public void DebugPrint( )
         {
+            Debug.WriteLine( _name);
+
             int index = 0;
             foreach( var c in _cmds )
             {
-                Debug.WriteLine("{0} {1}: {2}", _name, index, c.ToString());
+                Debug.WriteLine("{0,2}| {1}", index, c.ToString());
                 index++;
             }
+
+            Debug.WriteLine("");
         }
     }
 

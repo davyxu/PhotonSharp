@@ -27,6 +27,17 @@ namespace Photon.VM
             return _data[index];
         }
 
+        public string ValueToString( int index )
+        {
+            var v = Get(index);
+            if ( v == null )
+            {
+                return "null";
+            }
+
+            return v.ToString();
+        }
+
         public void ClearTo( int index )
         {
             for (int i = index; i <= _usedSlot;i++ )

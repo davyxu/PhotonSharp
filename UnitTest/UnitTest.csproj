@@ -48,6 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="TestCase\DataStackBalance.pho" />
+    <None Include="TestCase\ForLoop.pho" />
+    <None Include="TestCase\If.pho" />
+    <None Include="TestCase\MultiCall.pho" />
+    <None Include="TestCase\Scope.pho" />
+    <None Include="TestCase\SwapVar.pho" />
+    <None Include="TestCase\Test.pho" />
+    <None Include="TestCase\WhileLoop.pho" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

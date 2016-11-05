@@ -47,7 +47,7 @@ namespace Photon.OpCode
 
         public override string GetDesc()
         {
-            return _number.ToString() + "|number";
+            return _number.ToString() + "(number)";
         }
     }
 
@@ -77,7 +77,7 @@ namespace Photon.OpCode
 
         public override string GetDesc()
         {
-            return _index.ToString() + "|func";
+            return _index.ToString() + "(func)";
         }
     }
 

@@ -1,5 +1,4 @@
 ﻿using Photon.Parser;
-using Photon.Compiler;
 using Photon.VM;
 using Photon.OpCode;
 using System.Diagnostics;
@@ -9,12 +8,12 @@ namespace Photon.API
 {
     public class Script
     {
-        ScriptParser _parser = new ScriptParser();
-        ScriptCompiler _compiler = new ScriptCompiler();
+        ScriptParser _parser = new ScriptParser();        
         VMachine _vm = new VMachine();
 
         bool _debugMode;
-        public bool DebugMode{
+        public bool DebugMode
+        {
             get { return _debugMode; }
             set
             {
@@ -30,6 +29,7 @@ namespace Photon.API
 
         public static void PrintSource( string src )
         {
+            Debug.WriteLine("source:");
             var lines = src.Split('\r');
             int lineCount  = 1;
             foreach( var line in lines )
@@ -45,6 +45,8 @@ namespace Photon.API
                 Debug.Print("{0} {1}", lineCount, trimedLine);
                 lineCount ++;
             }
+
+            Debug.WriteLine("");
         }
 
         public Executable Compile( string src )
@@ -59,13 +61,25 @@ namespace Photon.API
 
             if (_debugMode)
             {
-                ScriptParser.DebugPrint(chunk);
+                Debug.WriteLine("ast:");
+                ScriptParser.PrintAST(chunk);
+                Debug.WriteLine("");
 
                 _parser.PrintScopeSymbol();
             }
 
+            
+            var exe = new Executable();
+
+            var cmdSet = new CommandSet("global");
+
+            exe.AddCmdSet(cmdSet);
+
             // 遍历AST,生成代码
-            var exe = _compiler.Walk(chunk );
+            chunk.Block.Compile(exe, cmdSet, false);
+
+            cmdSet.Add(new Command(Opcode.Exit));
+
 
             if (_debugMode)
             {

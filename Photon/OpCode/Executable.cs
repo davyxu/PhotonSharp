@@ -1,5 +1,6 @@
 ﻿using Photon.AST;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Photon.OpCode
 {
@@ -27,6 +28,7 @@ namespace Photon.OpCode
             {
                 cs.DebugPrint();
             }
+            Debug.WriteLine("");
         }
 
         public int AddCmdSet(CommandSet f)

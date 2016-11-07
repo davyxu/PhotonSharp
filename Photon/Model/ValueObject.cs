@@ -21,6 +21,11 @@ namespace Photon.Model
             return Value.Empty;
         }
 
+        public virtual Value Select(Value obj)
+        {
+            return Value.Empty;
+        }
+
          public virtual void Set(Value obj, Value value )
          {
 

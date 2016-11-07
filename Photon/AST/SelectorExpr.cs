@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,17 @@ namespace Photon.AST
         public override string ToString()
         {
             return "SelectorExpr";
+        }
+
+        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        {
+            X.Compile(exe, cm, lhs );
+            
+            var c = new ValueString(Selector.Name);
+
+            var ci = exe.Constants.Add( c );
+
+            cm.Add(new Command(Opcode.SelectR, ci ) );
         }
     }
 }

@@ -223,6 +223,18 @@ namespace Photon.VM
             return nv.Number;
         }
 
+        public static ValueObject CastObject(Value d)
+        {
+            var nv = d as ValueObject;
+            if (nv == null)
+            {
+                Error("expect object");
+                return null;
+            }
+
+            return nv;
+        }
+
         public static int CastFuncIndex( Value d )
         {
             var fv = d as ValueFunc;

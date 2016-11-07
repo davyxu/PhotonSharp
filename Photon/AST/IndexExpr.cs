@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Photon.AST
 {
+    // a.b   x=a  index=b
+
     public class IndexExpr : Expr
     {
         public Expr X;
@@ -29,6 +32,15 @@ namespace Photon.AST
         public override string ToString()
         {
             return "IndexExpr";
+        }
+
+        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        {
+            X.Compile(exe, cm, lhs);
+
+            Index.Compile(exe, cm, lhs);            
+
+            cm.Add(new Command(Opcode.IndexR ));
         }
     }
 }

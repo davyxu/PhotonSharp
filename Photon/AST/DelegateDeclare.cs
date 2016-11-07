@@ -40,7 +40,7 @@ namespace Photon.AST
                 index++;
             }
 
-            return string.Format("ExternFuncDeclare {0}: {1}", Name, sb.ToString());
+            return string.Format("DelegateDeclare {0}: {1}", Name, sb.ToString());
         }
 
         public override IEnumerable<Node> Child()

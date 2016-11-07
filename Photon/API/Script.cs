@@ -84,10 +84,22 @@ namespace Photon.API
             cmdSet.Add(new Command(Opcode.Exit));
 
 
+            InitAux();
+
             if (_debugMode)
             {
                 _exe.DebugPrint();
             }
+        }
+
+        void InitAux( )
+        {
+            RegisterDelegate("array", (vm) =>
+            {
+                vm.Stack.Push(new ValueArray() );
+
+                return 1;
+            });
         }
 
         public void Run( )
@@ -111,7 +123,8 @@ namespace Photon.API
             ValueDelegate v = null;
             if (!_exe.DelegateMap.TryGetValue( name, out v ))            
             {
-                throw new Exception("extern func not define in code: " + name );
+                Debug.WriteLine("extern func not define in code: " + name);
+                return;
             }
 
             v.Entry = callback;       

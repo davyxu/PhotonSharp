@@ -86,15 +86,20 @@ namespace Photon.VM
             if ( dg != null )
             {
                
-
+                // 外部调用不进行栈调整
                 var stackBeforeCall = vm.Stack.Count;
 
                 var retValueCount = dg.Entry(vm);
 
+                // 调用结束时需要平衡栈( 返回值没有被用到 )
                 if (cmd.DataB != 0 )
                 {
                     // 调用前(包含参数+ delegate)
                     vm.Stack.Count = stackBeforeCall - argCount;
+                }
+                else
+                {
+                    vm.Stack.Cut(stackBeforeCall - argCount, retValueCount);
                 }
 
             }

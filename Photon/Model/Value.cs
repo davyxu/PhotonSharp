@@ -9,6 +9,11 @@ namespace Photon.Model
         }
 
         public static Value Empty = new Value();
+
+        public override string ToString()
+        {
+            return "(empty)";
+        }
     }
 
 }

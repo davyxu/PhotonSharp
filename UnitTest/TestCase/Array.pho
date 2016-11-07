@@ -1,8 +1,6 @@
-var a
-a.append(  1)
+func array( )
 
-/* 
-a = array()
-a[0]
 
-*/
+var a = array( )
+a.append(1)
+var c = a[0]

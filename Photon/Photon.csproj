@@ -64,6 +64,7 @@
     <Compile Include="Model\ValueDelegate.cs" />
     <Compile Include="Model\ValueFunc.cs" />
     <Compile Include="Model\ValueArray.cs" />
+    <Compile Include="Model\ValueString.cs" />
     <Compile Include="Model\ValueObject.cs" />
     <Compile Include="Model\ValueNumber.cs" />
     <Compile Include="Model\Executable.cs" />

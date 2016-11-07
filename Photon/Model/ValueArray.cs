@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Photon.VM;
 
 namespace Photon.Model
 {
@@ -9,6 +10,31 @@ namespace Photon.Model
         public override string ToString()
         {
             return "(array)";
+        }
+
+        public override Value Select(Value obj)
+        {
+            var method = obj as ValueString;
+
+            switch (method.String)
+            {
+                case "append":
+                    {
+                        return new ValueDelegate( Append );
+                    }
+                    break;
+            }
+
+            return Value.Empty;
+        }
+
+        int Append( VMachine vm )
+        {
+            var v = vm.Stack.Pop();
+
+            _value.Add(v);
+
+            return 0;
         }
 
         public override Value Get(Value obj)

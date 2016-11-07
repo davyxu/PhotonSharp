@@ -6,6 +6,16 @@ namespace Photon.Model
     {
         public Func<Photon.VM.VMachine, int> Entry;        
 
+        public ValueDelegate( )
+        {
+
+        }
+
+        public ValueDelegate( Func<Photon.VM.VMachine, int> callback )
+        {
+            Entry = callback;
+        }
+
         public override bool Equal(Value other)
         {
             var otherT = other as ValueDelegate;

@@ -91,4 +91,46 @@ namespace Photon.VM
             return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
         }
     }
+
+    [Instruction(Cmd = Opcode.IndexR)]
+    class CmdIndexR
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {
+            var key = vm.Stack.Pop();
+            var main = VMachine.CastObject( vm.Stack.Pop() );
+            var result = main.Get(key);
+            vm.Stack.Push(result);
+                        
+            return true;
+        }
+
+        public static string Print(VMachine vm, Command cmd)
+        {
+
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.ValueToString(-2), vm.Stack.ValueToString(-1));
+        }
+    }
+
+    [Instruction(Cmd = Opcode.SelectR)]
+    class CmdSelectR
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {            
+            var main = VMachine.CastObject(vm.Stack.Pop());
+
+            var key = vm.Executable.Constants.Get(cmd.DataA);
+
+            var result = main.Select(key);
+            vm.Stack.Push(result);
+
+            return true;
+        }
+
+        public static string Print(VMachine vm, Command cmd)
+        {
+
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.ValueToString(-1), vm.Executable.Constants.ValueToString(cmd.DataA) );
+        }
+    }
 }

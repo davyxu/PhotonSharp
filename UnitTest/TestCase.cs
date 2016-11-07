@@ -8,14 +8,17 @@ namespace UnitTest
 
         static void TestCase()
         {
+
+            new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
+
+
             {
                 var tb = new TestBox().CompileFile("Delegate.pho");
                 tb.Script.RegisterDelegate("add", (vm) =>
                 {
                     var a = VMachine.CastNumber(vm.Stack.Get(-1));
                     var b = VMachine.CastNumber(vm.Stack.Get(-2));
-
-                    vm.Stack.PopMulti(2);
+                    
                     vm.Stack.Push(new ValueNumber(a + b));
 
                     return 1;

@@ -60,15 +60,29 @@ namespace Photon.AST
             }
             else
             {
-                if (ScopeInfo.IsGlobal )
+                if ( ScopeInfo == null )
                 {
-                    cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex)).Comment = Name;
+                    // 将自己视为字符串( 在处理selector和index指令时, 将key视为字符串, 后面没有用到这段代码)
+
+                    var c = new ValueString(_token.Value);
+
+                    var ci = exe.Constants.Add( c );
+
+                    cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
                 }
                 else
                 {
-                    cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex)).Comment = Name;
+                    // 将自己视为变量
+
+                    if (ScopeInfo.IsGlobal)
+                    {
+                        cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex)).Comment = Name;
+                    }
+                    else
+                    {
+                        cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex)).Comment = Name;
+                    }
                 }
-                
             }
         }
     }

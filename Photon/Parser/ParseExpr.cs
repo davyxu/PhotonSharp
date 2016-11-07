@@ -113,11 +113,20 @@ namespace Photon.Parser
         {
             Expect(TokenType.LBracket);
 
-            var args = ParseRHSList();
+            if (CurrTokenType != TokenType.RBracket)
+            {
+                var args = ParseRHSList();
+
+                Expect(TokenType.RBracket);
+
+
+                return new CallExpr(func, args, _topScope);
+            }
 
             Expect(TokenType.RBracket);
 
-            return new CallExpr(func, args, _topScope );
+            // 空参数
+            return new CallExpr(func, new List<Expr>(), _topScope);
         }
 
         Expr ParsePrimaryExpr(bool lhs)

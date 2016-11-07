@@ -72,6 +72,19 @@ namespace Photon.VM
             _count -= count;
         }
 
+        // preTop + 废数据 + 有效数据,  将废弃部分去掉, 有效部分前移覆盖
+        public void Cut( int preTop, int validCount )
+        {
+            int validBegin = Count - validCount;
+
+            for (int i = 0; i < validCount; i++)
+            {
+                _values[preTop + i] = _values[validBegin + i];
+            }
+
+            _count = preTop + validCount;
+        }
+
         public Value Get( int index = -1 )
         {
             if ( index >=0 )

@@ -6,10 +6,15 @@ using System.Diagnostics;
 
 namespace Photon.Parser
 {
-    public partial class ScriptParser
+    partial class ScriptParser
     {
         Scope _topScope;
         Scope _global;
+
+        public Scope GlobalScope
+        {
+            get { return _global; }
+        }
 
         void InitScope( )
         {
@@ -29,9 +34,9 @@ namespace Photon.Parser
             _topScope = _topScope.Outter;
         }
 
-        Symbol Declare(Node n, Scope s, string name, TokenPos pos )
+        public Symbol Declare(Node n, Scope s, string name, TokenPos pos )
         {
-            var pre = s.Lookup(name);
+            var pre = s.FindSymbol(name);
             if ( pre != null )
             {
                 Error(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
@@ -44,12 +49,15 @@ namespace Photon.Parser
 
             s.Insert(data);
 
-            var ident = n as Ident;
+            if ( n != null )
+            {
+                var ident = n as Ident;
 
-            if (ident == null)
-                return data;
+                if (ident == null)
+                    return data;
 
-            ident.ScopeInfo = data;
+                ident.ScopeInfo = data;
+            }
 
             return data;
         }
@@ -64,7 +72,7 @@ namespace Photon.Parser
 
             for (var s = _topScope; s != null; s = s.Outter)
             {
-                var data = s.Lookup(ident.Name);
+                var data = s.FindSymbol(ident.Name);
                 if ( data != null )
                 {
                     ident.ScopeInfo = data;

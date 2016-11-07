@@ -72,7 +72,7 @@ namespace Photon.AST
             return _type.ToString();
         }
 
-        public Symbol Lookup( string name ) 
+        public Symbol FindSymbol( string name ) 
         {
            Symbol ret;
            if ( _symbolByName.TryGetValue( name, out ret ) )

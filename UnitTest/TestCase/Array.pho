@@ -1,0 +1,8 @@
+var a
+a.append(  1)
+
+/* 
+a = array()
+a[0]
+
+*/

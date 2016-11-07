@@ -49,34 +49,60 @@ namespace Photon.VM
         {
             var argCount = cmd.DataA;
 
-            var funcIndex = VMachine.CastFuncIndex(vm.Stack.Get(-argCount - 1));
+            var obj = vm.Stack.Pop();
 
-            // 更换当前上下文
-            vm.EnterFrame(funcIndex);
+            var func = obj as ValueFunc;
 
-            // 调用结束时需要平衡栈
-            if (cmd.DataB != 0)
-            {
-                vm.CurrFrame.RestoreDataStack = true;
+            if ( func != null )
+            {                
+
+                // 更换当前上下文
+                vm.EnterFrame(func.Index);
+
+                // 调用结束时需要平衡栈
+                if (cmd.DataB != 0)
+                {
+                    vm.CurrFrame.RestoreDataStack = true;
+                }
+
+                // 将栈转为被调用函数的寄存器
+                for (int i = 0; i < argCount; i++)
+                {
+                    var arg = vm.Stack.Get( -i - 1 );
+                    vm.LocalRegister.Set(argCount - i - 1, arg);
+                }
+
+                // 清空栈
+                vm.Stack.PopMulti(argCount);
+
+                // 记录当前的数据栈位置
+                vm.CurrFrame.DataStackBase = vm.Stack.Count;
+
+                // 马上跳到下个执行域            
+                return false;
             }
 
-            // 将栈转为被调用函数的寄存器
-            for (int i = 0; i < argCount; i++)
+            var dg = obj as ValueDelegate;
+            if ( dg != null )
             {
-                var arg = vm.Stack.Get(-argCount + i);
-                vm.LocalRegister.Set(i, arg);
+               
+
+                var stackBeforeCall = vm.Stack.Count;
+
+                var retValueCount = dg.Entry(vm);
+
+                if (cmd.DataB != 0 )
+                {
+                    // 调用前(包含参数+ delegate)
+                    vm.Stack.Count = stackBeforeCall - argCount;
+                }
+
             }
 
-            // 清空栈
-            vm.Stack.PopMulti(argCount + 1);
+            return true;
 
-            // 记录当前的数据栈位置
-            vm.CurrFrame.DataStackBase = vm.Stack.Count;
-
-
-            // 马上跳到下个执行域            
-            return false;
         }
+
 
         public static string Print(VMachine vm, Command cmd)
         {

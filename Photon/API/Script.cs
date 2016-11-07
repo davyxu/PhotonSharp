@@ -2,14 +2,17 @@
 using Photon.VM;
 using Photon.Model;
 using System.Diagnostics;
-using System.IO;
+using System;
 
 namespace Photon.API
 {
+    
+
     public class Script
     {
         ScriptParser _parser = new ScriptParser();        
         VMachine _vm = new VMachine();
+        Executable _exe = new Executable();
 
         bool _debugMode;
         public bool DebugMode
@@ -49,7 +52,7 @@ namespace Photon.API
             Debug.WriteLine("");
         }
 
-        public Executable Compile( string src )
+        public void Compile( string src )
         {
             if (_debugMode)
             {
@@ -73,30 +76,28 @@ namespace Photon.API
 
             var cmdSet = new CommandSet("global");
 
-            exe.AddCmdSet(cmdSet);
+            _exe.AddCmdSet(cmdSet);
 
             // 遍历AST,生成代码
-            chunk.Block.Compile(exe, cmdSet, false);
+            chunk.Compile(_exe, cmdSet, false);
 
             cmdSet.Add(new Command(Opcode.Exit));
 
 
             if (_debugMode)
             {
-                exe.DebugPrint();
+                _exe.DebugPrint();
             }
-
-            return exe;
         }
 
-        public void Run( Executable exe )
+        public void Run( )
         {
             if (_debugMode)
             {
                 Debug.WriteLine("");
             }
 
-            _vm.Run(exe);
+            _vm.Run(_exe);
 
             if ( _debugMode )
             {
@@ -104,5 +105,17 @@ namespace Photon.API
             }
             
         }
+
+        public void RegisterDelegate(string name, Func<Photon.VM.VMachine, int> callback)
+        {
+            ValueDelegate v = null;
+            if (!_exe.DelegateMap.TryGetValue( name, out v ))            
+            {
+                throw new Exception("extern func not define in code: " + name );
+            }
+
+            v.Entry = callback;       
+        }
+
     }
 }

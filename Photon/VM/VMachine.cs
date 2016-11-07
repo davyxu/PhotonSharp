@@ -2,14 +2,13 @@
 using Photon.Model;
 using System;
 using System.Diagnostics;
-using Photon.AST;
+using System.Reflection;
 
 namespace Photon.VM
 {
     using InstructionExecFunc = Func<VMachine, Command, bool>;
     using InstructionPrintFunc = Func<VMachine, Command, string>;
-    using System.Reflection;
-
+    
     class InstructionAttribute : Attribute
     {
         public Opcode Cmd
@@ -135,7 +134,7 @@ namespace Photon.VM
         {
             if ( _currFrame.RestoreDataStack )
             {
-                _dataStack.SetTop(_currFrame.DataStackBase);
+                _dataStack.Count = _currFrame.DataStackBase;
             }
 
             _currFrame = _frameStack.Pop();

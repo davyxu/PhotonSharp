@@ -1,2 +1,11 @@
-var a = 1
-a = a + 1
+//var a = array( )
+//a[1] = 2
+//a.append( 1 )
+
+
+func add( a, b ){
+
+	return a + b
+}
+
+add( 1, 2 )

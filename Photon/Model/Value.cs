@@ -7,6 +7,8 @@ namespace Photon.Model
         {
             return false;
         }
+
+        public static Value Empty = new Value();
     }
 
 }

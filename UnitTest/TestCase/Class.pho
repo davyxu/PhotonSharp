@@ -12,12 +12,12 @@ class Dog : Anim {
 
 }
 
-func Animal.ctor( self ){
+func Dog:ctor( self ){
 
 	base.
 }
 
-func Animal.foo( self, a, b ){
+func Dog:foo( self, a, b ){
 
 
 }

@@ -37,12 +37,14 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-            Func.Compile(exe, cm, false);
-
+            // 先放参数
             foreach (var arg in Args)
             {
                 arg.Compile(exe, cm, false);                
             }
+
+            // 再放函数
+            Func.Compile(exe, cm, false);
 
             // 单独的一句时, 需要平衡数据栈
             int needBalanceDataStack = 0 ;

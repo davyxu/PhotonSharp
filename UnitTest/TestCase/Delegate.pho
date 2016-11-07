@@ -1,0 +1,4 @@
+func add( a, b )
+
+
+var c= add( 1, 2 )

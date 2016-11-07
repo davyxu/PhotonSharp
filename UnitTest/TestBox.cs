@@ -13,7 +13,7 @@ namespace UnitTest
 
         string _caseName;        
 
-        public TestBox Run( string caseName, string src )
+        public TestBox Compile( string caseName, string src )
         {
             _caseName = caseName;
 
@@ -21,17 +21,36 @@ namespace UnitTest
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _script.Run(_script.Compile(src));
+            _script.Compile(src);            
 
             return this;
         }
 
-        public TestBox RunFile( string filename )
-        {            
+        public TestBox Run( )
+        {
+            _script.Run();
+
+            return this;
+        }
+
+        public Script Script
+        {
+            get { return _script; }
+        }
+
+        public TestBox CompileFile(string filename)
+        {
 
             var content = File.ReadAllText(filename);
 
-            return Run(filename, content).TestStackClear();
+            return Compile(filename, content);
+        }
+
+
+
+        public TestBox RunFile( string filename )
+        {                        
+            return CompileFile(filename ).Run().TestStackClear();
         }
 
         public void Error( string info )
@@ -50,17 +69,17 @@ namespace UnitTest
             return this;
         }        
 
-        public TestBox TestGlobalRegEqual(int index, float num)
+        public TestBox TestGlobalRegEqualNumber(int index, float num)
         {
-            return TestRegEqual(index, num, _script.VM.GlobalRegister);
+            return TestRegEqualNumber(index, num, _script.VM.GlobalRegister);
         }
 
-        public TestBox TestLocalRegEqual(int index, float num)
+        public TestBox TestLocalRegEqualNumber(int index, float num)
         {
-            return TestRegEqual(index, num, _script.VM.LocalRegister);
+            return TestRegEqualNumber(index, num, _script.VM.LocalRegister);
         }
 
-        TestBox TestRegEqual(int index, float num, Register reg )
+        TestBox TestRegEqualNumber(int index, float num, Register reg )
         {
             var v = reg.Get( index );
 

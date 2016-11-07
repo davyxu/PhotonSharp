@@ -8,11 +8,17 @@ namespace Photon.Model
     public class Executable
     {
         List<CommandSet> _cmdset = new List<CommandSet>();
+        Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
         ConstantSet _constSet = new ConstantSet();
 
         public List<CommandSet> CmdSet
         {
             get { return _cmdset; }
+        }
+
+        public Dictionary<string, ValueDelegate> DelegateMap
+        {
+            get { return _delegateByName; }
         }
 
         public ConstantSet Constants
@@ -42,5 +48,7 @@ namespace Photon.Model
         {
             return _cmdset[index];
         }
+        
+        
     }
 }

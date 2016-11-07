@@ -28,5 +28,10 @@ namespace Photon.AST
         {
             return "VarDeclareStmt";
         }
+
+        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        {
+         
+        }
     }
 }

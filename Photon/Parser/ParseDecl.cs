@@ -6,7 +6,7 @@ namespace Photon.Parser
 {
     public partial class ScriptParser
     {
-        FuncDeclare ParseFuncDecl( )
+        Stmt ParseFuncDecl()
         {
             Expect(TokenType.Func);
 
@@ -16,13 +16,28 @@ namespace Photon.Parser
 
             var paramlist = ParseParameters(scope);
 
-            var body = ParseBody(scope);
+            if ( CurrTokenType == TokenType.LBrace )
+            {
+                var body = ParseBody(scope);
 
-            var decl = new FuncDeclare(ident, paramlist, body, scope);
+                var decl = new FuncDeclare(ident, paramlist, body, scope);
 
-            ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos );
+                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
 
-            return decl;
+                return decl;
+            }
+            else
+            {
+                // 声明已经结束
+                CloseScope();
+
+                var decl = new DelegateDeclare(ident, paramlist, scope);
+
+                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
+
+                return decl;
+            }
+            
         }
 
         List<Ident> ParseParameters( Scope s )

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Model;
+using System.Collections.Generic;
 
 namespace Photon.AST
 {
@@ -21,6 +22,12 @@ namespace Photon.AST
         public override string ToString()
         {
             return "Chunk";
+        }
+
+        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        {
+            Block.Compile(exe, cm, lhs);
+        
         }
     }
 }

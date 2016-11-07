@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Photon.Model;
 using Photon.Model;
+using System;
 
 namespace Photon.AST
 {
@@ -15,7 +16,7 @@ namespace Photon.AST
 
         public virtual void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-
+            throw new Exception("'Compile' not implement: " + this.ToString());
         }
 
         public void BuildRelation( )

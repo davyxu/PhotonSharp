@@ -16,6 +16,17 @@ namespace Photon.VM
         public int Count
         {
             get { return _count; }
+            set
+            {
+                // 设置到希望的高度
+
+                for (int i = value; i < _count; i++)
+                {
+                    _values[i] = null;
+                }
+
+                _count = value;
+            }
         }
 
         public void Clear()
@@ -29,16 +40,7 @@ namespace Photon.VM
         }
 
 
-        // 设置到希望的高度
-        public void SetTop( int top )
-        {
-            for( int i = top;i < _count;i++)
-            {
-                _values[i] = null;
-            }
-
-            _count = top;
-        }
+        
 
         public void Push( Value v )
         {
@@ -77,8 +79,13 @@ namespace Photon.VM
                 return _values[index];
             }
 
-            
-            return _values[_count + index];
+            var final = _count + index;
+
+            if (final >= _values.Length || final < 0)
+                return null;
+
+
+            return _values[final];
         }
 
         public string ValueToString(int index = -1)

@@ -50,6 +50,7 @@
     <None Include="App.config" />
     <None Include="TestCase\Array.pho" />
     <None Include="TestCase\Class.pho" />
+    <None Include="TestCase\Closure.pho" />
     <None Include="TestCase\DataStackBalance.pho" />
     <None Include="TestCase\Delegate.pho" />
     <None Include="TestCase\ForLoop.pho" />

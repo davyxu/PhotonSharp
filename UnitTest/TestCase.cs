@@ -8,6 +8,7 @@ namespace UnitTest
 
         static void TestCase()
         {
+            new TestBox().RunFile("Closure.pho");
 
             new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
 

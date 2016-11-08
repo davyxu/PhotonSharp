@@ -10,7 +10,7 @@ namespace Photon.Parser
         {
             Expect(TokenType.Func);
 
-            var scope = OpenScope(ScopeType.Function);           
+            var scope = OpenScope(ScopeType.Function);
 
             var ident = ParseIdent();
 

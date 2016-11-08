@@ -1,0 +1,15 @@
+
+
+
+func foo( ){
+	var a = 0
+
+	return func( ){
+		a = a + 1
+		return a
+	}
+}
+
+
+var c = foo( )
+c( )

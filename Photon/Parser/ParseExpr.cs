@@ -87,7 +87,14 @@ namespace Photon.Parser
                     break;
                 case TokenType.Func: // a = func( ) {}
                     {
+                        Next();
 
+                        var scope = OpenScope(ScopeType.Function);
+                        var paramlist = ParseParameters(scope);
+
+                        var body = ParseBody(scope);
+
+                        return new FuncLitExpr(paramlist, body, scope);
                     }
                     break;
             }

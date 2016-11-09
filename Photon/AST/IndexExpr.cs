@@ -40,7 +40,7 @@ namespace Photon.AST
 
             Index.Compile(exe, cm, lhs);            
 
-            cm.Add(new Command(Opcode.IndexR ));
+            cm.Add(new Command(Opcode.Index ));
         }
     }
 }

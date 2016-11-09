@@ -33,8 +33,8 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-            // TODO 放入闭包位置
-            var newset = new CommandSet("closure");
+            // TODO 还要加上 捕获的变量数量
+            var newset = new CommandSet("closure", TypeInfo.ScopeInfo.SymbolCount, false );
 
             var funcIndex = exe.AddCmdSet(newset);
 

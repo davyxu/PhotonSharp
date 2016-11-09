@@ -69,7 +69,7 @@ namespace Photon.VM
                 for (int i = 0; i < argCount; i++)
                 {
                     var arg = vm.Stack.Get( -i - 1 );
-                    vm.LocalRegister.Set(argCount - i - 1, arg);
+                    vm.LocalRegister.Set(argCount - i - 1 + vm.RegBase, arg);
                 }
 
                 // 清空栈
@@ -111,7 +111,7 @@ namespace Photon.VM
 
         public static string Print(VMachine vm, Command cmd)
         {
-            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.ValueToString(-cmd.DataA - 1), cmd.DataB );
+            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.ValueToString( ), cmd.DataB );
         }
     }
     [Instruction(Cmd = Opcode.Ret)]
@@ -129,7 +129,7 @@ namespace Photon.VM
     class CmdExit
     {
         public static bool Execute(VMachine vm, Command cmd)
-        {
+        {            
             vm.CurrFrame.PC = -1;
 
             return false;

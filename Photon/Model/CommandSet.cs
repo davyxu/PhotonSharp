@@ -9,15 +9,30 @@ namespace Photon.Model
 
         string _name;
 
+        int _regCount;
 
-        public CommandSet( string name )
+        bool _isGlobal;
+
+        public CommandSet( string name, int regCount, bool isGlobal )
         {
             _name = name;
+            _regCount = regCount;
+            _isGlobal = isGlobal;
+        }
+
+        public bool IsGlobal
+        {
+            get { return _isGlobal; }
         }
 
         public string Name
         {
             get { return _name;  }
+        }
+
+        public int RegCount
+        {
+            get { return _regCount; }
         }
 
         public List<Command> Commands

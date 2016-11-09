@@ -45,7 +45,7 @@ namespace Photon.Model
             int index = 0;
             foreach (var c in _cset)
             {
-                Debug.WriteLine("C[{0}]={1}", index, c.ToString());
+                Debug.WriteLine("C{0}: {1}", index, c.ToString());
                 index++;
             }
 

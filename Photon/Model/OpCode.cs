@@ -21,8 +21,8 @@ namespace Photon.Model
         LoadG,  // S[Top] = G[I]
         SetR,   // R[I] = S[I+1]
         SetG,   // G[I] = S[I+1]
-        IndexR, // S[Top] = S[I][ S[I+1] ]  key为非字符串
-        SelectR, // S[Top] = S[I][ P1 ] 显式字符串key调用
+        Index, // S[Top] = S[I][ S[I+1] ]  key为非字符串
+        Select, // S[Top] = S[I][ P1 ] 显式字符串key调用
         
         Call,   // S[I](S[I+1], ... )
         Ret,    // 

@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using System;
 using System.Diagnostics;
 
 namespace Photon.VM
@@ -6,7 +7,7 @@ namespace Photon.VM
     public class Register
     {
         Value[] _data;
-        int _usedSlot = -1;
+        int _usedSlot = 0;
         string _usage;
 
         public Register( string usage, int maxReg )
@@ -15,10 +16,29 @@ namespace Photon.VM
             _data = new Value[maxReg];
         }
 
+        public int Count
+        {
+            get { return _usedSlot; }
+        }
+
+        public void SetUsedCount( int count )
+        {
+
+            for (int i = 0; i < _data.Length; i++)
+            {
+                if (i >= count)
+                {
+                    _data[i] = null;
+                }
+
+            }
+
+            _usedSlot = count;
+        }
+
         public void Set( int index, Value v )
         {
-            _data[index] = v;
-            _usedSlot = index;
+            _data[index] = v;            
         }
 
         public Value Get( int index )
@@ -37,15 +57,6 @@ namespace Photon.VM
             return v.ToString();
         }
 
-        public void ClearTo( int index )
-        {
-            for (int i = index; i <= _usedSlot;i++ )
-            {
-                _data[i] = null;
-            }
-
-            _usedSlot = index;
-        }
 
         public void Clear()
         {
@@ -59,7 +70,7 @@ namespace Photon.VM
 
         public void DebugPrint()
         {            
-            for (int i = 0; i <= _usedSlot; i++)
+            for (int i = 0; i < _usedSlot; i++)
             {
                 var v = _data[i];
 
@@ -69,7 +80,7 @@ namespace Photon.VM
                     str = v.ToString();
                 }
 
-                Debug.WriteLine("[{0}] {1}: {2}", _usage, i, str);
+                Debug.WriteLine("R{0}: {1}", i, str);
             }
         }
     }

@@ -3,7 +3,7 @@ namespace Photon.Model
 {
     public class ValueFunc : Value
     {
-        int _index = 0;  // 相对于Executable的索引
+        int _index = 0;  // 相对于Executable的索引       
 
         public ValueFunc( int index )
         {

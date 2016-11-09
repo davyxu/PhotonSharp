@@ -89,12 +89,14 @@ namespace Photon.Parser
                     {
                         Next();
 
-                        var scope = OpenScope(ScopeType.Function);
+                        var scope = OpenScope(ScopeType.Closure);
                         var paramlist = ParseParameters(scope);
 
                         var body = ParseBody(scope);
 
-                        return new FuncLitExpr(paramlist, body, scope);
+                        var funclit = new FuncLitExpr(paramlist, body, scope);
+
+                        return funclit;
                     }
                     break;
             }

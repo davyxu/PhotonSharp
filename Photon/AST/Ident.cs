@@ -28,14 +28,14 @@ namespace Photon.AST
         {
             if (ScopeInfo != null)
             {
-                if (ScopeInfo.IsGlobal)
-                {
-                    return string.Format("{0} G({1})", Name, ScopeInfo.RegIndex);
-                }
-                else
-                {
-                    return string.Format("{0} R({1})", Name, ScopeInfo.RegIndex);
-                }
+                //if (ScopeInfo.IsGlobal)
+                //{
+                //    return string.Format("{0} G{1}", Name, ScopeInfo.RegIndex);
+                //}
+                //else
+                //{
+                    return string.Format("{0} R{1}", Name, ScopeInfo.RegIndex);
+                //}
                 
             }
 

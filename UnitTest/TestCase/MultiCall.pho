@@ -4,7 +4,7 @@ func mul( a, b ){
 
 func foo( a, b ){
 
-    return a + mul( b, 2 )
+    return a + mul( 7, 2 )
 }
 
 var y = foo( 1, 2 )

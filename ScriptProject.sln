@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D
 	ProjectSection(SolutionItems) = preProject
 		Doc\BNF.txt = Doc\BNF.txt
 		Doc\Style.md = Doc\Style.md
+		Doc\TODO.md = Doc\TODO.md
 		Doc\VM.md = Doc\VM.md
 	EndProjectSection
 EndProject

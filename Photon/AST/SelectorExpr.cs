@@ -40,7 +40,7 @@ namespace Photon.AST
 
             var ci = exe.Constants.Add( c );
 
-            cm.Add(new Command(Opcode.SelectR, ci ) );
+            cm.Add(new Command(Opcode.Select, ci ) );
         }
     }
 }

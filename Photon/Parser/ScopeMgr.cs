@@ -84,6 +84,7 @@ namespace Photon.Parser
 
         }
 
+
         public void PrintScopeSymbol( )
         {
 

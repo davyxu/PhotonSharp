@@ -74,7 +74,7 @@ namespace Photon.API
             
             var exe = new Executable();
 
-            var cmdSet = new CommandSet("global");
+            var cmdSet = new CommandSet("global", _parser.GlobalScope.SymbolCount, true);
 
             _exe.AddCmdSet(cmdSet);
 

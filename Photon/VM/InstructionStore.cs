@@ -24,7 +24,8 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            Value v = vm.LocalRegister.Get(cmd.DataA);
+            int regIndex = cmd.DataA + vm.RegBase;
+            Value v = vm.LocalRegister.Get(regIndex);
             vm.Stack.Push(v);
 
             return true;  
@@ -32,7 +33,9 @@ namespace Photon.VM
 
         public static string Print(VMachine vm, Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.ValueToString(cmd.DataA));
+            int regIndex = cmd.DataA + vm.RegBase;
+
+            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.LocalRegister.ValueToString(regIndex));
         }
     }
 
@@ -41,7 +44,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            var regIndex = cmd.DataA;
+            int regIndex = cmd.DataA + vm.RegBase;
             var d = vm.Stack.Pop();
             vm.LocalRegister.Set(regIndex, d);
 
@@ -51,7 +54,9 @@ namespace Photon.VM
         }
         public static string Print(VMachine vm, Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
+            int regIndex = cmd.DataA + vm.RegBase;
+
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.Stack.ValueToString());
         }
 
     }
@@ -62,7 +67,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            Value v = vm.GlobalRegister.Get(cmd.DataA);
+            Value v = vm.LocalRegister.Get(cmd.DataA);
 
             vm.Stack.Push(v);
 
@@ -70,7 +75,7 @@ namespace Photon.VM
         }
         public static string Print(VMachine vm, Command cmd)
         {
-            return string.Format("S <- G{0}     | G{1}: {2}", cmd.DataA, cmd.DataA, vm.GlobalRegister.ValueToString(cmd.DataA));
+            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.ValueToString(cmd.DataA));
         }
     }
 
@@ -81,18 +86,18 @@ namespace Photon.VM
         {
             var regIndex = cmd.DataA;
             var d = vm.Stack.Pop();
-            vm.GlobalRegister.Set(regIndex, d);
+            vm.LocalRegister.Set(regIndex, d);
 
             return true;
         }
 
         public static string Print(VMachine vm, Command cmd)
         {
-            return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
         }
     }
 
-    [Instruction(Cmd = Opcode.IndexR)]
+    [Instruction(Cmd = Opcode.Index)]
     class CmdIndexR
     {
         public static bool Execute(VMachine vm, Command cmd)
@@ -112,7 +117,7 @@ namespace Photon.VM
         }
     }
 
-    [Instruction(Cmd = Opcode.SelectR)]
+    [Instruction(Cmd = Opcode.Select)]
     class CmdSelectR
     {
         public static bool Execute(VMachine vm, Command cmd)

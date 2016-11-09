@@ -24,7 +24,15 @@ namespace Photon.AST
 
         public override string ToString()
         {
-            return string.Format("{0} R{1}  {2}", Name, RegIndex, DefinePos);
+            //if ( IsGlobal )
+            //{
+            //    return string.Format("{0} G{1}  {2}", Name, RegIndex, DefinePos);
+            //}
+            //else
+            {
+                return string.Format("{0} R{1}  {2}", Name, RegIndex, DefinePos);
+            }
+            
         }
     }
 
@@ -34,6 +42,7 @@ namespace Photon.AST
         Function,
         Block,
         For,
+        Closure,
     }
 
     public class Scope
@@ -83,18 +92,46 @@ namespace Photon.AST
            return null;
         }
 
-        public int RegBase
+        public int SymbolCount
         {
-            get{
-
-                if (_outter != null)
-                {
-                    return _outter.RegBase;
-                }
+            get{                
 
                 return _symbolByName.Count;
             }
            
+        }
+
+
+        public int CalcRegBase()
+        {
+            int regBase = this.SymbolCount;
+
+            Scope s = this;
+
+            // 函数只从自己开始算regbase
+            // 其他作用域向上查到函数
+
+            if ( s.Type != ScopeType.Function )
+            {
+                do
+                {
+
+
+                    s = s.Outter;
+
+                    if (s == null)
+                    {
+                        break;
+                    }
+
+
+                    regBase += s.SymbolCount;
+
+                } while (s.Type != ScopeType.Function);
+            }
+
+
+            return regBase;
         }
 
         public void DebugPrint( string indent )
@@ -115,7 +152,7 @@ namespace Photon.AST
 
         public void Insert( Symbol data )
         {
-            data.RegIndex = _symbolByName.Count;
+            data.RegIndex = CalcRegBase();
             data.Belong = this;
 
             _symbolByName.Add(data.Name, data);

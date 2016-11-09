@@ -37,7 +37,7 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-            var newset = new CommandSet(Name.Name );
+            var newset = new CommandSet(Name.Name, TypeInfo.ScopeInfo.SymbolCount, false );
 
             var funcIndex = exe.AddCmdSet(newset);
 
@@ -46,7 +46,7 @@ namespace Photon.AST
 
             cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
 
-            cm.Add(new Command(Opcode.SetG, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
+            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
 
             Body.Compile(exe, newset, false);
 

@@ -6,8 +6,6 @@ namespace Photon.VM
     {
         public int PC;
 
-        public Register Reg;
-
         public CommandSet CmdSet;
 
         public int DataStackBase;
@@ -17,8 +15,7 @@ namespace Photon.VM
 
 
         public RuntimeFrame(CommandSet cs)
-        {
-            Reg = new Register("reg",10);
+        {            
             CmdSet = cs; 
         }        
 

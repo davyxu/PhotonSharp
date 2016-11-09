@@ -25,14 +25,30 @@ namespace Photon.VM
 
         Stack<RuntimeFrame> _frameStack = new Stack<RuntimeFrame>();
 
-        RuntimeFrame _currFrame;
+        RuntimeFrame _currFrame;        
 
-        Register _globalReg = new Register("G", 10);
+        Register _localReg = new Register("R", 10);
+
+        struct RegRange
+        {
+            public int Min;
+            public int Max;
+        }
+
+        Stack<RegRange> _regBaseStack = new Stack<RegRange>();
+        int _regBase = 0;
 
         Executable _exe;
 
         InstructionExecFunc[] _instructionExec = new InstructionExecFunc[(int)Opcode.MAX];
         InstructionPrintFunc[] _instructionPrint = new InstructionPrintFunc[(int)Opcode.MAX];
+
+
+        public int RegBase
+        {
+            get { return _regBase; }
+        }
+
 
         public bool DebugRun
         {
@@ -45,14 +61,9 @@ namespace Photon.VM
             get { return _dataStack; }
         }
 
-        public Register GlobalRegister
-        {
-            get { return _globalReg; }
-        }
-
         public Register LocalRegister
         {
-            get { return _currFrame.Reg; }
+            get { return _localReg; }
         }
 
         public Executable Executable
@@ -128,6 +139,28 @@ namespace Photon.VM
             }
 
             _currFrame = newFrame;
+
+            // globa不用local寄存器
+
+
+            // 第一层的reg是0, 不记录
+            if (_regBaseStack.Count > 0)
+            {
+                _regBase = _regBaseStack.Peek().Max;
+            }
+
+            RegRange rr;
+            rr.Min = _regBase;
+            rr.Max = _regBase + newFrame.CmdSet.RegCount;
+
+            _localReg.SetUsedCount(rr.Max);
+
+            // 留作下次调用叠加时使用
+            _regBaseStack.Push(rr);
+    
+
+            
+            
         }
 
         public void LaveFrame( )
@@ -138,6 +171,13 @@ namespace Photon.VM
             }
 
             _currFrame = _frameStack.Pop();
+
+            _regBaseStack.Pop();
+
+            var rr = _regBaseStack.Peek();
+            _regBase = rr.Min;
+
+            _localReg.SetUsedCount(rr.Max);
         }
 
 
@@ -168,14 +208,12 @@ namespace Photon.VM
                 // 打印执行完后的信息
                 if (DebugRun)
                 {
-                    // 数据栈信息
-                    _dataStack.DebugPrint();
-
                     // 寄存器信息
-                    _currFrame.Reg.DebugPrint();
+                    LocalRegister.DebugPrint();
 
-                    // 全局寄存器
-                    _globalReg.DebugPrint();
+                    // 数据栈信息
+                    Stack.DebugPrint();
+                    
 
                     Debug.WriteLine("");
                 }

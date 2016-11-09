@@ -8,17 +8,16 @@ namespace Photon.AST
     {
         public Ident Name;
 
-        public FuncType TypeInfo = new FuncType();
+        public FuncType TypeInfo;
       
         public BlockStmt Body;
 
-        public FuncDeclare(Ident name, List<Ident> param, BlockStmt body, Scope s)
+        public FuncDeclare(Ident name, BlockStmt body, FuncType ft )
         {
             Name = name;
             Body = body;
 
-            TypeInfo.Params = param;
-            TypeInfo.ScopeInfo = s;            
+            TypeInfo = ft;
 
             BuildRelation();
         }
@@ -41,7 +40,7 @@ namespace Photon.AST
 
             var funcIndex = exe.AddCmdSet(newset);
 
-            var c = new ValueFunc(funcIndex);
+            var c = new ValueFunc(funcIndex, TypeInfo.FuncPos);
             var ci = exe.Constants.Add(c);
 
             cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();

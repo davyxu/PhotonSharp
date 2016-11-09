@@ -87,6 +87,7 @@ namespace Photon.Parser
                     break;
                 case TokenType.Func: // a = func( ) {}
                     {
+                        var funcPos = CurrTokenPos;
                         Next();
 
                         var scope = OpenScope(ScopeType.Closure);
@@ -94,7 +95,7 @@ namespace Photon.Parser
 
                         var body = ParseBody(scope);
 
-                        var funclit = new FuncLitExpr(paramlist, body, scope);
+                        var funclit = new FuncLitExpr(body, new FuncType( funcPos, paramlist, scope) );
 
                         return funclit;
                     }

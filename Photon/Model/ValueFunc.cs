@@ -1,13 +1,16 @@
 ﻿
+using SharpLexer;
 namespace Photon.Model
 {
     public class ValueFunc : Value
     {
-        int _index = 0;  // 相对于Executable的索引       
+        int _index = 0;  // 相对于Executable的索引
+        TokenPos _pos;
 
-        public ValueFunc( int index )
+        public ValueFunc( int index, TokenPos pos )
         {
             _index = index;
+            _pos = pos;
         }
 
         public int Index
@@ -27,7 +30,7 @@ namespace Photon.Model
 
         public override string ToString()
         {
-            return _index.ToString() + "(func)";
+            return string.Format("{0} (func) {1}", _index.ToString(), _pos);
         }
     }
 

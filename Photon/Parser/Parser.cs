@@ -98,6 +98,11 @@ namespace Photon.Parser
             get { return (TokenType)_token.MatcherID; }
         }
 
+        TokenPos CurrTokenPos
+        {
+            get { return _token.Pos; }
+        }
+
         void Expect(TokenType t)
         {
             if (CurrTokenType != t)

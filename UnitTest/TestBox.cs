@@ -69,10 +69,6 @@ namespace UnitTest
             return this;
         }        
 
-        public TestBox TestGlobalRegEqualNumber(int index, float num)
-        {
-            return TestRegEqualNumber(index, num, _script.VM.GlobalRegister);
-        }
 
         public TestBox TestLocalRegEqualNumber(int index, float num)
         {

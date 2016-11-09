@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +7,18 @@ namespace Photon.AST
 {
     public class FuncType
     {
+        public TokenPos FuncPos;
+
         public List<Ident> Params;
 
         public Scope ScopeInfo;
+
+        public FuncType( TokenPos funcPos, List<Ident> param, Scope s )
+        {
+            FuncPos = funcPos;
+            Params = param;
+            ScopeInfo = s;
+        }
 
         public override string ToString()
         {

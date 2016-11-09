@@ -8,6 +8,8 @@ namespace Photon.Parser
     {
         Stmt ParseFuncDecl()
         {
+            var funcPos = CurrTokenPos;
+
             Expect(TokenType.Func);
 
             var scope = OpenScope(ScopeType.Function);
@@ -20,7 +22,7 @@ namespace Photon.Parser
             {
                 var body = ParseBody(scope);
 
-                var decl = new FuncDeclare(ident, paramlist, body, scope);
+                var decl = new FuncDeclare(ident, body, new FuncType(funcPos, paramlist, scope) );
 
                 ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
 

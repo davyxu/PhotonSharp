@@ -42,16 +42,23 @@ namespace Photon.Model
 
         public override string ToString()
         {
+            string CommentData = string.Empty;
+            if ( !string.IsNullOrEmpty(Comment) )
+            {
+                CommentData = "; " + Comment;
+            }
+
+
             if (_dataCount == 1 )
             {
-                return string.Format("{0} {1} ; {2}", Op.ToString(), DataA.ToString(), Comment );
+                return string.Format("{0} {1} {2}", Op.ToString(), DataA.ToString(), CommentData);
             }
             else if (_dataCount == 2)
             {
-                return string.Format("{0} {1} {2}; {3}", Op.ToString(), DataA.ToString(),DataB.ToString(), Comment);
+                return string.Format("{0} {1} {2} {3}", Op.ToString(), DataA.ToString(), DataB.ToString(), CommentData);
             }
 
-            return string.Format("{0} ; {1}", Op.ToString(), Comment);
+            return string.Format("{0} {1}", Op.ToString(), CommentData);
             
         }
     }

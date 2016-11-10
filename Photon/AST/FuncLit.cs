@@ -3,6 +3,30 @@ using System.Collections.Generic;
 
 namespace Photon.AST
 {
+    // 作为引用的Upvalue, 必须保证在同作用域下的唯一
+    class UpvaluePair
+    {
+        Ident _id;
+
+        public UpvaluePair( Ident id )
+        {
+            _id = id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var otherid = (UpvaluePair)obj;
+
+            return _id.ScopeInfo == otherid._id.ScopeInfo &&
+                _id.Name == otherid._id.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return _id.ScopeInfo.GetHashCode() + _id.Name.GetHashCode();
+        }
+    }
+
     public class FuncLit : Expr
     {
         public FuncType TypeInfo;
@@ -30,8 +54,7 @@ namespace Photon.AST
 
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
-        {
-            // TODO 还要加上 捕获的变量数量
+        {            
             var newset = new CommandSet("closure", TypeInfo.ScopeInfo.SymbolCount, false );
 
             var funcIndex = exe.AddCmdSet(newset);
@@ -43,14 +66,17 @@ namespace Photon.AST
 
             Body.Compile(exe, newset, false);
 
-            var upvalues = new List<Ident>();
+            // 找这个闭包用过的
+            var upvalues = new Dictionary<UpvaluePair, Ident>();
             FindUsedUpvalue(Body, upvalues );
 
-            for (int upIndex = 0; upIndex < upvalues.Count; upIndex++ )
+            int upIndex = 0;
+            foreach( var pr in upvalues )
             {
-                var id = upvalues[upIndex];
+                // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
+                cm.Add(new Command(Opcode.LinkU, upIndex, pr.Value.ScopeInfo.RegIndex)).Comment = pr.Value.ToString();
 
-                cm.Add(new Command(Opcode.LinkU, upIndex, id.ScopeInfo.RegIndex)).Comment = id.ToString();
+                upIndex++;
             }
 
 
@@ -60,16 +86,25 @@ namespace Photon.AST
             
         }
 
-        void FindUsedUpvalue( Node n, List<Ident> upvalues )
+        void FindUsedUpvalue(Node n, Dictionary<UpvaluePair, Ident> upvalues)
         {
             var usedVar = n as Ident;
             if (usedVar != null && usedVar.UpValue)
             {
-                upvalues.Add(usedVar);
+                var key = new UpvaluePair( usedVar );
+                if (!upvalues.ContainsKey(key))
+                {
+                    upvalues.Add(key, usedVar);
+                }
+                
             }
 
+            // 如果也是闭包声明, 跳过
+            if (n is FuncLit)
+                return;
+
             foreach( var c in n.Child() )
-            {
+            {                
                 FindUsedUpvalue(c, upvalues);
             }
         }

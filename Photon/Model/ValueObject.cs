@@ -18,12 +18,12 @@ namespace Photon.Model
 
         public virtual Value Get( Value obj )
         {
-            return Value.Empty;
+            return Value.Nil;
         }
 
         public virtual Value Select(Value obj)
         {
-            return Value.Empty;
+            return Value.Nil;
         }
 
          public virtual void Set(Value obj, Value value )

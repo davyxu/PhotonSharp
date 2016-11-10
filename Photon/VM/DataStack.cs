@@ -11,6 +11,11 @@ namespace Photon.VM
         public DataStack( int max )
         {
             _values = new Value[max];
+
+            for (int i = 0; i < _values.Length; i++)
+            {
+                _values[i] = Value.Nil;
+            }
         }
 
         public int Count
@@ -22,7 +27,7 @@ namespace Photon.VM
 
                 for (int i = value; i < _count; i++)
                 {
-                    _values[i] = null;
+                    _values[i] = Value.Nil;
                 }
 
                 _count = value;
@@ -33,7 +38,7 @@ namespace Photon.VM
         {
             for (int i = 0; i < _values.Length;i++ )
             {
-                _values[i] = null;
+                _values[i] = Value.Nil;
             }
 
             _count = 0;
@@ -54,7 +59,7 @@ namespace Photon.VM
             var v = _values[_count - 1];
 
             // 调试功能, 让栈看起来清爽
-            _values[_count - 1] = null;
+            _values[_count - 1] = Value.Nil;
 
             _count--;
 
@@ -66,7 +71,7 @@ namespace Photon.VM
             // 调试功能, 让栈看起来清爽
             for( int i = 1;i<= count;i++)
             {
-                _values[_count - i] = null;
+                _values[_count - i] = Value.Nil;
             }
 
             _count -= count;
@@ -95,21 +100,15 @@ namespace Photon.VM
             var final = _count + index;
 
             if (final >= _values.Length || final < 0)
-                return null;
+                return Value.Nil;
 
 
             return _values[final];
         }
 
         public string ValueToString(int index = -1)
-        {
-            var v = Get(index);
-            if (v == null)
-            {
-                return "null";
-            }
-
-            return v.ToString();
+        {            
+            return Get(index).ToString();
         }
 
         public void DebugPrint( )
@@ -119,15 +118,7 @@ namespace Photon.VM
  
                 var v = _values[i];
 
-                string str = "null";
-                if ( v != null )
-                {
-                    str = v.ToString();
-                }
-
-
-
-                Debug.WriteLine("[stack] {0}: {1}", i, str);
+                Debug.WriteLine("[stack] {0}: {1}", i, v.ToString());
             }
         }
     }

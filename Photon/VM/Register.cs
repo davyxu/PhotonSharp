@@ -6,14 +6,18 @@ namespace Photon.VM
 {
     public class Register
     {
-        Value[] _data;
+        Value[] _values;
         int _usedSlot = 0;
         string _usage;
 
         public Register( string usage, int maxReg )
         {
             _usage = usage;
-            _data = new Value[maxReg];
+            _values = new Value[maxReg];
+            for (int i = 0; i < _values.Length; i++)
+            {
+                _values[i] = Value.Nil;
+            }
         }
 
         public int Count
@@ -24,11 +28,11 @@ namespace Photon.VM
         public void SetUsedCount( int count )
         {
 
-            for (int i = 0; i < _data.Length; i++)
+            for (int i = 0; i < _values.Length; i++)
             {
                 if (i >= count)
                 {
-                    _data[i] = null;
+                    _values[i] = Value.Nil;
                 }
 
             }
@@ -38,31 +42,25 @@ namespace Photon.VM
 
         public void Set( int index, Value v )
         {
-            _data[index] = v;            
+            _values[index] = v;            
         }
 
         public Value Get( int index )
         {
-            return _data[index];
+            return _values[index];
         }
 
-        public string ValueToString( int index )
+        public string ValueToString(int index = -1)
         {
-            var v = Get(index);
-            if ( v == null )
-            {
-                return "null";
-            }
-
-            return v.ToString();
+            return Get(index).ToString();
         }
 
 
         public void Clear()
         {
-            for (int i = 0; i < _data.Length; i++)
+            for (int i = 0; i < _values.Length; i++)
             {
-                _data[i] = null;
+                _values[i] = Value.Nil;
             }
 
             _usedSlot = 0;
@@ -72,15 +70,9 @@ namespace Photon.VM
         {            
             for (int i = 0; i < _usedSlot; i++)
             {
-                var v = _data[i];
+                var v = _values[i];
 
-                string str = "null";
-                if (v != null)
-                {
-                    str = v.ToString();
-                }
-
-                Debug.WriteLine("R{0}: {1}", i, str);
+                Debug.WriteLine("R{0}: {1}", i, v.ToString());
             }
         }
     }

@@ -6,8 +6,7 @@ using System;
 
 namespace Photon.API
 {
-    
-
+   
     public class Script
     {
         ScriptParser _parser = new ScriptParser();        

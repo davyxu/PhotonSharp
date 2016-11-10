@@ -39,7 +39,7 @@ namespace Photon.AST
 
             Condition.Compile(exe, cm, false);            
 
-            var jnzCmd = cm.Add(new Command(Opcode.Jnz, 0));
+            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0));
 
             Body.Compile(exe, cm, false);            
 

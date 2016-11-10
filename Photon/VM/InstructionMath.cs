@@ -2,192 +2,147 @@
 
 namespace Photon.VM
 {
-    [Instruction(Cmd = Opcode.Add)]
-    class CmdAdd
+    class InstructionMath : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute(Command cmd)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
+            var a = vm.Stack.Pop().CastNumber();
+            var b = vm.Stack.Pop().CastNumber();
 
-            vm.Stack.Push(new ValueNumber(a + b));
+            float c;
+
+            // 栈顺序是反的, 需要倒过来
+            var result = ExecuteOn2Value(cmd, b, a, out c );
+
+            vm.Stack.Push(new ValueNumber(c));
+
+            return result;
+        }
+
+
+        public virtual bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        {
+            x = 0;
 
             return true;
         }
-        public static string Print(VMachine vm, Command cmd)
+
+        public override string Print(Command cmd)
         {
             return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
+        }
+    }
+
+
+    [Instruction(Cmd = Opcode.Add)]
+    class CmdAdd : InstructionMath
+    {
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        {
+            x = a + b;
+
+            return true;
         }
     }
 
     [Instruction(Cmd = Opcode.Sub)]
-    class CmdSub
+    class CmdSub : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b - a));
+            x = a - b;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.Mul)]
-    class CmdMul
+    class CmdMul : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(a * b));
+            x = a * b ;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.Div)]
-    class CmdDiv
+    class CmdDiv : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b / a));
+            x = a / b ;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.GT)]
-    class CmdGT
+    class CmdGT : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b > a ? 1 : 0));
+            x = a > b ? 1 : 0;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.GE)]
-    class CmdGE
-    {
-        public static bool Execute(VMachine vm, Command cmd)
+    class CmdGE : InstructionMath
+    {            
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b >= a ? 1 : 0));
+            x = a >= b ? 1 : 0;
 
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
-        }
     }
 
     [Instruction(Cmd = Opcode.LT)]
-    class CmdLT
+    class CmdLT : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b < a ? 1 : 0));
+            x = a < b ? 1 : 0;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.LE)]
-    class CmdLE
+    class CmdLE : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(b <= a ? 1 : 0));
+            x = a <= b ? 1 : 0;
 
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
-        }
     }
 
     [Instruction(Cmd = Opcode.EQ)]
-    class CmdEQ
+    class CmdEQ : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(a == b ? 1 : 0));
+            x = a == b ? 1 : 0;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 
     [Instruction(Cmd = Opcode.NE)]
-    class CmdNE
+    class CmdNE : InstructionMath
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
-            var a = VMachine.CastNumber(vm.Stack.Pop());
-            var b = VMachine.CastNumber(vm.Stack.Pop());
-
-            vm.Stack.Push(new ValueNumber(a != b ? 1 : 0));
+            x = a != b ? 1 : 0;
 
             return true;
-        }
-
-        public static string Print(VMachine vm, Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.Stack.ValueToString(-1), vm.Stack.ValueToString(-2));
         }
     }
 

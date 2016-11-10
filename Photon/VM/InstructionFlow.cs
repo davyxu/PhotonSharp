@@ -2,16 +2,16 @@
 
 namespace Photon.VM
 {
-    [Instruction(Cmd = Opcode.Jnz)]
-    class CmdJnz
+    [Instruction(Cmd = Opcode.Jz)]
+    class CmdJnz : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             var targetPC = cmd.DataA;
 
-            var d = vm.Stack.Pop();
+            var d = vm.Stack.Pop().CastNumber();
 
-            if (!VMachine.IsValueNoneZero(d))
+            if ( d == 0 )
             {
                 vm.CurrFrame.PC = targetPC;                
                 return true;
@@ -20,32 +20,32 @@ namespace Photon.VM
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("Condition: {0}, PC : {1}", vm.Stack.ValueToString(),  cmd.DataA);
         }
     }
 
     [Instruction(Cmd = Opcode.Jmp)]
-    class CmdJmp
+    class CmdJmp : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             vm.CurrFrame.PC = cmd.DataA;
 
             return false;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("PC : {0}", cmd.DataA);
         }
     }
 
     [Instruction(Cmd = Opcode.Call)]
-    class CmdCall
+    class CmdCall : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             var argCount = cmd.DataA;
 
@@ -104,22 +104,22 @@ namespace Photon.VM
                     vm.Stack.Cut(stackBeforeCall - argCount, retValueCount);
                 }
 
+                return true;
             }
 
-            return true;
-
+            throw new RuntimeExcetion("expect function or delegate");
         }
 
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.ValueToString( ), cmd.DataB );
         }
     }
     [Instruction(Cmd = Opcode.Ret)]
-    class CmdRet
+    class CmdRet : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             vm.LeaveFrame();
 
@@ -128,9 +128,9 @@ namespace Photon.VM
     }
   
     [Instruction(Cmd = Opcode.Exit)]
-    class CmdExit
+    class CmdExit : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {            
             vm.CurrFrame.PC = -1;
 
@@ -139,13 +139,13 @@ namespace Photon.VM
     }
 
     [Instruction(Cmd = Opcode.Closure)]
-    class CmdClosure
+    class CmdClosure : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
-            var c = vm.Executable.Constants.Get(cmd.DataA);
+            var f = vm.Executable.Constants.Get(cmd.DataA).CastFunc();
 
-            vm.Stack.Push(new ValueClosure(c as ValueFunc));
+            vm.Stack.Push(new ValueClosure(f));
 
             return true;
         }

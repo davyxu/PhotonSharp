@@ -18,8 +18,8 @@ namespace UnitTest
                 var tb = new TestBox().CompileFile("Delegate.pho");
                 tb.Script.RegisterDelegate("add", (vm) =>
                 {
-                    var a = VMachine.CastNumber(vm.Stack.Get(-1));
-                    var b = VMachine.CastNumber(vm.Stack.Get(-2));
+                    var a = vm.Stack.Get(-1).CastNumber();
+                    var b = vm.Stack.Get(-2).CastNumber();
                     
                     vm.Stack.Push(new ValueNumber(a + b));
 

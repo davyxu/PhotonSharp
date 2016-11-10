@@ -24,7 +24,7 @@ namespace Photon.Model
                     }                    
             }
 
-            return Value.Empty;
+            return Value.Nil;
         }
 
         int Append( VMachine vm )
@@ -41,7 +41,7 @@ namespace Photon.Model
             var key = obj as ValueNumber;
 
             if (key == null)
-                return Value.Empty;
+                return Value.Nil;
 
             return _value[(int)key.Number];
         }

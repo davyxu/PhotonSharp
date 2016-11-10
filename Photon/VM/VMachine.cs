@@ -6,17 +6,6 @@ using System.Reflection;
 
 namespace Photon.VM
 {
-    using InstructionExecFunc = Func<VMachine, Command, bool>;
-    using InstructionPrintFunc = Func<VMachine, Command, string>;
-    
-    class InstructionAttribute : Attribute
-    {
-        public Opcode Cmd
-        {
-            get;
-            set;
-        }
-    }
 
 
     public partial class VMachine
@@ -38,10 +27,9 @@ namespace Photon.VM
         Stack<RegRange> _regBaseStack = new Stack<RegRange>();
         int _regBase = 0;
 
-        Executable _exe;
+        Executable _exe;        
 
-        InstructionExecFunc[] _instructionExec = new InstructionExecFunc[(int)Opcode.MAX];
-        InstructionPrintFunc[] _instructionPrint = new InstructionPrintFunc[(int)Opcode.MAX];
+        Instruction[] _instruction = new Instruction[(int)Opcode.MAX];
 
 
         public int RegBase
@@ -91,42 +79,35 @@ namespace Photon.VM
                 if (att == null)
                     continue;
 
-                MethodInfo exe = t.GetMethod("Execute", BindingFlags.Public | BindingFlags.Static);
-                _instructionExec[(int)att.Cmd] = exe.CreateDelegate(typeof(InstructionExecFunc)) as InstructionExecFunc;
-
-                MethodInfo pt = t.GetMethod("Print", BindingFlags.Public | BindingFlags.Static);
-                if (pt != null )
-                {
-                    _instructionPrint[(int)att.Cmd] = pt.CreateDelegate(typeof(InstructionPrintFunc)) as InstructionPrintFunc;
-                }
-                
+                var cmd = Activator.CreateInstance(t) as Instruction;
+                cmd.vm = this;
+                _instruction[(int)att.Cmd] = cmd;                
             }
         }
 
         string InstructToString( Command cmd )
         {
-            var inc = _instructionPrint[(int)cmd.Op];
+            var inc = _instruction[(int)cmd.Op];
 
             if (inc == null)
             {            
                 return string.Empty;
             }
 
-            return inc( this, cmd );
+            return inc.Print( cmd );
         }
 
         bool ExecCode(Command cmd)
         {
-            var inc = _instructionExec[(int)cmd.Op];
+            var inc = _instruction[(int)cmd.Op];
 
             if (inc == null)
             {
-                Error("invalid instruction");
-                return false;
+                throw new RuntimeExcetion("invalid instruction");                
             }
 
 
-            return inc(this, cmd);
+            return inc.Execute( cmd);
         }
 
         public void EnterFrame( int funcIndex )
@@ -215,63 +196,6 @@ namespace Photon.VM
                 }
 
             }
-        }
-
-
-        public static bool IsValueNoneZero( Value d )
-        {
-            if (d == null)
-                return false;
-
-            var nv = d as ValueNumber;
-
-            if ( nv != null )
-            {
-                return nv.Number != 0;
-            }
-
-            var fv = d as ValueFunc;
-
-            if ( fv != null )
-            {
-                return true;
-            }
-
-
-            Error("unknown value type");
-
-
-            return false;
-        }
-
-
-        public static float CastNumber( Value d )
-        {
-            var nv = d as ValueNumber;
-            if (nv == null)
-            {
-                Error("expect number");
-                return 0;
-            }
-
-            return nv.Number;
-        }
-
-        public static ValueObject CastObject(Value d)
-        {
-            var nv = d as ValueObject;
-            if (nv == null)
-            {
-                Error("expect object");
-                return null;
-            }
-
-            return nv;
-        }
-
-        static void Error(string str)
-        {
-            throw new Exception(str);
         }
     }
 }

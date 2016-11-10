@@ -28,7 +28,7 @@ namespace Photon.Model
         
         Call,   // S[I](S[I+1], ... )
         Ret,    // 
-        Jnz,    // S[Top] != 0
+        Jz,    // S[Top] != 0
         Jmp,    // 无条件
         Closure, //  创建闭包
         LinkU,  // 让Upvalue与寄存器建立引用

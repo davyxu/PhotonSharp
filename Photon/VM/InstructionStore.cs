@@ -3,9 +3,9 @@
 namespace Photon.VM
 {
     [Instruction(Cmd = Opcode.LoadC)]
-    class CmdLoadC
+    class CmdLoadC : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             var c = vm.Executable.Constants.Get(cmd.DataA);
             vm.Stack.Push(c);
@@ -20,9 +20,9 @@ namespace Photon.VM
     }
 
     [Instruction(Cmd = Opcode.LoadR)]
-    class CmdLoadR
+    class CmdLoadR : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
             Value v = vm.LocalRegister.Get(regIndex);
@@ -31,7 +31,7 @@ namespace Photon.VM
             return true;  
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
@@ -40,9 +40,9 @@ namespace Photon.VM
     }
 
     [Instruction(Cmd = Opcode.SetR)]
-    class CmdSetR
+    class CmdSetR : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
             var d = vm.Stack.Pop();
@@ -52,7 +52,7 @@ namespace Photon.VM
 
             return true;
         }
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
@@ -63,9 +63,9 @@ namespace Photon.VM
 
 
     [Instruction(Cmd = Opcode.LoadG)]
-    class CmdLoadG
+    class CmdLoadG : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             Value v = vm.LocalRegister.Get(cmd.DataA);
 
@@ -73,16 +73,16 @@ namespace Photon.VM
 
             return true;
         }
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.ValueToString(cmd.DataA));
         }
     }
 
     [Instruction(Cmd = Opcode.SetG)]
-    class CmdSetG
+    class CmdSetG : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             var regIndex = cmd.DataA;
             var d = vm.Stack.Pop();
@@ -91,26 +91,26 @@ namespace Photon.VM
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
         }
     }
 
     [Instruction(Cmd = Opcode.Index)]
-    class CmdIndexR
+    class CmdIndexR : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             var key = vm.Stack.Pop();
-            var main = VMachine.CastObject( vm.Stack.Pop() );
+            var main = vm.Stack.Pop().CastObject();
             var result = main.Get(key);
             vm.Stack.Push(result);
                         
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
 
             return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.ValueToString(-2), vm.Stack.ValueToString(-1));
@@ -118,11 +118,11 @@ namespace Photon.VM
     }
 
     [Instruction(Cmd = Opcode.Select)]
-    class CmdSelectR
+    class CmdSelectR : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {            
-            var main = VMachine.CastObject(vm.Stack.Pop());
+            var main = vm.Stack.Pop().CastObject();
 
             var key = vm.Executable.Constants.Get(cmd.DataA);
 
@@ -132,7 +132,7 @@ namespace Photon.VM
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
 
             return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.ValueToString(-1), vm.Executable.Constants.ValueToString(cmd.DataA) );
@@ -141,9 +141,9 @@ namespace Photon.VM
 
 
     [Instruction(Cmd = Opcode.LinkU)]
-    class CmdLinkU
+    class CmdLinkU : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB + vm.RegBase;
@@ -156,7 +156,7 @@ namespace Photon.VM
 
             return true;
         }
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB;
@@ -167,9 +167,9 @@ namespace Photon.VM
 
 
     [Instruction(Cmd = Opcode.LoadU)]
-    class CmdLoadU
+    class CmdLoadU : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             int regIndex =  cmd.DataA;
 
@@ -179,16 +179,16 @@ namespace Photon.VM
 
             return true;
         }
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.ValueToString(cmd.DataA));
         }
     }
 
     [Instruction(Cmd = Opcode.SetU)]
-    class CmdSetU
+    class CmdSetU : Instruction
     {
-        public static bool Execute(VMachine vm, Command cmd)
+        public override bool Execute( Command cmd)
         {
             
             var regIndex = cmd.DataA;
@@ -198,7 +198,7 @@ namespace Photon.VM
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print( Command cmd)
         {
             return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
         }

@@ -64,6 +64,7 @@
     <Compile Include="Model\CommandSet.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\Exception.cs" />
     <Compile Include="Model\ValueDelegate.cs" />
     <Compile Include="Model\ValueClosure.cs" />
     <Compile Include="Model\ValueFunc.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\OpCode.cs" />
     <Compile Include="Model\Token.cs" />
+    <Compile Include="VM\Instruction.cs" />
     <Compile Include="VM\InstructionFlow.cs" />
     <Compile Include="VM\InstructionMath.cs" />
     <Compile Include="VM\InstructionStore.cs" />

@@ -41,6 +41,11 @@ namespace Photon.AST
                         c = new ValueNumber(v);
                     }
                     break;
+                case TokenType.QuotedString:
+                    {
+                        c = new ValueString(Value);
+                    }
+                    break;
                 default:
                     break;
             }

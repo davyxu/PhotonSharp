@@ -121,7 +121,7 @@ namespace Photon.VM
     {
         public static bool Execute(VMachine vm, Command cmd)
         {
-            vm.LaveFrame();
+            vm.LeaveFrame();
 
             return true;
         }

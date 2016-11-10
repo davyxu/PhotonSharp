@@ -12,4 +12,4 @@ func foo( ){
 
 
 var c = foo( )
-c( 9 )
+var x = c( 9 )

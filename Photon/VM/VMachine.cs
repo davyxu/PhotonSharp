@@ -159,7 +159,7 @@ namespace Photon.VM
             _regBaseStack.Push(rr);
         }
 
-        public void LaveFrame( )
+        public void LeaveFrame( )
         {
             if ( _currFrame.RestoreDataStack )
             {

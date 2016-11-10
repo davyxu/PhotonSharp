@@ -76,7 +76,7 @@ namespace Photon.Parser
                 case TokenType.Number:
                 case TokenType.QuotedString:
                     {
-                        var x = new BasicLitExpr(_token.Value, CurrTokenType);
+                        var x = new BasicLit(_token.Value, CurrTokenType);
                         Next();
                         return x;
                     }
@@ -90,16 +90,15 @@ namespace Photon.Parser
                         var funcPos = CurrTokenPos;
                         Next();
 
-                        var scope = OpenScope(ScopeType.Closure);
+                        var scope = OpenScope(ScopeType.Closure, funcPos );
                         var paramlist = ParseParameters(scope);
 
                         var body = ParseBody(scope);
 
-                        var funclit = new FuncLitExpr(body, new FuncType( funcPos, paramlist, scope) );
+                        var funclit = new FuncLit(body, new FuncType( funcPos, paramlist, scope) );
 
                         return funclit;
-                    }
-                    break;
+                    }                    
             }
 
             return new BadExpr();

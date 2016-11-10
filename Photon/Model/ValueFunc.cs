@@ -4,13 +4,19 @@ namespace Photon.Model
 {
     public class ValueFunc : Value
     {
-        int _index = 0;  // 相对于Executable的索引
-        TokenPos _pos;
+        protected int _index = 0;  // 相对于Executable的索引
+        protected TokenPos _pos;
 
         public ValueFunc( int index, TokenPos pos )
         {
             _index = index;
             _pos = pos;
+        }
+
+        public ValueFunc( ValueFunc f )
+        {
+            _index = f._index;
+            _pos = f._pos;
         }
 
         public int Index

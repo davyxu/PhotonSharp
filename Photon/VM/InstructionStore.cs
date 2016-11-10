@@ -138,4 +138,69 @@ namespace Photon.VM
             return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.ValueToString(-1), vm.Executable.Constants.ValueToString(cmd.DataA) );
         }
     }
+
+
+    [Instruction(Cmd = Opcode.LinkU)]
+    class CmdLinkU
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {
+            int upIndex = cmd.DataA;
+            int regIndex = cmd.DataB + vm.RegBase;
+
+            var closure = vm.Stack.Get() as ValueClosure;
+
+            Value v = vm.LocalRegister.Get(regIndex);
+            closure.AddUpValue(v);
+            
+
+            return true;
+        }
+        public static string Print(VMachine vm, Command cmd)
+        {
+            int upIndex = cmd.DataA;
+            int regIndex = cmd.DataB;
+
+            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.LocalRegister.ValueToString(regIndex));
+        }
+    }
+
+
+    [Instruction(Cmd = Opcode.LoadU)]
+    class CmdLoadU
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {
+            int regIndex =  cmd.DataA;
+
+            var v = vm.CurrFrame.Closure.GetUpValue(regIndex);            
+
+            vm.Stack.Push(v);
+
+            return true;
+        }
+        public static string Print(VMachine vm, Command cmd)
+        {
+            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.ValueToString(cmd.DataA));
+        }
+    }
+
+    [Instruction(Cmd = Opcode.SetU)]
+    class CmdSetU
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {
+            
+            var regIndex = cmd.DataA;
+            var d = vm.Stack.Pop();
+            vm.CurrFrame.Closure.SetUpValue(regIndex, d );            
+
+            return true;
+        }
+
+        public static string Print(VMachine vm, Command cmd)
+        {
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.ValueToString());
+        }
+    }
 }

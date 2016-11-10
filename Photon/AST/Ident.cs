@@ -9,6 +9,9 @@ namespace Photon.AST
 
         public Symbol ScopeInfo;
 
+        public bool UpValue; // 闭包中捕获的变量
+
+
         public Ident(Token t)
         {
             _token = t;
@@ -28,15 +31,10 @@ namespace Photon.AST
         {
             if (ScopeInfo != null)
             {
-                //if (ScopeInfo.IsGlobal)
-                //{
-                //    return string.Format("{0} G{1}", Name, ScopeInfo.RegIndex);
-                //}
-                //else
-                //{
-                    return string.Format("{0} R{1}", Name, ScopeInfo.RegIndex);
-                //}
-                
+                if ( UpValue )
+                    return string.Format("{0} R{1} (UpValue)", Name, ScopeInfo.RegIndex);   
+                else
+                    return string.Format("{0} R{1}", Name, ScopeInfo.RegIndex);   
             }
 
             return Name;
@@ -51,6 +49,10 @@ namespace Photon.AST
                 if (ScopeInfo.IsGlobal)
                 {
                     cm.Add(new Command(Opcode.SetG, ScopeInfo.RegIndex)).Comment = Name;
+                }
+                else if ( UpValue )
+                {
+                    cm.Add(new Command(Opcode.SetU, ScopeInfo.RegIndex)).Comment = Name;
                 }
                 else
                 {
@@ -77,6 +79,10 @@ namespace Photon.AST
                     if (ScopeInfo.IsGlobal)
                     {
                         cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex)).Comment = Name;
+                    }
+                    else if ( UpValue )
+                    {
+                        cm.Add(new Command(Opcode.LoadU, ScopeInfo.RegIndex)).Comment = Name;
                     }
                     else
                     {

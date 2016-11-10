@@ -13,6 +13,7 @@ namespace Photon.VM
         // 结束运行后, 需要恢复数据栈
         public bool RestoreDataStack;
 
+        public ValueClosure Closure;
 
         public RuntimeFrame(CommandSet cs)
         {            

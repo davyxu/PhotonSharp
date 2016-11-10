@@ -21,8 +21,7 @@ namespace Photon.Model
                 case "append":
                     {
                         return new ValueDelegate( Append );
-                    }
-                    break;
+                    }                    
             }
 
             return Value.Empty;

@@ -43,9 +43,10 @@ namespace Photon.Parser
 
         BlockStmt ParseBlockStmt()
         {
+            var defPos = CurrTokenPos;
             Expect(TokenType.LBrace);
 
-            OpenScope( ScopeType.Block);
+            OpenScope(ScopeType.Block, defPos);
 
             var list = ParseStatmentList();
 
@@ -122,9 +123,10 @@ namespace Photon.Parser
 
         ForStmt ParseForStmt()
         {
+            var defPos = CurrTokenPos;
             Expect(TokenType.For);
 
-            OpenScope( ScopeType.For);
+            OpenScope( ScopeType.For, defPos );
 
             var init = ParseForInit();
            

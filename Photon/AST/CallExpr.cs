@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Photon.Model;
-using Photon.Model;
 
 namespace Photon.AST
 {

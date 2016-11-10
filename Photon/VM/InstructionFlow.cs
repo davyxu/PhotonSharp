@@ -59,6 +59,8 @@ namespace Photon.VM
                 // 更换当前上下文
                 vm.EnterFrame(func.Index);
 
+                vm.CurrFrame.Closure = obj as ValueClosure;
+
                 // 调用结束时需要平衡栈
                 if (cmd.DataB != 0)
                 {
@@ -136,4 +138,16 @@ namespace Photon.VM
         }
     }
 
+    [Instruction(Cmd = Opcode.Closure)]
+    class CmdClosure
+    {
+        public static bool Execute(VMachine vm, Command cmd)
+        {
+            var c = vm.Executable.Constants.Get(cmd.DataA);
+
+            vm.Stack.Push(new ValueClosure(c as ValueFunc));
+
+            return true;
+        }
+    }
 }

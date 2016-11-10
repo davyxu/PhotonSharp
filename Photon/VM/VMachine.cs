@@ -157,10 +157,6 @@ namespace Photon.VM
 
             // 留作下次调用叠加时使用
             _regBaseStack.Push(rr);
-    
-
-            
-            
         }
 
         public void LaveFrame( )
@@ -271,18 +267,6 @@ namespace Photon.VM
             }
 
             return nv;
-        }
-
-        public static int CastFuncIndex( Value d )
-        {
-            var fv = d as ValueFunc;
-            if ( fv == null )
-            {
-                Error("expect function");
-                return -1;
-            }
-
-            return fv.Index;
         }
 
         static void Error(string str)

@@ -18,13 +18,13 @@ namespace Photon.Parser
 
         void InitScope( )
         {
-            OpenScope( ScopeType.Global );
+            OpenScope( ScopeType.Global, TokenPos.Invalid );
             _global = _topScope;
         }
 
-        Scope OpenScope( ScopeType type)
+        Scope OpenScope( ScopeType type, TokenPos pos )
         {
-            var s = new Scope(_topScope, type);
+            var s = new Scope(_topScope, type, pos );
             _topScope = s;
             return s;
         }
@@ -69,13 +69,19 @@ namespace Photon.Parser
             if (ident == null)
                 return;
 
-
             for (var s = _topScope; s != null; s = s.Outter)
             {
                 var data = s.FindSymbol(ident.Name);
                 if ( data != null )
                 {
                     ident.ScopeInfo = data;
+
+                    // 从闭包开始搜索, 如果已经不是在本层找到, 一定是upvalue
+                    if ( _topScope.Type == ScopeType.Closure &&  s != _topScope )
+                    {
+                        ident.UpValue = true;
+                    }
+
                     return;
                 }
             }

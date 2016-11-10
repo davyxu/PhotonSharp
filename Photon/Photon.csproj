@@ -40,11 +40,12 @@
     <Compile Include="API\Script.cs" />
     <Compile Include="AST\DelegateDeclare.cs" />
     <Compile Include="AST\FuncType.cs" />
-    <Compile Include="AST\FuncLitExpr.cs" />
+    <Compile Include="AST\FuncLit.cs" />
+    <Compile Include="AST\Symbol.cs" />
     <Compile Include="AST\VarDeclareStmt.cs" />
     <Compile Include="AST\CallExpr.cs" />
     <Compile Include="AST\FuncDeclare.cs" />
-    <Compile Include="AST\BasicLitExpr.cs" />
+    <Compile Include="AST\BasicLit.cs" />
     <Compile Include="AST\SelectorExpr.cs" />
     <Compile Include="AST\BinaryExpr.cs" />
     <Compile Include="AST\IndexExpr.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
     <Compile Include="Model\ValueDelegate.cs" />
+    <Compile Include="Model\ValueClosure.cs" />
     <Compile Include="Model\ValueFunc.cs" />
     <Compile Include="Model\ValueArray.cs" />
     <Compile Include="Model\ValueString.cs" />

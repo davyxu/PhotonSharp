@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Photon.Model
 {
     public class ValueClosure : ValueFunc
-    {        
-        List<Value> _upvalues = new List<Value>();
+    {
+        List<Slot> _upvalues = new List<Slot>();
 
         public ValueClosure(ValueFunc f )
             : base( f )
@@ -13,19 +13,19 @@ namespace Photon.Model
             
         }
 
-        public void AddUpValue( Value v )
+        public void AddUpValue( Slot v )
         {
             _upvalues.Add(v);
         }
 
         public void SetUpValue(int index, Value v )
         {
-            _upvalues[index] = v;
+            _upvalues[index].SetData( v );
         }
 
         public Value GetUpValue(int index )
         {
-            return _upvalues[index];
+            return _upvalues[index].Data;
         }
 
         public override string ToString()

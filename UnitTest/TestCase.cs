@@ -1,14 +1,12 @@
-﻿using Photon.VM;
-using Photon.Model;
-using System.IO;
+﻿using Photon.Model;
+
 namespace UnitTest
 {
     partial class Program
     {
 
         static void TestCase()
-        {        
-
+        {            
             new TestBox().RunFile("Closure.pho").TestLocalRegEqualNumber(2, 12 );
 
             new TestBox().RunFile("Array.pho").TestLocalRegEqualNumber(2, 1);

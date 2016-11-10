@@ -65,7 +65,7 @@ namespace Photon.Model
 
         public void DebugPrint( )
         {
-            Debug.WriteLine( _name);
+            Debug.WriteLine( "{0} locals: {1}", _name, RegCount);
 
             int index = 0;
             foreach( var c in _cmds )

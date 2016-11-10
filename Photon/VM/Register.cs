@@ -1,23 +1,25 @@
 ﻿using Photon.Model;
-using System;
 using System.Diagnostics;
 
 namespace Photon.VM
 {
     public class Register
     {
-        Value[] _values;
+        Slot[] _values;
         int _usedSlot = 0;
         string _usage;
+
+        int _slotIDGen = 0;
+
+        int GenSlotID( )
+        {
+            return ++_slotIDGen;
+        }
 
         public Register( string usage, int maxReg )
         {
             _usage = usage;
-            _values = new Value[maxReg];
-            for (int i = 0; i < _values.Length; i++)
-            {
-                _values[i] = Value.Nil;
-            }
+            _values = new Slot[maxReg];
         }
 
         public int Count
@@ -26,13 +28,23 @@ namespace Photon.VM
         }
 
         public void SetUsedCount( int count )
-        {
-
-            for (int i = 0; i < _values.Length; i++)
+        {            
+            // 扩展
+            if ( count > _usedSlot )
             {
-                if (i >= count)
+                for (int i = _usedSlot; i < count; i++)
                 {
-                    _values[i] = Value.Nil;
+                    // 重新分配槽, 避免覆盖原来的值
+                    _values[i] = new Slot(GenSlotID());
+                }
+            }
+            // 缩减
+            else if ( count < _usedSlot )
+            {
+                for( int i = count; i < _usedSlot; i++ )
+                {
+                    // 重新分配槽, 避免覆盖原来的值
+                    _values[i] = new Slot(GenSlotID());
                 }
 
             }
@@ -41,26 +53,25 @@ namespace Photon.VM
         }
 
         public void Set( int index, Value v )
-        {
-            _values[index] = v;            
+        {            
+            _values[index].SetData(v);
         }
 
         public Value Get( int index )
         {
+            return _values[index].Data;
+        }
+
+        public Slot GetSlot( int index )
+        {
             return _values[index];
         }
-
-        public string ValueToString(int index = -1)
-        {
-            return Get(index).ToString();
-        }
-
 
         public void Clear()
         {
             for (int i = 0; i < _values.Length; i++)
             {
-                _values[i] = Value.Nil;
+                _values[i].SetData( Value.Nil );
             }
 
             _usedSlot = 0;
@@ -70,7 +81,7 @@ namespace Photon.VM
         {            
             for (int i = 0; i < _usedSlot; i++)
             {
-                var v = _values[i];
+                var v = _values[i].Data;
 
                 Debug.WriteLine("R{0}: {1}", i, v.ToString());
             }

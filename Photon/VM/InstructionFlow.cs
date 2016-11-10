@@ -22,7 +22,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("Condition: {0}, PC : {1}", vm.Stack.ValueToString(),  cmd.DataA);
+            return string.Format("Condition: {0}, PC : {1}", vm.Stack.Get(),  cmd.DataA);
         }
     }
 
@@ -113,7 +113,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.ValueToString( ), cmd.DataB );
+            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.Get( ), cmd.DataB );
         }
     }
     [Instruction(Cmd = Opcode.Ret)]

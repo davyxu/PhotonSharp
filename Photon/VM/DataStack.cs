@@ -44,9 +44,6 @@ namespace Photon.VM
             _count = 0;
         }
 
-
-        
-
         public void Push( Value v )
         {
 
@@ -104,11 +101,6 @@ namespace Photon.VM
 
 
             return _values[final];
-        }
-
-        public string ValueToString(int index = -1)
-        {            
-            return Get(index).ToString();
         }
 
         public void DebugPrint( )

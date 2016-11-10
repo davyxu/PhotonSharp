@@ -1,4 +1,5 @@
 ﻿using SharpLexer;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -66,14 +67,35 @@ namespace Photon.AST
 
         public int SymbolCount
         {
-            get{                
-
-                return _symbolByName.Count;
-            }
+            get{return _symbolByName.Count; }
            
         }
 
+        public int CalcUsedReg()
+        {
+            return RawCalcUsedReg( this );
+        }
 
+        // 计算某个作用域使用到的重叠寄存器量( 方向向下 )
+        int RawCalcUsedReg( Scope s  )
+        {
+            int maxReg = 0;
+
+            foreach( var c in s._child )
+            {
+                if (c.Type == ScopeType.Function || c.Type == ScopeType.Closure)
+                {
+                    continue;
+                }
+
+                // 递归同层取最大的
+                maxReg = Math.Max(maxReg, RawCalcUsedReg(c));
+            }
+
+            return maxReg + s.SymbolCount;
+        }
+
+        // 计算symbol应该分配的寄存器base( 方向向上 )
         public int CalcRegBase()
         {
             int regBase = this.SymbolCount;
@@ -83,25 +105,17 @@ namespace Photon.AST
             // 函数只从自己开始算regbase
             // 其他作用域向上查到函数
 
-            if (s.Type != ScopeType.Function && s.Type != ScopeType.Closure)
+            while (s.Type != ScopeType.Function && s.Type != ScopeType.Closure)
             {
-                do
+                s = s.Outter;
+
+                if (s == null)
                 {
+                    break;
+                }
 
-
-                    s = s.Outter;
-
-                    if (s == null)
-                    {
-                        break;
-                    }
-
-
-                    regBase += s.SymbolCount;
-
-                } while (s.Type != ScopeType.Function && s.Type != ScopeType.Closure);
+                regBase += s.SymbolCount;
             }
-
 
             return regBase;
         }

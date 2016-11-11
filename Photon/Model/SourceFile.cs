@@ -14,6 +14,11 @@ namespace Photon.Model
             get { return _src; }
         }
 
+        public List<string> Lines
+        {
+            get { return _sourceLine; }
+        }
+
         public SourceFile( string src )
         {
             _src = src;
@@ -44,6 +49,8 @@ namespace Photon.Model
 
             return _sourceLine[line - 1];
         }
+
+
 
         public void DebugPrint( )
         {

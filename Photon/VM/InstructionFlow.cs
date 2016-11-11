@@ -71,7 +71,7 @@ namespace Photon.VM
                 for (int i = 0; i < argCount; i++)
                 {
                     var arg = vm.Stack.Get( -i - 1 );
-                    vm.LocalRegister.Set(argCount - i - 1 + vm.RegBase, arg);
+                    vm.Reg.Set(argCount - i - 1 + vm.RegBase, arg);
                 }
 
                 // 清空栈
@@ -79,6 +79,8 @@ namespace Photon.VM
 
                 // 记录当前的数据栈位置
                 vm.CurrFrame.DataStackBase = vm.Stack.Count;
+
+                
 
                 // 马上跳到下个执行域            
                 return false;
@@ -143,7 +145,7 @@ namespace Photon.VM
     {
         public override bool Execute( Command cmd)
         {
-            var f = vm.Executable.Constants.Get(cmd.DataA).CastFunc();
+            var f = vm.Exec.Constants.Get(cmd.DataA).CastFunc();
 
             vm.Stack.Push(new ValueClosure(f));
 

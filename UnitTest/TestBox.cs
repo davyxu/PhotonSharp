@@ -72,7 +72,7 @@ namespace UnitTest
 
         public TestBox TestLocalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _script.VM.LocalRegister);
+            return TestRegEqualNumber(index, num, _script.VM.Reg);
         }
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )

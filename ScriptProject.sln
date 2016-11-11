@@ -11,6 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D4-4A66-B10E-459864FAED38}"
 	ProjectSection(SolutionItems) = preProject
 		Doc\BNF.txt = Doc\BNF.txt
+		README.md = README.md
 		Doc\Style.md = Doc\Style.md
 		Doc\TODO.md = Doc\TODO.md
 		Doc\VM.md = Doc\VM.md
@@ -19,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon", "Photon\Photon.csproj", "{129399C8-6ED0-47DA-8829-5781D54C2A48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLexer", "..\SharpLexer\SharpLexer\SharpLexer.csproj", "{5138A406-5B76-4D5E-B889-257224E1FB2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{AA290B2B-F89E-4AD2-AA01-69A544B5A9F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonToy", "PhotonToy\PhotonToy.csproj", "{B37BC0BC-90F7-401B-B485-17219FF88B52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +43,10 @@ Global
 		{5138A406-5B76-4D5E-B889-257224E1FB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5138A406-5B76-4D5E-B889-257224E1FB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5138A406-5B76-4D5E-B889-257224E1FB2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,17 +6,41 @@ using System.Reflection;
 
 namespace Photon.VM
 {
+    public enum State
+    {
+        Standby = 0,
+        Running,
+        Breaking,
+    }
 
+    public enum DebugHook
+    {        
+        ExecInstruction,        // 每个指令运行前
+        SourceLine,             // 源码行执行前
+        Call,                   // 函数执行前
+        Return,                 // 返回函数后
+        MAX,
+    }
 
     public partial class VMachine
     {
-        DataStack _dataStack = new DataStack(10);       
+        // 数据交换栈
+        DataStack _dataStack = new DataStack(10);
 
+        // 数据寄存器
+        Register _localReg = new Register("R", 10);
+
+        // 运行帧栈
         Stack<RuntimeFrame> _frameStack = new Stack<RuntimeFrame>();
 
-        RuntimeFrame _currFrame;        
+        // 当前运行帧
+        RuntimeFrame _currFrame;
 
-        Register _localReg = new Register("R", 10);
+        Action<VMachine>[] _hook = new Action<VMachine>[(int)DebugHook.MAX];
+
+        
+        // 运行状态
+        State _state = State.Standby;
 
         struct RegRange
         {
@@ -24,21 +48,28 @@ namespace Photon.VM
             public int Max;
         }
 
+        // 寄存器使用范围栈
         Stack<RegRange> _regBaseStack = new Stack<RegRange>();
         int _regBase = 0;
 
         Executable _exe;        
 
+        // 指令集
         Instruction[] _instruction = new Instruction[(int)Opcode.MAX];
 
-
+        // 当前寄存器最小使用位置
         public int RegBase
         {
             get { return _regBase; }
         }
 
+        public State State 
+        {
+            get { return _state; }
+        }
 
-        public bool DebugRun
+
+        public bool ShowDebugInfo
         {
             get;
             set;
@@ -49,12 +80,12 @@ namespace Photon.VM
             get { return _dataStack; }
         }
 
-        public Register LocalRegister
+        public Register Reg
         {
             get { return _localReg; }
         }
 
-        public Executable Executable
+        public Executable Exec
         {
             get { return _exe; }
         }
@@ -62,6 +93,21 @@ namespace Photon.VM
         public RuntimeFrame CurrFrame
         {
             get { return _currFrame; }
+        }
+
+        Command CurrCommand
+        {
+            get
+            {
+
+                int pc = _currFrame.PC;
+                if (pc >= _currFrame.CmdSet.Commands.Count || pc < 0)
+                {
+                    return null;
+                }
+
+                return _currFrame.CmdSet.Commands[pc];
+            }
         }
 
         public VMachine()
@@ -97,7 +143,7 @@ namespace Photon.VM
             return inc.Print( cmd );
         }
 
-        bool ExecCode(Command cmd)
+        void ExecCode(Command cmd)
         {
             var inc = _instruction[(int)cmd.Op];
 
@@ -107,11 +153,21 @@ namespace Photon.VM
             }
 
 
-            return inc.Execute( cmd);
+            if( inc.Execute( cmd) )
+            {
+                _currFrame.PC++;
+            }
+        }
+
+        public void SetHook(DebugHook hook, Action<VMachine> callback )
+        {
+            _hook[(int)hook] = callback;
         }
 
         public void EnterFrame( int funcIndex )
         {
+            CallHook(DebugHook.Call);
+
             var newFrame = new RuntimeFrame(_exe.CmdSet[funcIndex] );
 
             if ( _currFrame != null )
@@ -122,7 +178,6 @@ namespace Photon.VM
             _currFrame = newFrame;
 
             // globa不用local寄存器
-
 
             // 第一层的reg是0, 不记录
             if (_regBaseStack.Count > 0)
@@ -155,39 +210,76 @@ namespace Photon.VM
             _regBase = rr.Min;
 
             _localReg.SetUsedCount(rr.Max);
+
+            CallHook(DebugHook.Return);
         }
 
+        void CallHook( DebugHook hook )
+        {
+            var func = _hook[(int)hook];
+            if (func != null)
+            {
+                _state = VM.State.Breaking;
 
+                func(this);
+
+                _state = VM.State.Running;
+            }
+        }
+
+        public void Stop( )
+        {
+            _currFrame.PC = -1;
+        }
 
         public void Run( Executable exe, SourceFile file )
         {
+            _exe = exe;
+
             _frameStack.Clear();
             _dataStack.Clear();
 
-            _exe = exe;
-
             EnterFrame(0);
 
-            while (_currFrame.PC < _currFrame.CmdSet.Commands.Count && _currFrame.PC != -1 )
-            {
-                var cmd = _currFrame.CmdSet.Commands[_currFrame.PC];
+            int currSrcLine = 0;
 
-                if (DebugRun)
+            _state = VM.State.Running;
+            
+            while (true)
+            {
+                var cmd = CurrCommand;
+                if (cmd == null)
+                    break;
+
+                if (ShowDebugInfo)
                 {
                     Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, file.GetLine(cmd.CodePos.Line));
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }
 
-                if ( ExecCode(cmd) )
+                // 源码行有变化时
+                if (currSrcLine == 0 || currSrcLine != cmd.CodePos.Line)
                 {
-                    _currFrame.PC++;
+                    if ( currSrcLine != 0 )
+                    {
+                        CallHook(DebugHook.SourceLine);
+                    }
+                    
+                    currSrcLine = cmd.CodePos.Line;
                 }
 
+
+                // 每条指令执行前
+                CallHook(DebugHook.ExecInstruction);
+
+
+                ExecCode(cmd);
+
                 // 打印执行完后的信息
-                if (DebugRun)
+                if (ShowDebugInfo)
                 {
                     // 寄存器信息
-                    LocalRegister.DebugPrint();
+                    Reg.DebugPrint();
 
                     // 数据栈信息
                     Stack.DebugPrint();

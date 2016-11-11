@@ -21,7 +21,7 @@ namespace Photon.API
             set
             {
                 _debugMode = value;
-                _vm.DebugRun = value;
+                _vm.ShowDebugInfo = value;
             }
         }
 

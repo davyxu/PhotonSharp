@@ -7,7 +7,7 @@ namespace Photon.VM
     {
         public override bool Execute( Command cmd)
         {
-            var c = vm.Executable.Constants.Get(cmd.DataA);
+            var c = vm.Exec.Constants.Get(cmd.DataA);
             vm.Stack.Push(c);
 
             return true;
@@ -15,7 +15,7 @@ namespace Photon.VM
 
         public static string Print( VMachine vm, Command cmd )
         {
-            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, vm.Executable.Constants.Get(cmd.DataA));
+            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, vm.Exec.Constants.Get(cmd.DataA));
         }
     }
 
@@ -25,7 +25,7 @@ namespace Photon.VM
         public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
-            Value v = vm.LocalRegister.Get(regIndex);
+            Value v = vm.Reg.Get(regIndex);
             vm.Stack.Push(v);
 
             return true;  
@@ -35,7 +35,7 @@ namespace Photon.VM
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.LocalRegister.Get(regIndex));
+            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.Reg.Get(regIndex));
         }
     }
 
@@ -46,7 +46,7 @@ namespace Photon.VM
         {
             int regIndex = cmd.DataA + vm.RegBase;
             var d = vm.Stack.Pop();
-            vm.LocalRegister.Set(regIndex, d);
+            vm.Reg.Set(regIndex, d);
 
             
 
@@ -67,7 +67,7 @@ namespace Photon.VM
     {
         public override bool Execute( Command cmd)
         {
-            Value v = vm.LocalRegister.Get(cmd.DataA);
+            Value v = vm.Reg.Get(cmd.DataA);
 
             vm.Stack.Push(v);
 
@@ -75,7 +75,7 @@ namespace Photon.VM
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.Get(cmd.DataA));
+            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.Reg.Get(cmd.DataA));
         }
     }
 
@@ -86,7 +86,7 @@ namespace Photon.VM
         {
             var regIndex = cmd.DataA;
             var d = vm.Stack.Pop();
-            vm.LocalRegister.Set(regIndex, d);
+            vm.Reg.Set(regIndex, d);
 
             return true;
         }
@@ -124,7 +124,7 @@ namespace Photon.VM
         {            
             var main = vm.Stack.Pop().CastObject();
 
-            var key = vm.Executable.Constants.Get(cmd.DataA);
+            var key = vm.Exec.Constants.Get(cmd.DataA);
 
             var result = main.Select(key);
             vm.Stack.Push(result);
@@ -135,7 +135,7 @@ namespace Photon.VM
         public override string Print( Command cmd)
         {
 
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.Get(-1), vm.Executable.Constants.Get(cmd.DataA) );
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.Get(-1), vm.Exec.Constants.Get(cmd.DataA) );
         }
     }
 
@@ -150,7 +150,7 @@ namespace Photon.VM
 
             var closure = vm.Stack.Get() as ValueClosure;
 
-            Slot slot = vm.LocalRegister.GetSlot(regIndex);
+            Slot slot = vm.Reg.GetSlot(regIndex);
             closure.AddUpValue(slot);
             
 
@@ -161,7 +161,7 @@ namespace Photon.VM
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB;
 
-            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.LocalRegister.Get(regIndex));
+            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.Reg.Get(regIndex));
         }
     }
 
@@ -181,7 +181,7 @@ namespace Photon.VM
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalRegister.Get(cmd.DataA));
+            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.Reg.Get(cmd.DataA));
         }
     }
 

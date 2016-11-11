@@ -12,6 +12,7 @@ namespace Photon.API
         ScriptParser _parser = new ScriptParser();        
         VMachine _vm = new VMachine();
         Executable _exe = new Executable();
+        SourceFile _file;
 
         bool _debugMode;
         public bool DebugMode
@@ -29,37 +30,18 @@ namespace Photon.API
             get { return _vm; }
         }
 
-        public static void PrintSource( string src )
+
+        public void Compile( SourceFile file )
         {
-            Debug.WriteLine("source:");
-            var lines = src.Split('\r');
-            int lineCount  = 1;
-            foreach( var line in lines )
-            {
-                string trimedLine;
-                if (line.Length > 0 && line[0] == '\n' )
-                {
-                    trimedLine  = line.Substring(1);
-                }else{
-                    trimedLine  = line;
-                }
+            _file = file;
 
-                Debug.Print("{0} {1}", lineCount, trimedLine);
-                lineCount ++;
-            }
-
-            Debug.WriteLine("");
-        }
-
-        public void Compile( string src )
-        {
             if (_debugMode)
             {
-                PrintSource(src);
+                file.DebugPrint();
             }
 
             // 编译生成AST
-            var chunk = _parser.ParseSource(src);
+            var chunk = _parser.ParseSource(file.Source);
 
             if (_debugMode)
             {
@@ -87,7 +69,7 @@ namespace Photon.API
 
             if (_debugMode)
             {
-                _exe.DebugPrint();
+                _exe.DebugPrint(_file);
             }
         }
 
@@ -108,7 +90,7 @@ namespace Photon.API
                 Debug.WriteLine("");
             }
 
-            _vm.Run(_exe);
+            _vm.Run(_exe, _file);
 
             if ( _debugMode )
             {

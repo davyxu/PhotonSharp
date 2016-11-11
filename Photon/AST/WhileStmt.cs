@@ -1,9 +1,6 @@
 ﻿using Photon.Model;
-using System;
+using SharpLexer;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Photon.AST
 {
@@ -13,10 +10,13 @@ namespace Photon.AST
 
         public BlockStmt Body;
 
-        public WhileStmt(Expr con, BlockStmt body)
+        public TokenPos WhilePos;        
+
+        public WhileStmt(Expr con, BlockStmt body, TokenPos whilepos)
         {
             Condition = con;
             Body = body;
+            WhilePos = whilepos;
 
             BuildRelation();
         }
@@ -37,13 +37,15 @@ namespace Photon.AST
         {
             var loopStart = cm.CurrGenIndex;
 
-            Condition.Compile(exe, cm, false);            
+            Condition.Compile(exe, cm, false);
 
-            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0));
+            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0))
+                .SetCodePos(WhilePos);
 
             Body.Compile(exe, cm, false);            
 
-            cm.Add(new Command(Opcode.Jmp, loopStart));
+            cm.Add(new Command(Opcode.Jmp, loopStart))
+                .SetCodePos(WhilePos);
 
             // false body跳入
             jnzCmd.DataA = cm.CurrGenIndex;

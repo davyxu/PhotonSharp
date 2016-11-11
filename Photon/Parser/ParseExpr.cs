@@ -76,7 +76,7 @@ namespace Photon.Parser
                 case TokenType.Number:
                 case TokenType.QuotedString:
                     {
-                        var x = new BasicLit(_token.Value, CurrTokenType);
+                        var x = new BasicLit(_token.Value, CurrTokenType, CurrTokenPos);
                         Next();
                         return x;
                     }
@@ -104,38 +104,27 @@ namespace Photon.Parser
             return new BadExpr();
         }
 
-        Expr ParseSelector( Expr x )
-        {
-            var ident = ParseIdent();
-
-            return new SelectorExpr(x, ident);
-        }
-
-        Expr ParseIndex( Expr x )
-        {
-            var index = ParseRHSList( );
-
-            return new IndexExpr(x, index[0]);
-        }
-
         CallExpr ParseCallExpr( Expr func )
         {
+            var lpos = CurrTokenPos;
             Expect(TokenType.LBracket);
 
             if (CurrTokenType != TokenType.RBracket)
             {
                 var args = ParseRHSList();
 
+                var rpos = CurrTokenPos;
                 Expect(TokenType.RBracket);
 
 
-                return new CallExpr(func, args, _topScope);
+                return new CallExpr(func, args, _topScope, lpos, rpos );
             }
 
+            var rpos2 = CurrTokenPos;
             Expect(TokenType.RBracket);
 
             // 空参数
-            return new CallExpr(func, new List<Expr>(), _topScope);
+            return new CallExpr(func, new List<Expr>(), _topScope, lpos, rpos2);
         }
 
         Expr ParsePrimaryExpr(bool lhs)
@@ -158,8 +147,11 @@ namespace Photon.Parser
                             switch (CurrTokenType)
                             {
                                 case TokenType.Identifier:
-                                    {
-                                        x = ParseSelector(x);
+                                    {                                        
+                                        var ident = ParseIdent();
+
+                                        x= new SelectorExpr(x, ident);
+
                                     }
                                     break;
                                 default:
@@ -172,13 +164,18 @@ namespace Photon.Parser
                         // a[index]
                     case TokenType.LSqualBracket:
                         {
+                            var lpos = CurrTokenPos;
+
                             Resolve(x);
 
                             Next();
 
-                            x = ParseIndex(x);
+                            var index = ParseRHSList();
 
+                            var rpos = CurrTokenPos;
                             Expect(TokenType.RSqualBracket);
+
+                            x = new IndexExpr(x, index[0], lpos, rpos);
                         }
                         break;
                     case TokenType.LBracket:
@@ -207,10 +204,12 @@ namespace Photon.Parser
                 case TokenType.Sub:
                     {
                         var op = CurrTokenType;
+                        var oppos = CurrTokenPos;
+
                         Next();
                         var x = ParsePrimaryExpr( false );
 
-                        return new UnaryExpr(x, op);
+                        return new UnaryExpr(x, op, oppos);
                     }
             }
 
@@ -230,6 +229,7 @@ namespace Photon.Parser
                         break;
 
                     var op = CurrTokenType;
+                    var oppos = CurrTokenPos;
 
                     Next();
 
@@ -240,7 +240,7 @@ namespace Photon.Parser
                     
                     Resolve(y);
 
-                    x = new BinaryExpr(x, y, op);
+                    x = new BinaryExpr(x, y, op, oppos);
                 }
             }
 
@@ -302,14 +302,14 @@ namespace Photon.Parser
         {
             var x = ParseLHSList();
 
-
+            var assignPos = CurrTokenPos;
             if (CurrTokenType == TokenType.Assign)
             {
                 Next();
 
                 var y = ParseRHSList();
 
-                return new AssignStmt(x, y);
+                return new AssignStmt(x, y, assignPos);
             }
 
             // 函数调用

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Photon.Model;
+using SharpLexer;
 
 namespace Photon.AST
 {
@@ -10,11 +11,16 @@ namespace Photon.AST
         public List<Expr> Args;
         public Scope S;
 
-        public CallExpr(Expr f, List<Expr> args, Scope s )
+        public TokenPos LParen;
+        public TokenPos RParen;
+
+        public CallExpr(Expr f, List<Expr> args, Scope s, TokenPos lparen, TokenPos rparen)
         {
             Func = f;
             Args = args;
             S = s;
+            LParen = lparen;
+            RParen = rparen;
 
             BuildRelation();
         }
@@ -53,7 +59,7 @@ namespace Photon.AST
             }
 
 
-            cm.Add(new Command(Opcode.Call, Args.Count, needBalanceDataStack));
+            cm.Add(new Command(Opcode.Call, Args.Count, needBalanceDataStack)).SetCodePos(LParen);
         }
     }
 }

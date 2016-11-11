@@ -1,4 +1,6 @@
-﻿
+﻿using SharpLexer;
+using System.Text;
+
 namespace Photon.Model
 {
 
@@ -13,6 +15,8 @@ namespace Photon.Model
 
         string _comment;
 
+        TokenPos _pos;
+
         public Command(Opcode op)
         {
             Op = op;
@@ -21,8 +25,12 @@ namespace Photon.Model
 
         public string Comment
         {
-            get { return _comment; }
-            set { _comment = value; }
+            get { return _comment; }            
+        }
+
+        public TokenPos CodePos
+        {
+            get { return _pos; }
         }
 
         public Command(Opcode op, int data)
@@ -40,26 +48,48 @@ namespace Photon.Model
             _dataCount = 2;
         }
 
+        public Command SetComment( string text )
+        {
+            _comment = text;
+
+            return this;
+        }
+
+        public Command SetCodePos(TokenPos pos)
+        {
+            _pos = pos;
+            return this;
+        }
+
         public override string ToString()
         {
-            string CommentData = string.Empty;
+
+            var sb = new StringBuilder();
+
+            sb.Append(Op);
+            sb.Append(" ");
+            
+
+            if (_dataCount >= 1 )
+            {
+                sb.Append(DataA);
+                sb.Append(" ");
+            }
+
+            if (_dataCount >= 2)
+            {
+                sb.Append(DataB);
+                sb.Append(" ");
+            }
+           
             if ( !string.IsNullOrEmpty(Comment) )
             {
-                CommentData = "; " + Comment;
+                sb.Append("; ");
+                sb.Append(Comment);
+                sb.Append(" ");
             }
 
-
-            if (_dataCount == 1 )
-            {
-                return string.Format("{0} {1} {2}", Op.ToString(), DataA.ToString(), CommentData);
-            }
-            else if (_dataCount == 2)
-            {
-                return string.Format("{0} {1} {2} {3}", Op.ToString(), DataA.ToString(), DataB.ToString(), CommentData);
-            }
-
-            return string.Format("{0} {1}", Op.ToString(), CommentData);
-            
+            return sb.ToString();
         }
     }
 

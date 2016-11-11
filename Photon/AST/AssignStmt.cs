@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon.AST
@@ -7,16 +8,22 @@ namespace Photon.AST
     {
         public List<Expr> LHS = new List<Expr>();
         public List<Expr> RHS = new List<Expr>();
-        public AssignStmt(List<Expr> lhs, List<Expr> rhs)
+
+        public TokenPos AssignPos;
+
+        public AssignStmt(List<Expr> lhs, List<Expr> rhs, TokenPos assignPos )
         {
             LHS = lhs;
             RHS = rhs;
+            AssignPos = assignPos;
 
             BuildRelation();
         }
 
-        public AssignStmt(Expr lhs, Expr rhs)
-        {            
+        public AssignStmt(Expr lhs, Expr rhs, TokenPos assignPos)
+        {
+            AssignPos = assignPos;
+
             LHS.Add(lhs);
          
             RHS.Add(rhs);

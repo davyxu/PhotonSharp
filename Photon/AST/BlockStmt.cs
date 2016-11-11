@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon.AST
@@ -6,15 +7,19 @@ namespace Photon.AST
     public class BlockStmt : Stmt
     {
         public List<Stmt> Stmts = new List<Stmt>();
+        public TokenPos LBracePos;
+        public TokenPos RBracePos;
 
-        public BlockStmt()
+        public BlockStmt(TokenPos lpos, TokenPos rpos)
         {
 
         }
 
-        public BlockStmt(List<Stmt> list)
+        public BlockStmt(List<Stmt> list, TokenPos lpos, TokenPos rpos)
         {
             Stmts = list;
+            LBracePos = lpos;
+            RBracePos = rpos;
 
             BuildRelation();
         }

@@ -65,10 +65,13 @@
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
     <Compile Include="Model\Exception.cs" />
+    <Compile Include="Model\Slot.cs" />
+    <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Model\ValueDelegate.cs" />
     <Compile Include="Model\ValueClosure.cs" />
     <Compile Include="Model\ValueFunc.cs" />
     <Compile Include="Model\ValueArray.cs" />
+    <Compile Include="Model\ValueNil.cs" />
     <Compile Include="Model\ValueString.cs" />
     <Compile Include="Model\ValueObject.cs" />
     <Compile Include="Model\ValueNumber.cs" />

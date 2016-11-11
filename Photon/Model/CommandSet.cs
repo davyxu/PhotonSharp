@@ -61,15 +61,31 @@ namespace Photon.Model
 
         // 返回值数量
         public int OutputValueCount { get; set; }
-        
 
-        public void DebugPrint( )
+
+        public void DebugPrint(SourceFile file)
         {
-            Debug.WriteLine( "{0} locals: {1}", _name, RegCount);
+            Debug.WriteLine("[{0}] locals: {1}", _name, RegCount);
 
             int index = 0;
-            foreach( var c in _cmds )
-            {
+
+            int currLine = 0;
+
+            foreach (var c in _cmds)
+            {                
+
+                if (c.CodePos.Line > currLine )
+                {
+                    if ( currLine != 0 )
+                    {
+                        Debug.WriteLine("");
+                    }
+                    
+                    currLine = c.CodePos.Line;
+                    Debug.WriteLine("{0}|{1}", currLine, file.GetLine(currLine));
+                }
+
+
                 Debug.WriteLine("{0,2}| {1}", index, c.ToString());
                 index++;
             }

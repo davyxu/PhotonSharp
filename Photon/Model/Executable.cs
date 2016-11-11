@@ -26,13 +26,13 @@ namespace Photon.Model
             get { return _constSet; }
         }
 
-        public void DebugPrint( )
+        public void DebugPrint( SourceFile file )
         {
             _constSet.DebugPrint(  );
 
             foreach( var cs in _cmdset )
             {
-                cs.DebugPrint();
+                cs.DebugPrint(file);
             }
             Debug.WriteLine("");
         }

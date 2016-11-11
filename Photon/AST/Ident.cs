@@ -42,21 +42,22 @@ namespace Photon.AST
         }
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
-        {            
+        {
+            Command cmd = null;
 
             if (lhs)
             {
                 if (ScopeInfo.IsGlobal)
                 {
-                    cm.Add(new Command(Opcode.SetG, ScopeInfo.RegIndex)).Comment = Name;
+                    cmd = cm.Add(new Command(Opcode.SetG, ScopeInfo.RegIndex));
                 }
                 else if ( UpValue )
                 {
-                    cm.Add(new Command(Opcode.SetU, ScopeInfo.RegIndex)).Comment = Name;
+                    cmd = cm.Add(new Command(Opcode.SetU, ScopeInfo.RegIndex));
                 }
                 else
                 {
-                    cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex)).Comment = Name;
+                    cmd = cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex));
                 }
                 
             }
@@ -70,7 +71,7 @@ namespace Photon.AST
 
                     var ci = exe.Constants.Add( c );
 
-                    cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
+                    cmd = cm.Add(new Command(Opcode.LoadC, ci));
                 }
                 else
                 {
@@ -78,18 +79,21 @@ namespace Photon.AST
 
                     if (ScopeInfo.IsGlobal)
                     {
-                        cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex)).Comment = Name;
+                        cmd = cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex));
                     }
                     else if ( UpValue )
                     {
-                        cm.Add(new Command(Opcode.LoadU, ScopeInfo.RegIndex)).Comment = Name;
+                        cmd = cm.Add(new Command(Opcode.LoadU, ScopeInfo.RegIndex));
                     }
                     else
                     {
-                        cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex)).Comment = Name;
+                        cmd = cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex));
                     }
                 }
             }
+
+
+            cmd.SetComment(Name).SetCodePos(DefinePos);
         }
     }
 }

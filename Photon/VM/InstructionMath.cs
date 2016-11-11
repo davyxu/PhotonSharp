@@ -29,7 +29,7 @@ namespace Photon.VM
 
         public override string Print(Command cmd)
         {
-            return string.Format("A: {0}, B: {1}", vm.Stack.Get(-1), vm.Stack.Get(-2));
+            return string.Format("A: {0}, B: {1}", vm.Stack.Get(-2), vm.Stack.Get(-1));
         }
     }
 

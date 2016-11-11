@@ -1,5 +1,6 @@
 ﻿
 using Photon.Model;
+using SharpLexer;
 
 namespace Photon.AST
 {
@@ -7,10 +8,13 @@ namespace Photon.AST
     {
         public TokenType Type;
         public string Value;
-        public BasicLit(string v, TokenType t)
+        public TokenPos Pos;
+
+        public BasicLit(string v, TokenType t, TokenPos pos )
         {
             Value = v;
             Type = t;
+            Pos = pos;
         }
 
         public override string ToString()
@@ -23,7 +27,7 @@ namespace Photon.AST
             var c = Lit2Const( );
             var ci = exe.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
+            cm.Add(new Command(Opcode.LoadC, ci)).SetComment( c.ToString() ).SetCodePos( Pos );
         }
 
         Value Lit2Const()

@@ -1,9 +1,6 @@
 ﻿using Photon.Model;
-using System;
+using SharpLexer;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Photon.AST
 {
@@ -15,11 +12,14 @@ namespace Photon.AST
 
         public BlockStmt ElseBody;
 
-        public IfStmt(Expr con, BlockStmt body, BlockStmt elsebody)
+        public TokenPos IfPos;
+
+        public IfStmt(Expr con, BlockStmt body, BlockStmt elsebody, TokenPos ifpos)
         {
             Condition = con;
             Body = body;
             ElseBody = elsebody;
+            IfPos = ifpos;
 
             BuildRelation();
         }
@@ -33,7 +33,7 @@ namespace Photon.AST
         public override IEnumerable<Node> Child()
         {
             yield return Condition;
-
+            
             yield return Body;
 
             yield return ElseBody;
@@ -43,11 +43,13 @@ namespace Photon.AST
         {
             Condition.Compile(exe, cm, false);            
 
-            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0));
+            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0))
+                .SetCodePos(IfPos);
 
             Body.Compile(exe, cm, false);            
 
-            var jmpCmd = cm.Add(new Command(Opcode.Jmp, 0));
+            var jmpCmd = cm.Add(new Command(Opcode.Jmp, 0))
+                .SetCodePos(IfPos);
 
             // false body跳入
             jnzCmd.DataA = cm.CurrGenIndex;

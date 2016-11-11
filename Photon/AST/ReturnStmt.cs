@@ -1,9 +1,6 @@
 ﻿using Photon.Model;
-using System;
+using SharpLexer;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Photon.AST
 {
@@ -11,10 +8,12 @@ namespace Photon.AST
     public class ReturnStmt : Stmt
     {
         public List<Expr> Results = new List<Expr>();
+        public TokenPos RetPos;
 
-        public ReturnStmt(List<Expr> list)
+        public ReturnStmt(List<Expr> list, TokenPos retpos)
         {
             Results = list;
+            RetPos = retpos;
 
             BuildRelation();
         }
@@ -34,9 +33,10 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
+            // TODO 多返回值打到comment里
             Results[0].Compile(exe, cm, false);
 
-            cm.Add(new Command(Opcode.Ret));
+            cm.Add(new Command(Opcode.Ret)).SetCodePos(RetPos);
         }
     }
 }

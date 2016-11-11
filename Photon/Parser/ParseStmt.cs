@@ -22,13 +22,16 @@ namespace Photon.Parser
 
         Chunk ParseChunk()
         {
+            var lpos = CurrTokenPos;
             var list = ParseStatmentList();
+            var rpos = CurrTokenPos;
 
-            return new Chunk( new BlockStmt(list) );
+            return new Chunk( new BlockStmt(list, lpos, rpos) );
         }
 
         ReturnStmt ParseReturnStmt()
         {
+            var defpos = CurrTokenPos;
             Expect(TokenType.Return);
 
             List<Expr> results = new List<Expr>();
@@ -38,7 +41,7 @@ namespace Photon.Parser
                 results = ParseRHSList();
             }
 
-            return new ReturnStmt(results);
+            return new ReturnStmt(results, defpos);
         }
 
         BlockStmt ParseBlockStmt()
@@ -52,9 +55,10 @@ namespace Photon.Parser
 
             CloseScope();
 
+            var rpos = CurrTokenPos;
             Expect(TokenType.RBrace);
 
-            return new BlockStmt(list);
+            return new BlockStmt(list, defPos, rpos);
         }
 
         Stmt ParseStatement()
@@ -87,6 +91,7 @@ namespace Photon.Parser
 
         IfStmt ParseIfStmt()
         {
+            var defpos = CurrTokenPos;
             Expect(TokenType.If);
 
             var condition = ParseRHS();
@@ -102,10 +107,11 @@ namespace Photon.Parser
             }
             else
             {
-                elseBody = new BlockStmt();
+
+                elseBody = new BlockStmt(CurrTokenPos, CurrTokenPos);
             }
 
-            return new IfStmt(condition, body, elseBody);
+            return new IfStmt(condition, body, elseBody, defpos);
         }
 
         Stmt ParseForInit( )
@@ -114,11 +120,13 @@ namespace Photon.Parser
 
             Declare( ident, _topScope, ident.Name, ident.DefinePos );
 
+            var assignPos = CurrTokenPos;
+
             Expect( TokenType.Assign );
 
             var expr = ParseRHS();
 
-            return new AssignStmt( ident, expr );
+            return new AssignStmt( ident, expr, assignPos );
         }
 
         ForStmt ParseForStmt()
@@ -145,19 +153,20 @@ namespace Photon.Parser
 
             var condtion = conStmt as ExprStmt;
 
-            return new ForStmt( init, condtion.X[0], post, body );
+            return new ForStmt(init, condtion.X[0], post, body, defPos);
             
         }
 
         WhileStmt ParseWhileStmt()
         {
+            var defpos = CurrTokenPos;
             Expect(TokenType.While);
 
             var condition = ParseRHS();
 
             var body = ParseBlockStmt();
 
-            return new WhileStmt(condition, body);
+            return new WhileStmt(condition, body, defpos);
         }
     }
 }

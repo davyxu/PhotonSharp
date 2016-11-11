@@ -8,39 +8,19 @@ namespace Photon.AST
     {
         public Ident Name;
 
-        public List<Ident> Params;
+        public FuncType TypeInfo;
 
-        public Scope ScopeInfo;
-
-        public DelegateDeclare(Ident name, List<Ident> param, Scope s)
+        public DelegateDeclare(Ident name, FuncType ft )
         {
             Name = name;
-            Params = param;
-            ScopeInfo = s;
+            TypeInfo = ft;
 
             BuildRelation();
         }
 
-
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-
-            int index = 0;
-            foreach (var i in Params)
-            {
-                if (index > 0)
-                {
-                    sb.Append(", ");
-                }
-
-                sb.Append(i.Name.ToString());
-
-
-                index++;
-            }
-
-            return string.Format("DelegateDeclare {0}: {1}", Name, sb.ToString());
+            return string.Format("DelegateDeclare {0} {1}", Name.Name, TypeInfo.ToString());
         }
 
         public override IEnumerable<Node> Child()
@@ -56,9 +36,13 @@ namespace Photon.AST
 
             exe.DelegateMap.Add(Name.Name, c);
 
-            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
+            cm.Add(new Command(Opcode.LoadC, ci))
+                .SetComment(c.ToString())
+                .SetCodePos(TypeInfo.FuncPos);
 
-            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
+            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex))
+                .SetComment(Name.Name)
+                .SetCodePos(TypeInfo.FuncPos);
         }
     }
 }

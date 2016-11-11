@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon.AST
@@ -7,10 +8,14 @@ namespace Photon.AST
     {
         public TokenType Op;
         public Expr X;
-        public UnaryExpr(Expr x, TokenType t)
+
+        public TokenPos OpPos;
+
+        public UnaryExpr(Expr x, TokenType t, TokenPos oppos)
         {
             X = x;
             Op = t;
+            OpPos = oppos;
 
             BuildRelation();
         }

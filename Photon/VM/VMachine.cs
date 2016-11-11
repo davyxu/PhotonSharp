@@ -159,7 +159,7 @@ namespace Photon.VM
 
 
 
-        public void Run( Executable exe )
+        public void Run( Executable exe, SourceFile file )
         {
             _frameStack.Clear();
             _dataStack.Clear();
@@ -174,6 +174,7 @@ namespace Photon.VM
 
                 if (DebugRun)
                 {
+                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, file.GetLine(cmd.CodePos.Line));
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }
 

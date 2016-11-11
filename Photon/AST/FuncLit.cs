@@ -3,30 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon.AST
 {
-    // 作为引用的Upvalue, 必须保证在同作用域下的唯一
-    class UpvaluePair
-    {
-        Ident _id;
-
-        public UpvaluePair( Ident id )
-        {
-            _id = id;
-        }
-
-        public override bool Equals(object obj)
-        {
-            var otherid = (UpvaluePair)obj;
-
-            return _id.ScopeInfo == otherid._id.ScopeInfo &&
-                _id.Name == otherid._id.Name;
-        }
-
-        public override int GetHashCode()
-        {
-            return _id.ScopeInfo.GetHashCode() + _id.Name.GetHashCode();
-        }
-    }
-
+    // 匿名函数
     public class FuncLit : Expr
     {
         public FuncType TypeInfo;
@@ -62,7 +39,9 @@ namespace Photon.AST
             var c = new ValueFunc(funcIndex, TypeInfo.FuncPos);
             var ci = exe.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.Closure, ci)).Comment = c.ToString();            
+            cm.Add(new Command(Opcode.Closure, ci))
+                .SetComment(c.ToString())
+                .SetCodePos(TypeInfo.FuncPos);
 
             Body.Compile(exe, newset, false);
 
@@ -70,11 +49,14 @@ namespace Photon.AST
             var upvalues = new Dictionary<UpvaluePair, Ident>();
             FindUsedUpvalue(Body, upvalues );
 
+            // 捕获的目标变量的引用建立后, 在闭包的upvalue里的索引就无所谓了, 只要跟用的时候索引对应上就OK
             int upIndex = 0;
             foreach( var pr in upvalues )
             {
                 // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                cm.Add(new Command(Opcode.LinkU, upIndex, pr.Value.ScopeInfo.RegIndex)).Comment = pr.Value.ToString();
+                cm.Add(new Command(Opcode.LinkU, upIndex, pr.Value.ScopeInfo.RegIndex))
+                    .SetComment( pr.Value.ToString() )
+                    .SetCodePos(TypeInfo.FuncPos);
 
                 upIndex++;
             }
@@ -110,5 +92,29 @@ namespace Photon.AST
         }
 
 
+    }
+
+    // 作为引用的Upvalue, 必须保证在同作用域下的唯一
+    class UpvaluePair
+    {
+        Ident _id;
+
+        public UpvaluePair(Ident id)
+        {
+            _id = id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var otherid = (UpvaluePair)obj;
+
+            return _id.ScopeInfo == otherid._id.ScopeInfo &&
+                _id.Name == otherid._id.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return _id.ScopeInfo.GetHashCode() + _id.Name.GetHashCode();
+        }
     }
 }

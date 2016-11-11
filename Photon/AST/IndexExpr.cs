@@ -1,4 +1,5 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,15 @@ namespace Photon.AST
         public Expr X;
         public Expr Index;
 
-        public IndexExpr(Expr x, Expr index)
+        public TokenPos LBrackPos;
+        public TokenPos RBrackPos;
+
+        public IndexExpr(Expr x, Expr index, TokenPos lpos, TokenPos rpos)
         {
             X = x;
             Index = index;
+            LBrackPos = lpos;
+            RBrackPos = rpos;
 
             BuildRelation();
         }

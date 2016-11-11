@@ -21,7 +21,7 @@ namespace UnitTest
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _script.Compile(src);            
+            _script.Compile(new SourceFile(src));            
 
             return this;
         }

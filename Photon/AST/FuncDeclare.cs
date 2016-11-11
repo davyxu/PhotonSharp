@@ -43,9 +43,13 @@ namespace Photon.AST
             var c = new ValueFunc(funcIndex, TypeInfo.FuncPos);
             var ci = exe.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.LoadC, ci)).Comment = c.ToString();
+            cm.Add(new Command(Opcode.LoadC, ci))
+                .SetComment(c.ToString())
+                .SetCodePos(TypeInfo.FuncPos);
 
-            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex )).Comment = Name.Name;
+            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex))
+                .SetComment(Name.Name)
+                .SetCodePos(TypeInfo.FuncPos);
 
             Body.Compile(exe, newset, false);
 

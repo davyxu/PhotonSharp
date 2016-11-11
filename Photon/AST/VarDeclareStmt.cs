@@ -1,17 +1,20 @@
 ﻿using Photon.Model;
+using SharpLexer;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Photon.AST
 {
     // var XXX  纯变量定义
     public class VarDeclareStmt : Stmt
     {
-        public List<Ident> Names;        
+        public List<Ident> Names;
 
-        public VarDeclareStmt(List<Ident> names )
+        public TokenPos VarPos;
+
+        public VarDeclareStmt(List<Ident> names, TokenPos varpos )
         {
-            Names = names;            
+            Names = names;
+            VarPos = varpos;
 
             BuildRelation();
         }

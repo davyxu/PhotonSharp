@@ -33,7 +33,7 @@ namespace Photon.Parser
                 // 声明已经结束
                 CloseScope();
 
-                var decl = new DelegateDeclare(ident, paramlist, scope);
+                var decl = new DelegateDeclare(ident, new FuncType(funcPos, paramlist, scope) );
 
                 ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
 
@@ -75,6 +75,7 @@ namespace Photon.Parser
 
         BlockStmt ParseBody(Scope s) 
         {
+            var lpos = CurrTokenPos;
             Expect(TokenType.LBrace);
 
             _topScope = s;
@@ -83,13 +84,15 @@ namespace Photon.Parser
 
             CloseScope();
 
+            var rpos = CurrTokenPos;
             Expect(TokenType.RBrace);
 
-            return new BlockStmt(list);
+            return new BlockStmt(list, lpos, rpos);
         }
 
         Stmt ParseVarDecl()
         {
+            var defpos = CurrTokenPos;
             Expect(TokenType.Var);
 
             var idents = ParseIdentList();
@@ -100,6 +103,8 @@ namespace Photon.Parser
             }
 
             List<Expr> values = new List<Expr>();
+
+            var assignPos = CurrTokenPos;
 
             if (CurrTokenType == TokenType.Assign)
             {
@@ -113,10 +118,10 @@ namespace Photon.Parser
                     lhs.Add( id );
                 }
 
-                return new AssignStmt(lhs, values);
+                return new AssignStmt(lhs, values, assignPos);
             }
 
-            return new VarDeclareStmt(idents );
+            return new VarDeclareStmt(idents, defpos);
         }
 
 

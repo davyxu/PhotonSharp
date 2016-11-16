@@ -29,7 +29,7 @@ namespace Photon.Model
 
         int Append( VMachine vm )
         {
-            var v = vm.Stack.Pop();
+            var v = vm.DataStack.Pop();
 
             _value.Add(v);
 

@@ -3,6 +3,7 @@ using Photon.VM;
 using Photon.Model;
 using System.Diagnostics;
 using System;
+using SharpLexer;
 
 namespace Photon.API
 {
@@ -55,7 +56,7 @@ namespace Photon.API
             
             var exe = new Executable();
 
-            var cmdSet = new CommandSet("global", _parser.GlobalScope.CalcUsedReg(), true);
+            var cmdSet = new CommandSet("global", TokenPos.Init, _parser.GlobalScope.CalcUsedReg(), true);
 
             _exe.AddCmdSet(cmdSet);
 
@@ -64,6 +65,7 @@ namespace Photon.API
 
             cmdSet.Add(new Command(Opcode.Exit));
 
+            _vm.Attach(_exe);
 
             InitAux();
 
@@ -77,7 +79,7 @@ namespace Photon.API
         {
             RegisterDelegate("array", (vm) =>
             {
-                vm.Stack.Push(new ValueArray() );
+                vm.DataStack.Push(new ValueArray() );
 
                 return 1;
             });
@@ -90,11 +92,11 @@ namespace Photon.API
                 Debug.WriteLine("");
             }
 
-            _vm.Run(_exe, _file);
+            _vm.Run(_file);
 
             if ( _debugMode )
             {
-                _vm.Stack.DebugPrint();
+                _vm.DataStack.DebugPrint();
             }
             
         }

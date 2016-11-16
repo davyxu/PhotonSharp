@@ -31,7 +31,7 @@ namespace Photon.VM
         Register _localReg = new Register("R", 10);
 
         // 运行帧栈
-        Stack<RuntimeFrame> _frameStack = new Stack<RuntimeFrame>();
+        Stack<RuntimeFrame> _callStack = new Stack<RuntimeFrame>();
 
         // 当前运行帧
         RuntimeFrame _currFrame;
@@ -75,7 +75,7 @@ namespace Photon.VM
             set;
         }
 
-        public DataStack Stack
+        public DataStack DataStack
         {
             get { return _dataStack; }
         }
@@ -93,6 +93,11 @@ namespace Photon.VM
         public RuntimeFrame CurrFrame
         {
             get { return _currFrame; }
+        }
+
+        public Stack<RuntimeFrame> CallStack
+        {
+            get { return _callStack; }
         }
 
         Command CurrCommand
@@ -172,7 +177,7 @@ namespace Photon.VM
 
             if ( _currFrame != null )
             {
-                _frameStack.Push(_currFrame);
+                _callStack.Push(_currFrame);
             }
 
             _currFrame = newFrame;
@@ -202,7 +207,7 @@ namespace Photon.VM
                 _dataStack.Count = _currFrame.DataStackBase;
             }
 
-            _currFrame = _frameStack.Pop();
+            _currFrame = _callStack.Pop();
 
             _regBaseStack.Pop();
 
@@ -232,11 +237,14 @@ namespace Photon.VM
             _currFrame.PC = -1;
         }
 
-        public void Run( Executable exe, SourceFile file )
+        internal void Attach( Executable exe)
         {
             _exe = exe;
+        }
 
-            _frameStack.Clear();
+        public void Run( SourceFile file )
+        {
+            _callStack.Clear();
             _dataStack.Clear();
 
             EnterFrame(0);
@@ -282,7 +290,7 @@ namespace Photon.VM
                     Reg.DebugPrint();
 
                     // 数据栈信息
-                    Stack.DebugPrint();
+                    DataStack.DebugPrint();
                     
 
                     Debug.WriteLine("");

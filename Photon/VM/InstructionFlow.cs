@@ -9,7 +9,7 @@ namespace Photon.VM
         {
             var targetPC = cmd.DataA;
 
-            var d = vm.Stack.Pop().CastNumber();
+            var d = vm.DataStack.Pop().CastNumber();
 
             if ( d == 0 )
             {
@@ -22,7 +22,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("Condition: {0}, PC : {1}", vm.Stack.Get(),  cmd.DataA);
+            return string.Format("Condition: {0}, PC : {1}", vm.DataStack.Get(),  cmd.DataA);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Photon.VM
         {
             var argCount = cmd.DataA;
 
-            var obj = vm.Stack.Pop();
+            var obj = vm.DataStack.Pop();
 
             var func = obj as ValueFunc;
 
@@ -70,15 +70,15 @@ namespace Photon.VM
                 // 将栈转为被调用函数的寄存器
                 for (int i = 0; i < argCount; i++)
                 {
-                    var arg = vm.Stack.Get( -i - 1 );
+                    var arg = vm.DataStack.Get( -i - 1 );
                     vm.Reg.Set(argCount - i - 1 + vm.RegBase, arg);
                 }
 
                 // 清空栈
-                vm.Stack.PopMulti(argCount);
+                vm.DataStack.PopMulti(argCount);
 
                 // 记录当前的数据栈位置
-                vm.CurrFrame.DataStackBase = vm.Stack.Count;
+                vm.CurrFrame.DataStackBase = vm.DataStack.Count;
 
                 
 
@@ -91,7 +91,7 @@ namespace Photon.VM
             {
                
                 // 外部调用不进行栈调整
-                var stackBeforeCall = vm.Stack.Count;
+                var stackBeforeCall = vm.DataStack.Count;
 
                 var retValueCount = dg.Entry(vm);
 
@@ -99,11 +99,11 @@ namespace Photon.VM
                 if (cmd.DataB != 0 )
                 {
                     // 调用前(包含参数+ delegate)
-                    vm.Stack.Count = stackBeforeCall - argCount;
+                    vm.DataStack.Count = stackBeforeCall - argCount;
                 }
                 else
                 {
-                    vm.Stack.Cut(stackBeforeCall - argCount, retValueCount);
+                    vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
                 }
 
                 return true;
@@ -115,7 +115,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.Stack.Get( ), cmd.DataB );
+            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.DataStack.Get( ), cmd.DataB );
         }
     }
     [Instruction(Cmd = Opcode.Ret)]
@@ -147,7 +147,7 @@ namespace Photon.VM
         {
             var f = vm.Exec.Constants.Get(cmd.DataA).CastFunc();
 
-            vm.Stack.Push(new ValueClosure(f));
+            vm.DataStack.Push(new ValueClosure(f));
 
             return true;
         }

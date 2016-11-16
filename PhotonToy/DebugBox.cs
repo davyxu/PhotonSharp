@@ -8,17 +8,29 @@ using System.Windows.Forms;
 
 namespace PhotonToy
 {
+    enum DebuggerMode
+    {
+        Continue,
+        StepIn,
+        StepOut,
+        StepOver,
+    }
+
+
     class DebugBox
     {
         public Control _invoker;
 
-        Script _script = new Script();
+        Script _script;
         Thread _thread;
         AutoResetEvent _debugSignal = new AutoResetEvent(false);
         AutoResetEvent _exitSignal = new AutoResetEvent(false);
 
-        public Action<VMachine> OnBreak;
+        public Action<AssemblyLocation> OnBreak;
         public Action<VMachine> OnLoad;
+       
+        VarGuard<int> _expectCallDepth = new VarGuard<int>(-1);
+        VarGuard<DebuggerMode> _mode = new VarGuard<DebuggerMode>(DebuggerMode.StepIn);
         
         object _stateGuard = new object();
 
@@ -39,19 +51,6 @@ namespace PhotonToy
             _invoker = invoker;
         }
 
-        public void Load(string filename)
-        {
-            var file = new SourceFile(File.ReadAllText(filename) );
-            Source = file;
-
-            _script.Compile(file);
-
-            if ( OnLoad != null )
-            {
-                OnLoad(_script.VM);
-            }
-        }
-
         public SourceFile Source
         {
             get;
@@ -59,9 +58,27 @@ namespace PhotonToy
         }
 
 
-        public void Start()
+        public void Start(string filename)
         {
+            if (string.IsNullOrEmpty(filename))
+                return;
+
+            var file = new SourceFile(File.ReadAllText(filename));
+            Source = file;
+
+            _script = new Script();
+            _script.Compile(file);
+            _script.VM.ShowDebugInfo = true;
+
+            if (OnLoad != null)
+            {
+                OnLoad(_script.VM);
+            }
+
+
+            _mode.Value = DebuggerMode.StepIn;
             _thread = new Thread(VMThread);
+            _thread.Name = "DebugBox";
             _thread.IsBackground = true;
             _thread.Start();
         }
@@ -76,7 +93,7 @@ namespace PhotonToy
                     {
                         _script.VM.Stop();
 
-                        Resume();
+                        Operate(DebuggerMode.Continue);
 
                         _exitSignal.WaitOne();    
                     }
@@ -108,29 +125,92 @@ namespace PhotonToy
             }
         }
 
-        public void Resume( )
+        public void Operate( DebuggerMode hookmode )
         {
+            _mode.Value = hookmode;
+            switch ( hookmode )
+            {
+                case DebuggerMode.Continue:
+                case DebuggerMode.StepIn:
+                    {
+                        _expectCallDepth.Value = -1;
+                    }
+                    break;
+                case DebuggerMode.StepOver:
+                    {
+                        _expectCallDepth.Value = _script.VM.CallStack.Count;
+                    }
+                    break;
+                case DebuggerMode.StepOut:
+                    {
+                        _expectCallDepth.Value = _script.VM.CallStack.Count - 1;
+                    }
+                    break;
+
+            }
+
             _debugSignal.Set();
         }
-
 
         void VMThread( )
         {
             _script.VM.SetHook(Photon.VM.DebugHook.ExecInstruction, (vm) =>
             {
+                switch( _mode.Value )
+                {
+                    case DebuggerMode.Continue:
+                        return;
+
+                    case DebuggerMode.StepOver:
+                        {
+                            // 没有恢复到期望深度, 继续执行
+                            if ( _expectCallDepth.Value != _script.VM.CallStack.Count )
+                            {
+                                return;
+                            }
+                        }
+                        break;
+                    case DebuggerMode.StepOut:
+                        {
+                            // 没有恢复到期望深度, 继续执行
+                            if (_script.VM.CallStack.Count > _expectCallDepth.Value )
+                            {
+                                return;
+                            }
+
+                        }
+                        break;
+                }
+
+                _expectCallDepth.Value = -1;
+                _mode.Value = DebuggerMode.StepIn;
+
+                var al = new AssemblyLocation(vm.CurrFrame.CmdSet, vm.CurrFrame.PC);
                 SafeCall(delegate
                 {
                     if (OnBreak != null)
-                    {                           
-                        OnBreak(vm);
+                    {
+                        OnBreak(al);
                     }
-                    
+
                 });
 
-                _debugSignal.WaitOne();
+                _debugSignal.WaitOne();                
             });
 
             _script.Run();
+            
+            var existAL = new AssemblyLocation(_script.VM.CurrFrame.CmdSet, _script.VM.CurrFrame.PC);
+
+            SafeCall(delegate
+            {
+                if (OnBreak != null)
+                {
+
+                    OnBreak(existAL);
+                }
+
+            });
 
             _exitSignal.Set();
         }

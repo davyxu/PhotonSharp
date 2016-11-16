@@ -6,15 +6,15 @@ namespace Photon.VM
     {
         public override bool Execute(Command cmd)
         {
-            var a = vm.Stack.Pop().CastNumber();
-            var b = vm.Stack.Pop().CastNumber();
+            var a = vm.DataStack.Pop().CastNumber();
+            var b = vm.DataStack.Pop().CastNumber();
 
             float c;
 
             // 栈顺序是反的, 需要倒过来
             var result = ExecuteOn2Value(cmd, b, a, out c );
 
-            vm.Stack.Push(new ValueNumber(c));
+            vm.DataStack.Push(new ValueNumber(c));
 
             return result;
         }
@@ -29,7 +29,7 @@ namespace Photon.VM
 
         public override string Print(Command cmd)
         {
-            return string.Format("A: {0}, B: {1}", vm.Stack.Get(-2), vm.Stack.Get(-1));
+            return string.Format("A: {0}, B: {1}", vm.DataStack.Get(-2), vm.DataStack.Get(-1));
         }
     }
 

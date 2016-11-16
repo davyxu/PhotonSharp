@@ -8,7 +8,7 @@ namespace Photon.VM
         public override bool Execute( Command cmd)
         {
             var c = vm.Exec.Constants.Get(cmd.DataA);
-            vm.Stack.Push(c);
+            vm.DataStack.Push(c);
 
             return true;
         }
@@ -26,7 +26,7 @@ namespace Photon.VM
         {
             int regIndex = cmd.DataA + vm.RegBase;
             Value v = vm.Reg.Get(regIndex);
-            vm.Stack.Push(v);
+            vm.DataStack.Push(v);
 
             return true;  
         }
@@ -45,7 +45,7 @@ namespace Photon.VM
         public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
-            var d = vm.Stack.Pop();
+            var d = vm.DataStack.Pop();
             vm.Reg.Set(regIndex, d);
 
             
@@ -56,7 +56,7 @@ namespace Photon.VM
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.Stack.Get());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.DataStack.Get());
         }
 
     }
@@ -69,7 +69,7 @@ namespace Photon.VM
         {
             Value v = vm.Reg.Get(cmd.DataA);
 
-            vm.Stack.Push(v);
+            vm.DataStack.Push(v);
 
             return true;
         }
@@ -85,7 +85,7 @@ namespace Photon.VM
         public override bool Execute( Command cmd)
         {
             var regIndex = cmd.DataA;
-            var d = vm.Stack.Pop();
+            var d = vm.DataStack.Pop();
             vm.Reg.Set(regIndex, d);
 
             return true;
@@ -93,7 +93,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.Get());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
         }
     }
 
@@ -102,10 +102,10 @@ namespace Photon.VM
     {
         public override bool Execute( Command cmd)
         {
-            var key = vm.Stack.Pop();
-            var main = vm.Stack.Pop().CastObject();
+            var key = vm.DataStack.Pop();
+            var main = vm.DataStack.Pop().CastObject();
             var result = main.Get(key);
-            vm.Stack.Push(result);
+            vm.DataStack.Push(result);
                         
             return true;
         }
@@ -113,7 +113,7 @@ namespace Photon.VM
         public override string Print( Command cmd)
         {
 
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.Get(-2), vm.Stack.Get(-1));
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-2), vm.DataStack.Get(-1));
         }
     }
 
@@ -122,12 +122,12 @@ namespace Photon.VM
     {
         public override bool Execute( Command cmd)
         {            
-            var main = vm.Stack.Pop().CastObject();
+            var main = vm.DataStack.Pop().CastObject();
 
             var key = vm.Exec.Constants.Get(cmd.DataA);
 
             var result = main.Select(key);
-            vm.Stack.Push(result);
+            vm.DataStack.Push(result);
 
             return true;
         }
@@ -135,7 +135,7 @@ namespace Photon.VM
         public override string Print( Command cmd)
         {
 
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.Stack.Get(-1), vm.Exec.Constants.Get(cmd.DataA) );
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-1), vm.Exec.Constants.Get(cmd.DataA) );
         }
     }
 
@@ -148,7 +148,7 @@ namespace Photon.VM
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB + vm.RegBase;
 
-            var closure = vm.Stack.Get() as ValueClosure;
+            var closure = vm.DataStack.Get() as ValueClosure;
 
             Slot slot = vm.Reg.GetSlot(regIndex);
             closure.AddUpValue(slot);
@@ -175,7 +175,7 @@ namespace Photon.VM
 
             var v = vm.CurrFrame.Closure.GetUpValue(regIndex);            
 
-            vm.Stack.Push(v);
+            vm.DataStack.Push(v);
 
             return true;
         }
@@ -192,7 +192,7 @@ namespace Photon.VM
         {
             
             var regIndex = cmd.DataA;
-            var d = vm.Stack.Pop();
+            var d = vm.DataStack.Pop();
             vm.CurrFrame.Closure.SetUpValue(regIndex, d );            
 
             return true;
@@ -200,7 +200,7 @@ namespace Photon.VM
 
         public override string Print( Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.Stack.Get());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
         }
     }
 }

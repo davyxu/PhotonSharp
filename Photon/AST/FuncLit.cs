@@ -32,7 +32,7 @@ namespace Photon.AST
 
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
-            var newset = new CommandSet("closure", TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new CommandSet("closure", TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
             var funcIndex = exe.AddCmdSet(newset);
 

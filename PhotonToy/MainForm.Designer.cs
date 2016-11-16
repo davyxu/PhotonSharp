@@ -93,7 +93,7 @@
             this.debugToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(343, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(556, 25);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -160,13 +160,15 @@
             this.stepIntoToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
             this.stepIntoToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.stepIntoToolStripMenuItem.Text = "Step Into";
+            this.stepIntoToolStripMenuItem.Click += new System.EventHandler(this.stepIntoToolStripMenuItem_Click);
             // 
             // stepOutToolStripMenuItem
             // 
             this.stepOutToolStripMenuItem.Name = "stepOutToolStripMenuItem";
-            this.stepOutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10)));
+            this.stepOutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
             this.stepOutToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.stepOutToolStripMenuItem.Text = "Step Out";
+            this.stepOutToolStripMenuItem.Click += new System.EventHandler(this.stepOutToolStripMenuItem_Click);
             // 
             // codeList
             // 
@@ -174,18 +176,19 @@
             this.codeList.ItemHeight = 12;
             this.codeList.Location = new System.Drawing.Point(12, 28);
             this.codeList.Name = "codeList";
-            this.codeList.Size = new System.Drawing.Size(316, 220);
+            this.codeList.Size = new System.Drawing.Size(532, 220);
             this.codeList.TabIndex = 5;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 443);
+            this.ClientSize = new System.Drawing.Size(556, 455);
             this.Controls.Add(this.codeList);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "MainForm";

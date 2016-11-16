@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SharpLexer;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Photon.Model
@@ -13,11 +14,14 @@ namespace Photon.Model
 
         bool _isGlobal;
 
-        public CommandSet( string name, int regCount, bool isGlobal )
+        TokenPos _codePos;
+
+        public CommandSet( string name, TokenPos codepos, int regCount, bool isGlobal )
         {
             _name = name;
             _regCount = regCount;
             _isGlobal = isGlobal;
+            _codePos = codepos;
         }
 
         public bool IsGlobal
@@ -48,7 +52,7 @@ namespace Photon.Model
 
         public override string ToString()
         {
-            return _name;
+            return string.Format("{0} {1}", _name, _codePos);
         }
 
         public int CurrGenIndex
@@ -73,19 +77,22 @@ namespace Photon.Model
 
             foreach (var c in _cmds)
             {                
-
+                // 到新的源码行
                 if (c.CodePos.Line > currLine )
                 {
+                    // 每个源码下的汇编成为一块, 块与块之间空行
                     if ( currLine != 0 )
                     {
                         Debug.WriteLine("");
                     }
                     
                     currLine = c.CodePos.Line;
+
+                    // 显示源码
                     Debug.WriteLine("{0}|{1}", currLine, file.GetLine(currLine));
                 }
 
-
+                // 显示汇编
                 Debug.WriteLine("{0,2}| {1}", index, c.ToString());
                 index++;
             }

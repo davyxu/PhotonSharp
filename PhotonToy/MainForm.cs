@@ -10,59 +10,39 @@ namespace PhotonToy
     {
         DebugBox _debugBox;
 
-        public MainForm()
+        string _currFile;
+
+        public MainForm(string[] args)
         {
             _debugBox = new DebugBox(this);
 
             InitializeComponent();
-            CodeViewInit();
+            codeList.HookDraw();
 
             
             _debugBox.OnBreak += OnBreak;
             _debugBox.OnLoad += OnLoad;
 
-            _debugBox.Load("Closure.pho");
-        }
-
-        static readonly SolidBrush textBg = new SolidBrush(Color.Black);
-
-        void CodeViewInit()
-        {
-            codeList.DrawMode = DrawMode.OwnerDrawVariable;
-            codeList.DrawItem += ( sender, e ) => 
+            if (args.Length > 0 )
             {
-                if ( e.Index == -1 )
-                {
-                    return;
-                }
+                _currFile = args[0];
+                _debugBox.Start(_currFile);
+            }
 
-                var item = codeList.Items[e.Index] as string;
-                if (item == null)
-                    return;
-
-                e.Graphics.DrawString( item,codeList.Font,textBg, e.Bounds );
-            };
         }
 
-        void OnBreak( VMachine vm )
-        {            
+        void OnBreak( AssemblyLocation al )
+        {
             
+            codeList.SetCurrLine(al);
         }
 
         void OnLoad(VMachine vm)
-        {
-            UpdateCode(_debugBox.Source);
+        {            
+            codeList.ShowCode(_debugBox.Source, vm.Exec);            
         }
 
-        void UpdateCode( SourceFile file )
-        {
-            codeList.Items.Clear();
 
-            foreach( var line in file.Lines )
-            {
-                codeList.Items.Add(line);
-            }
-        }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -73,7 +53,8 @@ namespace PhotonToy
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                _debugBox.Load( dialog.FileName);
+                _debugBox.Stop();                
+                _debugBox.Start(_currFile);
             }
         }
 
@@ -81,11 +62,11 @@ namespace PhotonToy
         {
             if (_debugBox.State == Photon.VM.State.Breaking)
             {
-                _debugBox.Resume();
+                _debugBox.Operate(DebuggerMode.Continue);
             }
             else
             {
-                _debugBox.Start();
+                _debugBox.Start(_currFile);
             }
             
         }
@@ -99,7 +80,7 @@ namespace PhotonToy
         {
             if (_debugBox.State == Photon.VM.State.Breaking)
             {
-                _debugBox.Resume();
+                _debugBox.Operate(DebuggerMode.StepOver);
             }
         }
 
@@ -107,6 +88,16 @@ namespace PhotonToy
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _debugBox.Stop();
+        }
+
+        private void stepIntoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _debugBox.Operate(DebuggerMode.StepIn);            
+        }
+
+        private void stepOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _debugBox.Operate(DebuggerMode.StepOut);            
         }
     }
 }

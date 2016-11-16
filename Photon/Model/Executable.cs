@@ -41,7 +41,9 @@ namespace Photon.Model
         {
             _cmdset.Add(f);
 
-            return _cmdset.Count - 1;
+            f.ID = _cmdset.Count - 1;
+
+            return f.ID;
         }
 
         public CommandSet GetCmdSet(int index )

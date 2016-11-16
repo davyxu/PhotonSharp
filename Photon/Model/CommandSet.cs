@@ -8,6 +8,8 @@ namespace Photon.Model
     {
         List<Command> _cmds = new List<Command>();
 
+        int _id;
+
         string _name;
 
         int _regCount;
@@ -22,6 +24,12 @@ namespace Photon.Model
             _regCount = regCount;
             _isGlobal = isGlobal;
             _codePos = codepos;
+        }
+
+        public int ID
+        {
+            get { return _id; }
+            internal set { _id = value; }
         }
 
         public bool IsGlobal

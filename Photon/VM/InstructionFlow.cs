@@ -93,7 +93,13 @@ namespace Photon.VM
                 // 外部调用不进行栈调整
                 var stackBeforeCall = vm.DataStack.Count;
 
-                var retValueCount = dg.Entry(vm);
+                int retValueCount = 0;
+
+                if (dg.Entry != null )
+                {
+                    retValueCount = dg.Entry(vm);
+                }
+                
 
                 // 调用结束时需要平衡栈( 返回值没有被用到 )
                 if (cmd.DataB != 0 )

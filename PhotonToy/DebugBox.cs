@@ -16,6 +16,12 @@ namespace PhotonToy
         StepOver,
     }
 
+    class VMState
+    {
+        public AssemblyLocation Location;
+
+    }
+
 
     class DebugBox
     {
@@ -40,6 +46,9 @@ namespace PhotonToy
 
                 lock (_stateGuard)
                 {
+                    if (_script == null)
+                        return Photon.VM.State.None;
+
                     return _script.VM.State;
                 }
 
@@ -127,6 +136,9 @@ namespace PhotonToy
 
         public void Operate( DebuggerMode hookmode )
         {
+            if (_script == null)
+                return;
+
             _mode.Value = hookmode;
             switch ( hookmode )
             {
@@ -185,7 +197,7 @@ namespace PhotonToy
                 _expectCallDepth.Value = -1;
                 _mode.Value = DebuggerMode.StepIn;
 
-                var al = new AssemblyLocation(vm.CurrFrame.CmdSet, vm.CurrFrame.PC);
+                var al = new AssemblyLocation(vm.CurrFrame.CmdSet.ID, vm.CurrFrame.PC);
                 SafeCall(delegate
                 {
                     if (OnBreak != null)
@@ -200,7 +212,7 @@ namespace PhotonToy
 
             _script.Run();
             
-            var existAL = new AssemblyLocation(_script.VM.CurrFrame.CmdSet, _script.VM.CurrFrame.PC);
+            var existAL = new AssemblyLocation(_script.VM.CurrFrame.CmdSet.ID, _script.VM.CurrFrame.PC);
 
             SafeCall(delegate
             {

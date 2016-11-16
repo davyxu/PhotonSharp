@@ -8,7 +8,8 @@ namespace Photon.VM
 {
     public enum State
     {
-        Standby = 0,
+        None = 0,
+        Standby ,
         Running,
         Breaking,
     }

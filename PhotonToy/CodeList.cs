@@ -5,27 +5,27 @@ using System.Windows.Forms;
 
 namespace PhotonToy
 {
-    public struct AssemblyLocation
+    enum CodeType
     {
-        public CommandSet CmdSet;
-        public int Pos;
+        Empty,
+        Assembly,
+        Source,
+    }
 
-        public AssemblyLocation( CommandSet cmdset, int pos )
+    class CodeLine
+    {
+        public string Code;
+        public CodeType Type;
+
+        public CodeLine(CodeType t, string code)
         {
-            CmdSet = cmdset;
-            Pos = pos;
+            Type = t;
+            Code = code;
         }
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            var other = (AssemblyLocation)obj;
-
-            return this.CmdSet == other.CmdSet && this.Pos == other.Pos;
-        }
-
-        public override int GetHashCode()
-        {
-            return Pos.GetHashCode() + CmdSet.GetHashCode();
+            return Code;
         }
     }
 
@@ -64,32 +64,6 @@ namespace PhotonToy
 
                 e.Graphics.DrawString(item.ToString(), self.Font, textBrush, b);
             };
-        }
-
-
-
-        enum CodeType
-        {
-            Empty,
-            Assembly,
-            Source,
-        }
-
-        class  CodeLine
-        {
-            public string Code;
-            public CodeType Type;
-
-            public CodeLine( CodeType t, string code )
-            {
-                Type = t;
-                Code = code;
-            }
-
-            public override string ToString()
-            {
-                return Code;
-            }
         }
 
         internal static void ShowCode(this ListBox self, SourceFile file, Executable exec )
@@ -137,7 +111,7 @@ namespace PhotonToy
             int currSourceLine = 0;
 
             AssemblyLocation al;
-            al.CmdSet = cmdset;
+            al.CmdSetID = cmdset.ID;
             al.Pos = 0;
 
             foreach (var c in cmdset.Commands)

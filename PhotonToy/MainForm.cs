@@ -53,6 +53,7 @@ namespace PhotonToy
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+                _currFile = dialog.FileName;
                 _debugBox.Stop();                
                 _debugBox.Start(_currFile);
             }

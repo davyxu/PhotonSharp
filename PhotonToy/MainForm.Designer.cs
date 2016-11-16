@@ -31,7 +31,7 @@
             this.registerList = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.stackList = new System.Windows.Forms.ListBox();
+            this.dataStackList = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,9 +43,12 @@
             this.stepIntoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.codeList = new System.Windows.Forms.ListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.callStackList = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // registerList
@@ -69,22 +72,22 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.stackList);
-            this.groupBox2.Location = new System.Drawing.Point(173, 254);
+            this.groupBox2.Controls.Add(this.dataStackList);
+            this.groupBox2.Location = new System.Drawing.Point(198, 254);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(155, 180);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Stack";
+            this.groupBox2.Text = "DataStack";
             // 
-            // stackList
+            // dataStackList
             // 
-            this.stackList.FormattingEnabled = true;
-            this.stackList.ItemHeight = 12;
-            this.stackList.Location = new System.Drawing.Point(6, 20);
-            this.stackList.Name = "stackList";
-            this.stackList.Size = new System.Drawing.Size(142, 148);
-            this.stackList.TabIndex = 1;
+            this.dataStackList.FormattingEnabled = true;
+            this.dataStackList.ItemHeight = 12;
+            this.dataStackList.Location = new System.Drawing.Point(6, 20);
+            this.dataStackList.Name = "dataStackList";
+            this.dataStackList.Size = new System.Drawing.Size(142, 148);
+            this.dataStackList.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -179,12 +182,32 @@
             this.codeList.Size = new System.Drawing.Size(532, 220);
             this.codeList.TabIndex = 5;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.callStackList);
+            this.groupBox3.Location = new System.Drawing.Point(389, 254);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(155, 180);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "CallStack";
+            // 
+            // callStackList
+            // 
+            this.callStackList.FormattingEnabled = true;
+            this.callStackList.ItemHeight = 12;
+            this.callStackList.Location = new System.Drawing.Point(6, 20);
+            this.callStackList.Name = "callStackList";
+            this.callStackList.Size = new System.Drawing.Size(142, 148);
+            this.callStackList.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 455);
             this.Controls.Add(this.codeList);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
@@ -198,6 +221,7 @@
             this.groupBox2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,7 +232,7 @@
         private System.Windows.Forms.ListBox registerList;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListBox stackList;
+        private System.Windows.Forms.ListBox dataStackList;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
@@ -220,6 +244,8 @@
         private System.Windows.Forms.ToolStripMenuItem stepIntoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stepOutToolStripMenuItem;
         private System.Windows.Forms.ListBox codeList;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ListBox callStackList;
     }
 }
 

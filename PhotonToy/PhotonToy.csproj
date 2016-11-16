@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyLocation.cs" />
     <Compile Include="CodeList.cs" />
     <Compile Include="DebugBox.cs" />
     <Compile Include="MainForm.cs">

@@ -1,7 +1,6 @@
-﻿using Photon.Model;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace Photon.VM
+namespace Photon
 {
     public class DataStack
     {

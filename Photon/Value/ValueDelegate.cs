@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace Photon.Model
+namespace Photon
 {    
     public class ValueDelegate : Value
     {
-        public Func<Photon.VM.VMachine, int> Entry;        
+        public Func<VMachine, int> Entry;        
 
         public ValueDelegate( )
         {
 
         }
 
-        public ValueDelegate( Func<Photon.VM.VMachine, int> callback )
+        public ValueDelegate( Func<VMachine, int> callback )
         {
             Entry = callback;
         }

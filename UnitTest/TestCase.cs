@@ -1,5 +1,6 @@
-﻿using Photon.Model;
+﻿
 
+using Photon;
 namespace UnitTest
 {
     partial class Program
@@ -14,12 +15,12 @@ namespace UnitTest
 
             {
                 var tb = new TestBox().CompileFile("Delegate.pho");
-                tb.Script.RegisterDelegate("add", (vm) =>
+                tb.Exe.RegisterDelegate("add", (vm) =>
                 {
-                    var a = vm.Stack.Get(-1).CastNumber();
-                    var b = vm.Stack.Get(-2).CastNumber();
-                    
-                    vm.Stack.Push(new ValueNumber(a + b));
+                    var a = vm.DataStack.Get(-1).CastNumber();
+                    var b = vm.DataStack.Get(-2).CastNumber();
+
+                    vm.DataStack.Push(new ValueNumber(a + b));
 
                     return 1;
                 });

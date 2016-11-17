@@ -1,10 +1,10 @@
-﻿using Photon.Model;
-using Photon.AST;
+﻿
+
 using System;
 using System.Diagnostics;
 using SharpLexer;
 
-namespace Photon.Parser
+namespace Photon
 {
     public class ParseException : Exception
     {
@@ -22,13 +22,13 @@ namespace Photon.Parser
         }
     }
 
-    public partial class ScriptParser
+    public partial class CodeParser
     {
         Lexer _lexer = new Lexer();
 
         Token _token;
 
-        public ScriptParser()
+        public CodeParser()
         {
             _lexer.AddMatcher(new PositiveNumeralMatcher(TokenType.Number));
             _lexer.AddMatcher(new StringMatcher(TokenType.QuotedString));

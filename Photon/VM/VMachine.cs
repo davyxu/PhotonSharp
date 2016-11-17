@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Photon.Model;
+
 using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Photon.VM
+namespace Photon
 {
     public enum State
     {
@@ -225,11 +225,11 @@ namespace Photon.VM
             var func = _hook[(int)hook];
             if (func != null)
             {
-                _state = VM.State.Breaking;
+                _state = State.Breaking;
 
                 func(this);
 
-                _state = VM.State.Running;
+                _state = State.Running;
             }
         }
 
@@ -238,13 +238,9 @@ namespace Photon.VM
             _currFrame.PC = -1;
         }
 
-        internal void Attach( Executable exe)
+        public void Run(Executable exe)
         {
             _exe = exe;
-        }
-
-        public void Run( SourceFile file )
-        {
             _callStack.Clear();
             _dataStack.Clear();
 
@@ -252,7 +248,7 @@ namespace Photon.VM
 
             int currSrcLine = 0;
 
-            _state = VM.State.Running;
+            _state = State.Running;
             
             while (true)
             {
@@ -262,7 +258,7 @@ namespace Photon.VM
 
                 if (ShowDebugInfo)
                 {
-                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, file.GetLine(cmd.CodePos.Line));
+                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, exe.Source.GetLine(cmd.CodePos.Line));
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }
 
@@ -297,6 +293,13 @@ namespace Photon.VM
                     Debug.WriteLine("");
                 }
 
+            }
+
+
+
+            if (ShowDebugInfo)
+            {
+                DataStack.DebugPrint();
             }
         }
     }

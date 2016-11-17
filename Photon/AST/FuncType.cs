@@ -1,9 +1,9 @@
-﻿using Photon.Model;
+﻿
 using SharpLexer;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Photon.AST
+namespace Photon
 {
     public class FuncType
     {

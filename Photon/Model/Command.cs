@@ -1,7 +1,7 @@
 ﻿using SharpLexer;
 using System.Text;
 
-namespace Photon.Model
+namespace Photon
 {
 
     public class Command

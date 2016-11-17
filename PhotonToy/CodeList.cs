@@ -1,4 +1,5 @@
-﻿using Photon.Model;
+﻿
+using Photon;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -66,14 +67,14 @@ namespace PhotonToy
             };
         }
 
-        internal static void ShowCode(this ListBox self, SourceFile file, Executable exec )
+        internal static void ShowCode(this ListBox self, Executable exec )
         {
             _listIndexByLocation.Clear();
             self.Items.Clear();
 
             foreach (var cs in exec.CmdSet)
             {
-                ShowCommandSet(self, file, cs);
+                ShowCommandSet(self, exec.Source, cs);
             }
         }
 

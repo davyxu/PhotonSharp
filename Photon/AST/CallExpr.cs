@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Photon.Model;
 using SharpLexer;
 
-namespace Photon.AST
+namespace Photon
 {
 
     public class CallExpr : Expr

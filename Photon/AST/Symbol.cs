@@ -1,6 +1,6 @@
 ﻿using SharpLexer;
 
-namespace Photon.AST
+namespace Photon
 {
     public class Symbol
     {

@@ -1,7 +1,7 @@
-﻿using Photon.Model;
+﻿
 using System.Collections.Generic;
 
-namespace Photon.AST
+namespace Photon
 {
     // 匿名函数
     public class FuncLit : Expr

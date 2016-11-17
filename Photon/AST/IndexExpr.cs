@@ -1,4 +1,4 @@
-﻿using Photon.Model;
+﻿
 using SharpLexer;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Photon.AST
+namespace Photon
 {
     // a.b   x=a  index=b
 

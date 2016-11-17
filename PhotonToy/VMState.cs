@@ -1,4 +1,4 @@
-﻿using Photon.VM;
+﻿using Photon;
 using System.Collections.Generic;
 
 namespace PhotonToy

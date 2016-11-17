@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Photon.VM;
+using Photon;
 
 namespace PhotonToy
 {
@@ -59,9 +59,9 @@ namespace PhotonToy
 
         }
 
-        void OnLoad(VMachine vm)
-        {            
-            codeList.ShowCode(_debugBox.Source, vm.Exec);            
+        void OnLoad(Executable exe)
+        {
+            codeList.ShowCode(exe);            
         }
 
 
@@ -83,7 +83,7 @@ namespace PhotonToy
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_debugBox.State == Photon.VM.State.Breaking)
+            if (_debugBox.State == State.Breaking)
             {
                 _debugBox.Operate(DebuggerMode.Continue);
             }
@@ -101,7 +101,7 @@ namespace PhotonToy
 
         private void stepOverToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_debugBox.State == Photon.VM.State.Breaking)
+            if (_debugBox.State == State.Breaking)
             {
                 _debugBox.Operate(DebuggerMode.StepOver);
             }

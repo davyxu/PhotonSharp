@@ -1,7 +1,7 @@
-﻿using Photon.Model;
+﻿
 using System.Collections.Generic;
 
-namespace Photon.AST
+namespace Photon
 {
     // 单独的一句表达式(例如: 纯函数调用)
     public class ExprStmt : Stmt

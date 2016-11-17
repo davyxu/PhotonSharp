@@ -1,6 +1,4 @@
-﻿using Photon.API;
-using Photon.Model;
-using Photon.VM;
+﻿using Photon;
 using System;
 using System.IO;
 using System.Threading;
@@ -22,13 +20,15 @@ namespace PhotonToy
     {
         public Control _invoker;
 
-        Script _script;
+        VMachine _vm;
+        Executable _exe;
+
         Thread _thread;
         AutoResetEvent _debugSignal = new AutoResetEvent(false);
         AutoResetEvent _exitSignal = new AutoResetEvent(false);
 
         public Action<VMState> OnBreak;
-        public Action<VMachine> OnLoad;
+        public Action<Executable> OnLoad;
         public Action<string> OnError;
        
         VarGuard<int> _expectCallDepth = new VarGuard<int>(-1);
@@ -43,10 +43,10 @@ namespace PhotonToy
 
                 lock (_stateGuard)
                 {
-                    if (_script == null)
-                        return Photon.VM.State.None;
+                    if (_vm == null)
+                        return State.None;
 
-                    return _script.VM.State;
+                    return _vm.State;
                 }
 
             }
@@ -69,14 +69,11 @@ namespace PhotonToy
             if (string.IsNullOrEmpty(filename))
                 return;
 
-            var file = new SourceFile(File.ReadAllText(filename));
-            Source = file;
-
-            _script = new Script();
+            var file = new SourceFile(File.ReadAllText(filename));            
 
             try
             {
-                _script.Compile(file);
+                _exe = Compiler.Compile(file);
             }
             catch( Exception e )
             {
@@ -84,14 +81,14 @@ namespace PhotonToy
                     OnError(e.ToString());
 
                 return;
-            }
-
-            _script.VM.ShowDebugInfo = true;
+            }            
 
             if (OnLoad != null)
             {
-                OnLoad(_script.VM);
+                OnLoad(_exe);
             }
+
+            _vm = new VMachine();
 
             _mode.Value = DebuggerMode.StepIn;
             _thread = new Thread(VMThread);
@@ -104,16 +101,16 @@ namespace PhotonToy
         {
             switch( State )
             {
-                case Photon.VM.State.Breaking:
+                case State.Breaking:
                     {
-                        _script.VM.Stop();
+                        _vm.Stop();
 
                         Operate(DebuggerMode.Continue);
 
                         _exitSignal.WaitOne();    
                     }
                     break;
-                case Photon.VM.State.Running:
+                case State.Running:
                     {
                         // 在跑, 直接停
 
@@ -142,7 +139,7 @@ namespace PhotonToy
 
         public void Operate( DebuggerMode hookmode )
         {
-            if (_script == null)
+            if (_vm == null)
                 return;
 
             _mode.Value = hookmode;
@@ -172,7 +169,7 @@ namespace PhotonToy
 
         void VMThread( )
         {
-            _script.VM.SetHook(Photon.VM.DebugHook.AssemblyLine, (vm) =>
+            _vm.SetHook(DebugHook.AssemblyLine, (vm) =>
             {
                 switch( _mode.Value )
                 {
@@ -216,20 +213,20 @@ namespace PhotonToy
                 _debugSignal.WaitOne();                
             });
 
-            _script.VM.SetHook(Photon.VM.DebugHook.Call, (vm) =>
+            _vm.SetHook(DebugHook.Call, (vm) =>
             {
                 _callDepth.Value++;
             });
 
-            _script.VM.SetHook(Photon.VM.DebugHook.Return, (vm) =>
+            _vm.SetHook(DebugHook.Return, (vm) =>
             {
                 _callDepth.Value--;
             });
 
 
-            _script.Run();
+            _vm.Run(_exe);
 
-            var vms2 = new VMState(_script.VM);
+            var vms2 = new VMState(_vm);
 
             SafeCall(delegate
             {

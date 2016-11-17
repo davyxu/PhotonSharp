@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.AST
+namespace Photon
 {
 
     public enum ScopeType

@@ -1,5 +1,5 @@
 ﻿
-namespace Photon.Model
+namespace Photon
 {
     // S: 栈  R: 寄存器 C:常量表　I:索引 Top: 栈顶
     public enum Opcode

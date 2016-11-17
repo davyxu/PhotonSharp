@@ -1,8 +1,7 @@
-﻿using Photon.Model;
-using SharpLexer;
+﻿using SharpLexer;
 using System.Collections.Generic;
 
-namespace Photon.AST
+namespace Photon
 {
     public class BlockStmt : Stmt
     {

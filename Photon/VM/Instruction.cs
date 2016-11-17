@@ -1,7 +1,7 @@
-﻿using Photon.Model;
+﻿
 using System;
 
-namespace Photon.VM
+namespace Photon
 {
     class InstructionAttribute : Attribute
     {

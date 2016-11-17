@@ -1,7 +1,7 @@
 ﻿
-using Photon.Model;
+
 using SharpLexer;
-namespace Photon.AST
+namespace Photon
 {
     public class Ident : Expr
     {

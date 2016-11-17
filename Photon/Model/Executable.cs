@@ -1,8 +1,9 @@
-﻿using Photon.AST;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.Model
+namespace Photon
 {
 
     public class Executable
@@ -11,14 +12,21 @@ namespace Photon.Model
         Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
         ConstantSet _constSet = new ConstantSet();
 
+        // 调试Symbol
+        Chunk _chunk;
+
+        Scope _globalScope;
+
+        SourceFile _sourcefile;
+
+        public SourceFile Source
+        {
+            get { return _sourcefile; }
+        }
+
         public List<CommandSet> CmdSet
         {
             get { return _cmdset; }
-        }
-
-        public Dictionary<string, ValueDelegate> DelegateMap
-        {
-            get { return _delegateByName; }
         }
 
         public ConstantSet Constants
@@ -26,14 +34,47 @@ namespace Photon.Model
             get { return _constSet; }
         }
 
-        public void DebugPrint( SourceFile file )
+        internal Executable( Chunk ast,Scope s, SourceFile src )
         {
-            _constSet.DebugPrint(  );
+            _chunk = ast;
+            _globalScope = s;
+            _sourcefile = src;
+        }
+        public static void PrintAST(Node n, string indent = "")
+        {
+            Debug.WriteLine(indent + n.ToString());
 
+            foreach (var c in n.Child())
+            {
+                PrintAST(c, indent + "\t");
+            }
+        }
+
+
+        public void DebugPrint( )
+        {
+            // 源文件
+            _sourcefile.DebugPrint();
+
+            // 语法树
+            Debug.WriteLine("ast:");
+            PrintAST(_chunk);
+            Debug.WriteLine("");
+
+            // 符号
+            Debug.WriteLine("symbols:");
+            _globalScope.DebugPrint("");
+            Debug.WriteLine("");
+
+            // 常量表
+            _constSet.DebugPrint( );
+
+            // 汇编
             foreach( var cs in _cmdset )
             {
-                cs.DebugPrint(file);
+                cs.DebugPrint(_sourcefile);
             }
+
             Debug.WriteLine("");
         }
 
@@ -50,7 +91,22 @@ namespace Photon.Model
         {
             return _cmdset[index];
         }
-        
-        
+
+        internal void AddDelegate( string name, ValueDelegate d )
+        {
+            _delegateByName.Add(name, d);
+        }
+
+        public void RegisterDelegate(string name, Func<VMachine, int> callback)
+        {
+            ValueDelegate v = null;
+            if (!_delegateByName.TryGetValue(name, out v))
+            {
+                Debug.WriteLine("extern func not define in code: " + name);
+                return;
+            }
+
+            v.Entry = callback;
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Photon.Model;
+﻿
 using System.Collections.Generic;
 using System.Text;
 
-namespace Photon.AST
+namespace Photon
 {
     public class DelegateDeclare : Stmt
     {
@@ -34,7 +34,7 @@ namespace Photon.AST
             var c = new ValueDelegate( );
             var ci = exe.Constants.Add(c);
 
-            exe.DelegateMap.Add(Name.Name, c);
+            exe.AddDelegate(Name.Name, c);
 
             cm.Add(new Command(Opcode.LoadC, ci))
                 .SetComment(c.ToString())

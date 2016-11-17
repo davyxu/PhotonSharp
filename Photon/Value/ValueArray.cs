@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Photon.VM;
 
-namespace Photon.Model
+namespace Photon
 {
     public class ValueArray : ValueObject
     {

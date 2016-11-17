@@ -1,6 +1,6 @@
-﻿using Photon.Model;
+﻿
 
-namespace Photon.VM
+namespace Photon
 {
     class InstructionMath : Instruction
     {

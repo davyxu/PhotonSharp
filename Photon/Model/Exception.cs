@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Photon.Model
+namespace Photon
 {
     class ParserException : Exception
     {

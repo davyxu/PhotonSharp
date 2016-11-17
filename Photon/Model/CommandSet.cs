@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.Model
+namespace Photon
 {
     public class CommandSet
     {

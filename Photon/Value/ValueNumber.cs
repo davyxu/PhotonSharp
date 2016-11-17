@@ -1,5 +1,5 @@
 ﻿
-namespace Photon.Model
+namespace Photon
 {
     public class ValueNumber : Value
     {

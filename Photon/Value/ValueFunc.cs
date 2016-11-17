@@ -1,6 +1,6 @@
 ﻿
 using SharpLexer;
-namespace Photon.Model
+namespace Photon
 {
     public class ValueFunc : Value
     {

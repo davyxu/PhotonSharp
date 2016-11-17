@@ -1,41 +1,40 @@
-﻿using Photon.API;
-using Photon.VM;
-using Photon.Model;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System;
 using System.IO;
+using Photon;
 
 namespace UnitTest
 {
     class TestBox
     {
-        Script _script = new Script();
+        Executable _exe;
+        VMachine _vm = new VMachine();
 
         string _caseName;        
 
         public TestBox Compile( string caseName, string src )
         {
-            _caseName = caseName;
-
-            _script.DebugMode = true;
+            _caseName = caseName;            
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _script.Compile(new SourceFile(src));            
+            _exe = Compiler.Compile(new SourceFile(src));
+
+            _exe.DebugPrint();
 
             return this;
         }
 
         public TestBox Run( )
         {
-            _script.Run();
+            _vm.Run(_exe);
 
             return this;
         }
 
-        public Script Script
+        public Executable Exe
         {
-            get { return _script; }
+            get { return _exe; }
         }
 
         public TestBox CompileFile(string filename)
@@ -61,7 +60,7 @@ namespace UnitTest
 
         public TestBox TestStackClear()
         {
-            if (_script.VM.Stack.Count != 0)
+            if (_vm.DataStack.Count != 0)
             {
                 Error("Stack not clear");
             }
@@ -72,7 +71,7 @@ namespace UnitTest
 
         public TestBox TestLocalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _script.VM.Reg);
+            return TestRegEqualNumber(index, num, _vm.Reg);
         }
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )

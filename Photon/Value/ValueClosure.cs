@@ -1,7 +1,7 @@
 ﻿using SharpLexer;
 using System.Collections.Generic;
 
-namespace Photon.Model
+namespace Photon
 {
     public class ValueClosure : ValueFunc
     {

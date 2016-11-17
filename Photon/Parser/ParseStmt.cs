@@ -1,10 +1,9 @@
-﻿using Photon.AST;
-using Photon.Model;
+﻿
 using System.Collections.Generic;
 
-namespace Photon.Parser
+namespace Photon
 {
-    public partial class ScriptParser
+    public partial class CodeParser
     {
 
         List<Stmt> ParseStatmentList()

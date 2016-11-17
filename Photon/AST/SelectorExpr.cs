@@ -1,7 +1,7 @@
-﻿using Photon.Model;
+﻿
 using System.Collections.Generic;
 
-namespace Photon.AST
+namespace Photon
 {
     // a.b   x=a  selector=b
     public class SelectorExpr : Expr

@@ -1,12 +1,12 @@
-﻿using Photon.AST;
-using Photon.Model;
+﻿
+
 using SharpLexer;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Photon.Parser
+namespace Photon
 {
-    partial class ScriptParser
+    partial class CodeParser
     {
         Scope _topScope;
         Scope _global;

@@ -1,8 +1,8 @@
-﻿using Photon.Model;
+﻿
 using SharpLexer;
 using System.Collections.Generic;
 
-namespace Photon.AST
+namespace Photon
 {
     // var XXX  纯变量定义
     public class VarDeclareStmt : Stmt

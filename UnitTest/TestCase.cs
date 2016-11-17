@@ -7,7 +7,9 @@ namespace UnitTest
     {
 
         static void TestCase()
-        {            
+        {
+            new TestBox().RunFile("Package.pho");
+
             new TestBox().RunFile("Closure.pho").TestLocalRegEqualNumber(2, 12 );
 
             new TestBox().RunFile("Array.pho").TestLocalRegEqualNumber(2, 1);

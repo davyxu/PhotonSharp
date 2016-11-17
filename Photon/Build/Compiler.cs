@@ -11,7 +11,7 @@ namespace Photon
             var parser = new CodeParser();
 
             // 编译生成AST
-            var chunk = parser.ParseSource(file.Source);
+            var chunk = parser.Parse(file.Source);
             
             var exe = new Executable(chunk, parser.GlobalScope, file );
 

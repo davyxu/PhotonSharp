@@ -39,7 +39,7 @@ namespace Photon
 
             Condition.Compile(exe, cm, false);
 
-            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0))
+            var jzCmd = cm.Add(new Command(Opcode.Jz, 0))
                 .SetCodePos(WhilePos);
 
             Body.Compile(exe, cm, false);            
@@ -48,7 +48,7 @@ namespace Photon
                 .SetCodePos(WhilePos);
 
             // false body跳入
-            jnzCmd.DataA = cm.CurrGenIndex;
+            jzCmd.DataA = cm.CurrGenIndex;
         }
 
     }

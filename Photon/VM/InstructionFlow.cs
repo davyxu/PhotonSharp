@@ -3,7 +3,7 @@
 namespace Photon
 {
     [Instruction(Cmd = Opcode.Jz)]
-    class CmdJnz : Instruction
+    class CmdJZ : Instruction
     {
         public override bool Execute( Command cmd)
         {

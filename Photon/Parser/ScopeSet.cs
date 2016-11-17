@@ -34,7 +34,7 @@ namespace Photon
             _topScope = _topScope.Outter;
         }
 
-        public Symbol Declare(Node n, Scope s, string name, TokenPos pos )
+        internal Symbol Declare(Node n, Scope s, string name, TokenPos pos, SymbolUsage usage )
         {
             var pre = s.FindSymbol(name);
             if ( pre != null )
@@ -46,6 +46,7 @@ namespace Photon
             data.Name = name;
             data.Decl = n;
             data.DefinePos = pos;
+            data.Usage = usage;
 
             s.Insert(data);
 
@@ -88,17 +89,6 @@ namespace Photon
 
             Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );
 
-        }
-
-
-        public void PrintScopeSymbol( )
-        {
-
-            Debug.WriteLine("symbols:");
-
-            _global.DebugPrint("");
-
-            Debug.WriteLine("");
         }
     }
 }

@@ -20,7 +20,7 @@ namespace UnitTest
 
             _exe = Compiler.Compile(new SourceFile(src));            
 
-            _exe.DebugPrint();
+            _exe.DebugPrint();            
 
             return this;
         }
@@ -40,7 +40,7 @@ namespace UnitTest
         public TestBox CompileFile(string filename)
         {
 
-            var content = File.ReadAllText(filename);
+            var content = System.IO.File.ReadAllText(filename);
 
             return Compile(filename, content);
         }

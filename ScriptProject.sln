@@ -11,6 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D4-4A66-B10E-459864FAED38}"
 	ProjectSection(SolutionItems) = preProject
 		Doc\BNF.txt = Doc\BNF.txt
+		Doc\Implement.md = Doc\Implement.md
 		README.md = README.md
 		Doc\Style.md = Doc\Style.md
 		Doc\TODO.md = Doc\TODO.md

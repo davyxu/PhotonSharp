@@ -65,6 +65,7 @@
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
     <Compile Include="Model\Exception.cs" />
+    <Compile Include="Model\Package.cs" />
     <Compile Include="Value\Slot.cs" />
     <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Value\ValueDelegate.cs" />

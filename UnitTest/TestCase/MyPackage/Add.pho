@@ -1,0 +1,5 @@
+
+func AddValue( a, b ){
+	
+	return a + b
+}

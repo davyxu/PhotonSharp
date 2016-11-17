@@ -2,6 +2,16 @@
 
 namespace Photon
 {
+    public enum SymbolUsage
+    {
+        None,
+        Delegate,
+        Func,
+        Variable,
+        Parameter,
+    }
+
+
     public class Symbol
     {
         public string Name;
@@ -10,6 +20,8 @@ namespace Photon
         public int RegIndex;
 
         public Scope Belong;
+
+        public SymbolUsage Usage;
 
         public bool IsGlobal
         {
@@ -21,7 +33,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} R{1}  {2}", Name, RegIndex, DefinePos);
+            return string.Format("{0} R{1} {2} {3}", Name, RegIndex, Usage, DefinePos);
         }
     }
 }

@@ -56,6 +56,7 @@
     <None Include="TestCase\ForLoop.pho" />
     <None Include="TestCase\If.pho" />
     <None Include="TestCase\MultiCall.pho" />
+    <None Include="TestCase\Package.pho" />
     <None Include="TestCase\Scope.pho" />
     <None Include="TestCase\SwapVar.pho" />
     <None Include="TestCase\Test.pho" />

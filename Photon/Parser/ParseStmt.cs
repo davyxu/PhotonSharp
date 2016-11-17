@@ -117,7 +117,7 @@ namespace Photon
         {
             var ident = ParseIdent();
 
-            Declare( ident, _topScope, ident.Name, ident.DefinePos );
+            Declare(ident, _topScope, ident.Name, ident.DefinePos, SymbolUsage.Variable);
 
             var assignPos = CurrTokenPos;
 

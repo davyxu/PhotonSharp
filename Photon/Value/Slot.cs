@@ -2,7 +2,7 @@
 namespace Photon
 {
 
-    public class Slot
+    class Slot
     {
         Value _data = Value.Nil;
 

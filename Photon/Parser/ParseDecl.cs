@@ -24,7 +24,7 @@ namespace Photon
 
                 var decl = new FuncDeclare(ident, body, new FuncType(funcPos, paramlist, scope) );
 
-                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
+                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Func);
 
                 return decl;
             }
@@ -33,9 +33,10 @@ namespace Photon
                 // 声明已经结束
                 CloseScope();
 
+                // 函数前置声明
                 var decl = new DelegateDeclare(ident, new FuncType(funcPos, paramlist, scope) );
 
-                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos);
+                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Delegate);
 
                 return decl;
             }
@@ -56,7 +57,7 @@ namespace Photon
                     var param = ParseIdent();
                     p.Add(param);
 
-                    Declare(param, s, param.Name, param.DefinePos);
+                    Declare(param, s, param.Name, param.DefinePos, SymbolUsage.Parameter);
 
                     if (CurrTokenType != TokenType.Comma)
                     {
@@ -99,7 +100,7 @@ namespace Photon
 
             foreach( var i in idents )
             {
-                Declare(i, _topScope, i.Name, i.DefinePos);
+                Declare(i, _topScope, i.Name, i.DefinePos, SymbolUsage.Variable);
             }
 
             List<Expr> values = new List<Expr>();

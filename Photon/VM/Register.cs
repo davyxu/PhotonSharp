@@ -27,7 +27,7 @@ namespace Photon
             get { return _usedSlot; }
         }
 
-        public void SetUsedCount( int count )
+        internal void SetUsedCount( int count )
         {            
             // 扩展
             if ( count > _usedSlot )
@@ -62,7 +62,7 @@ namespace Photon
             return _values[index].Data;
         }
 
-        public Slot GetSlot( int index )
+        internal Slot GetSlot( int index )
         {
             return _values[index];
         }

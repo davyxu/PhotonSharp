@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Photon
 {
+    // 函数前置声明
     public class DelegateDeclare : Stmt
     {
         public Ident Name;

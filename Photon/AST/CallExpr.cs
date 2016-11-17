@@ -39,6 +39,43 @@ namespace Photon
             return "CallExpr";
         }
 
+
+        void AnalyseFuncEntry( )
+        {            
+            // 名字访问, 可能是本地函数调用, 或动态变量访问
+            var funcNameToken = Func as Ident;
+            if ( funcNameToken != null )
+            {
+                var funcNameSymbol = S.FindSymbol(funcNameToken.Name);
+                int a = 1;
+            }
+
+            var sel = Func as SelectorExpr;
+            if ( sel != null)
+            {
+                var packageName = sel.X as Ident;
+
+                // 可能是a.b.c()的多个selector调用, 现在暂时不处理这种复杂情况
+                if ( packageName == null )
+                {
+                    throw new ParseException("invalid function entry", LParen);
+                }
+
+                //var funcName = sel.Selector;
+            }
+            
+        }
+
+        static Node GetOneChild(Node n)
+        {
+            foreach (var c in n.Child())
+            {
+                return c;
+            }
+
+            return null;
+        }
+
         public override void Compile(Executable exe, CommandSet cm, bool lhs)
         {
             // 先放参数
@@ -46,6 +83,8 @@ namespace Photon
             {
                 arg.Compile(exe, cm, false);                
             }
+
+            AnalyseFuncEntry();
 
             // 再放函数
             Func.Compile(exe, cm, false);

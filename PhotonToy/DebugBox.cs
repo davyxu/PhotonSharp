@@ -69,7 +69,7 @@ namespace PhotonToy
             if (string.IsNullOrEmpty(filename))
                 return;
 
-            var file = new SourceFile(File.ReadAllText(filename));            
+            var file = new SourceFile(System.IO.File.ReadAllText(filename));            
 
             try
             {
@@ -81,7 +81,8 @@ namespace PhotonToy
                     OnError(e.ToString());
 
                 return;
-            }            
+            }
+            _exe.DebugPrint();
 
             if (OnLoad != null)
             {

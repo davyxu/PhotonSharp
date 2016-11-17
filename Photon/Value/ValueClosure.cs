@@ -13,7 +13,7 @@ namespace Photon
             
         }
 
-        public void AddUpValue( Slot v )
+        internal void AddUpValue( Slot v )
         {
             _upvalues.Add(v);
         }

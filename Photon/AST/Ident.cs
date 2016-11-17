@@ -1,8 +1,9 @@
-﻿
+﻿using SharpLexer;
 
-using SharpLexer;
 namespace Photon
 {
+
+
     public class Ident : Expr
     {
         Token _token;

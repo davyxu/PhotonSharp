@@ -73,7 +73,7 @@ namespace Photon
             _lexer.AddMatcher(new UnknownMatcher(TokenType.Unknown));
         }
 
-        public Chunk ParseSource(string source)
+        public Chunk Parse(string source)
         {
             InitScope();
 

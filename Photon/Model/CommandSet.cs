@@ -18,12 +18,18 @@ namespace Photon
 
         TokenPos _codePos;
 
-        public CommandSet( string name, TokenPos codepos, int regCount, bool isGlobal )
+        internal Package Pkg
+        {
+            get;
+            set;
+        }
+
+        public CommandSet( string name, TokenPos codepos, int regCount, bool isGlobal)
         {
             _name = name;
             _regCount = regCount;
             _isGlobal = isGlobal;
-            _codePos = codepos;
+            _codePos = codepos;            
         }
 
         public int ID
@@ -54,6 +60,7 @@ namespace Photon
 
         internal Command Add(Command c)
         {
+            c.Pkg = Pkg;
             _cmds.Add(c);
             return c;
         }

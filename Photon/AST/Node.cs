@@ -13,9 +13,14 @@ namespace Photon
             yield break;
         }
 
-        public virtual void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal virtual void Compile(Package pkg, CommandSet cm, bool lhs)
         {
             throw new Exception("'Compile' not implement: " + this.ToString());
+        }
+
+        internal virtual void Resolve()
+        {
+
         }
 
         public void BuildRelation( )

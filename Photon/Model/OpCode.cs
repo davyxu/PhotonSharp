@@ -27,6 +27,7 @@ namespace Photon
         Select, // S[Top] = S[I][ P1 ] 显式字符串key调用
         
         Call,   // S[I](S[I+1], ... )
+        CallD,  // S[I](S[I+1], ... )
         Ret,    // 
         Jz,    // S[Top] != 0
         Jmp,    // 无条件

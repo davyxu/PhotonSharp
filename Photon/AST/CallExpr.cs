@@ -40,14 +40,36 @@ namespace Photon
         }
 
 
-        void AnalyseFuncEntry( )
+        internal override void Resolve()
+        {
+
+        }
+
+        Command _callCmdToResolve;
+        string _funcName;        
+
+        void AnalyseFuncEntry(Package pkg, CommandSet cm)
         {            
             // 名字访问, 可能是本地函数调用, 或动态变量访问
             var funcNameToken = Func as Ident;
             if ( funcNameToken != null )
             {
                 var funcNameSymbol = S.FindSymbol(funcNameToken.Name);
-                int a = 1;
+                if ( funcNameSymbol == null )
+                {
+                    throw new ParseException("func name not found:" + funcNameToken.Name, LParen);
+                }
+
+                switch (funcNameSymbol.Usage )
+                {
+                    case SymbolUsage.Delegate:
+                    case SymbolUsage.Func:
+                        {
+                            _funcName = funcNameSymbol.Name;
+                            _callCmdToResolve=cm.Add(new Command(Opcode.CallD, NeedBalanceDataStack)).SetCodePos(LParen);
+                        }
+                        break;
+                }
             }
 
             var sel = Func as SelectorExpr;
@@ -76,28 +98,32 @@ namespace Photon
             return null;
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        int NeedBalanceDataStack
+        {
+            get {
+                // 单独的一句时, 需要平衡数据栈
+                if (Parent is ExprStmt)
+                    return 1;
+
+                return 0;
+            }
+        }
+
+        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
         {
             // 先放参数
             foreach (var arg in Args)
             {
-                arg.Compile(exe, cm, false);                
+                arg.Compile(pkg, cm, false);                
             }
 
-            AnalyseFuncEntry();
+            AnalyseFuncEntry(pkg, cm);
 
             // 再放函数
-            Func.Compile(exe, cm, false);
-
-            // 单独的一句时, 需要平衡数据栈
-            int needBalanceDataStack = 0 ;
-            if ( Parent is ExprStmt )
-            {
-                needBalanceDataStack = 1;
-            }
+            Func.Compile(pkg, cm, false);
 
 
-            cm.Add(new Command(Opcode.Call, Args.Count, needBalanceDataStack)).SetCodePos(LParen);
+            cm.Add(new Command(Opcode.Call, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Photon
             return "SelectorExpr";
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package exe, CommandSet cm, bool lhs)
         {
             X.Compile(exe, cm, lhs );
             

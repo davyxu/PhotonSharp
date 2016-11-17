@@ -34,7 +34,7 @@ namespace Photon
         }
 
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package exe, CommandSet cm, bool lhs)
         {
             var newset = new CommandSet(Name.Name, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 

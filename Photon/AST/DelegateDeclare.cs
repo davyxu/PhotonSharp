@@ -30,12 +30,12 @@ namespace Photon
         }
 
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
         {
             var c = new ValueDelegate( );
-            var ci = exe.Constants.Add(c);
+            var ci = pkg.Constants.Add(c);
 
-            exe.AddDelegate(Name.Name, c);
+            pkg.Exe.AddDelegate(Name.Name, c);
 
             cm.Add(new Command(Opcode.LoadC, ci))
                 .SetComment(c.ToString())

@@ -16,6 +16,12 @@ namespace Photon
         string _comment;
 
         TokenPos _pos;
+        
+        internal Package Pkg
+        {
+            get;
+            set;
+        }
 
         public Command(Opcode op)
         {

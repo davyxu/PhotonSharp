@@ -45,6 +45,8 @@ namespace Photon
     [Instruction(Cmd = Opcode.Call)]
     class CmdCall : Instruction
     {
+
+        void ExecFunction( Value )
         public override bool Execute( Command cmd)
         {
             var argCount = cmd.DataA;
@@ -54,10 +56,10 @@ namespace Photon
             var func = obj as ValueFunc;
 
             if ( func != null )
-            {                
-
+            {
+                var cmdSet = cmd.Pkg.GetCmdSet(func.Index);
                 // 更换当前上下文
-                vm.EnterFrame(func.Index);
+                vm.EnterFrame(cmdSet);
 
                 vm.CurrFrame.Closure = obj as ValueClosure;
 

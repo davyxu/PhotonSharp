@@ -170,11 +170,11 @@ namespace Photon
             _hook[(int)hook] = callback;
         }
 
-        internal void EnterFrame( int funcIndex )
+        internal void EnterFrame( CommandSet cmdSet )
         {
             CallHook(DebugHook.Call);
 
-            var newFrame = new RuntimeFrame(_exe.CmdSet[funcIndex] );
+            var newFrame = new RuntimeFrame(cmdSet);
 
             if ( _currFrame != null )
             {
@@ -244,7 +244,7 @@ namespace Photon
             _callStack.Clear();
             _dataStack.Clear();
 
-            EnterFrame(0);
+            EnterFrame(exe.GetPackage(0).GetCmdSet(0));
 
             int currSrcLine = 0;
 

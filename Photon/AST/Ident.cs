@@ -42,7 +42,7 @@ namespace Photon
 
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
         {
             Command cmd = null;
 
@@ -70,7 +70,7 @@ namespace Photon
 
                     var c = new ValueString(_token.Value);
 
-                    var ci = exe.Constants.Add( c );
+                    var ci = pkg.Constants.Add( c );
 
                     cmd = cm.Add(new Command(Opcode.LoadC, ci));
                 }

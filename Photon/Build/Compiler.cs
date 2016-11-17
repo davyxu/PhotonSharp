@@ -15,12 +15,14 @@ namespace Photon
             
             var exe = new Executable(chunk, parser.GlobalScope, file );
 
+            var pkg = exe.AddPackage("main");
+
             var cmdSet = new CommandSet("global", TokenPos.Init, parser.GlobalScope.CalcUsedReg(), true);
 
-            exe.AddCmdSet(cmdSet);
+            pkg.AddCmdSet(cmdSet);
 
             // 遍历AST,生成代码
-            chunk.Compile(exe, cmdSet, false);
+            chunk.Compile(pkg, cmdSet, false);
 
             cmdSet.Add(new Command(Opcode.Exit));
 

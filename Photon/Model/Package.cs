@@ -12,6 +12,8 @@ namespace Photon
     {
         string _name;
 
+        int _id;
+
         List<File> _file = new List<File>();
 
         // 所有函数执行体
@@ -20,14 +22,22 @@ namespace Photon
         // 常量表
         ConstantSet _constSet = new ConstantSet();
 
-        // 外部代理函数
-        Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
+        Executable _parent;
 
-        // 调试Symbol
-        Chunk _chunk;
+        internal Executable Exe
+        {
+            get { return _parent; }
+        }
 
-        // 作用域
-        Scope _globalScope;
+        internal ConstantSet Constants
+        {
+            get { return _constSet; }
+        }
+
+        internal int ID
+        {
+            get { return _id; }
+        }
 
 
         public string Name
@@ -35,9 +45,40 @@ namespace Photon
             get { return _name; }
         }
 
+        internal Package( int id, string name, Executable exe )
+        {
+            _parent = exe;
+            _name = name;
+            _id = id;
+        }
+
         public override string ToString()
         {
             return _name;
+        }
+
+        internal int AddCmdSet(CommandSet f)
+        {
+            f.Pkg = this;
+
+            _cmdset.Add(f);
+
+            f.ID = _cmdset.Count - 1;
+
+            return f.ID;
+        }
+
+        public CommandSet GetCmdSet(int index)
+        {
+            return _cmdset[index];
+        }
+
+        internal void DebugPrint( SourceFile source )
+        {
+            foreach (var cs in _cmdset)
+            {
+                cs.DebugPrint(source);
+            }
         }
     }
 }

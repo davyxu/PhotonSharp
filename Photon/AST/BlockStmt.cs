@@ -36,7 +36,7 @@ namespace Photon
             return "BlockStmt";
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package exe, CommandSet cm, bool lhs)
         {
 
             foreach (var b in Stmts)

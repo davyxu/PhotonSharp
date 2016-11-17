@@ -8,8 +8,10 @@ namespace Photon
 
     public class Executable
     {
-        // 所有函数执行体
-        List<CommandSet> _cmdset = new List<CommandSet>();
+        // 第一次pass无法搞定的node
+        List<Node> _unsolvedNode = new List<Node>();
+
+        List<Package> _packages = new List<Package>();
         
         // 常量表
         ConstantSet _constSet = new ConstantSet();
@@ -31,15 +33,12 @@ namespace Photon
             get { return _sourcefile; }
         }
 
-        public List<CommandSet> CmdSet
-        {
-            get { return _cmdset; }
-        }
 
         public ConstantSet Constants
         {
             get { return _constSet; }
         }
+
 
         internal Executable( Chunk ast,Scope s, SourceFile src )
         {
@@ -76,27 +75,38 @@ namespace Photon
             // 常量表
             _constSet.DebugPrint( );
 
-            // 汇编
-            foreach( var cs in _cmdset )
+            foreach( var pkg in _packages )
             {
-                cs.DebugPrint(_sourcefile);
+                // 汇编
+                pkg.DebugPrint(_sourcefile);
+
             }
+
+            
 
             Debug.WriteLine("");
         }
-
-        internal int AddCmdSet(CommandSet f)
+        internal Package AddPackage( string name )
         {
-            _cmdset.Add(f);
+            var pkg = new Package( _packages.Count,  name, this);
 
-            f.ID = _cmdset.Count - 1;
+            _packages.Add(pkg);
 
-            return f.ID;
+            return pkg;
+
+        }
+        internal Package GetPackage(int pkgid)
+        {
+            return _packages[pkgid];
         }
 
-        public CommandSet GetCmdSet(int index )
-        {
-            return _cmdset[index];
+        internal CommandSet GetCmdSet( int packageID, int cmdSetID )
+        {            
+            var pkg = _packages[packageID];
+            if (pkg == null)
+                return null;
+
+            return pkg.GetCmdSet(cmdSetID);
         }
 
         internal void AddDelegate( string name, ValueDelegate d )

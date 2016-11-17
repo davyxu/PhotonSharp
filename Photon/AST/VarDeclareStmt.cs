@@ -32,7 +32,7 @@ namespace Photon
             return "VarDeclareStmt";
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package exe, CommandSet cm, bool lhs)
         {
          
         }

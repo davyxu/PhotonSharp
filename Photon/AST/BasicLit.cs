@@ -20,10 +20,10 @@ namespace Photon
             return Value;
         }
 
-        public override void Compile(Executable exe, CommandSet cm, bool lhs)
+        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
         {
             var c = Lit2Const( );
-            var ci = exe.Constants.Add(c);
+            var ci = pkg.Constants.Add(c);
 
             cm.Add(new Command(Opcode.LoadC, ci)).SetComment( c.ToString() ).SetCodePos( Pos );
         }

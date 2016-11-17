@@ -15,6 +15,11 @@ namespace Photon.Parser
         {
             Pos = pos;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} at line {1}", this.Message, Pos.Line);
+        }
     }
 
     public partial class ScriptParser

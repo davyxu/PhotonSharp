@@ -16,11 +16,6 @@ namespace PhotonToy
         StepOver,
     }
 
-    class VMState
-    {
-        public AssemblyLocation Location;
-
-    }
 
 
     class DebugBox
@@ -32,10 +27,12 @@ namespace PhotonToy
         AutoResetEvent _debugSignal = new AutoResetEvent(false);
         AutoResetEvent _exitSignal = new AutoResetEvent(false);
 
-        public Action<AssemblyLocation> OnBreak;
+        public Action<VMState> OnBreak;
         public Action<VMachine> OnLoad;
+        public Action<string> OnError;
        
         VarGuard<int> _expectCallDepth = new VarGuard<int>(-1);
+        VarGuard<int> _callDepth = new VarGuard<int>(0);
         VarGuard<DebuggerMode> _mode = new VarGuard<DebuggerMode>(DebuggerMode.StepIn);
         
         object _stateGuard = new object();
@@ -76,7 +73,19 @@ namespace PhotonToy
             Source = file;
 
             _script = new Script();
-            _script.Compile(file);
+
+            try
+            {
+                _script.Compile(file);
+            }
+            catch( Exception e )
+            {
+                if (OnError != null)
+                    OnError(e.ToString());
+
+                return;
+            }
+
             _script.VM.ShowDebugInfo = true;
 
             if (OnLoad != null)
@@ -84,15 +93,12 @@ namespace PhotonToy
                 OnLoad(_script.VM);
             }
 
-
             _mode.Value = DebuggerMode.StepIn;
             _thread = new Thread(VMThread);
             _thread.Name = "DebugBox";
             _thread.IsBackground = true;
             _thread.Start();
         }
-
-
 
         public void Stop( )
         {
@@ -150,12 +156,12 @@ namespace PhotonToy
                     break;
                 case DebuggerMode.StepOver:
                     {
-                        _expectCallDepth.Value = _script.VM.CallStack.Count;
+                        _expectCallDepth.Value = _callDepth.Value;
                     }
                     break;
                 case DebuggerMode.StepOut:
                     {
-                        _expectCallDepth.Value = _script.VM.CallStack.Count - 1;
+                        _expectCallDepth.Value = _callDepth.Value - 1;
                     }
                     break;
 
@@ -166,7 +172,7 @@ namespace PhotonToy
 
         void VMThread( )
         {
-            _script.VM.SetHook(Photon.VM.DebugHook.ExecInstruction, (vm) =>
+            _script.VM.SetHook(Photon.VM.DebugHook.AssemblyLine, (vm) =>
             {
                 switch( _mode.Value )
                 {
@@ -176,7 +182,7 @@ namespace PhotonToy
                     case DebuggerMode.StepOver:
                         {
                             // 没有恢复到期望深度, 继续执行
-                            if ( _expectCallDepth.Value != _script.VM.CallStack.Count )
+                            if (_expectCallDepth.Value != _callDepth.Value)
                             {
                                 return;
                             }
@@ -185,7 +191,7 @@ namespace PhotonToy
                     case DebuggerMode.StepOut:
                         {
                             // 没有恢复到期望深度, 继续执行
-                            if (_script.VM.CallStack.Count > _expectCallDepth.Value )
+                            if (_callDepth.Value > _expectCallDepth.Value)
                             {
                                 return;
                             }
@@ -197,12 +203,12 @@ namespace PhotonToy
                 _expectCallDepth.Value = -1;
                 _mode.Value = DebuggerMode.StepIn;
 
-                var al = new AssemblyLocation(vm.CurrFrame.CmdSet.ID, vm.CurrFrame.PC);
+                var vms = new VMState(vm);
                 SafeCall(delegate
                 {
                     if (OnBreak != null)
                     {
-                        OnBreak(al);
+                        OnBreak(vms);
                     }
 
                 });
@@ -210,16 +216,27 @@ namespace PhotonToy
                 _debugSignal.WaitOne();                
             });
 
+            _script.VM.SetHook(Photon.VM.DebugHook.Call, (vm) =>
+            {
+                _callDepth.Value++;
+            });
+
+            _script.VM.SetHook(Photon.VM.DebugHook.Return, (vm) =>
+            {
+                _callDepth.Value--;
+            });
+
+
             _script.Run();
-            
-            var existAL = new AssemblyLocation(_script.VM.CurrFrame.CmdSet.ID, _script.VM.CurrFrame.PC);
+
+            var vms2 = new VMState(_script.VM);
 
             SafeCall(delegate
             {
                 if (OnBreak != null)
                 {
 
-                    OnBreak(existAL);
+                    OnBreak(vms2);
                 }
 
             });

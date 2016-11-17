@@ -68,6 +68,7 @@ namespace PhotonToy
 
         internal static void ShowCode(this ListBox self, SourceFile file, Executable exec )
         {
+            _listIndexByLocation.Clear();
             self.Items.Clear();
 
             foreach (var cs in exec.CmdSet)

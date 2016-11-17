@@ -16,7 +16,7 @@ namespace Photon.VM
 
     public enum DebugHook
     {        
-        ExecInstruction,        // 每个指令运行前
+        AssemblyLine,           // 每个指令运行前
         SourceLine,             // 源码行执行前
         Call,                   // 函数执行前
         Return,                 // 返回函数后
@@ -279,7 +279,7 @@ namespace Photon.VM
 
 
                 // 每条指令执行前
-                CallHook(DebugHook.ExecInstruction);
+                CallHook(DebugHook.AssemblyLine);
 
 
                 ExecCode(cmd);

@@ -53,6 +53,11 @@ namespace Photon.VM
 
         public Value Pop( )
         {
+            if ( _count < 1)
+            {
+                return Value.Nil;
+            }
+
             var v = _values[_count - 1];
 
             // 调试功能, 让栈看起来清爽

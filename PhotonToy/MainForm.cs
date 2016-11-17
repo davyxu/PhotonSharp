@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Photon.Model;
 using Photon.VM;
-using System.Drawing;
 
 namespace PhotonToy
 {
@@ -22,6 +20,9 @@ namespace PhotonToy
             
             _debugBox.OnBreak += OnBreak;
             _debugBox.OnLoad += OnLoad;
+            _debugBox.OnError += e  => {
+                MessageBox.Show(e);
+            };
 
             if (args.Length > 0 )
             {
@@ -31,10 +32,31 @@ namespace PhotonToy
 
         }
 
-        void OnBreak( AssemblyLocation al )
+        void OnBreak( VMState vms )
         {
             
-            codeList.SetCurrLine(al);
+            codeList.SetCurrLine(vms.Location);
+
+            registerList.Items.Clear();
+            foreach( var str in vms.Register)
+            {
+                registerList.Items.Add(str);
+            }
+
+            dataStackList.Items.Clear();
+            foreach (var str in vms.DataStack)
+            {
+                dataStackList.Items.Add(str);
+            }
+
+            callStackList.Items.Clear();
+            foreach (var str in vms.CallStack)
+            {
+                callStackList.Items.Add(str);
+            }
+            
+
+
         }
 
         void OnLoad(VMachine vm)
@@ -99,6 +121,11 @@ namespace PhotonToy
         private void stepOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _debugBox.Operate(DebuggerMode.StepOut);            
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

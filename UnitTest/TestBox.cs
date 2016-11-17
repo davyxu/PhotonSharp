@@ -18,7 +18,7 @@ namespace UnitTest
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _exe = Compiler.Compile(new SourceFile(src));
+            _exe = Compiler.Compile(new SourceFile(src));            
 
             _exe.DebugPrint();
 

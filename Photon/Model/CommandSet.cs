@@ -52,7 +52,7 @@ namespace Photon
             get { return _cmds; }
         }
 
-        public Command Add(Command c)
+        internal Command Add(Command c)
         {
             _cmds.Add(c);
             return c;
@@ -63,16 +63,16 @@ namespace Photon
             return string.Format("{0} {1}", _name, _codePos);
         }
 
-        public int CurrGenIndex
+        internal int CurrGenIndex
         {
             get { return _cmds.Count; }
         }
 
         // 传入参数数量
-        public int InputValueCount { get; set; }
+        internal int InputValueCount { get; set; }
 
         // 返回值数量
-        public int OutputValueCount { get; set; }
+        internal int OutputValueCount { get; set; }
 
 
         public void DebugPrint(SourceFile file)

@@ -7,7 +7,7 @@ namespace Photon
     {
         List<Value> _cset = new List<Value>();
 
-        public int Add(Value inc)
+        internal int Add(Value inc)
         {
             int index = 0;
             foreach( var c in _cset )
@@ -26,16 +26,6 @@ namespace Photon
         public Value Get(int index)
         {
             return _cset[index];
-        }
-        public string ValueToString(int index)
-        {
-            var v = Get(index);
-            if (v == null)
-            {
-                return "null";
-            }
-
-            return v.ToString();
         }
 
         public void DebugPrint( )

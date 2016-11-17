@@ -59,7 +59,7 @@ namespace Photon
         Instruction[] _instruction = new Instruction[(int)Opcode.MAX];
 
         // 当前寄存器最小使用位置
-        public int RegBase
+        internal int RegBase
         {
             get { return _regBase; }
         }
@@ -170,7 +170,7 @@ namespace Photon
             _hook[(int)hook] = callback;
         }
 
-        public void EnterFrame( int funcIndex )
+        internal void EnterFrame( int funcIndex )
         {
             CallHook(DebugHook.Call);
 
@@ -201,7 +201,7 @@ namespace Photon
             _regBaseStack.Push(rr);
         }
 
-        public void LeaveFrame( )
+        internal void LeaveFrame()
         {
             if ( _currFrame.RestoreDataStack )
             {

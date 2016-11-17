@@ -8,15 +8,22 @@ namespace Photon
 
     public class Executable
     {
+        // 所有函数执行体
         List<CommandSet> _cmdset = new List<CommandSet>();
-        Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
+        
+        // 常量表
         ConstantSet _constSet = new ConstantSet();
+
+        // 外部代理函数
+        Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
 
         // 调试Symbol
         Chunk _chunk;
 
+        // 作用域
         Scope _globalScope;
 
+        // 源码
         SourceFile _sourcefile;
 
         public SourceFile Source
@@ -78,7 +85,7 @@ namespace Photon
             Debug.WriteLine("");
         }
 
-        public int AddCmdSet(CommandSet f)
+        internal int AddCmdSet(CommandSet f)
         {
             _cmdset.Add(f);
 

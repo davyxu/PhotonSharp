@@ -1,8 +1,9 @@
 ﻿
 
+using SharpLexer;
 namespace Photon
 {
-    [Instruction(Cmd = Opcode.LoadC)]
+    [Instruction(Cmd = Opcode.LOADC)]
     class CmdLoadC : Instruction
     {
         public override bool Execute( Command cmd)
@@ -15,11 +16,11 @@ namespace Photon
 
         public static string Print( VMachine vm, Command cmd )
         {
-            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, vm.Exec.Constants.Get(cmd.DataA));
+            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, cmd.Pkg.Constants.Get(cmd.DataA));
         }
     }
 
-    [Instruction(Cmd = Opcode.LoadR)]
+    [Instruction(Cmd = Opcode.LOADR)]
     class CmdLoadR : Instruction
     {
         public override bool Execute( Command cmd)
@@ -39,7 +40,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.SetR)]
+    [Instruction(Cmd = Opcode.SETR)]
     class CmdSetR : Instruction
     {
         public override bool Execute( Command cmd)
@@ -62,7 +63,7 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.LoadG)]
+    [Instruction(Cmd = Opcode.LOADG)]
     class CmdLoadG : Instruction
     {
         public override bool Execute( Command cmd)
@@ -79,7 +80,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.SetG)]
+    [Instruction(Cmd = Opcode.SETG)]
     class CmdSetG : Instruction
     {
         public override bool Execute( Command cmd)
@@ -97,8 +98,8 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Index)]
-    class CmdIndexR : Instruction
+    [Instruction(Cmd = Opcode.IDX)]
+    class CmdIndex : Instruction
     {
         public override bool Execute( Command cmd)
         {
@@ -117,14 +118,14 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Select)]
-    class CmdSelectR : Instruction
+    [Instruction(Cmd = Opcode.SEL)]
+    class CmdSelect : Instruction
     {
         public override bool Execute( Command cmd)
         {            
             var main = vm.DataStack.Pop().CastObject();
 
-            var key = vm.Exec.Constants.Get(cmd.DataA);
+            var key = cmd.Pkg.Constants.Get(cmd.DataA);
 
             var result = main.Select(key);
             vm.DataStack.Push(result);
@@ -135,12 +136,12 @@ namespace Photon
         public override string Print( Command cmd)
         {
 
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-1), vm.Exec.Constants.Get(cmd.DataA) );
+            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-1), cmd.Pkg.Constants.Get(cmd.DataA));
         }
     }
 
 
-    [Instruction(Cmd = Opcode.LinkU)]
+    [Instruction(Cmd = Opcode.LINKU)]
     class CmdLinkU : Instruction
     {
         public override bool Execute( Command cmd)
@@ -148,7 +149,7 @@ namespace Photon
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB + vm.RegBase;
 
-            var closure = vm.DataStack.Get() as ValueClosure;
+            var closure = vm.DataStack.Get().CastFunc() as ValueClosure;
 
             Slot slot = vm.Reg.GetSlot(regIndex);
             closure.AddUpValue(slot);
@@ -166,7 +167,7 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.LoadU)]
+    [Instruction(Cmd = Opcode.LOADU)]
     class CmdLoadU : Instruction
     {
         public override bool Execute( Command cmd)
@@ -185,7 +186,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.SetU)]
+    [Instruction(Cmd = Opcode.SETU)]
     class CmdSetU : Instruction
     {
         public override bool Execute( Command cmd)
@@ -201,6 +202,37 @@ namespace Photon
         public override string Print( Command cmd)
         {
             return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADF)]
+    class CmdLoadF : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
+
+            vm.DataStack.Push(new ValueFunc(proc, TokenPos.Invalid));
+
+            return true;
+        }
+
+        public static string Print(VMachine vm, Command cmd)
+        {
+            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, cmd.Pkg.Constants.Get(cmd.DataA));
+        }
+    }
+
+    [Instruction(Cmd = Opcode.CLOSURE)]
+    class CmdClosure : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
+
+            vm.DataStack.Push(new ValueClosure(proc, TokenPos.Invalid));
+
+            return true;
         }
     }
 }

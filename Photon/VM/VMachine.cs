@@ -244,7 +244,9 @@ namespace Photon
             _callStack.Clear();
             _dataStack.Clear();
 
-            EnterFrame(exe.GetPackage(0).GetCmdSet(0));
+            var cs = exe.GetProcedure(0, 0) as CommandSet;
+
+            EnterFrame(cs);
 
             int currSrcLine = 0;
 

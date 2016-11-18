@@ -4,24 +4,18 @@ namespace Photon
 {
     public class ValueFunc : Value
     {
-        protected int _index = 0;  // 相对于Executable的索引
+        protected Procedure _proc;
         protected TokenPos _pos;
 
-        public ValueFunc( int index, TokenPos pos )
+        internal ValueFunc( Procedure p, TokenPos pos )
         {
-            _index = index;
+            _proc = p;
             _pos = pos;
         }
 
-        public ValueFunc( ValueFunc f )
+        internal Procedure Proc
         {
-            _index = f._index;
-            _pos = f._pos;
-        }
-
-        public int Index
-        {
-            get { return _index;  }
+            get { return _proc; }
         }
 
         public override bool Equal(Value other)
@@ -30,13 +24,13 @@ namespace Photon
             if (otherT == null)
                 return false;
 
-            return otherT._index == _index;
+            return otherT._proc == _proc;
         }
 
 
         public override string ToString()
         {
-            return string.Format("{0} (func) {1}", _index.ToString(), _pos);
+            return string.Format("{0} (proc) {1}", _proc.ToString(), _pos);
         }
     }
 

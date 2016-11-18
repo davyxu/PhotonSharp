@@ -36,7 +36,7 @@ namespace Photon
 
             var ci = exe.Constants.Add( c );
 
-            cm.Add(new Command(Opcode.Select, ci ) );
+            cm.Add(new Command(Opcode.SEL, ci ) );
         }
     }
 }

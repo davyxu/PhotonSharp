@@ -34,7 +34,7 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.Add)]
+    [Instruction(Cmd = Opcode.ADD)]
     class CmdAdd : InstructionMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
@@ -45,7 +45,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Sub)]
+    [Instruction(Cmd = Opcode.SUB)]
     class CmdSub : InstructionMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
@@ -56,7 +56,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Mul)]
+    [Instruction(Cmd = Opcode.MUL)]
     class CmdMul : InstructionMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
@@ -67,7 +67,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Div)]
+    [Instruction(Cmd = Opcode.DIV)]
     class CmdDiv : InstructionMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)

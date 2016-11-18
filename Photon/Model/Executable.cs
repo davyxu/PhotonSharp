@@ -9,13 +9,10 @@ namespace Photon
     public class Executable
     {
         // 第一次pass无法搞定的node
-        List<Node> _unsolvedNode = new List<Node>();
+        internal List<Node> _secondPassNode = new List<Node>();
 
         List<Package> _packages = new List<Package>();
-        
-        // 常量表
-        ConstantSet _constSet = new ConstantSet();
-
+       
         // 外部代理函数
         Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
 
@@ -34,11 +31,14 @@ namespace Photon
         }
 
 
-        public ConstantSet Constants
+        internal void ResolveNode( )
         {
-            get { return _constSet; }
+            foreach( var n in _secondPassNode )
+            {
+                n.Resolve();
+            }
+            
         }
-
 
         internal Executable( Chunk ast,Scope s, SourceFile src )
         {
@@ -72,8 +72,12 @@ namespace Photon
             _globalScope.DebugPrint("");
             Debug.WriteLine("");
 
-            // 常量表
-            _constSet.DebugPrint( );
+            foreach (var pkg in _packages)
+            {
+                // 汇编
+                pkg.Constants.DebugPrint();
+
+            }
 
             foreach( var pkg in _packages )
             {
@@ -100,13 +104,37 @@ namespace Photon
             return _packages[pkgid];
         }
 
-        internal CommandSet GetCmdSet( int packageID, int cmdSetID )
+        internal int PackageCount
+        {
+            get { return _packages.Count; }
+        }
+
+        internal Procedure GetProcedure( int packageID, int cmdSetID )
         {            
             var pkg = _packages[packageID];
             if (pkg == null)
                 return null;
 
-            return pkg.GetCmdSet(cmdSetID);
+            return pkg.GetProcedure(cmdSetID);
+        }
+
+        internal bool FindCmdSetInPackage(string name, out Procedure outP, out Package outPkg)
+        {
+            outP = null;
+            outPkg = null;
+
+            foreach( var pkg in _packages )
+            {
+                outP = pkg.FindProcedureByName(name);
+                if (outP != null)
+                {
+                    outPkg = pkg;
+                    return true;
+                }
+            }
+            
+
+            return false;
         }
 
         internal void AddDelegate( string name, ValueDelegate d )

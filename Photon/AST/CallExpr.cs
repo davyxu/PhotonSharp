@@ -42,11 +42,61 @@ namespace Photon
 
         internal override void Resolve()
         {
+            if (!ResolveFuncEntry(_belongPackage, _funcName, _callCmdToResolve))
+            {
+                throw new ParseException("unsolved function entry", LParen);
+            }            
+        }
+        static bool ResolveFuncEntry( Package pkg, string name, Command cmd )
+        {            
 
+            // 优先在本包找
+            var cs = pkg.FindProcedureByName(name) as CommandSet;
+            if (cs != null)
+            {
+                cmd.DataA = pkg.ID;
+                cmd.DataB = cs.ID;
+
+                return true;
+            }
+
+            Procedure outP;
+            Package outPkg;
+
+            if (pkg.Exe.FindCmdSetInPackage(name, out outP, out outPkg))
+            {
+                var outCS = outP as CommandSet;
+
+                cmd.DataA = outPkg.ID;
+                cmd.DataB = outCS.ID;
+
+                return true;
+            }
+
+            return false;
         }
 
         Command _callCmdToResolve;
-        string _funcName;        
+        string _funcName;
+        Package _belongPackage;
+
+
+        static Symbol FindFuncNameSymbol( Scope s, string name )
+        {
+            while( s != null)
+            {
+                var symbol = s.FindSymbol(name);
+                if (symbol != null)
+                {
+                    return symbol;
+                }
+
+                s = s.Outter;
+            }
+
+            return null;
+            
+        }
 
         void AnalyseFuncEntry(Package pkg, CommandSet cm)
         {            
@@ -54,7 +104,7 @@ namespace Photon
             var funcNameToken = Func as Ident;
             if ( funcNameToken != null )
             {
-                var funcNameSymbol = S.FindSymbol(funcNameToken.Name);
+                var funcNameSymbol = FindFuncNameSymbol(S, funcNameToken.Name);
                 if ( funcNameSymbol == null )
                 {
                     throw new ParseException("func name not found:" + funcNameToken.Name, LParen);
@@ -65,10 +115,27 @@ namespace Photon
                     case SymbolUsage.Delegate:
                     case SymbolUsage.Func:
                         {
+                            // 需要等下次pass时,才能确认symbol存在
+                            _belongPackage = pkg;
                             _funcName = funcNameSymbol.Name;
-                            _callCmdToResolve=cm.Add(new Command(Opcode.CallD, NeedBalanceDataStack)).SetCodePos(LParen);
+                            _callCmdToResolve=cm.Add(new Command(Opcode.LOADF,0,0 )).SetCodePos(LParen);
+
+                            if (!ResolveFuncEntry(_belongPackage, _funcName, _callCmdToResolve))
+                            {
+                                // 不是本package, 或者函数在本package后面定义, 延迟到下次pass进行解析
+                                pkg.Exe._secondPassNode.Add(this);
+                            }
+
+                            
                         }
                         break;
+                    case SymbolUsage.Variable:
+                    case SymbolUsage.Parameter:
+                        {
+                            // 动态调用, 放入变量
+                            Func.Compile(pkg, cm, false);
+                        }
+                        break;                    
                 }
             }
 
@@ -86,16 +153,6 @@ namespace Photon
                 //var funcName = sel.Selector;
             }
             
-        }
-
-        static Node GetOneChild(Node n)
-        {
-            foreach (var c in n.Child())
-            {
-                return c;
-            }
-
-            return null;
         }
 
         int NeedBalanceDataStack
@@ -120,10 +177,10 @@ namespace Photon
             AnalyseFuncEntry(pkg, cm);
 
             // 再放函数
-            Func.Compile(pkg, cm, false);
+            //Func.Compile(pkg, cm, false);
 
 
-            cm.Add(new Command(Opcode.Call, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
+            cm.Add(new Command(Opcode.CALLF, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
         }
     }
 }

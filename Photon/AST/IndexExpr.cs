@@ -46,7 +46,7 @@ namespace Photon
 
             Index.Compile(exe, cm, lhs);            
 
-            cm.Add(new Command(Opcode.Index ));
+            cm.Add(new Command(Opcode.IDX ));
         }
     }
 }

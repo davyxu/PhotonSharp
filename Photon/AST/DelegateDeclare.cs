@@ -37,13 +37,13 @@ namespace Photon
 
             pkg.Exe.AddDelegate(Name.Name, c);
 
-            cm.Add(new Command(Opcode.LoadC, ci))
-                .SetComment(c.ToString())
-                .SetCodePos(TypeInfo.FuncPos);
+            //cm.Add(new Command(Opcode.LOADC, ci))
+            //    .SetComment(c.ToString())
+            //    .SetCodePos(TypeInfo.FuncPos);
 
-            cm.Add(new Command(Opcode.SetR, Name.ScopeInfo.RegIndex))
-                .SetComment(Name.Name)
-                .SetCodePos(TypeInfo.FuncPos);
+            //cm.Add(new Command(Opcode.SETR, Name.ScopeInfo.RegIndex))
+            //    .SetComment(Name.Name)
+            //    .SetCodePos(TypeInfo.FuncPos);
         }
     }
 }

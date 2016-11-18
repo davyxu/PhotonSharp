@@ -1,8 +1,9 @@
 ﻿
 
+using SharpLexer;
 namespace Photon
 {
-    [Instruction(Cmd = Opcode.Jz)]
+    [Instruction(Cmd = Opcode.JZ)]
     class CmdJZ : Instruction
     {
         public override bool Execute( Command cmd)
@@ -26,7 +27,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Jmp)]
+    [Instruction(Cmd = Opcode.JMP)]
     class CmdJmp : Instruction
     {
         public override bool Execute( Command cmd)
@@ -42,91 +43,101 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Call)]
-    class CmdCall : Instruction
+    [Instruction(Cmd = Opcode.CALLD)]
+    class CmdCallD : Instruction
     {
-
-        void ExecFunction( Value )
-        public override bool Execute( Command cmd)
+        public override bool Execute(Command cmd)
         {
             var argCount = cmd.DataA;
 
             var obj = vm.DataStack.Pop();
 
-            var func = obj as ValueFunc;
-
-            if ( func != null )
-            {
-                var cmdSet = cmd.Pkg.GetCmdSet(func.Index);
-                // 更换当前上下文
-                vm.EnterFrame(cmdSet);
-
-                vm.CurrFrame.Closure = obj as ValueClosure;
-
-                // 调用结束时需要平衡栈
-                if (cmd.DataB != 0)
-                {
-                    vm.CurrFrame.RestoreDataStack = true;
-                }
-
-                // 将栈转为被调用函数的寄存器
-                for (int i = 0; i < argCount; i++)
-                {
-                    var arg = vm.DataStack.Get( -i - 1 );
-                    vm.Reg.Set(argCount - i - 1 + vm.RegBase, arg);
-                }
-
-                // 清空栈
-                vm.DataStack.PopMulti(argCount);
-
-                // 记录当前的数据栈位置
-                vm.CurrFrame.DataStackBase = vm.DataStack.Count;
-
-                
-
-                // 马上跳到下个执行域            
-                return false;
-            }
-
             var dg = obj as ValueDelegate;
-            if ( dg != null )
+
+            // 外部调用不进行栈调整
+            var stackBeforeCall = vm.DataStack.Count;
+
+            int retValueCount = 0;
+
+            if (dg.Entry != null)
             {
-               
-                // 外部调用不进行栈调整
-                var stackBeforeCall = vm.DataStack.Count;
-
-                int retValueCount = 0;
-
-                if (dg.Entry != null )
-                {
-                    retValueCount = dg.Entry(vm);
-                }
-                
-
-                // 调用结束时需要平衡栈( 返回值没有被用到 )
-                if (cmd.DataB != 0 )
-                {
-                    // 调用前(包含参数+ delegate)
-                    vm.DataStack.Count = stackBeforeCall - argCount;
-                }
-                else
-                {
-                    vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
-                }
-
-                return true;
+                retValueCount = dg.Entry(vm);
             }
 
-            throw new RuntimeExcetion("expect function or delegate");
+            // 调用结束时需要平衡栈( 返回值没有被用到 )
+            if (cmd.DataB != 0)
+            {
+                // 调用前(包含参数+ delegate)
+                vm.DataStack.Count = stackBeforeCall - argCount;
+            }
+            else
+            {
+                vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
+            }
+
+            return true;
         }
 
 
-        public override string Print( Command cmd)
+        public override string Print(Command cmd)
         {
-            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA,  vm.DataStack.Get( ), cmd.DataB );
+            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA, vm.DataStack.Get(), cmd.DataB);
         }
     }
-    [Instruction(Cmd = Opcode.Ret)]
+
+
+    [Instruction(Cmd = Opcode.CALLF)]
+    class CmdCallF : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var argCount = cmd.DataA;
+
+            var obj = vm.DataStack.Pop();
+
+            var func = obj as ValueFunc;            
+
+            var cmdSet = func.Proc as CommandSet;
+
+            // 更换当前上下文
+            vm.EnterFrame(cmdSet);
+
+            vm.CurrFrame.Closure = obj as ValueClosure;
+
+            // 调用结束时需要平衡栈
+            if (cmd.DataB != 0)
+            {
+                vm.CurrFrame.RestoreDataStack = true;
+            }
+
+            // 将栈转为被调用函数的寄存器
+            for (int i = 0; i < argCount; i++)
+            {
+                var arg = vm.DataStack.Get(-i - 1);
+                vm.Reg.Set(argCount - i - 1 + vm.RegBase, arg);
+            }
+
+            // 清空栈
+            vm.DataStack.PopMulti(argCount);
+
+            // 记录当前的数据栈位置
+            vm.CurrFrame.DataStackBase = vm.DataStack.Count;
+
+
+
+            // 马上跳到下个执行域            
+            return false;
+        }
+
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA, vm.DataStack.Get(), cmd.DataB);
+        }
+    }
+
+
+    [Instruction(Cmd = Opcode.RET)]
     class CmdRet : Instruction
     {
         public override bool Execute( Command cmd)
@@ -137,7 +148,7 @@ namespace Photon
         }
     }
   
-    [Instruction(Cmd = Opcode.Exit)]
+    [Instruction(Cmd = Opcode.EXIT)]
     class CmdExit : Instruction
     {
         public override bool Execute( Command cmd)
@@ -148,16 +159,5 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.Closure)]
-    class CmdClosure : Instruction
-    {
-        public override bool Execute( Command cmd)
-        {
-            var f = vm.Exec.Constants.Get(cmd.DataA).CastFunc();
 
-            vm.DataStack.Push(new ValueClosure(f));
-
-            return true;
-        }
-    }
 }

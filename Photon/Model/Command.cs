@@ -16,6 +16,12 @@ namespace Photon
         string _comment;
 
         TokenPos _pos;
+
+        internal int ID
+        {
+            get;
+            set;
+        }
         
         internal Package Pkg
         {

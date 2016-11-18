@@ -43,16 +43,16 @@ namespace Photon
         {
             Condition.Compile(exe, cm, false);            
 
-            var jnzCmd = cm.Add(new Command(Opcode.Jz, 0))
+            var jnzCmd = cm.Add(new Command(Opcode.JZ, 0))
                 .SetCodePos(IfPos);
 
             Body.Compile(exe, cm, false);            
 
-            var jmpCmd = cm.Add(new Command(Opcode.Jmp, 0))
+            var jmpCmd = cm.Add(new Command(Opcode.JMP, 0))
                 .SetCodePos(IfPos);
 
             // false body跳入
-            jnzCmd.DataA = cm.CurrGenIndex;
+            jnzCmd.DataA = cm.CurrCmdID;
 
             if (ElseBody.Stmts.Count > 0)
             {
@@ -60,7 +60,7 @@ namespace Photon
             }
 
             // true body执行完毕跳出
-            jmpCmd.DataA = cm.CurrGenIndex;
+            jmpCmd.DataA = cm.CurrCmdID;
         }
 
     }

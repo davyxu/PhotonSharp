@@ -17,7 +17,7 @@ namespace Photon
         List<File> _file = new List<File>();
 
         // 所有函数执行体
-        List<CommandSet> _cmdset = new List<CommandSet>();
+        List<Procedure> _proc = new List<Procedure>();
 
         // 常量表
         ConstantSet _constSet = new ConstantSet();
@@ -57,27 +57,43 @@ namespace Photon
             return _name;
         }
 
-        internal int AddCmdSet(CommandSet f)
+        internal int AddProcedure(Procedure f)
         {
             f.Pkg = this;
 
-            _cmdset.Add(f);
+            _proc.Add(f);
 
-            f.ID = _cmdset.Count - 1;
+            f.ID = _proc.Count - 1;
 
             return f.ID;
         }
 
-        public CommandSet GetCmdSet(int index)
+        public Procedure GetProcedure(int index)
         {
-            return _cmdset[index];
+            return _proc[index];
+        }
+
+        internal Procedure FindProcedureByName(string name)
+        {
+            foreach (var cs in _proc)
+            {
+                if (cs.Name == name)
+                    return cs;
+            }
+
+            return null;
         }
 
         internal void DebugPrint( SourceFile source )
         {
-            foreach (var cs in _cmdset)
+            foreach (var p in _proc)
             {
-                cs.DebugPrint(source);
+                var cs = p as CommandSet;
+                if ( cs != null )
+                {
+                    cs.DebugPrint(source);
+                }
+                
             }
         }
     }

@@ -4,33 +4,11 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    public class CommandSet
+    public class Procedure
     {
-        List<Command> _cmds = new List<Command>();
-
         int _id;
 
         string _name;
-
-        int _regCount;
-
-        bool _isGlobal;
-
-        TokenPos _codePos;
-
-        internal Package Pkg
-        {
-            get;
-            set;
-        }
-
-        public CommandSet( string name, TokenPos codepos, int regCount, bool isGlobal)
-        {
-            _name = name;
-            _regCount = regCount;
-            _isGlobal = isGlobal;
-            _codePos = codepos;            
-        }
 
         public int ID
         {
@@ -38,14 +16,56 @@ namespace Photon
             internal set { _id = value; }
         }
 
-        public bool IsGlobal
+        internal Package Pkg
         {
-            get { return _isGlobal; }
+            get;
+            set;
         }
+
 
         public string Name
         {
-            get { return _name;  }
+            get { return _name; }
+        }
+
+        internal Procedure( string name )
+        {
+            _name = name;
+        }
+    }
+
+
+    class Delegate : Procedure
+    {
+        internal Delegate( string name )
+            : base( name )
+        {
+
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}", Name);
+        }
+    }
+
+
+    public class CommandSet : Procedure
+    {
+        List<Command> _cmds = new List<Command>();
+
+        int _regCount;
+
+        bool _isGlobal;
+
+        TokenPos _codePos;
+
+        internal CommandSet(string name, TokenPos codepos, int regCount, bool isGlobal)
+            : base(name)
+        {            
+            _regCount = regCount;
+            _isGlobal = isGlobal;
+            _codePos = codepos;            
         }
 
         public int RegCount
@@ -61,16 +81,17 @@ namespace Photon
         internal Command Add(Command c)
         {
             c.Pkg = Pkg;
+            c.ID = CurrCmdID;
             _cmds.Add(c);
             return c;
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", _name, _codePos);
+            return string.Format("{0} {1}", Name, _codePos);
         }
 
-        internal int CurrGenIndex
+        internal int CurrCmdID
         {
             get { return _cmds.Count; }
         }
@@ -84,7 +105,7 @@ namespace Photon
 
         public void DebugPrint(SourceFile file)
         {
-            Debug.WriteLine("[{0}] locals: {1}", _name, RegCount);
+            Debug.WriteLine("[{0}] locals: {1}", Name, RegCount);
 
             int index = 0;
 

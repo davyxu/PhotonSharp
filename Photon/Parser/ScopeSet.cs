@@ -48,7 +48,9 @@ namespace Photon
             data.DefinePos = pos;
             data.Usage = usage;
 
-            s.Insert(data);
+            
+
+            s.Insert(data, (usage != SymbolUsage.Func && usage != SymbolUsage.Delegate));
 
             if ( n != null )
             {
@@ -87,7 +89,9 @@ namespace Photon
                 }
             }
 
-            Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );
+            // 这里不再检查symbol是否存在, 而是放到AST里去
+            // 这里检查将阻碍颠倒顺序函数定义
+            //Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );
 
         }
     }

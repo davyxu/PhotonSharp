@@ -48,17 +48,22 @@ namespace Photon
 
             if (lhs)
             {
+                if( ScopeInfo == null )
+                {
+                    throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
+                }
+
                 if (ScopeInfo.IsGlobal)
                 {
-                    cmd = cm.Add(new Command(Opcode.SetG, ScopeInfo.RegIndex));
+                    cmd = cm.Add(new Command(Opcode.SETG, ScopeInfo.RegIndex));
                 }
                 else if ( UpValue )
                 {
-                    cmd = cm.Add(new Command(Opcode.SetU, ScopeInfo.RegIndex));
+                    cmd = cm.Add(new Command(Opcode.SETU, ScopeInfo.RegIndex));
                 }
                 else
                 {
-                    cmd = cm.Add(new Command(Opcode.SetR, ScopeInfo.RegIndex));
+                    cmd = cm.Add(new Command(Opcode.SETR, ScopeInfo.RegIndex));
                 }
                 
             }
@@ -72,7 +77,7 @@ namespace Photon
 
                     var ci = pkg.Constants.Add( c );
 
-                    cmd = cm.Add(new Command(Opcode.LoadC, ci));
+                    cmd = cm.Add(new Command(Opcode.LOADC, ci));
                 }
                 else
                 {
@@ -80,15 +85,15 @@ namespace Photon
 
                     if (ScopeInfo.IsGlobal)
                     {
-                        cmd = cm.Add(new Command(Opcode.LoadG, ScopeInfo.RegIndex));
+                        cmd = cm.Add(new Command(Opcode.LOADG, ScopeInfo.RegIndex));
                     }
                     else if ( UpValue )
                     {
-                        cmd = cm.Add(new Command(Opcode.LoadU, ScopeInfo.RegIndex));
+                        cmd = cm.Add(new Command(Opcode.LOADU, ScopeInfo.RegIndex));
                     }
                     else
                     {
-                        cmd = cm.Add(new Command(Opcode.LoadR, ScopeInfo.RegIndex));
+                        cmd = cm.Add(new Command(Opcode.LOADR, ScopeInfo.RegIndex));
                     }
                 }
             }

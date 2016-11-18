@@ -38,13 +38,13 @@ namespace Photon
             switch (tk)
             {
                 case TokenType.Add:
-                    return Opcode.Add;
+                    return Opcode.ADD;
                 case TokenType.Mul:
-                    return Opcode.Mul;                    
+                    return Opcode.MUL;                    
                 case TokenType.Sub:
-                    return Opcode.Sub;                    
+                    return Opcode.SUB;                    
                 case TokenType.Div:
-                    return Opcode.Div;                    
+                    return Opcode.DIV;                    
                 case TokenType.GreatThan:
                     return Opcode.GT;                    
                 case TokenType.GreatEqual:
@@ -59,7 +59,7 @@ namespace Photon
                     return Opcode.NE;                    
             }
 
-            return Opcode.Nop;
+            return Opcode.NOP;
         }
 
         internal override void Compile(Package exe, CommandSet cm, bool lhs)

@@ -19,19 +19,27 @@ namespace Photon
 
             var cmdSet = new CommandSet("global", TokenPos.Init, parser.GlobalScope.CalcUsedReg(), true);
 
-            pkg.AddCmdSet(cmdSet);
+            pkg.AddProcedure(cmdSet);
 
             // 遍历AST,生成代码
             chunk.Compile(pkg, cmdSet, false);
 
-            cmdSet.Add(new Command(Opcode.Exit));
+            cmdSet.Add(new Command(Opcode.EXIT));
 
-            exe.RegisterDelegate("array", (vm) =>
-            {
-                vm.DataStack.Push(new ValueArray());
 
-                return 1;
-            });
+
+
+            exe.ResolveNode();
+
+
+
+
+            //exe.RegisterDelegate("array", (vm) =>
+            //{
+            //    vm.DataStack.Push(new ValueArray());
+
+            //    return 1;
+            //});
 
 
             return exe;

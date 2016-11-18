@@ -1,10 +1,12 @@
-func mul( a, b ){
-    return a * b
-}
 
 func foo( a, b ){
 
     return a + mul( 7, 2 )
 }
+
+func mul( a, b ){
+    return a * b
+}
+
 
 var y = foo( 1, 2 )

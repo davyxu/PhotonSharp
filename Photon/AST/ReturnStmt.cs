@@ -36,7 +36,7 @@ namespace Photon
             // TODO 多返回值打到comment里
             Results[0].Compile(exe, cm, false);
 
-            cm.Add(new Command(Opcode.Ret)).SetCodePos(RetPos);
+            cm.Add(new Command(Opcode.RET)).SetCodePos(RetPos);
         }
     }
 }

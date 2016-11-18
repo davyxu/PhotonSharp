@@ -23,6 +23,8 @@ namespace Photon
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
+        List<Symbol> _regs = new List<Symbol>();
+
         List<Scope> _child = new List<Scope>();
 
         public Scope(Scope outter, ScopeType type, TokenPos pos )
@@ -65,9 +67,9 @@ namespace Photon
            return null;
         }
 
-        public int SymbolCount
+        public int RegCount
         {
-            get{return _symbolByName.Count; }
+            get{return _regs.Count; }
            
         }
 
@@ -92,13 +94,13 @@ namespace Photon
                 maxReg = Math.Max(maxReg, RawCalcUsedReg(c));
             }
 
-            return maxReg + s.SymbolCount;
+            return maxReg + s.RegCount;
         }
 
         // 计算symbol应该分配的寄存器base( 方向向上 )
         public int CalcRegBase()
         {
-            int regBase = this.SymbolCount;
+            int regBase = this.RegCount;
 
             Scope s = this;
 
@@ -114,7 +116,7 @@ namespace Photon
                     break;
                 }
 
-                regBase += s.SymbolCount;
+                regBase += s.RegCount;
             }
 
             return regBase;
@@ -136,12 +138,22 @@ namespace Photon
             }
         }
 
-        public void Insert( Symbol data )
+        public void Insert( Symbol s, bool allocReg )
         {
-            data.RegIndex = CalcRegBase();
-            data.Belong = this;
+            if (allocReg )
+            {
+                s.RegIndex = CalcRegBase();
 
-            _symbolByName.Add(data.Name, data);
+                _regs.Add(s);
+            }
+            else
+            {
+                s.RegIndex = -1;
+            }
+            
+            s.Belong = this;
+
+            _symbolByName.Add(s.Name, s);
         }
     }
 }

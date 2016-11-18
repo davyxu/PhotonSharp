@@ -27,7 +27,12 @@ namespace UnitTest
 
         public TestBox Run( )
         {
+            Debug.WriteLine(">>>>>>>>>Running");
+            _vm.ShowDebugInfo = true;
+
             _vm.Run(_exe);
+
+            _vm.Reg.DebugPrint();
 
             return this;
         }

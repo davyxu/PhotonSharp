@@ -33,7 +33,11 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} R{1} {2} {3}", Name, RegIndex, Usage, DefinePos);
+            if ( RegIndex == -1 )
+                return string.Format("'{0}' {1} {2}", Name, Usage, DefinePos);
+
+
+            return string.Format("'{0}' {1} {2} R{3}", Name, Usage, DefinePos, RegIndex);
         }
     }
 }

@@ -28,15 +28,15 @@ namespace Photon
             return "SelectorExpr";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
-            X.Compile(exe, cm, lhs );
+            X.Compile(param);
             
             var c = new ValueString(Selector.Name);
 
-            var ci = exe.Constants.Add( c );
+            var ci = param.Pkg.Constants.Add(c);
 
-            cm.Add(new Command(Opcode.SEL, ci ) );
+            param.CS.Add(new Command(Opcode.SEL, ci));
         }
     }
 }

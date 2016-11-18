@@ -40,13 +40,13 @@ namespace Photon
             return "IndexExpr";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
-            X.Compile(exe, cm, lhs);
+            X.Compile(param);
 
-            Index.Compile(exe, cm, lhs);            
+            Index.Compile(param);
 
-            cm.Add(new Command(Opcode.IDX ));
+            param.CS.Add(new Command(Opcode.IDX));
         }
     }
 }

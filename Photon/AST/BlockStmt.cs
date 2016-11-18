@@ -36,12 +36,12 @@ namespace Photon
             return "BlockStmt";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
 
             foreach (var b in Stmts)
             {
-                b.Compile(exe, cm, false);
+                b.Compile(param.SetLHS(false));
             }
         }
     }

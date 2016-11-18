@@ -30,20 +30,12 @@ namespace Photon
         }
 
 
-        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
             var c = new ValueDelegate( );
-            var ci = pkg.Constants.Add(c);
+            var ci = param.Pkg.Constants.Add(c);
 
-            pkg.Exe.AddDelegate(Name.Name, c);
-
-            //cm.Add(new Command(Opcode.LOADC, ci))
-            //    .SetComment(c.ToString())
-            //    .SetCodePos(TypeInfo.FuncPos);
-
-            //cm.Add(new Command(Opcode.SETR, Name.ScopeInfo.RegIndex))
-            //    .SetComment(Name.Name)
-            //    .SetCodePos(TypeInfo.FuncPos);
+            param.Pkg.Exe.AddDelegate(Name.Name, c);
         }
     }
 }

@@ -3,7 +3,37 @@ using System;
 using SharpLexer;
 
 namespace Photon
-{   
+{
+    internal struct CompileParameter
+    {
+        internal Package Pkg;
+        internal CommandSet CS;
+        internal bool LHS;
+
+        internal CompileParameter SetLHS(bool lhs)
+        {
+            LHS = lhs;
+            return this;
+        }
+
+        internal void NextPassToResolve(Node n)
+        {
+            CompileContext ctx;
+            ctx.node = n;
+            ctx.parameter = this;
+
+            Pkg.Exe._secondPass.Add(ctx);
+        }
+    }
+
+
+    struct CompileContext
+    {
+        internal Node node;
+        internal CompileParameter parameter;
+    }
+
+
     public class Compiler
     {
         public static Executable Compile(SourceFile file)
@@ -15,16 +45,18 @@ namespace Photon
             
             var exe = new Executable(chunk, parser.GlobalScope, file );
 
-            var pkg = exe.AddPackage("main");
+            var param = new CompileParameter();
 
-            var cmdSet = new CommandSet("global", TokenPos.Init, parser.GlobalScope.CalcUsedReg(), true);
+            param.Pkg = exe.AddPackage("main");
 
-            pkg.AddProcedure(cmdSet);
+            param.CS = new CommandSet("global", TokenPos.Init, parser.GlobalScope.CalcUsedReg(), true);
+
+            param.Pkg.AddProcedure(param.CS);               
 
             // 遍历AST,生成代码
-            chunk.Compile(pkg, cmdSet, false);
+            chunk.Compile(param);
 
-            cmdSet.Add(new Command(Opcode.EXIT));
+            param.CS.Add(new Command(Opcode.EXIT));
 
 
 

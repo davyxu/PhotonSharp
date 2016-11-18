@@ -30,15 +30,15 @@ namespace Photon
         }
 
 
-        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
             var newset = new CommandSet("closure", TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var proid = pkg.AddProcedure(newset);
+            var proid = param.Pkg.AddProcedure(newset);
 
-            cm.Add(new Command(Opcode.CLOSURE, pkg.ID, proid)).SetCodePos(TypeInfo.FuncPos);
+            param.CS.Add(new Command(Opcode.CLOSURE, param.Pkg.ID, proid)).SetCodePos(TypeInfo.FuncPos);
 
-            Body.Compile(pkg, newset, false);
+            Body.Compile(param.SetLHS(false));
 
             // 找这个闭包用过的
             var upvalues = new Dictionary<UpvaluePair, Ident>();
@@ -49,7 +49,7 @@ namespace Photon
             foreach( var pr in upvalues )
             {
                 // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                cm.Add(new Command(Opcode.LINKU, upIndex, pr.Value.ScopeInfo.RegIndex))
+                param.CS.Add(new Command(Opcode.LINKU, upIndex, pr.Value.ScopeInfo.RegIndex))
                     .SetComment( pr.Value.ToString() )
                     .SetCodePos(TypeInfo.FuncPos);
 

@@ -9,7 +9,7 @@ namespace Photon
     public class Executable
     {
         // 第一次pass无法搞定的node
-        internal List<Node> _secondPassNode = new List<Node>();
+        internal List<CompileContext> _secondPass = new List<CompileContext>();
 
         List<Package> _packages = new List<Package>();
        
@@ -31,11 +31,11 @@ namespace Photon
         }
 
 
-        internal void ResolveNode( )
+        internal void ResolveNode()
         {
-            foreach( var n in _secondPassNode )
+            foreach( var ctx in _secondPass )
             {
-                n.Resolve();
+                ctx.node.Resolve(ctx.parameter);
             }
             
         }

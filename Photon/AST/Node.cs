@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-
 using System;
 
 namespace Photon
 {
+
+
+
     public class Node
     {
         public Node Parent;
@@ -13,12 +15,12 @@ namespace Photon
             yield break;
         }
 
-        internal virtual void Compile(Package pkg, CommandSet cm, bool lhs)
+        internal virtual void Compile(CompileParameter param)
         {
             throw new Exception("'Compile' not implement: " + this.ToString());
         }
 
-        internal virtual void Resolve()
+        internal virtual void Resolve(CompileParameter param)
         {
 
         }

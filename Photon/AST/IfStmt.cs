@@ -39,28 +39,28 @@ namespace Photon
             yield return ElseBody;
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
-            Condition.Compile(exe, cm, false);            
+            Condition.Compile(param.SetLHS(false));
 
-            var jnzCmd = cm.Add(new Command(Opcode.JZ, 0))
+            var jnzCmd = param.CS.Add(new Command(Opcode.JZ, 0))
                 .SetCodePos(IfPos);
 
-            Body.Compile(exe, cm, false);            
+            Body.Compile(param.SetLHS(false));
 
-            var jmpCmd = cm.Add(new Command(Opcode.JMP, 0))
+            var jmpCmd = param.CS.Add(new Command(Opcode.JMP, 0))
                 .SetCodePos(IfPos);
 
             // false body跳入
-            jnzCmd.DataA = cm.CurrCmdID;
+            jnzCmd.DataA = param.CS.CurrCmdID;
 
             if (ElseBody.Stmts.Count > 0)
             {
-                ElseBody.Compile(exe, cm, false);                
+                ElseBody.Compile(param.SetLHS(false));                
             }
 
             // true body执行完毕跳出
-            jmpCmd.DataA = cm.CurrCmdID;
+            jmpCmd.DataA = param.CS.CurrCmdID;
         }
 
     }

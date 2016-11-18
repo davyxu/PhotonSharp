@@ -82,7 +82,7 @@ namespace Photon
         {
             c.Pkg = Pkg;
             c.ID = CurrCmdID;
-            _cmds.Add(c);
+            _cmds.Add(c);            
             return c;
         }
 

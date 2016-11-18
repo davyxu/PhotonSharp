@@ -12,7 +12,7 @@ namespace UnitTest
 
            // new TestBox().RunFile("Test.pho");
 
-            //new TestBox().RunFile("MultiCall.pho").TestLocalRegEqualNumber(0, 15);
+            new TestBox().RunFile("MultiCall.pho").TestLocalRegEqualNumber(0, 15);
 
             new TestBox().RunFile("Closure.pho").TestLocalRegEqualNumber(1, 12 );
 

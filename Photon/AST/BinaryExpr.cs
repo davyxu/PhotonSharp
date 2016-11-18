@@ -62,13 +62,13 @@ namespace Photon
             return Opcode.NOP;
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
-            X.Compile(exe, cm, lhs);
-            Y.Compile(exe, cm, lhs);
+            X.Compile(param);
+            Y.Compile(param);
 
 
-            cm.Add(new Command(Token2OpCode(Op)))
+            param.CS.Add(new Command(Token2OpCode(Op)))
                 .SetCodePos(OpPos);
            
         }

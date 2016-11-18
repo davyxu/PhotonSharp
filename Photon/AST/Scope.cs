@@ -67,6 +67,23 @@ namespace Photon
            return null;
         }
 
+        public Symbol FindSymbolOutter( string name )
+        {
+            Scope s = this;
+            while (s != null)
+            {
+                var symbol = s.FindSymbol(name);
+                if (symbol != null)
+                {
+                    return symbol;
+                }
+
+                s = s.Outter;
+            }
+
+            return null;
+        }
+
         public int RegCount
         {
             get{return _regs.Count; }

@@ -23,9 +23,9 @@ namespace Photon
             return "Chunk";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
-            Block.Compile(exe, cm, lhs);
+            Block.Compile(param);
         
         }
     }

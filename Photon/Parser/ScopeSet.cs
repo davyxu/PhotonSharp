@@ -72,6 +72,8 @@ namespace Photon
             if (ident == null)
                 return;
 
+            ident.BaseScope = _topScope;
+
             for (var s = _topScope; s != null; s = s.Outter)
             {
                 var data = s.FindSymbol(ident.Name);
@@ -89,6 +91,7 @@ namespace Photon
                 }
             }
 
+            int a = 1;
             // 这里不再检查symbol是否存在, 而是放到AST里去
             // 这里检查将阻碍颠倒顺序函数定义
             //Error(string.Format("undeclared symbol {0}", ident.Name), ident.DefinePos );

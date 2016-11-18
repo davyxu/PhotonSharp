@@ -27,12 +27,12 @@ namespace Photon
             return "ExprStmt";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
 
             foreach (var b in X)
             {
-                b.Compile(exe, cm, false);
+                b.Compile(param.SetLHS(false));
             }
         }
     }

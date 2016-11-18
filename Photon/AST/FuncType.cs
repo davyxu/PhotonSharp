@@ -41,23 +41,6 @@ namespace Photon
             return sb.ToString();
         }
 
-        //public int CalcRegBase()
-        //{
-        //    var s = ScopeInfo.Outter;
-        //    if ( s == null )
-        //    {
-        //        return 0;
-        //    }
-
-        //    if ( s.Type == ScopeType.Global )
-        //    {
-        //        return 0;
-        //    }
-
-        //    return s.SymbolCount;
-        //}
-
-
         public static int CalcReturnValueCount(IEnumerable<Node> nodeEnum)
         {
             foreach (var c in nodeEnum)

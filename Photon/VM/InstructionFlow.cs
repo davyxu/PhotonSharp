@@ -158,6 +158,14 @@ namespace Photon
             return false;
         }
     }
+    [Instruction(Cmd = Opcode.NOP)]
+    class CmdNop : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {            
 
+            return true;
+        }
+    }
 
 }

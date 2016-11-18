@@ -31,12 +31,12 @@ namespace Photon
             return "ReturnStmt";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
             // TODO 多返回值打到comment里
-            Results[0].Compile(exe, cm, false);
+            Results[0].Compile(param.SetLHS(false));
 
-            cm.Add(new Command(Opcode.RET)).SetCodePos(RetPos);
+            param.CS.Add(new Command(Opcode.RET)).SetCodePos(RetPos);
         }
     }
 }

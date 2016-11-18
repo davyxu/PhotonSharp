@@ -34,24 +34,15 @@ namespace Photon
         }
 
 
-        internal override void Compile(Package pkg, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
             var newset = new CommandSet(Name.Name, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var cmdSetID = pkg.AddProcedure(newset);
+            var cmdSetID = param.Pkg.AddProcedure(newset);
 
-            //var c = new ValueFunc(pkg.ID, cmdSetID, TypeInfo.FuncPos);
-            //var ci = pkg.Constants.Add(c);
+            param.CS = newset;
 
-            //cm.Add(new Command(Opcode.LOADC, ci))
-            //    .SetComment(c.ToString())
-            //    .SetCodePos(TypeInfo.FuncPos);
-
-            //cm.Add(new Command(Opcode.SETR, Name.ScopeInfo.RegIndex))
-            //    .SetComment(Name.Name)
-            //    .SetCodePos(TypeInfo.FuncPos);
-
-            Body.Compile(pkg, newset, false);
+            Body.Compile(param.SetLHS(false));
 
             newset.InputValueCount = TypeInfo.Params.Count;
 

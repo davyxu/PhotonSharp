@@ -49,16 +49,16 @@ namespace Photon
             return "AssignStmt";
         }
 
-        internal override void Compile(Package exe, CommandSet cm, bool lhs)
+        internal override void Compile(CompileParameter param)
         {
             foreach (var e in RHS)
-            {
-                e.Compile(exe, cm, false );
+            {             
+                e.Compile(param.SetLHS(false));
             }
 
             foreach (var e in LHS)
-            {
-                e.Compile(exe, cm, true );
+            {                
+                e.Compile(param.SetLHS(true));
             }
         }
     }

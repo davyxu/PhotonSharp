@@ -37,8 +37,8 @@ namespace Photon
             var proid = param.Pkg.AddProcedure(newset);
 
             param.CS.Add(new Command(Opcode.CLOSURE, param.Pkg.ID, proid)).SetCodePos(TypeInfo.FuncPos);
-
-            Body.Compile(param.SetLHS(false));
+            
+            Body.Compile(param.SetLHS(false).SetComdSet(newset));
 
             // 找这个闭包用过的
             var upvalues = new Dictionary<UpvaluePair, Ident>();

@@ -77,13 +77,18 @@ namespace Photon
             _usedSlot = 0;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} used:{1}", _usage, _usedSlot);
+        }
+
         public void DebugPrint()
         {            
             for (int i = 0; i < _usedSlot; i++)
             {
                 var v = _values[i].Data;
 
-                Debug.WriteLine("R{0}: {1}", i, v.ToString());
+                Debug.WriteLine("{0}{1}: {2}", _usage, i, v.ToString());
             }
         }
     }

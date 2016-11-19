@@ -76,27 +76,37 @@ namespace Photon
 
         internal override void Resolve(CompileParameter param)
         {
-            if (ScopeInfo == null )
+            // 故地重游, 再次拨叫
+            if ( ScopeInfo == null )
             {
+                ScopeInfo = BaseScope.FindSymbolOutter(Name);
+            }
 
-            }
-            else
+            GenCode(param, 2);
+        }
+
+        internal override void Compile(CompileParameter param)
+        {
+            // 占位
+            _cmdGen = param.CS.Add(new Command(Opcode.NOP))
+                .SetComment(Name)
+                .SetCodePos(DefinePos);
+
+            GenCode(param, 1);
+
+            if ( _cmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
             {
-                if (!ResolveFuncEntry(param.Pkg, Name, _cmdGen))
-                {
-                    throw new ParseException("unsolved function entry", DefinePos);
-                }
+                throw new ParseException("code not resolve", DefinePos);
             }
-            
         }
 
 
-        internal override void Compile(CompileParameter param)
+        void GenCode(CompileParameter param, int pass)
         {            
-
             // 赋值
             if (param.LHS)
             {
+                // TODO 左值在下方被定义
                 if( ScopeInfo == null )
                 {
                     throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
@@ -104,36 +114,41 @@ namespace Photon
 
                 if (ScopeInfo.IsGlobal)
                 {
-                    _cmdGen = param.CS.Add(new Command(Opcode.SETG, ScopeInfo.RegIndex));
+                    _cmdGen.Op = Opcode.SETG;
+
+                    _cmdGen.DataA = param.Pkg.ID;
+                    _cmdGen.DataB = ScopeInfo.RegIndex;
                 }
                 else if ( UpValue )
                 {
-                    _cmdGen = param.CS.Add(new Command(Opcode.SETU, ScopeInfo.RegIndex));
+                    _cmdGen.Op = Opcode.SETU;
+
+                    
+                    _cmdGen.DataA = ScopeInfo.RegIndex;
                 }
                 else
                 {
-                    _cmdGen = param.CS.Add(new Command(Opcode.SETR, ScopeInfo.RegIndex));
+                    _cmdGen.Op = Opcode.SETR;
+
+                    _cmdGen.DataA = ScopeInfo.RegIndex;
                 }
+
+
                 
             }
             else
             {
                 // 取值
-
-
                 if ( ScopeInfo == null )
                 {
-                    _cmdGen = param.CS.Add(new Command(Opcode.NOP, 0, 0)).SetCodePos(DefinePos);
-
-                    param.NextPassToResolve(this);
-                    //throw new ParseException("Not Implement", DefinePos);
-                    // 将自己视为字符串( 在处理selector和index指令时, 将key视为字符串, 后面没有用到这段代码)
-
-                    //var c = new ValueString(_token.Value);
-
-                    //var ci = param.Pkg.Constants.Add(c);
-
-                    //_cmdGen = param.CS.Add(new Command(Opcode.LOADC, ci));
+                    if (pass == 1)
+                    {
+                        param.NextPassToResolve(this);
+                    }
+                    else
+                    {
+                        throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
+                    }
                 }
                 else
                 {
@@ -142,14 +157,22 @@ namespace Photon
                         case SymbolUsage.Delegate:
                         case SymbolUsage.Func:
                             {
-
-                                _cmdGen = param.CS.Add(new Command(Opcode.LOADF, 0, 0)).SetCodePos(DefinePos);
+                                _cmdGen.Op = Opcode.LOADF;
 
                                 if (!ResolveFuncEntry(param.Pkg, Name, _cmdGen))
                                 {
                                     // 不是本package, 或者函数在本package后面定义, 延迟到下次pass进行解析
 
-                                    param.NextPassToResolve(this);                                    
+                                    if (pass == 1)
+                                    {
+                                        param.NextPassToResolve(this);
+                                    }
+                                    else
+                                    {
+                                        throw new ParseException(string.Format("unsolved function name {0}", Name), DefinePos);
+                                    }
+
+                                    
                                 }
 
                             }
@@ -161,16 +184,22 @@ namespace Photon
 
                                 if (ScopeInfo.IsGlobal)
                                 {
-                                    _cmdGen = param.CS.Add(new Command(Opcode.LOADG, ScopeInfo.RegIndex));
+                                    _cmdGen.Op = Opcode.LOADG;
+                                    _cmdGen.DataA = param.Pkg.ID;
+                                    _cmdGen.DataB = ScopeInfo.RegIndex;
                                 }
                                 else if (UpValue)
                                 {
-                                    _cmdGen = param.CS.Add(new Command(Opcode.LOADU, ScopeInfo.RegIndex));
+                                    _cmdGen.Op = Opcode.LOADU;
+                                    _cmdGen.DataA = ScopeInfo.RegIndex;
                                 }
                                 else
                                 {
-                                    _cmdGen = param.CS.Add(new Command(Opcode.LOADR, ScopeInfo.RegIndex));
+                                    _cmdGen.Op = Opcode.LOADR;
+                                    _cmdGen.DataA = ScopeInfo.RegIndex;
                                 }
+
+                                
                             }
                             break;
                         default:
@@ -180,9 +209,7 @@ namespace Photon
       
                 
             }
-
-
-            _cmdGen.SetComment(Name).SetCodePos(DefinePos);
+         
         }
     }
 }

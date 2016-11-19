@@ -8,15 +8,17 @@ namespace UnitTest
 
         static void TestCase()
         {
+            new TestBox().RunFile("ForLoop.pho").TestGlobalRegEqualNumber(0, 8);
+
             //new TestBox().RunFile("Package.pho");
 
-           // new TestBox().RunFile("Test.pho");
+            //new TestBox().RunFile("Test.pho");
 
-            new TestBox().RunFile("MultiCall.pho").TestLocalRegEqualNumber(0, 15);
+            new TestBox().RunFile("MultiCall.pho").TestGlobalRegEqualNumber(0, 15);
 
-            new TestBox().RunFile("Closure.pho").TestLocalRegEqualNumber(1, 12 );
+           // new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
 
-           // new TestBox().RunFile("Array.pho").TestLocalRegEqualNumber(2, 1);
+           // new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
 
 
             //{
@@ -31,7 +33,7 @@ namespace UnitTest
             //        return 1;
             //    });
 
-            //    tb.Run().TestStackClear().TestLocalRegEqualNumber(1, 3 );
+            //    tb.Run().TestStackClear().TestGlobalRegEqualNumber(1, 3 );
             //}
 
             
@@ -39,11 +41,11 @@ namespace UnitTest
             new TestBox().RunFile("Scope.pho");
 
             new TestBox().RunFile("DataStackBalance.pho");
-            new TestBox().RunFile("ForLoop.pho").TestLocalRegEqualNumber(0, 8);
-            new TestBox().RunFile("If.pho").TestLocalRegEqualNumber(0, 1).TestLocalRegEqualNumber(1, 5);
-            new TestBox().RunFile("MultiCall.pho").TestLocalRegEqualNumber(0, 15);
-            new TestBox().RunFile("SwapVar.pho").TestLocalRegEqualNumber(0, 2).TestLocalRegEqualNumber(1, 1);
-            new TestBox().RunFile("WhileLoop.pho").TestLocalRegEqualNumber(0, 3);
+            new TestBox().RunFile("ForLoop.pho").TestGlobalRegEqualNumber(0, 8);
+            new TestBox().RunFile("If.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 5);
+            new TestBox().RunFile("MultiCall.pho").TestGlobalRegEqualNumber(0, 15);
+            new TestBox().RunFile("SwapVar.pho").TestGlobalRegEqualNumber(0, 2).TestGlobalRegEqualNumber(1, 1);
+            new TestBox().RunFile("WhileLoop.pho").TestGlobalRegEqualNumber(0, 3);
         }
     }
 }

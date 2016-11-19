@@ -114,7 +114,7 @@ namespace Photon
             for (int i = 0; i < argCount; i++)
             {
                 var arg = vm.DataStack.Get(-i - 1);
-                vm.Reg.Set(argCount - i - 1 + vm.RegBase, arg);
+                vm.LocalReg.Set(argCount - i - 1 + vm.RegBase, arg);
             }
 
             // 清空栈

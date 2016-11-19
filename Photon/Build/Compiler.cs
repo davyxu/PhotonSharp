@@ -16,6 +16,12 @@ namespace Photon
             return this;
         }
 
+        internal CompileParameter SetComdSet( CommandSet cs )
+        {
+            CS = cs;
+            return this;
+        }
+
         internal void NextPassToResolve(Node n)
         {
             CompileContext ctx;
@@ -23,6 +29,17 @@ namespace Photon
             ctx.parameter = this;
 
             Pkg.Exe._secondPass.Add(ctx);
+        }
+
+        internal bool IsNodeInNextPass( Node n )
+        {
+            foreach( var c in Pkg.Exe._secondPass )
+            {
+                if (c.node == n)
+                    return true;
+            }
+
+            return false;
         }
     }
 
@@ -49,7 +66,7 @@ namespace Photon
 
             param.Pkg = exe.AddPackage("main");
 
-            param.CS = new CommandSet("global", TokenPos.Init, parser.GlobalScope.CalcUsedReg(), true);
+            param.CS = new CommandSet("global", TokenPos.Init, parser.GlobalScope.RegCount, true);
 
             param.Pkg.AddProcedure(param.CS);               
 

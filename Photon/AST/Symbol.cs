@@ -19,7 +19,7 @@ namespace Photon
         public Node Decl;
         public int RegIndex;
 
-        public Scope Belong;
+        public Scope RegBelong;
 
         public SymbolUsage Usage;
 
@@ -27,7 +27,10 @@ namespace Photon
         {
             get
             {
-                return Belong.Type == ScopeType.Global;
+                if (RegBelong == null)
+                    return false;
+
+                return RegBelong.Type == ScopeType.Global;
             }
         }
 
@@ -36,8 +39,9 @@ namespace Photon
             if ( RegIndex == -1 )
                 return string.Format("'{0}' {1} {2}", Name, Usage, DefinePos);
 
+            string RegType = IsGlobal ? "G":"R";
 
-            return string.Format("'{0}' {1} {2} R{3}", Name, Usage, DefinePos, RegIndex);
+            return string.Format("'{0}' {1} {2} {3}{4}", Name, Usage, DefinePos, RegType, RegIndex);
         }
     }
 }

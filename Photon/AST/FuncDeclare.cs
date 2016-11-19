@@ -38,11 +38,9 @@ namespace Photon
         {
             var newset = new CommandSet(Name.Name, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var cmdSetID = param.Pkg.AddProcedure(newset);
+            var cmdSetID = param.Pkg.AddProcedure(newset);            
 
-            param.CS = newset;
-
-            Body.Compile(param.SetLHS(false));
+            Body.Compile(param.SetLHS(false).SetComdSet(newset));
 
             newset.InputValueCount = TypeInfo.Params.Count;
 

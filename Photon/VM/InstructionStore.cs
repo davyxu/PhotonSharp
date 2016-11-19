@@ -26,7 +26,7 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
-            Value v = vm.Reg.Get(regIndex);
+            Value v = vm.LocalReg.Get(regIndex);
             vm.DataStack.Push(v);
 
             return true;  
@@ -36,7 +36,7 @@ namespace Photon
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.Reg.Get(regIndex));
+            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.LocalReg.Get(regIndex));
         }
     }
 
@@ -47,7 +47,7 @@ namespace Photon
         {
             int regIndex = cmd.DataA + vm.RegBase;
             var d = vm.DataStack.Pop();
-            vm.Reg.Set(regIndex, d);
+            vm.LocalReg.Set(regIndex, d);
 
             
 
@@ -68,7 +68,8 @@ namespace Photon
     {
         public override bool Execute( Command cmd)
         {
-            Value v = vm.Reg.Get(cmd.DataA);
+
+            Value v = vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB);
 
             vm.DataStack.Push(v);
 
@@ -76,7 +77,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.Reg.Get(cmd.DataA));
+            return string.Format("S <- G{0}     | G{1}: {2}", cmd.DataA, cmd.DataA, vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB));
         }
     }
 
@@ -84,17 +85,16 @@ namespace Photon
     class CmdSetG : Instruction
     {
         public override bool Execute( Command cmd)
-        {
-            var regIndex = cmd.DataA;
+        {            
             var d = vm.DataStack.Pop();
-            vm.Reg.Set(regIndex, d);
+            vm.GetRuntimePackage(cmd.DataA).Reg.Set(cmd.DataB, d);            
 
             return true;
         }
 
         public override string Print( Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
+            return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
         }
     }
 
@@ -151,7 +151,7 @@ namespace Photon
 
             var closure = vm.DataStack.Get().CastFunc() as ValueClosure;
 
-            Slot slot = vm.Reg.GetSlot(regIndex);
+            Slot slot = vm.LocalReg.GetSlot(regIndex);
             closure.AddUpValue(slot);
             
 
@@ -162,7 +162,7 @@ namespace Photon
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB;
 
-            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.Reg.Get(regIndex));
+            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.LocalReg.Get(regIndex));
         }
     }
 
@@ -182,7 +182,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.Reg.Get(cmd.DataA));
+            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalReg.Get(cmd.DataA));
         }
     }
 

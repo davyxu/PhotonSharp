@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -30,6 +29,9 @@ namespace Photon
 
         // 数据寄存器
         Register _localReg = new Register("R", 10);
+
+        // 包内存
+        List<RuntimePackage> _package = new List<RuntimePackage>();
 
         // 运行帧栈
         Stack<RuntimeFrame> _callStack = new Stack<RuntimeFrame>();
@@ -81,10 +83,12 @@ namespace Photon
             get { return _dataStack; }
         }
 
-        public Register Reg
+        public Register LocalReg
         {
             get { return _localReg; }
         }
+
+
 
         public Executable Exec
         {
@@ -114,6 +118,11 @@ namespace Photon
 
                 return _currFrame.CmdSet.Commands[pc];
             }
+        }
+
+        public RuntimePackage GetRuntimePackage(int pkgid)
+        {
+            return _package[pkgid];
         }
 
         public VMachine()
@@ -182,23 +191,26 @@ namespace Photon
             }
 
             _currFrame = newFrame;
-
-            // globa不用local寄存器
-
-            // 第一层的reg是0, 不记录
-            if (_regBaseStack.Count > 0)
+            
+            if ( !_currFrame.CmdSet.IsGlobal)
             {
-                _regBase = _regBaseStack.Peek().Max;
+                // 第一层的reg是0, 不记录
+                if (_regBaseStack.Count > 0)
+                {
+                    _regBase = _regBaseStack.Peek().Max;
+                }
+
+                RegRange rr;
+                rr.Min = _regBase;
+                rr.Max = _regBase + newFrame.CmdSet.RegCount;
+
+                _localReg.SetUsedCount(rr.Max);
+
+                // 留作下次调用叠加时使用
+                _regBaseStack.Push(rr);
             }
 
-            RegRange rr;
-            rr.Min = _regBase;
-            rr.Max = _regBase + newFrame.CmdSet.RegCount;
-
-            _localReg.SetUsedCount(rr.Max);
-
-            // 留作下次调用叠加时使用
-            _regBaseStack.Push(rr);
+           
         }
 
         internal void LeaveFrame()
@@ -207,15 +219,32 @@ namespace Photon
             {
                 _dataStack.Count = _currFrame.DataStackBase;
             }
+            
+            
+
+            if (!_currFrame.CmdSet.IsGlobal)
+            {
+                _regBaseStack.Pop();
+
+
+                if (_regBaseStack.Count > 0)
+                {
+                    var rr = _regBaseStack.Peek();
+                    _regBase = rr.Min;
+
+                    _localReg.SetUsedCount(rr.Max);
+                }
+                else
+                {
+                    _localReg.SetUsedCount(0);
+                }
+                
+
+                
+            }
 
             _currFrame = _callStack.Pop();
 
-            _regBaseStack.Pop();
-
-            var rr = _regBaseStack.Peek();
-            _regBase = rr.Min;
-
-            _localReg.SetUsedCount(rr.Max);
 
             CallHook(DebugHook.Return);
         }
@@ -238,13 +267,23 @@ namespace Photon
             _currFrame.PC = -1;
         }
 
+        
+
         public void Run(Executable exe)
         {
             _exe = exe;
             _callStack.Clear();
             _dataStack.Clear();
 
+            // 包全局寄存器初始化
+            for( int i = 0;i<exe.PackageCount ;i++)
+            {
+                var pkg = exe.GetPackage(i);                
+                _package.Add(new RuntimePackage(pkg.Name));
+            }
+
             var cs = exe.GetProcedure(0, 0) as CommandSet;
+            GetRuntimePackage(0).Reg.SetUsedCount(cs.RegCount);                 
 
             EnterFrame(cs);
 
@@ -260,7 +299,9 @@ namespace Photon
 
                 if (ShowDebugInfo)
                 {
+                    
                     Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, exe.Source.GetLine(cmd.CodePos.Line));
+                    Debug.WriteLine("---------------------");
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }
 
@@ -285,12 +326,15 @@ namespace Photon
                 // 打印执行完后的信息
                 if (ShowDebugInfo)
                 {
-                    // 寄存器信息
-                    Reg.DebugPrint();
 
+                    GetRuntimePackage(0).Reg.DebugPrint();
+
+                    // 寄存器信息
+                    LocalReg.DebugPrint();
+
+                    
                     // 数据栈信息
                     DataStack.DebugPrint();
-                    
 
                     Debug.WriteLine("");
                 }
@@ -299,10 +343,7 @@ namespace Photon
 
 
 
-            if (ShowDebugInfo)
-            {
-                DataStack.DebugPrint();
-            }
+
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace Photon
 {
+    // 外部函数和内建函数统称过程
     public class Procedure
     {
         int _id;
@@ -68,6 +69,11 @@ namespace Photon
             _codePos = codepos;            
         }
 
+        internal bool IsGlobal
+        {
+            get { return _isGlobal; }
+        }
+
         public int RegCount
         {
             get { return _regCount; }
@@ -80,8 +86,7 @@ namespace Photon
 
         internal Command Add(Command c)
         {
-            c.Pkg = Pkg;
-            c.ID = CurrCmdID;
+            c.Pkg = Pkg;            
             _cmds.Add(c);            
             return c;
         }

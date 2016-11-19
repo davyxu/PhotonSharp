@@ -8,6 +8,7 @@ namespace Photon
 
     public enum ScopeType
     {
+        None,
         Global,
         Function,
         Block,
@@ -17,7 +18,7 @@ namespace Photon
 
     public class Scope
     {
-        Scope _outter;
+        Scope _outter;        
         ScopeType _type;
         TokenPos _defpos;
 
@@ -154,23 +155,34 @@ namespace Photon
                 c.DebugPrint(indent + "\t");
             }
         }
+        
 
-        public void Insert( Symbol s, bool allocReg )
+        public void Insert( Symbol symbol, bool allocReg )
         {
             if (allocReg )
             {
-                s.RegIndex = CalcRegBase();
+                symbol.RegIndex = CalcRegBase();
 
-                _regs.Add(s);
+                Scope regBound = this;
+                while( regBound.Type != ScopeType.Global && 
+                     regBound.Type != ScopeType.Function )
+                {
+
+                    regBound = regBound.Outter;
+                }
+
+                symbol.RegBelong = regBound;
+
+                regBound._regs.Add(symbol);
             }
             else
             {
-                s.RegIndex = -1;
+                symbol.RegIndex = -1;
             }
             
-            s.Belong = this;
+            
 
-            _symbolByName.Add(s.Name, s);
+            _symbolByName.Add(symbol.Name, symbol);
         }
     }
 }

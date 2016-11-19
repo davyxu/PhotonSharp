@@ -15,9 +15,9 @@ namespace PhotonToy
             Location.CmdSetID = vm.CurrFrame.CmdSet.ID;
             Location.Pos = vm.CurrFrame.PC;
 
-            for (int i = 0; i < vm.Reg.Count; i++)
+            for (int i = 0; i < vm.LocalReg.Count; i++)
             {
-                Register.Add(vm.Reg.Get(i).ToString());
+                Register.Add(vm.LocalReg.Get(i).ToString());
             }
 
             for (int i = 0; i < vm.DataStack.Count; i++)

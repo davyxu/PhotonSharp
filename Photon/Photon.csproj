@@ -91,8 +91,9 @@
     <Compile Include="VM\InstructionStore.cs" />
     <Compile Include="VM\DataStack.cs" />
     <Compile Include="Value\Value.cs" />
-    <Compile Include="VM\Frame.cs" />
+    <Compile Include="VM\RuntimeFrame.cs" />
     <Compile Include="VM\Register.cs" />
+    <Compile Include="VM\RuntimePackage.cs" />
     <Compile Include="VM\VMachine.cs" />
   </ItemGroup>
   <ItemGroup>

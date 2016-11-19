@@ -27,13 +27,17 @@ namespace UnitTest
 
         public TestBox Run( )
         {
-            Debug.WriteLine(">>>>>>>>>Running");
+            Debug.WriteLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
             _vm.Run(_exe);
 
-            _vm.Reg.DebugPrint();
+            Debug.WriteLine(string.Format(">>>>>>>>>End {0}", _caseName));
+            _vm.DataStack.DebugPrint();            
 
+            _vm.LocalReg.DebugPrint();
+
+            _vm.GetRuntimePackage(0).Reg.DebugPrint();
             return this;
         }
 
@@ -76,7 +80,12 @@ namespace UnitTest
 
         public TestBox TestLocalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _vm.Reg);
+            return TestRegEqualNumber(index, num, _vm.LocalReg);
+        }
+
+        public TestBox TestGlobalRegEqualNumber(int index, float num)
+        {
+            return TestRegEqualNumber(index, num, _vm.GetRuntimePackage(0).Reg);
         }
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )

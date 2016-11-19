@@ -20,7 +20,7 @@ namespace Photon
 
         public void SetData(Value d)
         {
-            if (ID == 14)
+            if (ID == 1)
             {
                 int a = 1;
             }

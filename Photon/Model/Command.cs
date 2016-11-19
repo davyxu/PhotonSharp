@@ -8,20 +8,15 @@ namespace Photon
     {
         public Opcode Op;
 
-        public int DataA;
-        public int DataB;
+        const int MaxDataCount = 2;
 
-        int _dataCount;
+        int[] _data = new int[MaxDataCount];
+        bool[] _dataUsed = new bool[MaxDataCount];
+
 
         string _comment;
 
         TokenPos _pos;
-
-        internal int ID
-        {
-            get;
-            set;
-        }
         
         internal Package Pkg
         {
@@ -29,10 +24,55 @@ namespace Photon
             set;
         }
 
+        internal int DataA
+        {
+            get
+            {
+                return _data[0];
+            }
+
+            set
+            {
+                _data[0] = value;
+                _dataUsed[0] = true;
+            }
+        }
+
+        internal int DataB
+        {
+            get
+            {
+                return _data[1];
+            }
+
+            set
+            {
+                _data[1] = value;
+                _dataUsed[1] = true;
+            }
+        }
+
+        internal int UsedDataCount
+        {
+            get {
+
+                int ret = 0;
+                foreach( var used in _dataUsed )
+                {
+                    if ( used )
+                    {
+                        ret++;
+                    }
+                }
+
+                return ret;
+
+            }
+        }
+
         public Command(Opcode op)
         {
             Op = op;
-            _dataCount = 0;
         }
 
         public string Comment
@@ -48,16 +88,14 @@ namespace Photon
         public Command(Opcode op, int data)
         {
             Op = op;
-            DataA = data;
-            _dataCount = 1;
+            DataA = data;            
         }
 
         public Command(Opcode op, int dataA, int dataB)
         {
             Op = op;
             DataA = dataA;
-            DataB = dataB;
-            _dataCount = 2;
+            DataB = dataB;            
         }
 
         public Command SetComment( string text )
@@ -80,15 +118,17 @@ namespace Photon
 
             sb.Append(Op);
             sb.Append(" ");
-            
 
-            if (_dataCount >= 1 )
+            var usedCount = UsedDataCount;
+
+
+            if (usedCount >= 1)
             {
                 sb.Append(DataA);
                 sb.Append(" ");
             }
 
-            if (_dataCount >= 2)
+            if (usedCount >= 2)
             {
                 sb.Append(DataB);
                 sb.Append(" ");

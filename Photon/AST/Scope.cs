@@ -165,7 +165,8 @@ namespace Photon
 
                 Scope regBound = this;
                 while( regBound.Type != ScopeType.Global && 
-                     regBound.Type != ScopeType.Function )
+                     regBound.Type != ScopeType.Function &&
+                     regBound.Type != ScopeType.Closure)
                 {
 
                     regBound = regBound.Outter;

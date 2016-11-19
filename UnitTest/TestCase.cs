@@ -8,15 +8,11 @@ namespace UnitTest
 
         static void TestCase()
         {
-            new TestBox().RunFile("ForLoop.pho").TestGlobalRegEqualNumber(0, 8);
-
             //new TestBox().RunFile("Package.pho");
 
             //new TestBox().RunFile("Test.pho");
 
-            new TestBox().RunFile("MultiCall.pho").TestGlobalRegEqualNumber(0, 15);
-
-           // new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
+            new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
 
            // new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
 

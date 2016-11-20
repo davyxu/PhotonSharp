@@ -58,6 +58,17 @@ namespace Photon
 
             return v;
         }
+
+        public ValueClosure CastClosure()
+        {
+            var v = this as ValueClosure;
+            if (v == null)
+            {
+                throw new RuntimeExcetion("expect closure");
+            }
+
+            return v;
+        }
     }
 
 

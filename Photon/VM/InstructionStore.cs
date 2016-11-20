@@ -149,7 +149,7 @@ namespace Photon
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB + vm.RegBase;
 
-            var closure = vm.DataStack.Get().CastFunc() as ValueClosure;
+            var closure = vm.DataStack.Get().CastClosure();
 
             Slot slot = vm.LocalReg.GetSlot(regIndex);
             closure.AddUpValue(slot);

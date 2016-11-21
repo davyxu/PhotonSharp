@@ -9,9 +9,16 @@ namespace Photon
 
         string _src;
 
+        string _sourceName;
+
         public string Source
         {
             get { return _src; }
+        }
+
+        public string SourceName
+        {
+            get { return _sourceName; }
         }
 
         public List<string> Lines
@@ -19,9 +26,10 @@ namespace Photon
             get { return _sourceLine; }
         }
 
-        public SourceFile( string src )
+        public SourceFile( string src, string srcName )
         {
             _src = src;
+            _sourceName = srcName;
 
             var lines = src.Split('\r');            
             foreach (var line in lines)

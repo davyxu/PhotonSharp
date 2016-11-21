@@ -1,4 +1,5 @@
 ﻿using SharpLexer;
+using System.Text;
 
 namespace Photon
 {
@@ -35,10 +36,23 @@ namespace Photon
         {
             if (ScopeInfo != null)
             {
-                if ( UpValue )
-                    return string.Format("{0} R{1} (UpValue)", Name, ScopeInfo.RegIndex);   
+                var sb = new StringBuilder();
+
+                if (ScopeInfo.RegIndex != -1 )
+                {
+                    sb.Append(ScopeInfo);
+                }
                 else
-                    return string.Format("{0} R{1}", Name, ScopeInfo.RegIndex);   
+                {
+                    sb.Append(Name);
+                }
+
+                if ( UpValue )
+                {
+                    sb.Append(" (UpValue)");
+                }
+
+                return sb.ToString();
             }
 
             return Name;

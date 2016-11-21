@@ -1,55 +1,7 @@
-﻿using System.Diagnostics;
-using System;
-using SharpLexer;
+﻿using SharpLexer;
 
 namespace Photon
 {
-    internal struct CompileParameter
-    {
-        internal Package Pkg;
-        internal CommandSet CS;
-        internal bool LHS;
-
-        internal CompileParameter SetLHS(bool lhs)
-        {
-            LHS = lhs;
-            return this;
-        }
-
-        internal CompileParameter SetComdSet( CommandSet cs )
-        {
-            CS = cs;
-            return this;
-        }
-
-        internal void NextPassToResolve(Node n)
-        {
-            CompileContext ctx;
-            ctx.node = n;
-            ctx.parameter = this;
-
-            Pkg.Exe._secondPass.Add(ctx);
-        }
-
-        internal bool IsNodeInNextPass( Node n )
-        {
-            foreach( var c in Pkg.Exe._secondPass )
-            {
-                if (c.node == n)
-                    return true;
-            }
-
-            return false;
-        }
-    }
-
-
-    struct CompileContext
-    {
-        internal Node node;
-        internal CompileParameter parameter;
-    }
-
 
     public class Compiler
     {
@@ -58,7 +10,7 @@ namespace Photon
             var parser = new CodeParser();
 
             // 编译生成AST
-            var chunk = parser.Parse(file.Source);
+            var chunk = parser.Parse(file);
             
             var exe = new Executable(chunk, parser.GlobalScope, file );
 
@@ -75,13 +27,7 @@ namespace Photon
 
             param.CS.Add(new Command(Opcode.EXIT));
 
-
-
-
             exe.ResolveNode();
-
-
-
 
             //exe.RegisterDelegate("array", (vm) =>
             //{

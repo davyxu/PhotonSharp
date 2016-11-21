@@ -212,7 +212,7 @@ namespace Photon
         {
             var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
 
-            vm.DataStack.Push(new ValueFunc(proc, TokenPos.Invalid));
+            vm.DataStack.Push(new ValueFunc(proc));
 
             return true;
         }
@@ -230,7 +230,7 @@ namespace Photon
         {
             var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
 
-            vm.DataStack.Push(new ValueClosure(proc, TokenPos.Invalid));
+            vm.DataStack.Push(new ValueClosure(proc));
 
             return true;
         }

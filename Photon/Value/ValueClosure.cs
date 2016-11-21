@@ -7,8 +7,8 @@ namespace Photon
     {
         List<Slot> _upvalues = new List<Slot>();
 
-        internal ValueClosure(Procedure proc, TokenPos pos)
-            : base(proc, pos )
+        internal ValueClosure(Procedure proc)
+            : base(proc)
         {
             
         }
@@ -30,7 +30,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} (closure) {1}", _proc.ToString(), _pos);
+            return string.Format("{0} (closure)", _proc.ToString());
         }
     }
 

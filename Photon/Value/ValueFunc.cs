@@ -4,13 +4,11 @@ namespace Photon
 {
     public class ValueFunc : Value
     {
-        protected Procedure _proc;
-        protected TokenPos _pos;
+        protected Procedure _proc;        
 
-        internal ValueFunc( Procedure p, TokenPos pos )
+        internal ValueFunc( Procedure p)
         {
-            _proc = p;
-            _pos = pos;
+            _proc = p;            
         }
 
         internal Procedure Proc
@@ -30,7 +28,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} (proc) {1}", _proc.ToString(), _pos);
+            return string.Format("{0} (proc)", _proc.ToString());
         }
     }
 

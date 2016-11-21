@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using SharpLexer;
 
@@ -73,11 +71,11 @@ namespace Photon
             _lexer.AddMatcher(new UnknownMatcher(TokenType.Unknown));
         }
 
-        public Chunk Parse(string source)
+        public Chunk Parse(SourceFile file)
         {
             InitScope();
 
-            _lexer.Start(source);
+            _lexer.Start(file.Source, file.SourceName);
 
             Next();
 

@@ -1,14 +1,11 @@
-﻿
-
-using Photon;
-namespace UnitTest
+﻿namespace PhotonCompiler
 {
     partial class Program
     {
 
         static void TestCase()
         {
-            //new TestBox().RunFile("Package.pho");
+            new TestBox().RunFile("Package.pho");
 
             //new TestBox().RunFile("Test.pho");
 

@@ -1,13 +1,21 @@
-﻿using System;
+﻿using SharpLexer;
+using System;
 
 namespace Photon
 {
-    class ParserException : Exception
+    public class ParseException : Exception
     {
-        public ParserException( string msg )
-            : base( msg )
-        {
+        public TokenPos Pos;
 
+        public ParseException(string msg, TokenPos pos)
+            : base(msg)
+        {
+            Pos = pos;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} at line {1}", this.Message, Pos.Line);
         }
     }
 

@@ -69,7 +69,9 @@ namespace PhotonToy
             if (string.IsNullOrEmpty(filename))
                 return;
 
-            var file = new SourceFile(System.IO.File.ReadAllText(filename));            
+            var pureName = Path.GetFileName(filename);
+
+            var file = new SourceFile(System.IO.File.ReadAllText(filename), pureName);
 
             try
             {

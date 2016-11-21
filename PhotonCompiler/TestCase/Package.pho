@@ -1,0 +1,3 @@
+import "MyPackage"
+var c = MyPackage.AddValue( 1, 2 )
+

@@ -7,8 +7,8 @@
     <ProjectGuid>{0AB986D1-0226-417A-A87D-ECDF6C020282}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTest</RootNamespace>
-    <AssemblyName>UnitTest</AssemblyName>
+    <RootNamespace>PhotonCompiler</RootNamespace>
+    <AssemblyName>pho</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlagSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBox.cs" />
@@ -66,9 +67,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Photon\Photon.csproj">
+    <ProjectReference Include="..\Photon\PhotonLibrary.csproj">
       <Project>{129399c8-6ed0-47da-8829-5781d54c2a48}</Project>
-      <Name>Photon</Name>
+      <Name>PhotonLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

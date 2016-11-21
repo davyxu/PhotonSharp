@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public partial class CodeParser
+    public partial class Parser
     {
         int GetTokenPrecedence()
         {
@@ -154,8 +154,8 @@ namespace Photon
 
                                     }
                                     break;
-                                default:
-                                    Error("expect selector");
+                                default:                                    
+                                    throw new ParseException("expect selector", CurrTokenPos);
                                     break;
                             }
                         

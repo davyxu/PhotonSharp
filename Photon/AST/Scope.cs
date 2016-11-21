@@ -9,7 +9,7 @@ namespace Photon
     public enum ScopeType
     {
         None,
-        Global,
+        Package,
         Function,
         Block,
         For,
@@ -164,7 +164,7 @@ namespace Photon
                 symbol.RegIndex = CalcRegBase();
 
                 Scope regBound = this;
-                while( regBound.Type != ScopeType.Global && 
+                while( regBound.Type != ScopeType.Package && 
                      regBound.Type != ScopeType.Function &&
                      regBound.Type != ScopeType.Closure)
                 {

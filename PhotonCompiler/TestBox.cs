@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using System;
-using System.IO;
 using Photon;
 
-namespace UnitTest
+namespace PhotonCompiler
 {
     class TestBox
     {

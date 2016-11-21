@@ -1,81 +1,22 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using SharpLexer;
 
 namespace Photon
 {
-    public class ParseException : Exception
+    public partial class Parser
     {
-        public TokenPos Pos;
-
-        public ParseException(string msg, TokenPos pos)
-            : base(msg)
-        {
-            Pos = pos;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} at line {1}", this.Message, Pos.Line);
-        }
-    }
-
-    public partial class CodeParser
-    {
-        Lexer _lexer = new Lexer();
+        Lexer _lexer;
 
         Token _token;
 
-        public CodeParser()
-        {
-            _lexer.AddMatcher(new PositiveNumeralMatcher(TokenType.Number));
-            _lexer.AddMatcher(new StringMatcher(TokenType.QuotedString));
-
-            _lexer.AddMatcher(new WhitespaceMatcher(TokenType.Whitespace).Ignore());
-            _lexer.AddMatcher(new LineEndMatcher(TokenType.LineEnd).Ignore());
-            _lexer.AddMatcher(new CStyleCommentMatcher(TokenType.Comment).Ignore());
-
-            _lexer.AddMatcher(new SignMatcher(TokenType.Nil, "nil"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Equal, "=="));
-            _lexer.AddMatcher(new SignMatcher(TokenType.GreatEqual, ">="));
-            _lexer.AddMatcher(new SignMatcher(TokenType.LessEqual, "<="));
-            _lexer.AddMatcher(new SignMatcher(TokenType.NotEqual, "!="));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Assign, "="));
-            _lexer.AddMatcher(new SignMatcher(TokenType.GreatThan, ">"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.LessThan, "<"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Add, "+"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Sub, "-"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Mul, "*"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Div, "/"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.LBracket, "("));
-            _lexer.AddMatcher(new SignMatcher(TokenType.RBracket, ")"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Comma, ","));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Dot, "."));
-            _lexer.AddMatcher(new SignMatcher(TokenType.SemiColon, ";"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Func, "func"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Var, "var"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.LSqualBracket, "["));
-            _lexer.AddMatcher(new SignMatcher(TokenType.RSqualBracket, "]"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.LBrace, "{"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.RBrace, "}"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Return, "return"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.If, "if"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Else, "else"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.For, "for"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Foreach, "foreach"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.While, "while"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Break, "break"));
-            _lexer.AddMatcher(new SignMatcher(TokenType.Continue, "continue"));
-
-            _lexer.AddMatcher(new IdentifierMatcher(TokenType.Identifier));
-            _lexer.AddMatcher(new UnknownMatcher(TokenType.Unknown));
-        }
-
-        public Chunk Parse(SourceFile file)
+        public Parser( )
         {
             InitScope();
+        }
 
-            _lexer.Start(file.Source, file.SourceName);
+        public Chunk Import(SourceFile file)
+        {
+            _lexer = NewLexer(file);            
 
             Next();
 
@@ -92,8 +33,8 @@ namespace Photon
             _token = _lexer.Read();
 
             if (CurrTokenType == TokenType.Unknown)
-            {
-                Error("unknown token");
+            {                
+                throw new ParseException("unknown token", CurrTokenPos);
             }
         }
 
@@ -107,24 +48,23 @@ namespace Photon
             get { return _token.Pos; }
         }
 
-        void Expect(TokenType t)
+        string CurrTokenValue
+        {
+            get { return _token.Value; }
+        }
+
+        Token Expect(TokenType t)
         {
             if (CurrTokenType != t)
-            {
-                Error(string.Format("expect token: {0}", t.ToString()));
+            {                
+                throw new ParseException(string.Format("expect token: {0}", t.ToString()), CurrTokenPos);
             }
 
+            var tk = _token;
+
             Next();
-        }
 
-        void Error(string str)
-        {
-            throw new ParseException(str, _token.Pos);
-        }
-
-        void Error(string str, TokenPos pos)
-        {
-            throw new ParseException(str, pos);
+            return tk;
         }
 
 

@@ -6,19 +6,19 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    partial class CodeParser
+    partial class Parser
     {
         Scope _topScope;
         Scope _global;
 
-        public Scope GlobalScope
+        public Scope PackageScope
         {
             get { return _global; }
         }
 
         void InitScope( )
         {
-            OpenScope( ScopeType.Global, TokenPos.Invalid );
+            OpenScope( ScopeType.Package, TokenPos.Invalid );
             _global = _topScope;
         }
 
@@ -38,8 +38,8 @@ namespace Photon
         {
             var pre = s.FindSymbol(name);
             if ( pre != null )
-            {
-                Error(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
+            {                
+                throw new ParseException(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
             }
 
             Symbol data = new Symbol();

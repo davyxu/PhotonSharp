@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{0AB986D1-0226-417A-A87D-ECDF6C020282}"
-	ProjectSection(ProjectDependencies) = postProject
-		{129399C8-6ED0-47DA-8829-5781D54C2A48} = {129399C8-6ED0-47DA-8829-5781D54C2A48}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D4-4A66-B10E-459864FAED38}"
 	ProjectSection(SolutionItems) = preProject
 		Doc\BNF.txt = Doc\BNF.txt
@@ -18,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D
 		Doc\VM.md = Doc\VM.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon", "Photon\Photon.csproj", "{129399C8-6ED0-47DA-8829-5781D54C2A48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonLibrary", "Photon\PhotonLibrary.csproj", "{129399C8-6ED0-47DA-8829-5781D54C2A48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLexer", "..\SharpLexer\SharpLexer\SharpLexer.csproj", "{5138A406-5B76-4D5E-B889-257224E1FB2F}"
 EndProject
@@ -26,16 +21,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{AA290B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonToy", "PhotonToy\PhotonToy.csproj", "{B37BC0BC-90F7-401B-B485-17219FF88B52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonCompiler", "PhotonCompiler\PhotonCompiler.csproj", "{0AB986D1-0226-417A-A87D-ECDF6C020282}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Release|Any CPU.Build.0 = Release|Any CPU
 		{129399C8-6ED0-47DA-8829-5781D54C2A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{129399C8-6ED0-47DA-8829-5781D54C2A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{129399C8-6ED0-47DA-8829-5781D54C2A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,6 +41,10 @@ Global
 		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37BC0BC-90F7-401B-B485-17219FF88B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB986D1-0226-417A-A87D-ECDF6C020282}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,7 +17,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return Value;
+            return string.Format("'{0}' ({1}) {2}", Value, Type, Pos);
         }
 
         internal override void Compile(CompileParameter param)

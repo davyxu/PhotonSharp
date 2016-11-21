@@ -44,6 +44,7 @@ namespace Photon
         While,          // while
         Break,          // break
         Continue,       // continue
+        Import,       // import
     }
    
 }

@@ -39,28 +39,6 @@ namespace Photon
             return "CallExpr";
         }
 
-        void AnalyseFuncEntry(CompileParameter param)
-        {            
-            var sel = Func as SelectorExpr;
-            if ( sel != null)
-            {
-                var packageName = sel.X as Ident;
-
-                // 可能是a.b.c()的多个selector调用, 现在暂时不处理这种复杂情况
-                if ( packageName == null )
-                {
-                    throw new ParseException("invalid function entry", LParen);
-                }
-
-                //var funcName = sel.Selector;
-            }
-            else
-            {
-                Func.Compile(param.SetLHS(false));
-            }
-            
-        }
-
         int NeedBalanceDataStack
         {
             get {
@@ -80,7 +58,24 @@ namespace Photon
                 arg.Compile(param.SetLHS(false));                
             }
 
-            AnalyseFuncEntry(param);
+            var sel = Func as SelectorExpr;
+            if (sel != null)
+            {
+                var packageName = sel.X as Ident;
+
+                // 可能是a.b.c()的多个selector调用, 现在暂时不处理这种复杂情况
+                if (packageName == null)
+                {
+                    throw new ParseException("invalid function entry", LParen);
+                }
+
+                //var funcName = sel.Selector;
+            }
+            else
+            {
+                // 本包及动态闭包调用
+                Func.Compile(param.SetLHS(false));
+            }
 
             param.CS.Add(new Command(Opcode.CALLF, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
         }

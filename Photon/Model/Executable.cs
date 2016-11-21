@@ -16,8 +16,7 @@ namespace Photon
         // 外部代理函数
         Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
 
-        // 调试Symbol
-        Chunk _chunk;
+
 
         // 作用域
         Scope _globalScope;
@@ -40,9 +39,8 @@ namespace Photon
             
         }
 
-        internal Executable( Chunk ast,Scope s, SourceFile src )
-        {
-            _chunk = ast;
+        internal Executable( Scope s, SourceFile src )
+        {            
             _globalScope = s;
             _sourcefile = src;
         }
@@ -63,18 +61,25 @@ namespace Photon
             _sourcefile.DebugPrint();
 
             // 语法树
-            Debug.WriteLine("ast:");
-            PrintAST(_chunk);
-            Debug.WriteLine("");
+            foreach (var pkg in _packages)
+            {
+                Debug.WriteLine("ast: {0}", pkg.Name);
+                PrintAST(pkg.AST);
+                Debug.WriteLine("");
+
+                // 汇编
+                pkg.Constants.DebugPrint();
+
+            }
 
             // 符号
             Debug.WriteLine("symbols:");
             _globalScope.DebugPrint("");
             Debug.WriteLine("");
 
+            // 常量表
             foreach (var pkg in _packages)
-            {
-                // 汇编
+            {                
                 pkg.Constants.DebugPrint();
 
             }

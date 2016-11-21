@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public partial class CodeParser
+    public partial class Parser
     {
 
         List<Stmt> ParseStatmentList()
@@ -83,6 +83,8 @@ namespace Photon
                     return ParseForStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
+                case TokenType.Import:
+                    return ParseImportStmt();
             }
 
             return new BadStmt();
@@ -166,6 +168,21 @@ namespace Photon
             var body = ParseBlockStmt();
 
             return new WhileStmt(condition, body, defpos);
+        }
+
+        ImportStmt ParseImportStmt( )
+        {
+            var defpos = CurrTokenPos;
+            Expect(TokenType.Import);
+            
+            
+            var tk = Expect(TokenType.QuotedString);
+
+            var pkgName = new List<BasicLit>();
+            pkgName.Add(new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos));
+
+
+            return new ImportStmt(pkgName, defpos);
         }
     }
 }

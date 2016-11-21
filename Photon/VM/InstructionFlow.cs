@@ -95,7 +95,7 @@ namespace Photon
 
             var obj = vm.DataStack.Pop();
 
-            var func = obj as ValueFunc;            
+            var func = obj.CastFunc();            
 
             var cmdSet = func.Proc as CommandSet;
 

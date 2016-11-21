@@ -14,6 +14,9 @@ namespace Photon
 
         int _id;
 
+        // 调试Symbol
+        Chunk _chunk;
+
         List<File> _file = new List<File>();
 
         // 所有函数执行体
@@ -23,6 +26,12 @@ namespace Photon
         ConstantSet _constSet = new ConstantSet();
 
         Executable _parent;
+
+        internal Chunk AST
+        {
+            get { return _chunk; }
+            set { _chunk = value; }
+        }
 
         internal Executable Exe
         {

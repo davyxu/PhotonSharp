@@ -127,6 +127,8 @@ namespace Photon
             return new CallExpr(func, new List<Expr>(), _topScope, lpos, rpos2);
         }
 
+       
+
         Expr ParsePrimaryExpr(bool lhs)
         {
             var x = ParseOperand(lhs);
@@ -140,23 +142,44 @@ namespace Photon
                         // a.b
                     case TokenType.Dot:
                         {
+                            var dotpos = CurrTokenPos;
                             Next();
 
                             Resolve(x);
 
+
+
                             switch (CurrTokenType)
                             {
                                 case TokenType.Identifier:
-                                    {                                        
-                                        var ident = ParseIdent();
+                                    {
+    
 
-                                        x= new SelectorExpr(x, ident);
+                                        //Selector.Compile(param.SetLHS(false).SetPackage(pkg));
 
+
+                                        var sel = ParseIdent();
+                                        
+
+                                        var xident = x as Ident;
+                                        if (xident != null && xident.Symbol.Usage == SymbolUsage.Package)
+                                        {
+
+                                            var pkg = Exe.GetPackageByName(xident.Name);
+                                            if (pkg == null)
+                                            {
+                                                throw new ParseException("package not found: " + xident.Name, dotpos);
+                                            }
+
+
+                                            Resolve(sel, pkg.TopScope);
+                                        }
+
+                                        x = new SelectorExpr(x, sel, dotpos);
                                     }
                                     break;
                                 default:                                    
-                                    throw new ParseException("expect selector", CurrTokenPos);
-                                    break;
+                                   throw new ParseException("expect selector", CurrTokenPos);                         
                             }
                         
                         }

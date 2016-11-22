@@ -3,71 +3,75 @@ using System.IO;
 
 namespace Photon
 {
+    public enum ImportMode
+    {
+        Directory,
+        File,
+    }
+
 
     public class Compiler
     {
 
-        //public static void Import( Parser parser, string packageName )
-        //{
-        //    var param = new CompileParameter();
+        static void ImportFile(Package pkg, Parser parser, string filename)
+        {
+            var content = System.IO.File.ReadAllText(filename);
 
-        //    param.Pkg = exe.AddPackage(packageName);
+            SourceFile srcfile = new SourceFile(content, Path.GetFileName(filename));
 
-        //    param.CS = new CommandSet(packageName, TokenPos.Init, parser.PackageScope.RegCount, true);
+            pkg.AddSource(srcfile);
 
-        //    param.Pkg.AddProcedure(param.CS);
+            parser.Import(srcfile);            
+        }
 
-        //    var files = Directory.GetFiles(packageName, "*.pho", SearchOption.TopDirectoryOnly);
-
-        //    foreach( var filename in files )
-        //    {
-        //        var content = System.IO.File.ReadAllText(packageName);
-
-        //        SourceFile file = new SourceFile(content, packageName);
-
-        //        var chunk = parser.Import(file);
-
-        //        // 遍历AST,生成代码
-        //        chunk.Compile(param);
-        //    }
-        //}
-
-
-
-        public static Executable Compile(SourceFile file)
-        {            
+        public static void Import(Executable exe,string packageName,  string packageFileName, ImportMode mode)
+        {
             var parser = new Parser();
+            parser.Exe = exe;
 
-            var exe = new Executable(parser.PackageScope, file);
+            var pkg = exe.AddPackage(packageName, parser.PackageScope);
 
+            if ( mode == ImportMode.Directory)
+            {
+                var files = Directory.GetFiles(packageFileName, "*.pho", SearchOption.TopDirectoryOnly);
 
+                foreach (var filename in files)
+                {
+                    ImportFile(pkg, parser, filename);
+                }
+            }
+            else
+            {                
+                ImportFile(pkg, parser, packageFileName);
+            }
 
-            // 编译生成AST
-            var chunk = parser.Import(file);
-            
-           
+            var cs = new CommandSet(pkg.Name, TokenPos.Init, parser.PackageScope.RegCount, true);
+
+            pkg.AddProcedure(cs);
+
             var param = new CompileParameter();
 
-            param.Pkg = exe.AddPackage("main");
-            param.Pkg.AST = chunk;
-
-            param.CS = new CommandSet("main", TokenPos.Init, parser.PackageScope.RegCount, true);
-
-            param.Pkg.AddProcedure(param.CS);               
+            param.Pkg = pkg;
+            param.CS = cs;
 
             // 遍历AST,生成代码
-            chunk.Compile(param);
+            parser.Chunk.Compile(param);
 
-            param.CS.Add(new Command(Opcode.EXIT));
+            param.Pkg.AST = parser.Chunk;
+            
+            cs.Add(new Command(Opcode.EXIT));
 
-            exe.ResolveNode();
+            pkg.ResolveNode();
+        }
 
-            //exe.RegisterDelegate("array", (vm) =>
-            //{
-            //    vm.DataStack.Push(new ValueArray());
 
-            //    return 1;
-            //});
+
+        public static Executable Compile(string filename)
+        {            
+            var exe = new Executable( );
+
+            Import(exe, "main", filename, ImportMode.File);
+
 
 
             return exe;

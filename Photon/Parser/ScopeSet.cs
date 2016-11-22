@@ -1,8 +1,4 @@
-﻿
-
-using SharpLexer;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using SharpLexer;
 
 namespace Photon
 {
@@ -47,10 +43,9 @@ namespace Photon
             data.Decl = n;
             data.DefinePos = pos;
             data.Usage = usage;
-
             
 
-            s.Insert(data, (usage != SymbolUsage.Func && usage != SymbolUsage.Delegate));
+            s.Insert(data );
 
             if ( n != null )
             {
@@ -59,30 +54,35 @@ namespace Photon
                 if (ident == null)
                     return data;
 
-                ident.ScopeInfo = data;
+                ident.Symbol = data;
             }
 
             return data;
         }
 
-        void Resolve( Node x )
+        void Resolve( Node x, Scope beginScope = null )
         {
             var ident = x as Ident;
 
             if (ident == null)
                 return;
 
-            ident.BaseScope = _topScope;
+            if ( beginScope == null )
+            {
+                beginScope = _topScope;
+            }
 
-            for (var s = _topScope; s != null; s = s.Outter)
+            ident.BaseScope = beginScope;
+
+            for (var s = beginScope; s != null; s = s.Outter)
             {
                 var data = s.FindSymbol(ident.Name);
                 if ( data != null )
                 {
-                    ident.ScopeInfo = data;
+                    ident.Symbol = data;
 
                     // 从闭包开始搜索, 如果已经不是在本层找到, 一定是upvalue
-                    if ( _topScope.Type == ScopeType.Closure &&  s != _topScope )
+                    if (beginScope.Type == ScopeType.Closure && s != beginScope)
                     {
                         ident.UpValue = true;
                     }

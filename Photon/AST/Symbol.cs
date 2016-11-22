@@ -9,6 +9,7 @@ namespace Photon
         Func,
         Variable,
         Parameter,
+        Package,
     }
 
 
@@ -21,7 +22,7 @@ namespace Photon
 
         public Scope RegBelong;
 
-        public SymbolUsage Usage;
+        public SymbolUsage Usage;        
 
         public bool IsGlobal
         {

@@ -24,6 +24,12 @@ namespace Photon
             CS = cs;
             return this;
         }
+        internal CompileParameter SetPackage(Package pkg)
+        {
+            Pkg = pkg;
+            return this;
+        }
+
 
         internal void NextPassToResolve(Node n)
         {
@@ -31,12 +37,12 @@ namespace Photon
             ctx.node = n;
             ctx.parameter = this;
 
-            Pkg.Exe._secondPass.Add(ctx);
+            Pkg._secondPass.Add(ctx);
         }
 
         internal bool IsNodeInNextPass(Node n)
         {
-            foreach (var c in Pkg.Exe._secondPass)
+            foreach (var c in Pkg._secondPass)
             {
                 if (c.node == n)
                     return true;

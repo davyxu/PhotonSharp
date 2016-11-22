@@ -41,11 +41,9 @@ namespace PhotonCompiler
         static void Run( List<string> files, bool run, bool debugInfo )
         {
             if (files.Count == 0)
-                return;
+                return;            
 
-            var content = System.IO.File.ReadAllText(files[0]);
-
-            var exe = Compiler.Compile(new SourceFile(content, files[0]));
+            var exe = Compiler.Compile(files[0]);
 
             if ( debugInfo )
             {

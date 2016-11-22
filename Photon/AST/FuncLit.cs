@@ -49,7 +49,7 @@ namespace Photon
             foreach( var pr in upvalues )
             {
                 // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                param.CS.Add(new Command(Opcode.LINKU, upIndex, pr.Value.ScopeInfo.RegIndex))
+                param.CS.Add(new Command(Opcode.LINKU, upIndex, pr.Value.Symbol.RegIndex))
                     .SetComment( pr.Value.ToString() )
                     .SetCodePos(TypeInfo.FuncPos);
 
@@ -103,13 +103,13 @@ namespace Photon
         {
             var otherid = (UpvaluePair)obj;
 
-            return _id.ScopeInfo == otherid._id.ScopeInfo &&
+            return _id.Symbol == otherid._id.Symbol &&
                 _id.Name == otherid._id.Name;
         }
 
         public override int GetHashCode()
         {
-            return _id.ScopeInfo.GetHashCode() + _id.Name.GetHashCode();
+            return _id.Symbol.GetHashCode() + _id.Name.GetHashCode();
         }
     }
 }

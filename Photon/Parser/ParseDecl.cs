@@ -24,7 +24,7 @@ namespace Photon
 
                 var decl = new FuncDeclare(ident, body, new FuncType(funcPos, paramlist, scope) );
 
-                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Func);
+                ident.Symbol = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Func);
 
                 return decl;
             }
@@ -36,7 +36,7 @@ namespace Photon
                 // 函数前置声明
                 var decl = new DelegateDeclare(ident, new FuncType(funcPos, paramlist, scope) );
 
-                ident.ScopeInfo = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Delegate);
+                ident.Symbol = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Delegate);
 
                 return decl;
             }

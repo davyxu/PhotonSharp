@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using SharpLexer;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Photon
 {
     public class File
     {
-        SourceFile _source;
+        public SourceFile Source;
     }
 
 
@@ -25,7 +27,21 @@ namespace Photon
         // 常量表
         ConstantSet _constSet = new ConstantSet();
 
-        Executable _parent;
+        Executable _exe;
+
+        Scope _top;
+
+        // 第一次pass无法搞定的node
+        internal List<CompileContext> _secondPass = new List<CompileContext>();
+
+        internal void ResolveNode()
+        {
+            foreach (var ctx in _secondPass)
+            {
+                ctx.node.Resolve(ctx.parameter);
+            }
+
+        }
 
         internal Chunk AST
         {
@@ -35,7 +51,7 @@ namespace Photon
 
         internal Executable Exe
         {
-            get { return _parent; }
+            get { return _exe; }
         }
 
         internal ConstantSet Constants
@@ -54,16 +70,29 @@ namespace Photon
             get { return _name; }
         }
 
-        internal Package( int id, string name, Executable exe )
+        public Scope TopScope
         {
-            _parent = exe;
+            get { return _top; }
+        }
+
+        internal Package( int id, string name, Executable exe, Scope s )
+        {
+            _exe = exe;
             _name = name;
             _id = id;
+            _top = s;
         }
 
         public override string ToString()
         {
             return _name;
+        }
+
+        internal void AddSource( SourceFile source )
+        {
+            var f = new File();
+            f.Source = source;
+            _file.Add( f);
         }
 
         internal int AddProcedure(Procedure f)
@@ -92,17 +121,48 @@ namespace Photon
 
             return null;
         }
-
-        internal void DebugPrint( SourceFile source )
+        static void PrintAST(Node n, string indent = "")
         {
+            Debug.WriteLine(indent + n.ToString());
+
+            foreach (var c in n.Child())
+            {
+                PrintAST(c, indent + "\t");
+            }
+        }
+
+        internal string QuerySourceLine(TokenPos pos)
+        {
+            foreach( var f in _file)
+            {
+                if ( f.Source.Name == pos.SourceName )
+                {
+                    return f.Source.GetLine(pos.Line);
+                }
+            }
+
+            return string.Empty;
+        }
+
+
+        internal void DebugPrint(  )
+        {
+            Debug.WriteLine(string.Format("ast: {0}", Name));
+            PrintAST(AST);
+            Debug.WriteLine("");
+
+            // 常量
+            Constants.DebugPrint();
+
+            // 汇编
             foreach (var p in _proc)
             {
                 var cs = p as CommandSet;
-                if ( cs != null )
+                if (cs != null)
                 {
-                    cs.DebugPrint(source);
+                    cs.DebugPrint();
                 }
-                
+
             }
         }
     }

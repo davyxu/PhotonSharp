@@ -9,18 +9,31 @@ namespace Photon
 
         Token _token;
 
+        Chunk _chunk = new Chunk();
+
+        internal Executable Exe
+        {
+            get;
+            set;
+        }
+
+        public Chunk Chunk
+        {
+            get { return _chunk; }
+        }
+
         public Parser( )
         {
             InitScope();
         }
 
-        public Chunk Import(SourceFile file)
+        public void Import(SourceFile file)
         {
             _lexer = NewLexer(file);            
 
             Next();
 
-            return ParseChunk();
+            ParseChunk();
         }
 
         public override string ToString()

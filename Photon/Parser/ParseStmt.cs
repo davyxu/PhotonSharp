@@ -19,13 +19,13 @@ namespace Photon
             return list;
         }
 
-        Chunk ParseChunk()
+        void ParseChunk()
         {
             var lpos = CurrTokenPos;
             var list = ParseStatmentList();
             var rpos = CurrTokenPos;
 
-            return new Chunk( new BlockStmt(list, lpos, rpos) );
+            _chunk.Add(new BlockStmt(list, lpos, rpos));            
         }
 
         ReturnStmt ParseReturnStmt()
@@ -178,11 +178,19 @@ namespace Photon
             
             var tk = Expect(TokenType.QuotedString);
 
+            
+
             var pkgName = new List<BasicLit>();
             pkgName.Add(new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos));
 
+            var n =new ImportStmt(pkgName, defpos);
 
-            return new ImportStmt(pkgName, defpos);
+            Declare(n, _global, tk.Value, defpos, SymbolUsage.Package);
+
+
+            Compiler.Import(Exe, tk.Value, tk.Value, ImportMode.Directory);
+
+            return n;
         }
     }
 }

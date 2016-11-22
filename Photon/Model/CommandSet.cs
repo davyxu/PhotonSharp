@@ -108,7 +108,7 @@ namespace Photon
         internal int OutputValueCount { get; set; }
 
 
-        public void DebugPrint(SourceFile file)
+        public void DebugPrint( )
         {
             Debug.WriteLine("[{0}] locals: {1}", Name, RegCount);
 
@@ -130,7 +130,7 @@ namespace Photon
                     currLine = c.CodePos.Line;
 
                     // 显示源码
-                    Debug.WriteLine("{0}|{1}", currLine, file.GetLine(currLine));
+                    Debug.WriteLine("{0}|{1}", currLine, Pkg.QuerySourceLine(c.CodePos));
                 }
 
                 // 显示汇编

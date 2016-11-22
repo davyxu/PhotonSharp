@@ -157,9 +157,22 @@ namespace Photon
         }
         
 
-        public void Insert( Symbol symbol, bool allocReg )
+        static bool NeedAllocReg( SymbolUsage usage )
         {
-            if (allocReg )
+            switch( usage )
+            {
+                case SymbolUsage.Parameter:
+                case SymbolUsage.Variable:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public void Insert( Symbol symbol )
+        {
+
+            if (NeedAllocReg(symbol.Usage))
             {
                 symbol.RegIndex = CalcRegBase();
 

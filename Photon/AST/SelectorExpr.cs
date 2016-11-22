@@ -1,4 +1,5 @@
 ﻿
+using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon
@@ -6,12 +7,15 @@ namespace Photon
     // a.b   x=a  selector=b
     public class SelectorExpr : Expr
     {
-        public Ident Selector;
         public Expr X;
-        public SelectorExpr(Expr x, Ident i)
+        public Ident Selector;
+        public TokenPos DotPos;
+        
+        public SelectorExpr(Expr x, Ident sel, TokenPos pos)
         {
             X = x;
-            Selector = i;
+            Selector = sel;
+            DotPos = pos;
             BuildRelation();
 
         }
@@ -28,15 +32,45 @@ namespace Photon
             return "SelectorExpr";
         }
 
+
+
         internal override void Compile(CompileParameter param)
         {
-            X.Compile(param);
-            
-            var c = new ValueString(Selector.Name);
+            var xident = X as Ident;
+            if ( xident != null )
+            {
+                if ( xident.Symbol == null )
+                {
+                    throw new ParseException("undefined symbol: " + xident.Name, DotPos);
+                }
 
-            var ci = param.Pkg.Constants.Add(c);
+                if ( xident.Symbol.Usage == SymbolUsage.Package )
+                {
+                    var pkg = param.Pkg.Exe.GetPackageByName(xident.Name);
 
-            param.CS.Add(new Command(Opcode.SEL, ci));
+                    if (pkg == null)
+                    {
+                        throw new ParseException("package not found: " + xident.Name, DotPos);
+                    }
+
+                    // Ident直接出代码
+                    Selector.Compile(param.SetLHS(false).SetPackage(pkg));
+                }
+
+            }
+            else
+            {
+                // 动态表达式, 需要用指令解析
+                X.Compile(param);
+
+                var c = new ValueString(Selector.Name);
+
+                var ci = param.Pkg.Constants.Add(c);
+
+                param.CS.Add(new Command(Opcode.SEL, ci));
+            }
+
+           
         }
     }
 }

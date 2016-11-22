@@ -51,7 +51,7 @@ namespace Photon
             lex.AddMatcher(new IdentifierMatcher(TokenType.Identifier));
             lex.AddMatcher(new UnknownMatcher(TokenType.Unknown));
 
-            lex.Start(file.Source, file.SourceName);
+            lex.Start(file.Source, file.Name);
 
             return lex;
         }

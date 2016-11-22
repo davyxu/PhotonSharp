@@ -9,7 +9,7 @@ namespace Photon
     {
         Token _token;
 
-        internal Symbol ScopeInfo; // 这个为空, 说明未找到定义
+        internal Symbol Symbol; // 这个为空, 说明未找到定义
 
         internal Scope BaseScope;   // 所在的Scope
 
@@ -34,13 +34,13 @@ namespace Photon
 
         public override string ToString()
         {
-            if (ScopeInfo != null)
+            if (Symbol != null)
             {
                 var sb = new StringBuilder();
 
-                if (ScopeInfo.RegIndex != -1 )
+                if (Symbol.RegIndex != -1 )
                 {
-                    sb.Append(ScopeInfo);
+                    sb.Append(Symbol);
                 }
                 else
                 {
@@ -91,9 +91,9 @@ namespace Photon
         internal override void Resolve(CompileParameter param)
         {
             // 故地重游, 再次拨叫
-            if ( ScopeInfo == null )
+            if ( Symbol == null )
             {
-                ScopeInfo = BaseScope.FindSymbolOutter(Name);
+                Symbol = BaseScope.FindSymbolOutter(Name);
             }
 
             GenCode(param, 2);
@@ -121,39 +121,37 @@ namespace Photon
             if (param.LHS)
             {
                 // TODO 左值在下方被定义
-                if( ScopeInfo == null )
+                if( Symbol == null )
                 {
                     throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
                 }
 
-                if (ScopeInfo.IsGlobal)
+                if (Symbol.IsGlobal)
                 {
                     _cmdGen.Op = Opcode.SETG;
 
                     _cmdGen.DataA = param.Pkg.ID;
-                    _cmdGen.DataB = ScopeInfo.RegIndex;
+                    _cmdGen.DataB = Symbol.RegIndex;
                 }
                 else if ( UpValue )
                 {
                     _cmdGen.Op = Opcode.SETU;
 
                     
-                    _cmdGen.DataA = ScopeInfo.RegIndex;
+                    _cmdGen.DataA = Symbol.RegIndex;
                 }
                 else
                 {
                     _cmdGen.Op = Opcode.SETR;
 
-                    _cmdGen.DataA = ScopeInfo.RegIndex;
+                    _cmdGen.DataA = Symbol.RegIndex;
                 }
-
-
-                
+ 
             }
             else
             {
                 // 取值
-                if ( ScopeInfo == null )
+                if ( Symbol == null )
                 {
                     if (pass == 1)
                     {
@@ -166,7 +164,7 @@ namespace Photon
                 }
                 else
                 {
-                    switch (ScopeInfo.Usage)    
+                    switch (Symbol.Usage)    
                     {
                         case SymbolUsage.Delegate:
                         case SymbolUsage.Func:
@@ -196,21 +194,21 @@ namespace Photon
                             {
                                 // 将自己视为变量
 
-                                if (ScopeInfo.IsGlobal)
+                                if (Symbol.IsGlobal)
                                 {
                                     _cmdGen.Op = Opcode.LOADG;
                                     _cmdGen.DataA = param.Pkg.ID;
-                                    _cmdGen.DataB = ScopeInfo.RegIndex;
+                                    _cmdGen.DataB = Symbol.RegIndex;
                                 }
                                 else if (UpValue)
                                 {
                                     _cmdGen.Op = Opcode.LOADU;
-                                    _cmdGen.DataA = ScopeInfo.RegIndex;
+                                    _cmdGen.DataA = Symbol.RegIndex;
                                 }
                                 else
                                 {
                                     _cmdGen.Op = Opcode.LOADR;
-                                    _cmdGen.DataA = ScopeInfo.RegIndex;
+                                    _cmdGen.DataA = Symbol.RegIndex;
                                 }
 
                                 

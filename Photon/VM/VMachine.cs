@@ -300,7 +300,7 @@ namespace Photon
                 if (ShowDebugInfo)
                 {
                     
-                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, exe.Source.GetLine(cmd.CodePos.Line));
+                   // Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, exe.Source.GetLine(cmd.CodePos.Line));
                     Debug.WriteLine("---------------------");
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
                 }

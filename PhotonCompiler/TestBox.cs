@@ -17,7 +17,7 @@ namespace PhotonCompiler
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _exe = Compiler.Compile(new SourceFile(src, caseName));            
+            _exe = Compiler.Compile(src);            
 
             _exe.DebugPrint();            
 
@@ -47,10 +47,7 @@ namespace PhotonCompiler
 
         public TestBox CompileFile(string filename)
         {
-
-            var content = System.IO.File.ReadAllText(filename);
-
-            return Compile(filename, content);
+            return Compile(filename, filename);
         }
 
 

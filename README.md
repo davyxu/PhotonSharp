@@ -57,7 +57,8 @@
 		}
 	}
 
-
+# 调试器
+![调试器](ScreenShot/debugger.png)
 	
 # 备注
 

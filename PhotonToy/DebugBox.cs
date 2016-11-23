@@ -91,6 +91,7 @@ namespace PhotonToy
             }
 
             _vm = new VMachine();
+            _vm.ShowDebugInfo = true;
 
             _mode.Value = DebuggerMode.StepIn;
             _thread = new Thread(VMThread);

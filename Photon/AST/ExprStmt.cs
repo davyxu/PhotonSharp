@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Photon
 {
     // 单独的一句表达式(例如: 纯函数调用)
-    public class ExprStmt : Stmt
+    internal class ExprStmt : Stmt
     {
         public List<Expr> X;
         public ExprStmt(List<Expr> x)

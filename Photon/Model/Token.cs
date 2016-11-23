@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public enum TokenType
+    enum TokenType
     {
         EOF,
         Unknown,

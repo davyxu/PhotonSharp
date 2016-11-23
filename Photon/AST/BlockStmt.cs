@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class BlockStmt : Stmt
+    internal class BlockStmt : Stmt
     {
         public List<Stmt> Stmts = new List<Stmt>();
         public TokenPos LBracePos;

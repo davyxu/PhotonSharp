@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public class ValueString : Value
+    class ValueString : Value
     {
         string _str;
 
@@ -15,7 +15,7 @@ namespace Photon
             get { return _str; }
         }
 
-        public override bool Equal(Value other)
+        internal override bool Equal(Value other)
         {
             var otherT = other as ValueString;
             if (otherT == null)
@@ -24,9 +24,19 @@ namespace Photon
             return otherT._str == _str;
         }
 
+        public override string DebugString()
+        {
+            return string.Format("'{0}' (string)", _str);
+        }
+
         public override string ToString()
         {
-            return string.Format("'{0}' (string)", _str.ToString());
+            return _str;
+        }
+
+        public override ValueType GetValueType()
+        {
+            return ValueType.String;
         }
     }
 

@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    public class Register
+    public class Register : DataAccessor
     {
         Slot[] _values;
         int _usedSlot = 0;
@@ -16,7 +16,7 @@ namespace Photon
             return ++_slotIDGen;
         }
 
-        public Register( string usage, int maxReg )
+        internal Register( string usage, int maxReg )
         {
             _usage = usage;
             _values = new Slot[maxReg];
@@ -52,12 +52,12 @@ namespace Photon
             _usedSlot = count;
         }
 
-        public void Set( int index, Value v )
+        internal override void Set( int index, Value v )
         {            
             _values[index].SetData(v);
         }
 
-        public Value Get( int index )
+        internal override Value Get(int index)
         {
             return _values[index].Data;
         }
@@ -67,7 +67,7 @@ namespace Photon
             return _values[index];
         }
 
-        public void Clear()
+        internal void Clear()
         {
             for (int i = 0; i < _values.Length; i++)
             {

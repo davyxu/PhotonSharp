@@ -6,6 +6,7 @@ namespace Photon
         public Register Reg= new Register("G", 10);
 
         string _name;
+
         public string Name
         {
             get { return _name; }

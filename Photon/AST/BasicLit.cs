@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class BasicLit : Expr
+    internal class BasicLit : Expr
     {
         public TokenType Type;
         public string Value;

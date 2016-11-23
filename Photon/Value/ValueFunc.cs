@@ -2,7 +2,7 @@
 using SharpLexer;
 namespace Photon
 {
-    public class ValueFunc : Value
+    class ValueFunc : Value
     {
         protected Procedure _proc;        
 
@@ -16,7 +16,7 @@ namespace Photon
             get { return _proc; }
         }
 
-        public override bool Equal(Value other)
+        internal override bool Equal(Value other)
         {
             var otherT = other as ValueFunc;
             if (otherT == null)
@@ -25,10 +25,19 @@ namespace Photon
             return otherT._proc == _proc;
         }
 
+        public override string DebugString()
+        {
+            return string.Format("{0} (proc)", _proc.ToString());
+        }
 
         public override string ToString()
         {
-            return string.Format("{0} (proc)", _proc.ToString());
+            return DebugString();
+        }
+
+        public override ValueType GetValueType()
+        {
+            return ValueType.Func;
         }
     }
 

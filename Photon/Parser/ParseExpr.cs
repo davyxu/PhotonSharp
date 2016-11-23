@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public partial class Parser
+    internal partial class Parser
     {
         int GetTokenPrecedence()
         {

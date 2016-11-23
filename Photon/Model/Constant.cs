@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    public class ConstantSet
+    public class ConstantSet : DataAccessor
     {
         List<Value> _cset = new List<Value>();
 
@@ -23,7 +23,7 @@ namespace Photon
             return _cset.Count - 1;
         }
 
-        public Value Get(int index)
+        internal override Value Get(int index)
         {
             return _cset[index];
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class UnaryExpr : Expr
+    internal class UnaryExpr : Expr
     {
         public TokenType Op;
         public Expr X;

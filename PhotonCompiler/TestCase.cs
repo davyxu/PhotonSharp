@@ -1,34 +1,35 @@
-﻿namespace PhotonCompiler
+﻿using Photon;
+namespace PhotonCompiler
 {
+    public class MyMath
+    {
+        [DelegateAttribute(typeof(DelegateEntry))]
+        public static int Add( VMachine vm )
+        {                        
+            var a = vm.DataStack.GetFloat32(-1);
+            var b = vm.DataStack.GetFloat32(-2);
+
+            vm.DataStack.PushFloat32(a + b);            
+
+            return 1;
+        }
+    }
+
     partial class Program
     {
 
         static void TestCase()
         {
+            new TestBox().CompileFile("Delegate.pho").Exe.RegisterPackage(typeof(MyMath));
+         
+
             new TestBox().RunFile("Package.pho");
 
-            //new TestBox().RunFile("Test.pho");
+            new TestBox().RunFile("Test.pho");
 
             new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
 
            // new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
-
-
-            //{
-            //    var tb = new TestBox().CompileFile("Delegate.pho");
-            //    tb.Exe.RegisterDelegate("add", (vm) =>
-            //    {
-            //        var a = vm.DataStack.Get(-1).CastNumber();
-            //        var b = vm.DataStack.Get(-2).CastNumber();
-
-            //        vm.DataStack.Push(new ValueNumber(a + b));
-
-            //        return 1;
-            //    });
-
-            //    tb.Run().TestStackClear().TestGlobalRegEqualNumber(1, 3 );
-            //}
-
             
 
             new TestBox().RunFile("Scope.pho");

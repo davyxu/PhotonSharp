@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class ValueClosure : ValueFunc
+    class ValueClosure : ValueFunc
     {
         List<Slot> _upvalues = new List<Slot>();
 
@@ -18,19 +18,23 @@ namespace Photon
             _upvalues.Add(v);
         }
 
-        public void SetUpValue(int index, Value v )
+        internal void SetUpValue(int index, Value v)
         {
             _upvalues[index].SetData( v );
         }
 
-        public Value GetUpValue(int index )
+        internal Value GetUpValue(int index)
         {
             return _upvalues[index].Data;
+        }
+        public override string DebugString()
+        {
+            return string.Format("{0} (closure)", _proc.ToString());
         }
 
         public override string ToString()
         {
-            return string.Format("{0} (closure)", _proc.ToString());
+            return DebugString();
         }
     }
 

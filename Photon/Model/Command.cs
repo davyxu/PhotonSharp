@@ -4,9 +4,9 @@ using System.Text;
 namespace Photon
 {
 
-    public class Command
+    internal class Command
     {
-        public Opcode Op;
+        internal Opcode Op;
 
         const int MaxDataCount = 2;
 
@@ -70,7 +70,7 @@ namespace Photon
             }
         }
 
-        public Command(Opcode op)
+        internal Command(Opcode op)
         {
             Op = op;
         }
@@ -85,13 +85,13 @@ namespace Photon
             get { return _pos; }
         }
 
-        public Command(Opcode op, int data)
+        internal Command(Opcode op, int data)
         {
             Op = op;
             DataA = data;            
         }
 
-        public Command(Opcode op, int dataA, int dataB)
+        internal Command(Opcode op, int dataA, int dataB)
         {
             Op = op;
             DataA = dataA;

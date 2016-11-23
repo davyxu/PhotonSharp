@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class WhileStmt : Stmt
+    internal class WhileStmt : Stmt
     {
         public Expr Condition;
 

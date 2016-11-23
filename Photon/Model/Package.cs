@@ -70,7 +70,7 @@ namespace Photon
             get { return _name; }
         }
 
-        public Scope TopScope
+        internal Scope TopScope
         {
             get { return _top; }
         }

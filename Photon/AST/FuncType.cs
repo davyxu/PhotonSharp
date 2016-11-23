@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Photon
 {
-    public class FuncType
+    internal class FuncType
     {
         public TokenPos FuncPos;
 

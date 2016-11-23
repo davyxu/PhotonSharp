@@ -1,16 +1,12 @@
 ﻿
 using SharpLexer;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Photon
 {
     // a.b   x=a  index=b
 
-    public class IndexExpr : Expr
+    internal class IndexExpr : Expr
     {
         public Expr X;
         public Expr Index;

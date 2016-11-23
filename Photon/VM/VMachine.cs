@@ -22,6 +22,15 @@ namespace Photon
         MAX,
     }
 
+    public delegate int DelegateEntry(VMachine vm);
+
+    public sealed class DelegateAttribute : Attribute
+    {
+        public DelegateAttribute(Type type)
+        {
+        }
+    }
+
     public partial class VMachine
     {
         // 数据交换栈
@@ -102,7 +111,7 @@ namespace Photon
             get { return _callStack; }
         }
 
-        public Command GetCurrCommand( )
+        internal Command GetCurrCommand()
         {
 
             int pc = _currFrame.PC;

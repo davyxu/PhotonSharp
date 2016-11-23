@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Photon
 {
-    public class FuncDeclare : Stmt
+    internal class FuncDeclare : Stmt
     {
         public Ident Name;
 

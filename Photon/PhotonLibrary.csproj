@@ -88,6 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\OpCode.cs" />
     <Compile Include="Model\Token.cs" />
+    <Compile Include="VM\DataAccessor.cs" />
     <Compile Include="VM\Instruction.cs" />
     <Compile Include="VM\InstructionFlow.cs" />
     <Compile Include="VM\InstructionMath.cs" />

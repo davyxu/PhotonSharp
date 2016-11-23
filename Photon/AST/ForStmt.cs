@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class ForStmt : Stmt
+    internal class ForStmt : Stmt
     {
         public Stmt Init;
 

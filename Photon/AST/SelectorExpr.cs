@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Photon
 {
     // a.b   x=a  selector=b
-    public class SelectorExpr : Expr
+    internal class SelectorExpr : Expr
     {
         public Expr X;
         public Ident Selector;

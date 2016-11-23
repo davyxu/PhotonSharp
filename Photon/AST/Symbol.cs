@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public enum SymbolUsage
+    enum SymbolUsage
     {
         None,
         Delegate,
@@ -13,7 +13,7 @@ namespace Photon
     }
 
 
-    public class Symbol
+    internal class Symbol
     {
         public string Name;
         public TokenPos DefinePos;

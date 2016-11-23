@@ -57,7 +57,7 @@ namespace Photon
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.DataStack.Get());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.DataStack.Get(-1));
         }
 
     }
@@ -94,7 +94,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
+            return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get(-1));
         }
     }
 
@@ -149,7 +149,7 @@ namespace Photon
             int upIndex = cmd.DataA;
             int regIndex = cmd.DataB + vm.RegBase;
 
-            var closure = vm.DataStack.Get().CastClosure();
+            var closure = vm.DataStack.Get(-1).CastClosure();
 
             Slot slot = vm.LocalReg.GetSlot(regIndex);
             closure.AddUpValue(slot);
@@ -201,7 +201,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get());
+            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get(-1));
         }
     }
 

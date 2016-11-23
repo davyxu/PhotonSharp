@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Photon
 {
 
-    public class ReturnStmt : Stmt
+    internal class ReturnStmt : Stmt
     {
         public List<Expr> Results = new List<Expr>();
         public TokenPos RetPos;

@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public class ValueNumber : Value
+    class ValueNumber : Value
     {
         float _number = 0;
 
@@ -15,7 +15,7 @@ namespace Photon
             get { return _number; }
         }
 
-        public override bool Equal(Value other)
+        internal override bool Equal(Value other)
         {
             var otherT = other as ValueNumber;
             if (otherT == null)
@@ -23,10 +23,19 @@ namespace Photon
 
             return otherT._number == _number;
         }
+        public override string DebugString()
+        {
+            return _number.ToString() + "(number)";
+        }
 
         public override string ToString()
         {
-            return _number.ToString() + "(number)";
+            return _number.ToString();
+        }
+
+        public override ValueType GetValueType()
+        {
+            return ValueType.Number;
         }
     }
 

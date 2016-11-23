@@ -1,9 +1,18 @@
 ﻿
 namespace Photon
 {
-    public class Value
+    public enum ValueType
     {
-        public virtual bool Equal( Value other )
+        Nil = 0,
+        Number,
+        String,
+        Func,
+        Object,
+    }
+
+    class Value
+    {
+        internal virtual bool Equal(Value other)
         {
             return false;
         }
@@ -12,7 +21,17 @@ namespace Photon
 
         public override string ToString()
         {
-            return "(empty)";
+            return "(NotImplementToString)";
+        }
+
+        public virtual string DebugString( )
+        {
+            return "(NotImplementToString)";
+        }
+
+        public virtual ValueType GetValueType()
+        {
+            return ValueType.Nil;
         }
 
         public float CastNumber( )

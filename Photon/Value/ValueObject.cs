@@ -2,9 +2,9 @@
 
 namespace Photon
 {
-    public class ValueObject : Value
-    {                
-        public override bool Equal(Value other)
+    class ValueObject : Value
+    {
+        internal override bool Equal(Value other)
         {
             throw new NotImplementedException();
         }
@@ -16,19 +16,24 @@ namespace Photon
 
 
 
-        public virtual Value Get( Value obj )
+        internal virtual Value Get(Value obj)
         {
             return Value.Nil;
         }
 
-        public virtual Value Select(Value obj)
+        internal virtual Value Select(Value obj)
         {
             return Value.Nil;
         }
 
-         public virtual void Set(Value obj, Value value )
+        internal virtual void Set(Value obj, Value value)
          {
 
+         }
+
+         public override ValueType GetValueType()
+         {
+             return ValueType.Object;
          }
 
 

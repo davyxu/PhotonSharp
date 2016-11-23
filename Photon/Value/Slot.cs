@@ -28,9 +28,14 @@ namespace Photon
             _data = d;
         }
 
+        public string DebugString()
+        {
+            return string.Format("{0} ID:{1}", Data.DebugString(), ID);
+        }
+
         public override string ToString()
         {
-            return string.Format("{0} ID:{1}", Data.ToString(), ID);
+            return DebugString();
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace Photon
 {    
-    public class ValueDelegate : Value
+    class ValueDelegate : Value
     {
         public Func<VMachine, int> Entry;        
 
@@ -16,7 +16,7 @@ namespace Photon
             Entry = callback;
         }
 
-        public override bool Equal(Value other)
+        internal override bool Equal(Value other)
         {
             var otherT = other as ValueDelegate;
             if (otherT == null)

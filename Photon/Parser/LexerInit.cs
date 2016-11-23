@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public partial class Parser
+    internal partial class Parser
     {
         static Lexer NewLexer(SourceFile file)
         {

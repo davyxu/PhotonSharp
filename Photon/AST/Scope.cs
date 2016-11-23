@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Photon
 {
 
-    public enum ScopeType
+    enum ScopeType
     {
         None,
         Package,
@@ -16,7 +16,7 @@ namespace Photon
         Closure,
     }
 
-    public class Scope
+    class Scope
     {
         Scope _outter;        
         ScopeType _type;
@@ -57,7 +57,7 @@ namespace Photon
             return string.Format("{0} {1}", _type.ToString(), _defpos );
         }
 
-        public Symbol FindSymbol( string name ) 
+        internal Symbol FindSymbol(string name) 
         {
            Symbol ret;
            if ( _symbolByName.TryGetValue( name, out ret ) )
@@ -68,7 +68,7 @@ namespace Photon
            return null;
         }
 
-        public Symbol FindSymbolOutter( string name )
+        internal Symbol FindSymbolOutter( string name )
         {
             Scope s = this;
             while (s != null)
@@ -169,7 +169,7 @@ namespace Photon
             return false;
         }
 
-        public void Insert( Symbol symbol )
+        internal void Insert(Symbol symbol)
         {
 
             if (NeedAllocReg(symbol.Usage))

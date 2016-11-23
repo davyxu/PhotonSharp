@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class ValueArray : ValueObject
+    class ValueArray : ValueObject
     {
         List<Value> _value = new List<Value>();
 
@@ -11,7 +11,7 @@ namespace Photon
             return "(array)";
         }
 
-        public override Value Select(Value obj)
+        internal override Value Select(Value obj)
         {
             var method = obj as ValueString;
 
@@ -35,7 +35,7 @@ namespace Photon
             return 0;
         }
 
-        public override Value Get(Value obj)
+        internal override Value Get(Value obj)
         {
             var key = obj as ValueNumber;
 
@@ -45,7 +45,7 @@ namespace Photon
             return _value[(int)key.Number];
         }
 
-        public override void Set(Value obj, Value value )
+        internal override void Set(Value obj, Value value)
         {
             var key = obj as ValueNumber;
 

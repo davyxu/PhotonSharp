@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Photon
 {
     // var XXX  纯变量定义
-    public class VarDeclareStmt : Stmt
+    internal class VarDeclareStmt : Stmt
     {
         public List<Ident> Names;
 

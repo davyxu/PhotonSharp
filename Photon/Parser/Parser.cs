@@ -3,7 +3,7 @@ using SharpLexer;
 
 namespace Photon
 {
-    public partial class Parser
+    internal partial class Parser
     {
         Lexer _lexer;
 

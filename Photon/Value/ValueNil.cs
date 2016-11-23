@@ -1,9 +1,9 @@
 ﻿
 namespace Photon
 {
-    public class ValueNil : Value
+    class ValueNil : Value
     {
-        public override bool Equal(Value other)
+        internal override bool Equal(Value other)
         {
             var otherT = other as ValueNil;
             if (otherT == null)
@@ -12,9 +12,19 @@ namespace Photon
             return true;
         }
 
-        public override string ToString()
+        public override string DebugString()
         {
             return "(nil)";
+        }
+
+        public override string ToString()
+        {
+            return "nil";
+        }
+
+        public override ValueType GetValueType()
+        {
+            return ValueType.Nil;
         }
     }
 }

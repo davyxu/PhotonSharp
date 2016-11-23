@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class BinaryExpr : Expr
+    internal class BinaryExpr : Expr
     {
         public Expr X;
         public TokenType Op;

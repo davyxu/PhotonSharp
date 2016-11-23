@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class AssignStmt : Stmt
+    internal class AssignStmt : Stmt
     {
         public List<Expr> LHS = new List<Expr>();
         public List<Expr> RHS = new List<Expr>();

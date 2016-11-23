@@ -3,9 +3,7 @@ using System.Text;
 
 namespace Photon
 {
-
-
-    public class Ident : Expr
+    internal class Ident : Expr
     {
         Token _token;
 

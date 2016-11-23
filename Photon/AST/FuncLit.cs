@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Photon
 {
     // 匿名函数
-    public class FuncLit : Expr
+    internal class FuncLit : Expr
     {
         public FuncType TypeInfo;
 

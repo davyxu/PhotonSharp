@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class IfStmt : Stmt
+    internal class IfStmt : Stmt
     {
         public Expr Condition;
 

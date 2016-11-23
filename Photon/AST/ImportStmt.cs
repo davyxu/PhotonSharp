@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Photon
 {
 
-    public class ImportStmt : Stmt
+    internal class ImportStmt : Stmt
     {
         public List<BasicLit> Sources = new List<BasicLit>();
         public TokenPos ImportPos;

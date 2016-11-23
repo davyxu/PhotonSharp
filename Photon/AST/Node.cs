@@ -3,10 +3,7 @@ using System;
 
 namespace Photon
 {
-
-
-
-    public class Node
+    internal class Node
     {
         public Node Parent;
 
@@ -35,22 +32,22 @@ namespace Photon
     }
 
 
-    public class Stmt : Node
+    internal class Stmt : Node
     {
 
     }
 
-    public class BadStmt : Stmt
+    internal class BadStmt : Stmt
     {
 
     }
 
-    public class Expr : Node
+    internal class Expr : Node
     {
 
     }
 
-    public class BadExpr : Expr
+    internal class BadExpr : Expr
     {
 
     }

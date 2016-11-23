@@ -2,7 +2,7 @@
 namespace Photon
 {
     // S: 栈  R: 寄存器 C:常量表　I:索引 F: 函数表 Top: 栈顶
-    public enum Opcode
+    enum Opcode
     {
         NOP = 0,
         ADD,    // S[Top] = S[I] + S[I+1]

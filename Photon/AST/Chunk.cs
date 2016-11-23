@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class Chunk : Node
+    internal class Chunk : Node
     {
         // 每个block是一个文件
         public List<BlockStmt> BlockList = new List<BlockStmt>();

@@ -86,22 +86,9 @@ namespace PhotonCompiler
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )
         {
-            var v = reg.Get( index );
+            var v = reg.GetFloat32( index );            
 
-            if ( v == null )
-            {
-                Error(string.Format("value nil on index: {0}, expect {1}", index, num));
-                return this;
-            }
-
-            var nv = v as ValueNumber;
-            if (nv == null)
-            {
-                Error(string.Format("value type error on index: {0}, expect 'number', have '{1}'", index, v.GetType().Name));
-                return this;
-            }
-
-            if (nv.Number != num)
+            if (v != num)
             {
                 Error(string.Format("value not equal on index: {0}, expect {1}", index, num));
                 return this;

@@ -8,19 +8,19 @@ namespace Photon
 
         public CommandSet CmdSet;
 
-        public int DataStackBase;
+        internal int DataStackBase;
 
         // 结束运行后, 需要恢复数据栈
-        public bool RestoreDataStack;
+        internal bool RestoreDataStack;
 
-        public ValueClosure Closure;
+        internal ValueClosure Closure;
 
         public RuntimeFrame(CommandSet cs)
         {            
             CmdSet = cs; 
         }        
 
-        public override string ToString()
+        public string DebugString()
         {
             Command cmd = CmdSet.Commands[PC];
             if ( cmd != null )
@@ -29,8 +29,11 @@ namespace Photon
             }
 
             return string.Format("{0}", CmdSet.Name);
+        }
 
-            
+        public override string ToString()
+        {
+            return DebugString();
         }
     }
 }

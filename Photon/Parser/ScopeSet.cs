@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    partial class Parser
+    internal partial class Parser
     {
         Scope _topScope;
         Scope _global;

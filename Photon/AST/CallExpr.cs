@@ -4,7 +4,7 @@ using SharpLexer;
 namespace Photon
 {
 
-    public class CallExpr : Expr
+    internal class CallExpr : Expr
     {
         public Expr Func;
         public List<Expr> Args;

@@ -27,7 +27,7 @@ namespace PhotonToy
             {
                 for (int i = 0; i < vm.LocalReg.Count; i++)
                 {
-                    Register.Add(vm.LocalReg.Get(i).DebugString());
+                    Register.Add(vm.LocalReg.DebugString(i));
                 }
             }
             else
@@ -35,14 +35,14 @@ namespace PhotonToy
                 var pkg = vm.GetRuntimePackageByName(regpkg);
                 for (int i = 0; i < pkg.Reg.Count; i++)
                 {
-                    Register.Add(pkg.Reg.Get(i).DebugString());
+                    Register.Add(pkg.Reg.DebugString(i));
                 }
             }
             
 
             for (int i = 0; i < vm.DataStack.Count; i++)
             {
-                DataStack.Add(vm.DataStack.Get(i).DebugString());
+                DataStack.Add(vm.DataStack.DebugString(i));
             }
 
             var arr = vm.CallStack.ToArray();

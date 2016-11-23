@@ -111,7 +111,7 @@ namespace Photon
             get { return _callStack; }
         }
 
-        internal Command GetCurrCommand()
+        public Command GetCurrCommand()
         {
 
             int pc = _currFrame.PC;

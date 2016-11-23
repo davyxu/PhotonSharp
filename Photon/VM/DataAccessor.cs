@@ -38,5 +38,10 @@ namespace Photon
         {
             Set(index, new ValueNil());
         }
+
+        public string DebugString( int index )
+        {
+            return Get(index).DebugString();
+        }
     }
 }

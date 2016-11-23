@@ -4,7 +4,7 @@ using System.Text;
 namespace Photon
 {
 
-    internal class Command
+    public class Command
     {
         internal Opcode Op;
 
@@ -98,14 +98,14 @@ namespace Photon
             DataB = dataB;            
         }
 
-        public Command SetComment( string text )
+        internal Command SetComment( string text )
         {
             _comment = text;
 
             return this;
         }
 
-        public Command SetCodePos(TokenPos pos)
+        internal Command SetCodePos(TokenPos pos)
         {
             _pos = pos;
             return this;

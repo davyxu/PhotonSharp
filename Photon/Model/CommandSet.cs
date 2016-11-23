@@ -79,7 +79,7 @@ namespace Photon
             get { return _regCount; }
         }
 
-        internal List<Command> Commands
+        public List<Command> Commands
         {
             get { return _cmds; }
         }

@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonLibrary", "Photon\Pho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLexer", "..\SharpLexer\SharpLexer\SharpLexer.csproj", "{5138A406-5B76-4D5E-B889-257224E1FB2F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{AA290B2B-F89E-4AD2-AA01-69A544B5A9F1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonToy", "PhotonToy\PhotonToy.csproj", "{B37BC0BC-90F7-401B-B485-17219FF88B52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonCompiler", "PhotonCompiler\PhotonCompiler.csproj", "{0AB986D1-0226-417A-A87D-ECDF6C020282}"

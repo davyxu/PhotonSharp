@@ -17,28 +17,12 @@ namespace Photon
 
         public void DebugPrint( )
         {
-            // 源文件
-            //_sourcefile.DebugPrint();
-
             // 语法树
             foreach (var pkg in _packages)
             {
+                Debug.WriteLine(string.Format("============= {0} =============", pkg.Name));
                 pkg.DebugPrint();
             }
-
-            // 符号
-            //Debug.WriteLine("symbols:");
-            //_globalScope.DebugPrint("");
-            //Debug.WriteLine("");
-
-            foreach( var pkg in _packages )
-            {
-                // 汇编
-               // pkg.DebugPrint(_sourcefile);
-
-            }
-
-            
 
             Debug.WriteLine("");
         }

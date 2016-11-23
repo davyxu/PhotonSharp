@@ -144,16 +144,27 @@ namespace Photon
             return string.Empty;
         }
 
+        public List<Procedure> ProcedureList
+        {
+            get { return _proc; }
+        }
+
 
         internal void DebugPrint(  )
         {
-            Debug.WriteLine(string.Format("ast: {0}", Name));
+            // 语法树
+            Debug.WriteLine("ast:");
             PrintAST(AST);
+            Debug.WriteLine("");
+
+            // 符号
+            Debug.WriteLine("symbols:");
+            _top.DebugPrint("");
             Debug.WriteLine("");
 
             // 常量
             Constants.DebugPrint();
-
+            
             // 汇编
             foreach (var p in _proc)
             {
@@ -162,7 +173,6 @@ namespace Photon
                 {
                     cs.DebugPrint();
                 }
-
             }
         }
     }

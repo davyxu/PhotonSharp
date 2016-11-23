@@ -52,8 +52,6 @@ namespace PhotonToy
                 if (item == null)
                     return;
 
-                
-
                 var b = e.Bounds;
 
                 b.Offset(TagRowWidth, 0);
@@ -67,16 +65,7 @@ namespace PhotonToy
             };
         }
 
-        internal static void ShowCode(this ListBox self, Executable exec )
-        {
-            _listIndexByLocation.Clear();
-            self.Items.Clear();
 
-            foreach (var cs in exec.CmdSet)
-            {
-                ShowCommandSet(self, exec.Source, cs);
-            }
-        }
 
 
         static int currIndex = 0;
@@ -106,6 +95,17 @@ namespace PhotonToy
                 _listIndexByLocation.Add(al, self.Items.Count - 1);
             }
             
+        }
+
+        internal static void ShowCode(this ListBox self, Executable exec)
+        {
+            _listIndexByLocation.Clear();
+            self.Items.Clear();
+
+            foreach (var cs in exec.CmdSet)
+            {
+                ShowCommandSet(self, exec.Source, cs);
+            }
         }
 
         static void ShowCommandSet( ListBox self, SourceFile file, CommandSet cmdset )

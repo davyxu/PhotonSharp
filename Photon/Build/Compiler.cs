@@ -72,8 +72,6 @@ namespace Photon
 
             Import(exe, "main", filename, ImportMode.File);
 
-
-
             return exe;
         }
 

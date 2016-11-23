@@ -110,7 +110,7 @@ namespace Photon
 
         public void DebugPrint( )
         {
-            Debug.WriteLine("[{0}] locals: {1}", Name, RegCount);
+            Debug.WriteLine("[{0}] regs: {1}", Name, RegCount);
 
             int index = 0;
 

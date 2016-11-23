@@ -71,7 +71,6 @@ namespace Photon
             get { return _state; }
         }
 
-
         public bool ShowDebugInfo
         {
             get;
@@ -88,8 +87,6 @@ namespace Photon
             get { return _localReg; }
         }
 
-
-
         public Executable Exec
         {
             get { return _exe; }
@@ -105,19 +102,16 @@ namespace Photon
             get { return _callStack; }
         }
 
-        Command CurrCommand
+        Command GetCurrCommand( )
         {
-            get
+
+            int pc = _currFrame.PC;
+            if (pc >= _currFrame.CmdSet.Commands.Count || pc < 0)
             {
-
-                int pc = _currFrame.PC;
-                if (pc >= _currFrame.CmdSet.Commands.Count || pc < 0)
-                {
-                    return null;
-                }
-
-                return _currFrame.CmdSet.Commands[pc];
+                return null;
             }
+
+            return _currFrame.CmdSet.Commands[pc];
         }
 
         public RuntimePackage GetRuntimePackage(int pkgid)
@@ -209,8 +203,7 @@ namespace Photon
                 // 留作下次调用叠加时使用
                 _regBaseStack.Push(rr);
             }
-
-           
+  
         }
 
         internal void LeaveFrame()
@@ -219,13 +212,10 @@ namespace Photon
             {
                 _dataStack.Count = _currFrame.DataStackBase;
             }
-            
-            
-
+                        
             if (!_currFrame.CmdSet.IsGlobal)
             {
                 _regBaseStack.Pop();
-
 
                 if (_regBaseStack.Count > 0)
                 {
@@ -238,9 +228,7 @@ namespace Photon
                 {
                     _localReg.SetUsedCount(0);
                 }
-                
-
-                
+                   
             }
 
             _currFrame = _callStack.Pop();
@@ -271,6 +259,11 @@ namespace Photon
 
         public void Run(Executable exe)
         {
+            if ( ShowDebugInfo )
+            {
+                Debug.WriteLine("============ VM Start ============");
+            }
+
             _exe = exe;
             _callStack.Clear();
             _dataStack.Clear();
@@ -293,7 +286,7 @@ namespace Photon
             
             while (true)
             {
-                var cmd = CurrCommand;
+                var cmd = GetCurrCommand();
                 if (cmd == null)
                     break;
 
@@ -343,7 +336,10 @@ namespace Photon
 
 
 
-
+            if (ShowDebugInfo)
+            {
+                Debug.WriteLine("============ VM End ============");
+            }
         }
     }
 }

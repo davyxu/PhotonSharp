@@ -71,11 +71,9 @@ namespace PhotonToy
 
             var pureName = Path.GetFileName(filename);
 
-            var file = new SourceFile(System.IO.File.ReadAllText(filename), pureName);
-
             try
             {
-                _exe = Compiler.Compile(file);
+                _exe = Compiler.Compile(filename);
             }
             catch( Exception e )
             {

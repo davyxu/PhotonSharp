@@ -15,7 +15,7 @@ namespace Photon
             if ( d == 0 )
             {
                 vm.CurrFrame.PC = targetPC;                
-                return true;
+                return false;
             }
 
             return true;

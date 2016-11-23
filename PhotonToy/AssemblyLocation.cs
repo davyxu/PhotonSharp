@@ -1,32 +1,37 @@
 ﻿
+using Photon;
 namespace PhotonToy
 {
     public struct AssemblyLocation
     {
-        public int CmdSetID;
+        public CommandSet CmdSet;
         public int Pos;
+        public string FileName;
 
-        public AssemblyLocation(int cmdsetid, int pos)
+        public AssemblyLocation(CommandSet cmdset, int pos, string filename)
         {
-            CmdSetID = cmdsetid;
+            CmdSet = cmdset;
             Pos = pos;
+            FileName = filename;
         }
 
         public override bool Equals(object obj)
         {
             var other = (AssemblyLocation)obj;
 
-            return this.CmdSetID == other.CmdSetID && this.Pos == other.Pos;
+            return this.CmdSet == other.CmdSet && 
+                this.Pos == other.Pos &&
+                this.FileName == other.FileName;
         }
 
         public override int GetHashCode()
         {
-            return Pos.GetHashCode() + CmdSetID.GetHashCode();
+            return Pos.GetHashCode() + CmdSet.GetHashCode() + FileName.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", CmdSetID, Pos);
+            return string.Format("{0} {1} {2}", CmdSet.Name, Pos, FileName);
         }
     }
 }

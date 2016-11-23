@@ -32,6 +32,38 @@ namespace PhotonToy
 
         }
 
+        void RefreshRegisterCategoryList(Executable exe)
+        {
+            var preselc = pkgSel.SelectedIndex;
+
+            pkgSel.Items.Clear();
+            pkgSel.Items.Add("local");
+
+            for (int i = 0; i < exe.PackageCount; i++)
+            {
+                var pkg = exe.GetPackage(i);
+                pkgSel.Items.Add(pkg.Name);
+            }
+
+            if ( preselc == -1)
+            {
+                pkgSel.SelectedIndex = 0;
+            }
+            else
+            {
+                pkgSel.SelectedIndex = preselc;
+            }
+
+
+        }
+
+        void OnLoad(Executable exe)
+        {
+            RefreshRegisterCategoryList(exe);
+
+            CodeList.Init(exe);
+        }
+
         void OnBreak( VMState vms )
         {
             
@@ -54,15 +86,36 @@ namespace PhotonToy
             {
                 callStackList.Items.Add(str);
             }
+
+            if ( string.IsNullOrEmpty(vms.RegPackage) )
+            {
+                pkgSel.SelectedIndex = 0;
+            }
+            else
+            {
+                if (pkgSel.SelectedItem as string != vms.RegPackage )
+                {
+                    foreach (var i in pkgSel.Items)
+                    {
+                        var pkgName = i as string;
+                        if (pkgName == vms.RegPackage)
+                        {
+                            pkgSel.SelectedItem = i;
+                            break;
+                        }
+                    }
+                }
+  
+
+            }
+
+            
+            
             
 
-
         }
 
-        void OnLoad(Executable exe)
-        {
-            codeList.ShowCode(exe);            
-        }
+
 
 
 
@@ -126,6 +179,22 @@ namespace PhotonToy
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _debugBox.Stop();
+            _debugBox.Start(_currFile);
+        }
+
+        private void pkgSel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var pkgName = pkgSel.SelectedItem as string;
+            if ( pkgName == "local")
+            {
+                pkgName = string.Empty;
+            }
+            _debugBox.SwitchRegister(pkgName);
         }
     }
 }

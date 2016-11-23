@@ -35,9 +35,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.stepOverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepIntoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +47,7 @@
             this.codeList = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.callStackList = new System.Windows.Forms.ListBox();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pkgSel = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -56,13 +58,14 @@
             // 
             this.registerList.FormattingEnabled = true;
             this.registerList.ItemHeight = 12;
-            this.registerList.Location = new System.Drawing.Point(6, 20);
+            this.registerList.Location = new System.Drawing.Point(6, 44);
             this.registerList.Name = "registerList";
-            this.registerList.Size = new System.Drawing.Size(142, 148);
+            this.registerList.Size = new System.Drawing.Size(142, 124);
             this.registerList.TabIndex = 1;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.pkgSel);
             this.groupBox1.Controls.Add(this.registerList);
             this.groupBox1.Location = new System.Drawing.Point(12, 254);
             this.groupBox1.Name = "groupBox1";
@@ -74,7 +77,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dataStackList);
-            this.groupBox2.Location = new System.Drawing.Point(198, 254);
+            this.groupBox2.Location = new System.Drawing.Point(173, 254);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(155, 180);
             this.groupBox2.TabIndex = 3;
@@ -97,7 +100,7 @@
             this.debugToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(556, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(502, 25);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -113,15 +116,23 @@
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.openFileToolStripMenuItem.Text = "&Open File...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startToolStripMenuItem,
             this.stopToolStripMenuItem,
+            this.restartToolStripMenuItem,
             this.toolStripMenuItem1,
             this.stepOverToolStripMenuItem,
             this.stepIntoToolStripMenuItem,
@@ -134,7 +145,7 @@
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
             this.startToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.startToolStripMenuItem.Text = "Run / Continue";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
@@ -142,20 +153,29 @@
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
             this.stopToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // restartToolStripMenuItem
+            // 
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F5)));
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.restartToolStripMenuItem.Text = "Restart";
+            this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(186, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(198, 6);
             // 
             // stepOverToolStripMenuItem
             // 
             this.stepOverToolStripMenuItem.Name = "stepOverToolStripMenuItem";
             this.stepOverToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.stepOverToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.stepOverToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.stepOverToolStripMenuItem.Text = "Step Over";
             this.stepOverToolStripMenuItem.Click += new System.EventHandler(this.stepOverToolStripMenuItem_Click);
             // 
@@ -163,7 +183,7 @@
             // 
             this.stepIntoToolStripMenuItem.Name = "stepIntoToolStripMenuItem";
             this.stepIntoToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.stepIntoToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.stepIntoToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.stepIntoToolStripMenuItem.Text = "Step Into";
             this.stepIntoToolStripMenuItem.Click += new System.EventHandler(this.stepIntoToolStripMenuItem_Click);
             // 
@@ -171,7 +191,7 @@
             // 
             this.stepOutToolStripMenuItem.Name = "stepOutToolStripMenuItem";
             this.stepOutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
-            this.stepOutToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.stepOutToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.stepOutToolStripMenuItem.Text = "Step Out";
             this.stepOutToolStripMenuItem.Click += new System.EventHandler(this.stepOutToolStripMenuItem_Click);
             // 
@@ -181,13 +201,13 @@
             this.codeList.ItemHeight = 12;
             this.codeList.Location = new System.Drawing.Point(12, 28);
             this.codeList.Name = "codeList";
-            this.codeList.Size = new System.Drawing.Size(532, 220);
+            this.codeList.Size = new System.Drawing.Size(470, 220);
             this.codeList.TabIndex = 5;
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.callStackList);
-            this.groupBox3.Location = new System.Drawing.Point(389, 254);
+            this.groupBox3.Location = new System.Drawing.Point(334, 254);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(155, 180);
             this.groupBox3.TabIndex = 3;
@@ -203,18 +223,21 @@
             this.callStackList.Size = new System.Drawing.Size(142, 148);
             this.callStackList.TabIndex = 1;
             // 
-            // exitToolStripMenuItem
+            // pkgSel
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.pkgSel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.pkgSel.FormattingEnabled = true;
+            this.pkgSel.Location = new System.Drawing.Point(6, 18);
+            this.pkgSel.Name = "pkgSel";
+            this.pkgSel.Size = new System.Drawing.Size(141, 20);
+            this.pkgSel.TabIndex = 2;
+            this.pkgSel.SelectedIndexChanged += new System.EventHandler(this.pkgSel_SelectedIndexChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 455);
+            this.ClientSize = new System.Drawing.Size(502, 439);
             this.Controls.Add(this.codeList);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -256,6 +279,8 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox callStackList;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
+        private System.Windows.Forms.ComboBox pkgSel;
     }
 }
 

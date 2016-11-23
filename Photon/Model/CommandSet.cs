@@ -17,7 +17,7 @@ namespace Photon
             internal set { _id = value; }
         }
 
-        internal Package Pkg
+        public Package Pkg
         {
             get;
             set;

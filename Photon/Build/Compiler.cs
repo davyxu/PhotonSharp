@@ -1,4 +1,5 @@
 ﻿using SharpLexer;
+using System;
 using System.IO;
 
 namespace Photon
@@ -13,11 +14,37 @@ namespace Photon
     public class Compiler
     {
 
+        static string NormalizeFileName( string filename )
+        {
+            var curr = Directory.GetCurrentDirectory().ToLower() + "\\";
+            filename = filename.ToLower();
+
+            string final;
+
+            if ( Path.IsPathRooted( filename ) )
+            {
+                if ( filename.IndexOf(curr) == 0 )
+                {
+                    final = filename.Substring(curr.Length);
+                }
+                else
+                {
+                    throw new Exception("file name not formated");
+                }
+            }
+            else
+            {
+                final = filename;
+            }
+
+            return final.Replace('\\', '/');
+        }
+
         static void ImportFile(Package pkg, Parser parser, string filename)
         {
             var content = System.IO.File.ReadAllText(filename);
 
-            SourceFile srcfile = new SourceFile(content, Path.GetFileName(filename));
+            SourceFile srcfile = new SourceFile(content, NormalizeFileName( filename ));
 
             pkg.AddSource(srcfile);
 
@@ -36,12 +63,12 @@ namespace Photon
                 var files = Directory.GetFiles(packageFileName, "*.pho", SearchOption.TopDirectoryOnly);
 
                 foreach (var filename in files)
-                {
+                {                    
                     ImportFile(pkg, parser, filename);
                 }
             }
             else
-            {                
+            {
                 ImportFile(pkg, parser, packageFileName);
             }
 
@@ -59,7 +86,7 @@ namespace Photon
 
             param.Pkg.AST = parser.Chunk;
             
-            cs.Add(new Command(Opcode.EXIT));
+            cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
 
             pkg.ResolveNode();
         }

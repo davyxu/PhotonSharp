@@ -102,7 +102,7 @@ namespace Photon
             get { return _callStack; }
         }
 
-        Command GetCurrCommand( )
+        public Command GetCurrCommand( )
         {
 
             int pc = _currFrame.PC;
@@ -117,6 +117,17 @@ namespace Photon
         public RuntimePackage GetRuntimePackage(int pkgid)
         {
             return _package[pkgid];
+        }
+
+        public RuntimePackage GetRuntimePackageByName(string name)
+        {
+            foreach( var pkg in _package )
+            {
+                if (pkg.Name == name)
+                    return pkg;
+            }
+
+            return null;
         }
 
         public VMachine()

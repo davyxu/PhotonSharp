@@ -22,7 +22,15 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("pc:{0}", PC);
+            Command cmd = CmdSet.Commands[PC];
+            if ( cmd != null )
+            {
+                return string.Format("{0}", cmd.CodePos);
+            }
+
+            return string.Format("{0}", CmdSet.Name);
+
+            
         }
     }
 }

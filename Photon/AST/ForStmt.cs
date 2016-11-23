@@ -22,6 +22,7 @@ namespace Photon
             Body = body;
             Init = init;
             Post = post;
+            ForPos = forpos;
 
             BuildRelation();
         }

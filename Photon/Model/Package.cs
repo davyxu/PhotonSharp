@@ -75,6 +75,16 @@ namespace Photon
             get { return _top; }
         }
 
+        public List<Procedure> ProcedureList
+        {
+            get { return _proc; }
+        }
+
+        public List<File> FileList
+        {
+            get { return _file; }
+        }
+
         internal Package( int id, string name, Executable exe, Scope s )
         {
             _exe = exe;
@@ -144,10 +154,7 @@ namespace Photon
             return string.Empty;
         }
 
-        public List<Procedure> ProcedureList
-        {
-            get { return _proc; }
-        }
+
 
 
         internal void DebugPrint(  )

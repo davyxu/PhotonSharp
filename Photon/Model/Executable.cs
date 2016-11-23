@@ -35,7 +35,7 @@ namespace Photon
             return pkg;
 
         }
-        internal Package GetPackage(int pkgid)
+        public Package GetPackage(int pkgid)
         {
             return _packages[pkgid];
         }
@@ -53,7 +53,23 @@ namespace Photon
             return null;
         }
 
-        internal int PackageCount
+        public SourceFile GetSourceFile(string filename)
+        {
+            foreach (var pkg in _packages)
+            {
+                foreach( var f in pkg.FileList )
+                {
+                    if ( f.Source.Name == filename )
+                    {
+                        return f.Source;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public int PackageCount
         {
             get { return _packages.Count; }
         }

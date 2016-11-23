@@ -33,6 +33,7 @@ namespace PhotonToy
        
         VarGuard<int> _expectCallDepth = new VarGuard<int>(-1);
         VarGuard<int> _callDepth = new VarGuard<int>(0);
+        VarGuard<string> _regPackageName = new VarGuard<string>(string.Empty);
         VarGuard<DebuggerMode> _mode = new VarGuard<DebuggerMode>(DebuggerMode.StepIn);
         
         object _stateGuard = new object();
@@ -168,6 +169,48 @@ namespace PhotonToy
             _debugSignal.Set();
         }
 
+        void CallBreak( VMachine vm, bool manulSwichPkgReg)
+        {
+            var cmd = vm.GetCurrCommand();
+
+            string pkgReg;
+            if ( manulSwichPkgReg )
+            {
+                pkgReg = _regPackageName.Value;
+            }
+            else
+            {
+                if (vm.CallStack.Count > 0)
+                {
+                    pkgReg = string.Empty;
+                }
+                else
+                {
+                    pkgReg = vm.CurrFrame.CmdSet.Pkg.Name;
+                }
+            }
+
+            var vms = new VMState(vm, pkgReg);
+
+            SafeCall(delegate
+            {
+                if (OnBreak != null)
+                {
+                    OnBreak(vms);
+                }
+
+            });
+        }
+
+        public void SwitchRegister( string packageName )
+        {
+            if (_vm == null)
+                return;
+            _regPackageName.Value = packageName;
+
+            CallBreak(_vm, true);
+        }
+
         void VMThread( )
         {
             _vm.SetHook(DebugHook.AssemblyLine, (vm) =>
@@ -201,15 +244,7 @@ namespace PhotonToy
                 _expectCallDepth.Value = -1;
                 _mode.Value = DebuggerMode.StepIn;
 
-                var vms = new VMState(vm);
-                SafeCall(delegate
-                {
-                    if (OnBreak != null)
-                    {
-                        OnBreak(vms);
-                    }
-
-                });
+                CallBreak(vm, false);
 
                 _debugSignal.WaitOne();                
             });
@@ -227,17 +262,7 @@ namespace PhotonToy
 
             _vm.Run(_exe);
 
-            var vms2 = new VMState(_vm);
-
-            SafeCall(delegate
-            {
-                if (OnBreak != null)
-                {
-
-                    OnBreak(vms2);
-                }
-
-            });
+            CallBreak(_vm, false);
 
             _exitSignal.Set();
         }

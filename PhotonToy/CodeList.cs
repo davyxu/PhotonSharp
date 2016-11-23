@@ -69,13 +69,32 @@ namespace PhotonToy
 
 
         static int currIndex = 0;
+        static AssemblyLocation lastAL;
+        static Executable Exe;
+
+        internal static void Init( Executable e)
+        {
+            Exe = e;
+            lastAL.CmdSet = null;
+            lastAL.FileName = null;
+            lastAL.Pos = -1;
+        }
+        
 
         internal static void SetCurrLine(this ListBox self, AssemblyLocation al)
         {
-            int index;
-            if ( !_listIndexByLocation.TryGetValue(al, out index) )
+
+            if (lastAL.FileName != al.FileName || lastAL.CmdSet != al.CmdSet)
             {
-                index = -1;
+                ShowCode(self, al, Exe);
+                lastAL = al;
+            }
+
+
+            int index = -1;
+            if ( !string.IsNullOrEmpty(al.FileName))
+            {
+                _listIndexByLocation.TryGetValue(al, out index);
             }
 
             currIndex = index;
@@ -97,26 +116,29 @@ namespace PhotonToy
             
         }
 
-        internal static void ShowCode(this ListBox self, Executable exec)
+        internal static void ShowCode(this ListBox self, AssemblyLocation al,  Executable exec)
         {
-            _listIndexByLocation.Clear();
-            self.Items.Clear();
 
-            foreach (var cs in exec.CmdSet)
+
+            var sf = exec.GetSourceFile(al.FileName);
+
+            if (sf != null)
             {
-                ShowCommandSet(self, exec.Source, cs);
+                _listIndexByLocation.Clear();
+                self.Items.Clear();
+
+                ShowCommandSet(self, sf, al);
             }
+
+            
         }
 
-        static void ShowCommandSet( ListBox self, SourceFile file, CommandSet cmdset )
+        static void ShowCommandSet(ListBox self, SourceFile file, AssemblyLocation al)
         {
             int currSourceLine = 0;
-
-            AssemblyLocation al;
-            al.CmdSetID = cmdset.ID;
             al.Pos = 0;
 
-            foreach (var c in cmdset.Commands)
+            foreach (var c in al.CmdSet.Commands)
             {
                 // 到新的源码行
                 if (c.CodePos.Line > currSourceLine)
@@ -131,7 +153,7 @@ namespace PhotonToy
 
                     // 显示源码
 
-                    AddCodeLine(self, al, CodeType.Source, "{0,3}({1})| {2}", currSourceLine, cmdset.ToString(), file.GetLine(currSourceLine));                    
+                    AddCodeLine(self, al, CodeType.Source, "{0,3}({1})| {2}", currSourceLine, al.CmdSet.ToString(), file.GetLine(currSourceLine));                    
                 }
                 
                 // 显示汇编

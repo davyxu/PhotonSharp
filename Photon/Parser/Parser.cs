@@ -22,14 +22,14 @@ namespace Photon
             get { return _chunk; }
         }
 
-        public Parser( )
+        public Parser()
         {
             InitScope();
         }
 
         public void Import(SourceFile file)
         {
-            _lexer = NewLexer(file);            
+            _lexer = NewLexer(file);
 
             Next();
 
@@ -46,7 +46,7 @@ namespace Photon
             _token = _lexer.Read();
 
             if (CurrTokenType == TokenType.Unknown)
-            {                
+            {
                 throw new ParseException("unknown token", CurrTokenPos);
             }
         }
@@ -56,7 +56,7 @@ namespace Photon
             get { return (TokenType)_token.MatcherID; }
         }
 
-        TokenPos CurrTokenPos
+        internal TokenPos CurrTokenPos
         {
             get { return _token.Pos; }
         }
@@ -69,7 +69,7 @@ namespace Photon
         Token Expect(TokenType t)
         {
             if (CurrTokenType != t)
-            {                
+            {
                 throw new ParseException(string.Format("expect token: {0}", t.ToString()), CurrTokenPos);
             }
 

@@ -56,7 +56,7 @@ namespace PhotonCompiler
 
                 vm.ShowDebugInfo = debugInfo;
 
-                vm.Run(exe, string.Empty);
+                vm.Run(exe );
             }
 
 

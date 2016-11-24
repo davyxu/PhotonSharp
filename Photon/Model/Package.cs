@@ -105,7 +105,7 @@ namespace Photon
             _file.Add( f);
         }
 
-        internal int AddProcedure(Procedure f)
+        internal Procedure AddProcedure(Procedure f)
         {
             f.Pkg = this;
 
@@ -113,7 +113,7 @@ namespace Photon
 
             f.ID = _proc.Count - 1;
 
-            return f.ID;
+            return f;
         }
 
         public Procedure GetProcedure(int index)

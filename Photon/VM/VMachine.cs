@@ -277,7 +277,7 @@ namespace Photon
 
         
 
-        public void Run(Executable exe, string startPkg)
+        public void Run(Executable exe, string startPkg = "main" )
         {
             if ( ShowDebugInfo )
             {

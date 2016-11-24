@@ -29,7 +29,7 @@ namespace PhotonCompiler
             Debug.WriteLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            _vm.Run(_exe, string.Empty);
+            _vm.Run(_exe );
 
             Debug.WriteLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            
@@ -81,7 +81,7 @@ namespace PhotonCompiler
 
         public TestBox TestGlobalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _vm.GetRuntimePackage(0).Reg);
+            return TestRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
         }
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )

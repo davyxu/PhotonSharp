@@ -30,7 +30,7 @@ namespace Photon
             _topScope = _topScope.Outter;
         }
 
-        internal Symbol Declare(Node n, Scope s, string name, TokenPos pos, SymbolUsage usage )
+        static internal Symbol Declare(Node n, Scope s, string name, TokenPos pos, SymbolUsage usage )
         {
             var pre = s.FindSymbol(name);
             if ( pre != null )

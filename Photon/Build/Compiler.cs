@@ -51,16 +51,13 @@ namespace Photon
             parser.Import(srcfile);            
         }
 
-        public static void Import(Executable exe, Package pkg, string packageName,  string packageFileName, ImportMode mode)
+        public static void Import(Executable exe, string packageName,  string packageFileName, ImportMode mode)
         {
             var parser = new Parser();
             parser.Exe = exe;
 
-            if ( pkg == null )
-            {
-                pkg = exe.AddPackage(packageName, parser.PackageScope);
-            }
-
+            var pkg = exe.AddPackage(packageName, parser.PackageScope);
+            
             parser.PackageScope.RelatePackage = packageName;
 
             if ( mode == ImportMode.Directory)
@@ -107,7 +104,7 @@ namespace Photon
 
         public static void Compile(Executable exe, string filename)
         {            
-            Import(exe, null, "main", filename, ImportMode.File); 
+            Import(exe, "main", filename, ImportMode.File); 
         
             for( int i = 0;i<exe.PackageCount;i++)
             {

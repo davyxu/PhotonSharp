@@ -109,10 +109,14 @@ namespace Photon
         {
             // 这个scope是给通过代码导入定义时使用                    
             var pkg = GetPackageByName(classType.Name);
-            if ( pkg == null )
+            if ( pkg != null )
             {
-                throw new RuntimeExcetion("class package not define in code");
+                throw new RuntimeExcetion("class package already define in code");
             }
+
+            Scope pkgScope = new Scope(null, ScopeType.Package, TokenPos.Init );
+
+            pkg = AddPackage( classType.Name, pkgScope );
 
             foreach( var m in classType.GetMembers() )
             {
@@ -122,17 +126,23 @@ namespace Photon
                 
                 var mm = classType.GetMethod(m.Name);
                 var dele = mm.CreateDelegate(typeof(DelegateEntry)) as DelegateEntry;
+                                
 
-                var proc = pkg.GetProcedureByName(m.Name);
-                if ( proc == null )
-                {
-                    throw new RuntimeExcetion("package function not define in code");
-                }
+                // 让导入的代码能认识这个函数
+                Symbol data = new Symbol();
+                data.Name = m.Name;
+                data.Decl = null;                
+                data.Usage = SymbolUsage.Func;
+                pkgScope.Insert(data);
 
+                var proc = pkg.AddProcedure(new Delegate(m.Name));
+              
                 var del = proc as Delegate;
                 del.Entry = dele;
             }
         }
+
+
 
         public void DebugPrint()
         {

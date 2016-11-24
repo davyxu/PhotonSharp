@@ -191,7 +191,7 @@ namespace Photon
             var pkg = Exe.GetPackageByName(tk.Value);
             if (pkg == null)
             {
-                Compiler.Import(Exe, pkg, tk.Value, tk.Value, ImportMode.Directory);
+                Compiler.Import(Exe, tk.Value, tk.Value, ImportMode.Directory);
             }
 
             

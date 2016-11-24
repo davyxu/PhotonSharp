@@ -61,7 +61,7 @@ namespace Photon
                 // 本包及动态闭包调用
             Func.Compile(param.SetLHS(false));
 
-            param.CS.Add(new Command(Opcode.CALLF, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
+            param.CS.Add(new Command(Opcode.CALL, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
         }
     }
 }

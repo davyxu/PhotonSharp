@@ -26,10 +26,8 @@ namespace Photon
         SETU,   // R[I] = * S[I+1]
         IDX,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
-        
-        CALL,   // P 直接指令调用
-        CALLD,  // S[I](S[I+1], ... ) 栈交换,Delegate调用
-        CALLF,  // S[I](S[I+1], ... ) 栈交换,普通函数调用
+                
+        CALL,  // S[I](S[I+1], ... ) 栈交换
         RET,    // 
         JZ,    // S[Top] != 0
         JMP,    // 无条件

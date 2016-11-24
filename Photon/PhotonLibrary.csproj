@@ -71,7 +71,6 @@
     <Compile Include="Parser\LexerInit.cs" />
     <Compile Include="Value\Slot.cs" />
     <Compile Include="Model\SourceFile.cs" />
-    <Compile Include="Value\ValueDelegate.cs" />
     <Compile Include="Value\ValueClosure.cs" />
     <Compile Include="Value\ValueFunc.cs" />
     <Compile Include="Value\ValueArray.cs" />

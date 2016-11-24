@@ -67,7 +67,7 @@ namespace Photon
                 return InvokeDelegate(dg, argCount, cmd.DataB != 0);
             }
 
-            throw new RuntimeExcetion("expect function or delegate");
+            throw new RuntimeException("expect function or delegate");
         }
 
         bool InvokeFunction(CommandSet cmdSet, int argCount, bool balanceStack, ValueClosure closure )

@@ -3,6 +3,7 @@ namespace PhotonCompiler
 {
     public class MyMath
     {
+        // TODO 在特性上标注进入参数, 在编译期检查
         [DelegateAttribute(typeof(DelegateEntry))]
         public static int AddValue( VMachine vm )
         {                        

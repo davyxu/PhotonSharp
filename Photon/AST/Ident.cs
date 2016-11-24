@@ -70,12 +70,11 @@ namespace Photon
                 return true;
             }
 
-            Procedure outP;
-            Package outPkg;
+            Procedure outP= pkg.Exe.GetProcedureByName(name );            
 
-            if (pkg.Exe.GetProcedureDetail(name, out outP, out outPkg))
+            if (outP != null )
             {                
-                cmd.DataA = outPkg.ID;
+                cmd.DataA = outP.Pkg.ID;
                 cmd.DataB = outP.ID;
 
                 return true;

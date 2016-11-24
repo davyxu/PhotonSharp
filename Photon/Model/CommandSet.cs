@@ -23,6 +23,12 @@ namespace Photon
             set;
         }
 
+        // 传入参数数量
+        internal int InputValueCount { get; set; }
+
+        // 返回值数量
+        internal int OutputValueCount { get; set; }
+
 
         public string Name
         {
@@ -103,11 +109,7 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
-        // 传入参数数量
-        internal int InputValueCount { get; set; }
 
-        // 返回值数量
-        internal int OutputValueCount { get; set; }
 
 
         public void DebugPrint( )

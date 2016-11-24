@@ -19,9 +19,9 @@ namespace Photon
         }
     }
 
-    class RuntimeExcetion : Exception
+    class RuntimeException : Exception
     {
-        public RuntimeExcetion(string msg)
+        public RuntimeException(string msg)
             : base( msg )
         {
 

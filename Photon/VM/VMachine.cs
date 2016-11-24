@@ -178,7 +178,7 @@ namespace Photon
 
             if (inc == null)
             {
-                throw new RuntimeExcetion("invalid instruction");                
+                throw new RuntimeException("invalid instruction");                
             }
 
 
@@ -275,8 +275,7 @@ namespace Photon
             _currFrame.PC = -1;
         }
 
-        
-
+       
         public void Run(Executable exe, string startPkg = "main" )
         {
             if ( ShowDebugInfo )
@@ -294,28 +293,18 @@ namespace Photon
                 var pkg = exe.GetPackage(i);                
                 _package.Add(new RuntimePackage(pkg.Name));
             }
-
-            CommandSet cs = null;
-
-            if (string.IsNullOrEmpty(startPkg))
-            {
-                cs = exe.GetProcedure(0, 0) as CommandSet;
-                GetRuntimePackage(0).Reg.SetUsedCount(cs.RegCount);   
-            }
-            else
-            {
-                Procedure proc;
-                Package outpkg;
-                if (exe.GetProcedureDetail( startPkg, out proc, out outpkg))
-                {
-                    cs = proc as CommandSet;
-                    GetRuntimePackage(outpkg.ID).Reg.SetUsedCount(cs.RegCount);
-                }
-            }
             
+            // 找到包入口
+            var proc = exe.GetProcedureByName(startPkg);
+            if ( proc == null )
+            {
+                throw new RuntimeException("unknown start package name: " + startPkg);
+            }
+
+            var cs = proc as CommandSet;
+            GetRuntimePackage(proc.Pkg.ID).Reg.SetUsedCount(cs.RegCount);
 
             EnterFrame(cs);
-            
 
             int currSrcLine = 0;
 
@@ -350,7 +339,6 @@ namespace Photon
                 // 每条指令执行前
                 CallHook(DebugHook.AssemblyLine);
 
-
                 ExecCode(cmd);
 
                 // 打印执行完后的信息
@@ -370,7 +358,6 @@ namespace Photon
                 }
 
             }
-
 
 
             if (ShowDebugInfo)

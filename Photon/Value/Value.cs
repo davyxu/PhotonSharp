@@ -39,7 +39,7 @@ namespace Photon
             var v = this as ValueNumber;
             if (v == null)
             {
-                throw new RuntimeExcetion("expect number");                
+                throw new RuntimeException("expect number");                
             }
 
             return v.Number;
@@ -49,7 +49,7 @@ namespace Photon
             var v = this as ValueString;
             if (v == null)
             {
-                throw new RuntimeExcetion("expect string");
+                throw new RuntimeException("expect string");
             }
 
             return v.String;
@@ -61,7 +61,7 @@ namespace Photon
             var v = this as ValueObject;
             if (v == null)
             {
-                throw new RuntimeExcetion("expect object");
+                throw new RuntimeException("expect object");
             }
 
             return v;
@@ -72,7 +72,7 @@ namespace Photon
             var v = this as ValueFunc;
             if (v == null)
             {
-                throw new RuntimeExcetion("expect function");
+                throw new RuntimeException("expect function");
             }
 
             return v;
@@ -83,7 +83,7 @@ namespace Photon
             var v = this as ValueClosure;
             if (v == null)
             {
-                throw new RuntimeExcetion("expect closure");
+                throw new RuntimeException("expect closure");
             }
 
             return v;

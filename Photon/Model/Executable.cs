@@ -12,16 +12,13 @@ namespace Photon
     {
 
         List<Package> _packages = new List<Package>();
-       
-        // 外部代理函数
-        Dictionary<string, ValueDelegate> _delegateByName = new Dictionary<string, ValueDelegate>();
-
+      
 
         internal Package AddPackage( string name, Scope top )
         {
             if ( GetPackageByName(name) != null )
             {
-                throw new RuntimeExcetion("duplicate register package, name: " + name);
+                throw new RuntimeException("duplicate register package, name: " + name);
             }
 
             var pkg = new Package( _packages.Count,  name, this, top);
@@ -54,28 +51,18 @@ namespace Photon
             return pkg.GetProcedure(cmdSetID);
         }
 
-        internal bool GetProcedureDetail(string name, out Procedure outP, out Package outPkg)
-        {
-            outP = null;
-            outPkg = null;
-
+        internal Procedure GetProcedureByName(string name )
+        {           
             foreach( var pkg in _packages )
             {
-                outP = pkg.GetProcedureByName(name);
-                if (outP != null)
+                var proc = pkg.GetProcedureByName(name);
+                if (proc != null)
                 {
-                    outPkg = pkg;
-                    return true;
+                    return proc;
                 }
             }
             
-
-            return false;
-        }
-
-        internal void AddDelegate( string name, ValueDelegate d )
-        {
-            _delegateByName.Add(name, d);
+            return null;
         }
 
         public Package GetPackage(int pkgid)
@@ -111,7 +98,7 @@ namespace Photon
             var pkg = GetPackageByName(classType.Name);
             if ( pkg != null )
             {
-                throw new RuntimeExcetion("class package already define in code");
+                throw new RuntimeException("class package already define in code");
             }
 
             Scope pkgScope = new Scope(null, ScopeType.Package, TokenPos.Init );

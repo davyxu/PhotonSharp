@@ -15,13 +15,6 @@ namespace Photon
         {
             var method = obj as ValueString;
 
-            switch (method.String)
-            {
-                case "append":
-                    {
-                        return new ValueDelegate( Append );
-                    }                    
-            }
 
             return Value.Nil;
         }

@@ -277,7 +277,7 @@ namespace Photon
 
         
 
-        public void Run(Executable exe)
+        public void Run(Executable exe, string startPkg)
         {
             if ( ShowDebugInfo )
             {
@@ -295,10 +295,27 @@ namespace Photon
                 _package.Add(new RuntimePackage(pkg.Name));
             }
 
-            var cs = exe.GetProcedure(0, 0) as CommandSet;
-            GetRuntimePackage(0).Reg.SetUsedCount(cs.RegCount);                 
+            CommandSet cs = null;
+
+            if (string.IsNullOrEmpty(startPkg))
+            {
+                cs = exe.GetProcedure(0, 0) as CommandSet;
+                GetRuntimePackage(0).Reg.SetUsedCount(cs.RegCount);   
+            }
+            else
+            {
+                Procedure proc;
+                Package outpkg;
+                if (exe.GetProcedureDetail( startPkg, out proc, out outpkg))
+                {
+                    cs = proc as CommandSet;
+                    GetRuntimePackage(outpkg.ID).Reg.SetUsedCount(cs.RegCount);
+                }
+            }
+            
 
             EnterFrame(cs);
+            
 
             int currSrcLine = 0;
 

@@ -121,7 +121,7 @@ namespace Photon
             return _proc[index];
         }
 
-        internal Procedure FindProcedureByName(string name)
+        internal Procedure GetProcedureByName(string name)
         {
             foreach (var cs in _proc)
             {
@@ -159,18 +159,31 @@ namespace Photon
 
         internal void DebugPrint(  )
         {
-            // 语法树
-            Debug.WriteLine("ast:");
-            PrintAST(AST);
-            Debug.WriteLine("");
+            if (AST != null )
+            {
+                // 语法树
+                Debug.WriteLine("ast:");
+                PrintAST(AST);
+                Debug.WriteLine("");
+            }
+            
 
-            // 符号
-            Debug.WriteLine("symbols:");
-            _top.DebugPrint("");
-            Debug.WriteLine("");
 
-            // 常量
-            Constants.DebugPrint();
+            if (_top != null )
+            {
+                // 符号
+                Debug.WriteLine("symbols:");
+                _top.DebugPrint("");
+                Debug.WriteLine("");
+            }
+
+
+            if (Constants.Count >0 )
+            {
+                // 常量
+                Constants.DebugPrint();
+            }
+            
             
             // 汇编
             foreach (var p in _proc)
@@ -178,7 +191,13 @@ namespace Photon
                 var cs = p as CommandSet;
                 if (cs != null)
                 {
+                    Debug.WriteLine(string.Format("cmdset: [{0}] id: {1} regs: {2}", cs.Name,cs.ID, cs.RegCount));
                     cs.DebugPrint();
+                }
+                var del = p as Delegate;
+                if ( del != null )
+                {
+                    Debug.WriteLine(string.Format("delegate: [{0}] id: {1}", del.Name, del.ID));                    
                 }
             }
         }

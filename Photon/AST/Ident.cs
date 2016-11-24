@@ -61,11 +61,11 @@ namespace Photon
         {
 
             // 优先在本包找
-            var cs = pkg.FindProcedureByName(name) as CommandSet;
-            if (cs != null)
+            var proc = pkg.GetProcedureByName(name);
+            if (proc != null)
             {
                 cmd.DataA = pkg.ID;
-                cmd.DataB = cs.ID;
+                cmd.DataB = proc.ID;
 
                 return true;
             }
@@ -73,12 +73,10 @@ namespace Photon
             Procedure outP;
             Package outPkg;
 
-            if (pkg.Exe.FindCmdSetInPackage(name, out outP, out outPkg))
-            {
-                var outCS = outP as CommandSet;
-
+            if (pkg.Exe.GetProcedureDetail(name, out outP, out outPkg))
+            {                
                 cmd.DataA = outPkg.ID;
-                cmd.DataB = outCS.ID;
+                cmd.DataB = outP.ID;
 
                 return true;
             }

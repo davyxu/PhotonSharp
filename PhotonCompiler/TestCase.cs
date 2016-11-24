@@ -4,7 +4,7 @@ namespace PhotonCompiler
     public class MyMath
     {
         [DelegateAttribute(typeof(DelegateEntry))]
-        public static int Add( VMachine vm )
+        public static int AddValue( VMachine vm )
         {                        
             var a = vm.DataStack.GetFloat32(-1);
             var b = vm.DataStack.GetFloat32(-2);
@@ -20,7 +20,16 @@ namespace PhotonCompiler
 
         static void TestCase()
         {
-            new TestBox().CompileFile("Delegate.pho").Exe.RegisterPackage(typeof(MyMath));
+            var testbox = new TestBox();
+
+            new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
+
+            testbox.CompileFile("Delegate.pho");
+
+            testbox.Exe.RegisterPackage(typeof(MyMath));
+
+            testbox.Run();
+
          
 
             new TestBox().RunFile("Package.pho");

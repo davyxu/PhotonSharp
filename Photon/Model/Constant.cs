@@ -23,6 +23,11 @@ namespace Photon
             return _cset.Count - 1;
         }
 
+        internal int Count
+        {
+            get { return _cset.Count; }
+        }
+
         internal override Value Get(int index)
         {
             return _cset[index];

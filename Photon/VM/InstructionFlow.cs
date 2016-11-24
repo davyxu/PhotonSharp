@@ -95,20 +95,30 @@ namespace Photon
 
             var obj = vm.DataStack.Pop();
 
-            var func = obj.CastFunc();            
+            var func = obj.CastFunc();
 
             var cmdSet = func.Proc as CommandSet;
+            if ( cmdSet != null )
+            {
+                return InvokeFunction(cmdSet, argCount, cmd.DataB != 0, obj as ValueClosure);
+            }
+            
+            var dg = func.Proc as Delegate;
+            if ( dg != null )
+            {
+                return InvokeDelegate(dg, argCount, cmd.DataB != 0);
+            }
 
+            throw new RuntimeExcetion("expect function or delegate");
+        }
+
+        bool InvokeFunction(CommandSet cmdSet, int argCount, bool balanceStack, ValueClosure closure )
+        {
             // 更换当前上下文
             vm.EnterFrame(cmdSet);
 
-            vm.CurrFrame.Closure = obj as ValueClosure;
-
-            // 调用结束时需要平衡栈
-            if (cmd.DataB != 0)
-            {
-                vm.CurrFrame.RestoreDataStack = true;
-            }
+            vm.CurrFrame.RestoreDataStack = balanceStack;
+            vm.CurrFrame.Closure = closure;
 
             // 将栈转为被调用函数的寄存器
             for (int i = 0; i < argCount; i++)
@@ -123,10 +133,33 @@ namespace Photon
             // 记录当前的数据栈位置
             vm.CurrFrame.DataStackBase = vm.DataStack.Count;
 
-
-
-            // 马上跳到下个执行域            
             return false;
+        }
+
+        bool InvokeDelegate(Delegate dg, int argCount, bool balanceStack)
+        {            
+            // 外部调用不进行栈调整
+            var stackBeforeCall = vm.DataStack.Count;
+
+            int retValueCount = 0;
+
+            if (dg.Entry != null)
+            {
+                retValueCount = dg.Entry(vm);
+            }
+
+            // 调用结束时需要平衡栈( 返回值没有被用到 )
+            if (balanceStack)
+            {
+                // 调用前(包含参数+ delegate)
+                vm.DataStack.Count = stackBeforeCall - argCount;
+            }
+            else
+            {
+                vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
+            }
+
+            return true;
         }
 
 

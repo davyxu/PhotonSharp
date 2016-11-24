@@ -6,7 +6,7 @@ namespace PhotonCompiler
 {
     class TestBox
     {
-        Executable _exe;
+        Executable _exe = new Executable();
         VMachine _vm = new VMachine();
 
         string _caseName;        
@@ -17,7 +17,7 @@ namespace PhotonCompiler
 
             Debug.WriteLine(string.Format("==================={0}===================", _caseName));
 
-            _exe = Compiler.Compile(src);            
+            Compiler.Compile(_exe, src);            
 
             _exe.DebugPrint();            
 
@@ -29,7 +29,7 @@ namespace PhotonCompiler
             Debug.WriteLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            _vm.Run(_exe);
+            _vm.Run(_exe, string.Empty);
 
             Debug.WriteLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            

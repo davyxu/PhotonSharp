@@ -1,2 +1,2 @@
-
-var a = 1
+import "MyMath"
+var c = MyMath.AddValue( 1, 2 )

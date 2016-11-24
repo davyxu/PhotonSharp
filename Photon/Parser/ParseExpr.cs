@@ -153,11 +153,6 @@ namespace Photon
                             {
                                 case TokenType.Identifier:
                                     {
-    
-
-                                        //Selector.Compile(param.SetLHS(false).SetPackage(pkg));
-
-
                                         var sel = ParseIdent();
                                         
 
@@ -169,6 +164,12 @@ namespace Photon
                                             if (pkg == null)
                                             {
                                                 throw new ParseException("package not found: " + xident.Name, dotpos);
+                                            }
+
+                                            // 包必须有一个顶级作用域
+                                            if ( pkg.TopScope == null )
+                                            {
+                                                throw new ParseException("package should have a scope: " + xident.Name, dotpos);
                                             }
 
 

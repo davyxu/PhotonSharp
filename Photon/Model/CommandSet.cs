@@ -38,10 +38,12 @@ namespace Photon
 
     class Delegate : Procedure
     {
-        internal Delegate( string name )
+        public DelegateEntry Entry;
+
+        internal Delegate( string name)
             : base( name )
         {
-
+            
         }
 
         public override string ToString()
@@ -110,7 +112,7 @@ namespace Photon
 
         public void DebugPrint( )
         {
-            Debug.WriteLine("[{0}] regs: {1}", Name, RegCount);
+            
 
             int index = 0;
 

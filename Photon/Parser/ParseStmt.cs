@@ -187,8 +187,14 @@ namespace Photon
 
             Declare(n, _global, tk.Value, defpos, SymbolUsage.Package);
 
+            // 如果包存在, 就不会在定义
+            var pkg = Exe.GetPackageByName(tk.Value);
+            if (pkg == null)
+            {
+                Compiler.Import(Exe, pkg, tk.Value, tk.Value, ImportMode.Directory);
+            }
 
-            Compiler.Import(Exe, tk.Value, tk.Value, ImportMode.Directory);
+            
 
             return n;
         }

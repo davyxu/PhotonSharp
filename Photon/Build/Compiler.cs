@@ -51,12 +51,17 @@ namespace Photon
             parser.Import(srcfile);            
         }
 
-        public static void Import(Executable exe,string packageName,  string packageFileName, ImportMode mode)
+        public static void Import(Executable exe, Package pkg, string packageName,  string packageFileName, ImportMode mode)
         {
             var parser = new Parser();
             parser.Exe = exe;
 
-            var pkg = exe.AddPackage(packageName, parser.PackageScope);
+            if ( pkg == null )
+            {
+                pkg = exe.AddPackage(packageName, parser.PackageScope);
+            }
+
+            parser.PackageScope.RelatePackage = packageName;
 
             if ( mode == ImportMode.Directory)
             {
@@ -87,8 +92,6 @@ namespace Photon
             param.Pkg.AST = parser.Chunk;
             
             cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
-
-            pkg.ResolveNode();
         }
 
 
@@ -97,9 +100,20 @@ namespace Photon
         {            
             var exe = new Executable( );
 
-            Import(exe, "main", filename, ImportMode.File);
+            Compile(exe, filename);
 
             return exe;
+        }
+
+        public static void Compile(Executable exe, string filename)
+        {            
+            Import(exe, null, "main", filename, ImportMode.File); 
+        
+            for( int i = 0;i<exe.PackageCount;i++)
+            {
+                var pkg = exe.GetPackage(i);
+                pkg.ResolveNode();
+            }
         }
 
     }

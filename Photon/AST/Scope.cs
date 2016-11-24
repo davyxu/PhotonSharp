@@ -22,6 +22,9 @@ namespace Photon
         ScopeType _type;
         TokenPos _defpos;
 
+        // 关联的包名, 调试用
+        public string RelatePackage;
+
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
         List<Symbol> _regs = new List<Symbol>();

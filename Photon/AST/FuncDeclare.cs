@@ -38,7 +38,7 @@ namespace Photon
         {
             var newset = new CommandSet(Name.Name, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var cmdSetID = param.Pkg.AddProcedure(newset);            
+            param.Pkg.AddProcedure(newset);            
 
             Body.Compile(param.SetLHS(false).SetComdSet(newset));
 

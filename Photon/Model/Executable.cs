@@ -1,7 +1,9 @@
 ﻿
+using SharpLexer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Photon
 {
@@ -17,6 +19,11 @@ namespace Photon
 
         internal Package AddPackage( string name, Scope top )
         {
+            if ( GetPackageByName(name) != null )
+            {
+                throw new RuntimeExcetion("duplicate register package, name: " + name);
+            }
+
             var pkg = new Package( _packages.Count,  name, this, top);
 
             _packages.Add(pkg);
@@ -47,14 +54,14 @@ namespace Photon
             return pkg.GetProcedure(cmdSetID);
         }
 
-        internal bool FindCmdSetInPackage(string name, out Procedure outP, out Package outPkg)
+        internal bool GetProcedureDetail(string name, out Procedure outP, out Package outPkg)
         {
             outP = null;
             outPkg = null;
 
             foreach( var pkg in _packages )
             {
-                outP = pkg.FindProcedureByName(name);
+                outP = pkg.GetProcedureByName(name);
                 if (outP != null)
                 {
                     outPkg = pkg;
@@ -100,9 +107,31 @@ namespace Photon
 
         public void RegisterPackage(Type classType)
         {
-            var obj = classType.GetCustomAttributes(typeof(DelegateAttribute), false);
+            // 这个scope是给通过代码导入定义时使用                    
+            var pkg = GetPackageByName(classType.Name);
+            if ( pkg == null )
+            {
+                throw new RuntimeExcetion("class package not define in code");
+            }
 
-            
+            foreach( var m in classType.GetMembers() )
+            {
+                var attr = m.GetCustomAttribute<DelegateAttribute>();
+                if (attr == null)
+                    continue;
+                
+                var mm = classType.GetMethod(m.Name);
+                var dele = mm.CreateDelegate(typeof(DelegateEntry)) as DelegateEntry;
+
+                var proc = pkg.GetProcedureByName(m.Name);
+                if ( proc == null )
+                {
+                    throw new RuntimeExcetion("package function not define in code");
+                }
+
+                var del = proc as Delegate;
+                del.Entry = dele;
+            }
         }
 
         public void DebugPrint()
@@ -110,7 +139,7 @@ namespace Photon
             // 语法树
             foreach (var pkg in _packages)
             {
-                Debug.WriteLine(string.Format("============= {0} =============", pkg.Name));
+                Debug.WriteLine(string.Format("============= {0} id: {1} =============", pkg.Name, pkg.ID));
                 pkg.DebugPrint();
             }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D4-4A66-B10E-459864FAED38}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonToy", "PhotonToy\PhotonToy.csproj", "{B37BC0BC-90F7-401B-B485-17219FF88B52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonCompiler", "PhotonCompiler\PhotonCompiler.csproj", "{0AB986D1-0226-417A-A87D-ECDF6C020282}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EA42A4CD-77F2-40D6-B483-693A5824FDF1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{A60DC43C-1B77-4463-9E49-DC52DD53B6CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,5 +50,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{129399C8-6ED0-47DA-8829-5781D54C2A48} = {EA42A4CD-77F2-40D6-B483-693A5824FDF1}
+		{5138A406-5B76-4D5E-B889-257224E1FB2F} = {EA42A4CD-77F2-40D6-B483-693A5824FDF1}
+		{B37BC0BC-90F7-401B-B485-17219FF88B52} = {A60DC43C-1B77-4463-9E49-DC52DD53B6CB}
+		{0AB986D1-0226-417A-A87D-ECDF6C020282} = {A60DC43C-1B77-4463-9E49-DC52DD53B6CB}
 	EndGlobalSection
 EndGlobal

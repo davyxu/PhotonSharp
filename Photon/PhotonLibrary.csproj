@@ -66,8 +66,10 @@
     <Compile Include="Model\CommandSet.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\Delegate.cs" />
     <Compile Include="Model\Exception.cs" />
     <Compile Include="Model\Package.cs" />
+    <Compile Include="Model\Procedure.cs" />
     <Compile Include="Parser\LexerInit.cs" />
     <Compile Include="Value\Slot.cs" />
     <Compile Include="Model\SourceFile.cs" />

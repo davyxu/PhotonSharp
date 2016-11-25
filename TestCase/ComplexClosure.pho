@@ -1,0 +1,23 @@
+
+func foo( ){
+	var a = 1
+	
+	return func( ){
+		var b = 2
+
+		return func( x ){
+			
+			var c = 3
+			
+			return a + b + c + x
+		}
+	}
+	
+}
+
+
+
+
+var c = foo( )
+
+var x = c()( 9 )

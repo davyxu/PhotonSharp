@@ -146,7 +146,9 @@ namespace Photon
     {
         public override bool Execute( Command cmd)
         {
-            int upIndex = cmd.DataA;
+            // 使用寄存器的地方和引用地方scope之差
+            int levelDiff = cmd.DataA;
+
             int regIndex = cmd.DataB + vm.RegBase;
 
             var closure = vm.DataStack.Get(-1).CastClosure();

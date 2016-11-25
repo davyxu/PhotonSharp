@@ -191,7 +191,7 @@ namespace Photon
                 var cs = p as CommandSet;
                 if (cs != null)
                 {
-                    Debug.WriteLine(string.Format("cmdset: [{0}] id: {1} regs: {2}", cs.Name,cs.ID, cs.RegCount));
+                    Debug.WriteLine(string.Format("cmdset: [{0}] id: {1} regs: {2}", cs,cs.ID, cs.RegCount));
                     cs.DebugPrint();
                 }
                 var del = p as Delegate;

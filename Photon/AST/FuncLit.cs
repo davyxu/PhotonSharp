@@ -45,15 +45,14 @@ namespace Photon
             FindUsedUpvalue(Body, upvalues );
 
             // 捕获的目标变量的引用建立后, 在闭包的upvalue里的索引就无所谓了, 只要跟用的时候索引对应上就OK
-            int upIndex = 0;
             foreach( var pr in upvalues )
             {
-                // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                param.CS.Add(new Command(Opcode.LINKU, upIndex, pr.Value.Symbol.RegIndex))
-                    .SetComment( pr.Value.ToString() )
-                    .SetCodePos(TypeInfo.FuncPos);
+                var diff=CalcScopeDiff(TypeInfo.ScopeInfo, pr.Value.Symbol.RegBelong);
 
-                upIndex++;
+                // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
+                param.CS.Add(new Command(Opcode.LINKU, diff, pr.Value.Symbol.RegIndex))
+                    .SetComment( pr.Value.ToString() )
+                    .SetCodePos(TypeInfo.FuncPos);                
             }
 
 
@@ -61,6 +60,21 @@ namespace Photon
 
             newset.OutputValueCount = FuncType.CalcReturnValueCount( Body.Child() );
             
+        }
+
+        int CalcScopeDiff( Scope baseScope, Scope regScope )
+        {
+            int diff = 0;
+
+            Scope s = baseScope;
+
+            while( regScope != s )
+            {
+                s = s.Outter;
+                diff--;
+            }
+
+            return diff;
         }
 
         void FindUsedUpvalue(Node n, Dictionary<UpvaluePair, Ident> upvalues)

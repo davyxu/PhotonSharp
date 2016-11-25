@@ -4,60 +4,7 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    // 外部函数和内建函数统称过程
-    public class Procedure
-    {
-        int _id;
-
-        string _name;
-
-        public int ID
-        {
-            get { return _id; }
-            internal set { _id = value; }
-        }
-
-        public Package Pkg
-        {
-            get;
-            set;
-        }
-
-        // 传入参数数量
-        internal int InputValueCount { get; set; }
-
-        // 返回值数量
-        internal int OutputValueCount { get; set; }
-
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        internal Procedure( string name )
-        {
-            _name = name;
-        }
-    }
-
-
-    class Delegate : Procedure
-    {
-        public DelegateEntry Entry;
-
-        internal Delegate( string name)
-            : base( name )
-        {
-            
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0}", Name);
-        }
-    }
-
+ 
 
     public class CommandSet : Procedure
     {
@@ -109,13 +56,8 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
-
-
-
         public void DebugPrint( )
         {
-            
-
             int index = 0;
 
             int currLine = 0;

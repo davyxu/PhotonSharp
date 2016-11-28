@@ -13,7 +13,7 @@ namespace Photon
 
         internal bool UpValue; // 闭包中捕获的变量
 
-        Command _cmdGen;
+        internal Command CmdGen;
 
         public Ident(Token t)
         {
@@ -28,6 +28,19 @@ namespace Photon
         public string Name
         {
             get { return _token.Value; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var otherid = (Ident)obj;
+
+            return Symbol == otherid.Symbol &&
+                Name == otherid.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return Symbol.GetHashCode() + Name.GetHashCode();
         }
 
         public override string ToString()
@@ -97,13 +110,13 @@ namespace Photon
         internal override void Compile(CompileParameter param)
         {
             // 占位
-            _cmdGen = param.CS.Add(new Command(Opcode.NOP))
+            CmdGen = param.CS.Add(new Command(Opcode.NOP))
                 .SetComment(Name)
                 .SetCodePos(DefinePos);
 
             GenCode(param, 1);
 
-            if ( _cmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
+            if ( CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
             {
                 throw new ParseException("code not resolve", DefinePos);
             }
@@ -123,23 +136,23 @@ namespace Photon
 
                 if (Symbol.IsGlobal)
                 {
-                    _cmdGen.Op = Opcode.SETG;
+                    CmdGen.Op = Opcode.SETG;
 
-                    _cmdGen.DataA = param.Pkg.ID;
-                    _cmdGen.DataB = Symbol.RegIndex;
+                    CmdGen.DataA = param.Pkg.ID;
+                    CmdGen.DataB = Symbol.RegIndex;
                 }
                 else if ( UpValue )
                 {
-                    _cmdGen.Op = Opcode.SETU;
+                    CmdGen.Op = Opcode.SETU;
 
                     
-                    _cmdGen.DataA = Symbol.RegIndex;
+                    CmdGen.DataA = Symbol.RegIndex;
                 }
                 else
                 {
-                    _cmdGen.Op = Opcode.SETR;
+                    CmdGen.Op = Opcode.SETR;
 
-                    _cmdGen.DataA = Symbol.RegIndex;
+                    CmdGen.DataA = Symbol.RegIndex;
                 }
  
             }
@@ -164,9 +177,9 @@ namespace Photon
                         case SymbolUsage.Delegate:
                         case SymbolUsage.Func:
                             {
-                                _cmdGen.Op = Opcode.LOADF;
+                                CmdGen.Op = Opcode.LOADF;
 
-                                if (!ResolveFuncEntry(param.Pkg, Name, _cmdGen))
+                                if (!ResolveFuncEntry(param.Pkg, Name, CmdGen))
                                 {
                                     // 不是本package, 或者函数在本package后面定义, 延迟到下次pass进行解析
 
@@ -191,19 +204,19 @@ namespace Photon
 
                                 if (Symbol.IsGlobal)
                                 {
-                                    _cmdGen.Op = Opcode.LOADG;
-                                    _cmdGen.DataA = param.Pkg.ID;
-                                    _cmdGen.DataB = Symbol.RegIndex;
+                                    CmdGen.Op = Opcode.LOADG;
+                                    CmdGen.DataA = param.Pkg.ID;
+                                    CmdGen.DataB = Symbol.RegIndex;
                                 }
                                 else if (UpValue)
                                 {
-                                    _cmdGen.Op = Opcode.LOADU;
-                                    _cmdGen.DataA = Symbol.RegIndex;
+                                    CmdGen.Op = Opcode.LOADU;
+                                    CmdGen.DataA = Symbol.RegIndex;
                                 }
                                 else
                                 {
-                                    _cmdGen.Op = Opcode.LOADR;
-                                    _cmdGen.DataA = Symbol.RegIndex;
+                                    CmdGen.Op = Opcode.LOADR;
+                                    CmdGen.DataA = Symbol.RegIndex;
                                 }
 
                                 

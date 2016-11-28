@@ -172,21 +172,29 @@ namespace Photon
             return false;
         }
 
+        // 找到能分配寄存器的scope
+        static Scope FoundRegAllocableScope( Scope s )
+        {
+            Scope regBound = s;
+            while (regBound.Type != ScopeType.Package &&
+                 regBound.Type != ScopeType.Function &&
+                 regBound.Type != ScopeType.Closure)
+            {
+
+                regBound = regBound.Outter;
+            }
+
+            return regBound;
+        }
+
         internal void Insert(Symbol symbol)
         {
 
             if (NeedAllocReg(symbol.Usage))
             {
-                symbol.RegIndex = CalcRegBase();
+                var regBound = FoundRegAllocableScope(this);
 
-                Scope regBound = this;
-                while( regBound.Type != ScopeType.Package && 
-                     regBound.Type != ScopeType.Function &&
-                     regBound.Type != ScopeType.Closure)
-                {
-
-                    regBound = regBound.Outter;
-                }
+                symbol.RegIndex = regBound.RegCount;
 
                 symbol.RegBelong = regBound;
 

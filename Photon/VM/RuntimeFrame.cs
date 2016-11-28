@@ -15,6 +15,8 @@ namespace Photon
 
         internal ValueClosure Closure;
 
+        internal Register Reg = new Register("R", 10);
+
         public RuntimeFrame(CommandSet cs)
         {            
             CmdSet = cs; 

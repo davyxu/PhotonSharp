@@ -36,9 +36,6 @@ namespace Photon
         // 数据交换栈
         DataStack _dataStack = new DataStack(10);
 
-        // 数据寄存器
-        Register _localReg = new Register("R", 10);
-
         // 包内存
         List<RuntimePackage> _package = new List<RuntimePackage>();
 
@@ -93,7 +90,7 @@ namespace Photon
 
         public Register LocalReg
         {
-            get { return _localReg; }
+            get { return _currFrame.Reg; }
         }
 
         public Executable Exec
@@ -218,7 +215,7 @@ namespace Photon
                 rr.Min = _regBase;
                 rr.Max = _regBase + newFrame.CmdSet.RegCount;
 
-                _localReg.SetUsedCount(rr.Max);
+                LocalReg.SetUsedCount(rr.Max);
 
                 // 留作下次调用叠加时使用
                 _regBaseStack.Push(rr);
@@ -237,17 +234,17 @@ namespace Photon
             {
                 _regBaseStack.Pop();
 
-                if (_regBaseStack.Count > 0)
-                {
-                    var rr = _regBaseStack.Peek();
-                    _regBase = rr.Min;
+                //if (_regBaseStack.Count > 0)
+                //{
+                //    var rr = _regBaseStack.Peek();
+                //    _regBase = rr.Min;
 
-                    _localReg.SetUsedCount(rr.Max);
-                }
-                else
-                {
-                    _localReg.SetUsedCount(0);
-                }
+                //    LocalReg.SetUsedCount(rr.Max);
+                //}
+                //else
+                //{
+                //    LocalReg.SetUsedCount(0);
+                //}
                    
             }
 

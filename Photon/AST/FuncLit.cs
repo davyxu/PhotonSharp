@@ -10,7 +10,7 @@ namespace Photon
 
         public BlockStmt Body;
 
-        public List<Ident> RefUpvalues = new List<Ident>();
+        public List<Ident> UpValues = new List<Ident>();
 
         public FuncLit(BlockStmt body, FuncType ft )
         {
@@ -31,6 +31,18 @@ namespace Photon
             return Body.Child();
         }
 
+        // foo  var a
+        // closure var b   间接UpValue a
+        // closure2 var c  直接UpValue a, b
+
+        // LINKU和LOADU对应
+        // 引用模式分为2种
+        // 1. 引用最近的上一层作用域,  LINKU第一个参数=0
+        // 1. 引用上N层作用域,  LINKU第一个参数=1
+        // 
+        // UpValue索引计算
+        // 不使用被引用的变量在它归属作用域分配的寄存器索引
+        // 直接引用并使用的UpValue
 
         internal override void Compile(CompileParameter param)
         {
@@ -39,32 +51,49 @@ namespace Photon
             var proc = param.Pkg.AddProcedure(newset);
 
             param.CS.Add(new Command(Opcode.CLOSURE, param.Pkg.ID, proc.ID)).SetCodePos(TypeInfo.FuncPos);
-            
+
             Body.Compile(param.SetLHS(false).SetComdSet(newset));
+            
+            // 找到这一层闭包用的upvalues集合(引用上面函数作用域的)            
+            FindUsedUpvalue(Body );
 
-            // 找到这一层闭包用的upvalues集合(引用上面函数作用域的)
-            var upvalues = new Dictionary<UpvaluePair, Ident>();
-            FindUsedUpvalue(Body, upvalues );
-
-            // 捕获的目标变量的引用建立后, 在闭包的upvalue里的索引就无所谓了, 只要跟用的时候索引对应上就OK
-            foreach( var pr in upvalues )
-            {
-                int regIndex = CalcRefUpvalueRegIndex(TypeInfo.ScopeInfo, pr.Value.Symbol.RegBelong, pr.Value);
-
-                // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                param.CS.Add(new Command(Opcode.LINKU, regIndex))
-                    .SetComment( pr.Value.ToString() )
-                    .SetCodePos(TypeInfo.FuncPos);                
+            // 给每一个upvalue添加引用的upvalue
+            foreach (var uv in UpValues)
+            {                
+                AddRefUpvalueInNode(TypeInfo.ScopeInfo, uv.Symbol.RegBelong, uv );
             }
 
-            foreach (var pr in RefUpvalues)
-            {
-                // 对需要引用上层作用域变量的Upvalue, 放入指令进行引用
-                 param.CS.Add(new Command(Opcode.LINKU, pr.Symbol.RegIndex))
-                    .SetComment(pr.ToString())
-                    .SetCodePos(TypeInfo.FuncPos);
-            }
+            int ThisLevelIndex = 0;
 
+            foreach (var uv in UpValues)
+            {
+                var cmd = param.CS.Add(new Command(Opcode.LINKU, -1, -1 ))
+                  .SetComment(uv.ToString())
+                  .SetCodePos(TypeInfo.FuncPos);
+
+
+                // 引用的上一层的upvalue的索引, 对应指令引用LocalReg的Index
+                int UplevelIndex = GetRegIndex(TypeInfo.ScopeInfo, uv.Name);
+                if ( UplevelIndex != -1 )
+                {
+                    cmd.DataA = 0;
+                    cmd.DataB = UplevelIndex;
+                }
+                else
+                {
+                    // 引用上层自己的Upvalue(间接引用)
+                    UplevelIndex = GetUpvalueIndex(TypeInfo.ScopeInfo, uv.Name);
+
+                    cmd.DataA = 1;
+                    cmd.DataB = UplevelIndex;
+                }
+                
+
+                // LOADU的对应的Upvalue的索引, 修改下
+                uv.CmdGen.DataA = ThisLevelIndex;
+
+                ThisLevelIndex++;
+            }
 
             newset.InputValueCount = TypeInfo.Params.Count;
 
@@ -72,67 +101,60 @@ namespace Photon
             
         }
 
-        FuncLit Scope2FuncLitNode( Scope s )
-        {
-            Node n = Parent;
 
-            while( !(n is FuncLit) )
+        int GetUpvalueIndex( Scope baseScope, string name )
+        {
+            Scope s = baseScope.Outter;
+            FuncLit fl = Scope2FuncLitNode(s, Parent);
+            
+            for (int i = 0; i < fl.UpValues.Count;i++ )
             {
-                n = n.Parent;
+                if (fl.UpValues[i].Name == name)
+                    return i;
             }
 
-            return n as FuncLit;
+            return -1;
         }
 
-        int CalcRefUpvalueRegIndex( Scope baseScope, Scope regScope, Ident var )
+        int GetRegIndex( Scope baseScope, string name )
         {
-            int regIndex = 0;
+            Scope s = baseScope.Outter;
+            var symbol = s.FindSymbol(name);
+            if (symbol == null)
+                return -1;
 
-            Scope s = baseScope;
+            return symbol.RegIndex;
+        }
+
+        void AddRefUpvalueInNode( Scope baseScope, Scope regScope, Ident var )
+        {                        
+            Scope s = baseScope.Outter;
 
             int level = 0;
 
             while( regScope != s )
             {
-                if ( s != baseScope )
-                {
-                    var fl = Scope2FuncLitNode(s);
-                    if ( fl != null )
-                    {
-                        // 给这一层增加一个引用变量
-                        fl.RefUpvalues.Add(var);
 
-                        // 只有在最近的上一层才可以计算寄存器索引
-                        if (level == -1 )
-                        {
-                            regIndex = fl.TypeInfo.ScopeInfo.RegCount;
-                        }
-                        
-                    }
+                var fl = Scope2FuncLitNode(s, Parent);
+                if ( fl != null )
+                {
+                    // 给这一层增加一个引用变量
+                    fl.UpValues.Add(var);       
                 }
 
                 s = s.Outter;
                 level--;
-            }
-
-            return regIndex;
+            }            
         }
 
-        void FindUsedUpvalue(Node n, Dictionary<UpvaluePair, Ident> upvalues)
+        void FindUsedUpvalue(Node n )
         {
-            var fn = n as FuncLit;
-            if (fn != null)
-            {
-                int a = 1;
-            }
-
             var usedVar = n as Ident;
             if (usedVar != null && usedVar.UpValue)
-            {
-                var key = new UpvaluePair( usedVar );
-                if (!upvalues.ContainsKey(key))
+            {                
+                if (!UpValues.Contains(usedVar))
                 {
-                    upvalues.Add(key, usedVar);
+                    UpValues.Add(usedVar);
                 }
                 
             }
@@ -143,10 +165,21 @@ namespace Photon
 
             foreach( var c in n.Child() )
             {                
-                FindUsedUpvalue(c, upvalues);
+                FindUsedUpvalue(c );
             }
         }
 
+        static FuncLit Scope2FuncLitNode(Scope s, Node parent)
+        {
+            Node n = parent;
+
+            while (!(n is FuncLit))
+            {
+                n = n.Parent;
+            }
+
+            return n as FuncLit;
+        }
 
     }
 

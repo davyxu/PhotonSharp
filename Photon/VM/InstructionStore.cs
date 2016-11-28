@@ -147,14 +147,34 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             // 使用寄存器的地方和引用地方scope之差
-            int levelDiff = cmd.DataA;
+            int mode = cmd.DataA;
 
-            int regIndex = cmd.DataB + vm.RegBase;
+            switch( mode )
+            {
+                    // 创建快照
+                case 0:
+                    {
+                        int regIndex = cmd.DataB + vm.RegBase;
 
-            var closure = vm.DataStack.Get(-1).CastClosure();
+                        var closure = vm.DataStack.Get(-1).CastClosure();
 
-            Slot slot = vm.LocalReg.GetSlot(regIndex);
-            closure.AddUpValue(slot);
+                        closure.AddUpValue(vm.LocalReg, regIndex);
+                    }
+                    break;
+                    // 直接引用
+                case 1:
+                    {
+                        int regIndex = cmd.DataB + vm.RegBase;
+
+                        var v = vm.CurrFrame.Closure.GetRuntimeUpValue(regIndex);
+
+                        var closure = vm.DataStack.Get(-1).CastClosure();
+                        closure.AddUpValue(v.Reg, v.Index);
+                    }
+                    break;
+            }
+
+          
             
 
             return true;

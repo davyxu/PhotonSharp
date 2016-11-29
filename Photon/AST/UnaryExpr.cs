@@ -55,7 +55,7 @@ namespace Photon
             }
             else
             {
-                throw new ParseException("Unknown unary operator", OpPos);
+                throw new CompileException("Unknown unary operator", OpPos);
             }
 
             param.CS.Add(new Command(opcode)).SetCodePos(OpPos);

@@ -35,7 +35,7 @@ namespace Photon
             var pre = s.FindSymbol(name);
             if ( pre != null )
             {                
-                throw new ParseException(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
+                throw new CompileException(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
             }
 
             Symbol data = new Symbol();

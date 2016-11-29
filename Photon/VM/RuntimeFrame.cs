@@ -20,16 +20,20 @@ namespace Photon
         public RuntimeFrame(CommandSet cs)
         {            
             CmdSet = cs; 
-        }        
+        }
+
+        public Command GetCurrCommand()
+        {
+            if (PC >= CmdSet.Commands.Count || PC < 0)
+            {
+                return null;
+            }
+
+            return CmdSet.Commands[PC];
+        }
 
         public string DebugString()
         {
-            //Command cmd = CmdSet.Commands[PC];
-            //if ( cmd != null )
-            //{
-            //    return string.Format("{0}", cmd.CodePos);
-            //}
-
             return string.Format("{0} {1}", CmdSet.CodePos, CmdSet.Name );
         }
 

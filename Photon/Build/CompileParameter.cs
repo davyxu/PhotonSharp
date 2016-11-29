@@ -33,22 +33,12 @@ namespace Photon
 
         internal void NextPassToResolve(Node n)
         {
-            CompileContext ctx;
-            ctx.node = n;
-            ctx.parameter = this;
-
-            Pkg._secondPass.Add(ctx);
+            Pkg.AddSecondPass(n, this);
         }
 
         internal bool IsNodeInNextPass(Node n)
         {
-            foreach (var c in Pkg._secondPass)
-            {
-                if (c.node == n)
-                    return true;
-            }
-
-            return false;
+            return Pkg.ContainSecondPassNode(n);            
         }
     }
 

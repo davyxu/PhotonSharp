@@ -41,7 +41,7 @@ namespace Photon
             {
                 if ( xident.Symbol == null )
                 {
-                    throw new ParseException("undefined symbol: " + xident.Name, DotPos);
+                    throw new CompileException("undefined symbol: " + xident.Name, DotPos);
                 }
 
                 if ( xident.Symbol.Usage == SymbolUsage.Package )
@@ -50,7 +50,7 @@ namespace Photon
 
                     if (pkg == null)
                     {
-                        throw new ParseException("package not found: " + xident.Name, DotPos);
+                        throw new CompileException("package not found: " + xident.Name, DotPos);
                     }
 
                     // Ident直接出代码

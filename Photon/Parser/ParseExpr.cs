@@ -163,13 +163,13 @@ namespace Photon
                                             var pkg = Exe.GetPackageByName(xident.Name);
                                             if (pkg == null)
                                             {
-                                                throw new ParseException("package not found: " + xident.Name, dotpos);
+                                                throw new CompileException("package not found: " + xident.Name, dotpos);
                                             }
 
                                             // 包必须有一个顶级作用域
                                             if ( pkg.TopScope == null )
                                             {
-                                                throw new ParseException("package should have a scope: " + xident.Name, dotpos);
+                                                throw new CompileException("package should have a scope: " + xident.Name, dotpos);
                                             }
 
 
@@ -180,7 +180,7 @@ namespace Photon
                                     }
                                     break;
                                 default:                                    
-                                   throw new ParseException("expect selector", CurrTokenPos);                         
+                                   throw new CompileException("expect selector", CurrTokenPos);                         
                             }
                         
                         }

@@ -118,7 +118,7 @@ namespace Photon
 
             if ( CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
             {
-                throw new ParseException("code not resolve", DefinePos);
+                throw new CompileException("code not resolve", DefinePos);
             }
         }
 
@@ -131,7 +131,7 @@ namespace Photon
                 // TODO 左值在下方被定义
                 if( Symbol == null )
                 {
-                    throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
+                    throw new CompileException(string.Format("undeclared symbol {0}", Name), DefinePos);
                 }
 
                 if (Symbol.IsGlobal)
@@ -167,7 +167,7 @@ namespace Photon
                     }
                     else
                     {
-                        throw new ParseException(string.Format("undeclared symbol {0}", Name), DefinePos);
+                        throw new CompileException(string.Format("undeclared symbol {0}", Name), DefinePos);
                     }
                 }
                 else
@@ -189,7 +189,7 @@ namespace Photon
                                     }
                                     else
                                     {
-                                        throw new ParseException(string.Format("unsolved function name {0}", Name), DefinePos);
+                                        throw new CompileException(string.Format("unsolved function name {0}", Name), DefinePos);
                                     }
 
                                     
@@ -223,7 +223,7 @@ namespace Photon
                             }
                             break;
                         default:
-                            throw new ParseException("Unknown usage", DefinePos);
+                            throw new CompileException("Unknown usage", DefinePos);
                     }
                 }
       

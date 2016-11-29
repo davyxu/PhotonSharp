@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace Photon
 {
@@ -61,10 +60,9 @@ namespace Photon
         Stack<RegRange> _regBaseStack = new Stack<RegRange>();
         int _regBase = 0;
 
-        Executable _exe;        
+        Executable _exe;
 
-        // 指令集
-        Instruction[] _instruction = new Instruction[(int)Opcode.MAX];
+        InstructionSet _insset;
 
         // 当前寄存器最小使用位置
         internal int RegBase
@@ -108,17 +106,6 @@ namespace Photon
             get { return _callStack; }
         }
 
-        public Command GetCurrCommand()
-        {
-
-            int pc = _currFrame.PC;
-            if (pc >= _currFrame.CmdSet.Commands.Count || pc < 0)
-            {
-                return null;
-            }
-
-            return _currFrame.CmdSet.Commands[pc];
-        }
 
         public RuntimePackage GetRuntimePackage(int pkgid)
         {
@@ -138,51 +125,7 @@ namespace Photon
 
         public VMachine()
         {
-            StaticRegisterAssemblyInstructions();
-        }
-
-        void StaticRegisterAssemblyInstructions()
-        {
-            var ass = Assembly.GetExecutingAssembly();
-
-            foreach (var t in ass.GetTypes())
-            {
-                var att = t.GetCustomAttribute<InstructionAttribute>();
-                if (att == null)
-                    continue;
-
-                var cmd = Activator.CreateInstance(t) as Instruction;
-                cmd.vm = this;
-                _instruction[(int)att.Cmd] = cmd;                
-            }
-        }
-
-        string InstructToString( Command cmd )
-        {
-            var inc = _instruction[(int)cmd.Op];
-
-            if (inc == null)
-            {            
-                return string.Empty;
-            }
-
-            return inc.Print( cmd );
-        }
-
-        void ExecCode(Command cmd)
-        {
-            var inc = _instruction[(int)cmd.Op];
-
-            if (inc == null)
-            {
-                throw new RuntimeException("invalid instruction");                
-            }
-
-
-            if( inc.Execute( cmd) )
-            {
-                _currFrame.PC++;
-            }
+            _insset = new InstructionSet(this);
         }
 
         public void SetHook(DebugHook hook, Action<VMachine> callback )
@@ -308,7 +251,7 @@ namespace Photon
             
             while (true)
             {
-                var cmd = GetCurrCommand();
+                var cmd = CurrFrame.GetCurrCommand();
                 if (cmd == null)
                     break;
 
@@ -317,7 +260,7 @@ namespace Photon
                     
                     Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, cmd.Pkg.QuerySourceLine(cmd.CodePos));
                     Debug.WriteLine("---------------------");
-                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), InstructToString(cmd) );
+                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
                 }
 
                 // 源码行有变化时
@@ -335,7 +278,10 @@ namespace Photon
                 // 每条指令执行前
                 CallHook(DebugHook.AssemblyLine);
 
-                ExecCode(cmd);
+                if (_insset.ExecCode(cmd))
+                {
+                    _currFrame.PC++;
+                }
 
                 // 打印执行完后的信息
                 if (ShowDebugInfo)

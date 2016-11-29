@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 namespace Photon
 {
- 
 
     public class CommandSet : Procedure
     {

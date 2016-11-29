@@ -19,6 +19,7 @@ namespace Photon
         // 调试Symbol
         Chunk _chunk;
 
+        // 源码
         List<File> _file = new List<File>();
 
         // 所有函数执行体
@@ -27,13 +28,17 @@ namespace Photon
         // 常量表
         ConstantSet _constSet = new ConstantSet();
 
+        // 父级
         Executable _exe;
 
+        // 包的作用域
         Scope _top;
 
         // 第一次pass无法搞定的node
-        internal List<CompileContext> _secondPass = new List<CompileContext>();
+        List<CompileContext> _secondPass = new List<CompileContext>();
 
+
+        // 第二次pass
         internal void ResolveNode()
         {
             foreach (var ctx in _secondPass)
@@ -96,6 +101,26 @@ namespace Photon
         public override string ToString()
         {
             return _name;
+        }
+
+        internal bool ContainSecondPassNode( Node n )
+        {
+            foreach( var c in _secondPass )
+            {
+                if (c.node == n)
+                    return true;
+            }
+
+            return false;
+        }
+
+        internal void AddSecondPass( Node n, CompileParameter cp )
+        {
+            CompileContext ctx;
+            ctx.node = n;
+            ctx.parameter = cp;
+
+            _secondPass.Add(ctx);
         }
 
         internal void AddSource( SourceFile source )
@@ -167,8 +192,6 @@ namespace Photon
                 Debug.WriteLine("");
             }
             
-
-
             if (_top != null )
             {
                 // 符号
@@ -177,13 +200,11 @@ namespace Photon
                 Debug.WriteLine("");
             }
 
-
             if (Constants.Count >0 )
             {
                 // 常量
                 Constants.DebugPrint();
             }
-            
             
             // 汇编
             foreach (var p in _proc)

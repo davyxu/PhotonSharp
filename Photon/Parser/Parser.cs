@@ -47,7 +47,7 @@ namespace Photon
 
             if (CurrTokenType == TokenType.Unknown)
             {
-                throw new ParseException("unknown token", CurrTokenPos);
+                throw new CompileException("unknown token", CurrTokenPos);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Photon
         {
             if (CurrTokenType != t)
             {
-                throw new ParseException(string.Format("expect token: {0}", t.ToString()), CurrTokenPos);
+                throw new CompileException(string.Format("expect token: {0}", t.ToString()), CurrTokenPos);
             }
 
             var tk = _token;

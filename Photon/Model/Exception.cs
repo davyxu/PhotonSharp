@@ -3,11 +3,11 @@ using System;
 
 namespace Photon
 {
-    public class ParseException : Exception
+    public class CompileException : Exception
     {
         public TokenPos Pos;
 
-        public ParseException(string msg, TokenPos pos)
+        public CompileException(string msg, TokenPos pos)
             : base(msg)
         {
             Pos = pos;

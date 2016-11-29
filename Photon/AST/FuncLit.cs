@@ -37,8 +37,8 @@ namespace Photon
 
         // LINKU和LOADU对应
         // 引用模式分为2种
-        // 1. 引用最近的上一层作用域,  LINKU第一个参数=0
-        // 1. 引用上N层作用域,  LINKU第一个参数=1
+        // 1. 引用最近的上一层作用域,  LINKU第一个参数=0(当前执行体不是闭包时)
+        // 1. 引用上N层作用域,  LINKU第一个参数=1 (当前执行体为闭包时)
         // 
         // UpValue索引计算
         // 不使用被引用的变量在它归属作用域分配的寄存器索引
@@ -52,6 +52,7 @@ namespace Photon
 
             param.CS.Add(new Command(Opcode.CLOSURE, param.Pkg.ID, proc.ID)).SetCodePos(TypeInfo.FuncPos);
 
+            // 深度遍历, 所以最终引用层会先被遍历到
             Body.Compile(param.SetLHS(false).SetComdSet(newset));
             
             // 找到这一层闭包用的upvalues集合(引用上面函数作用域的)            

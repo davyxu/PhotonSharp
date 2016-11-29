@@ -74,7 +74,10 @@ namespace Photon
                 ImportFile(pkg, parser, packageFileName);
             }
 
-            var cs = new CommandSet(pkg.Name, TokenPos.Init, parser.PackageScope.RegCount, true);
+            var initPos = TokenPos.Init;
+            initPos.SourceName = packageName;
+
+            var cs = new CommandSet(pkg.Name, initPos, parser.PackageScope.RegCount, true);
 
             pkg.AddProcedure(cs);
 

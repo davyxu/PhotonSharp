@@ -1,6 +1,5 @@
-﻿
+﻿using SharpLexer;
 
-using SharpLexer;
 namespace Photon
 {
     [Instruction(Cmd = Opcode.LOADC)]
@@ -9,6 +8,7 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             var c = cmd.Pkg.Constants.Get(cmd.DataA);
+
             vm.DataStack.Push(c);
 
             return true;
@@ -26,7 +26,9 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
+
             Value v = vm.LocalReg.Get(regIndex);
+
             vm.DataStack.Push(v);
 
             return true;  
@@ -46,10 +48,10 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             int regIndex = cmd.DataA + vm.RegBase;
-            var d = vm.DataStack.Pop();
-            vm.LocalReg.Set(regIndex, d);
 
-            
+            var d = vm.DataStack.Pop();
+
+            vm.LocalReg.Set(regIndex, d);
 
             return true;
         }
@@ -87,6 +89,7 @@ namespace Photon
         public override bool Execute( Command cmd)
         {            
             var d = vm.DataStack.Pop();
+
             vm.GetRuntimePackage(cmd.DataA).Reg.Set(cmd.DataB, d);            
 
             return true;
@@ -104,8 +107,11 @@ namespace Photon
         public override bool Execute( Command cmd)
         {
             var key = vm.DataStack.Pop();
+
             var main = vm.DataStack.Pop().CastObject();
+
             var result = main.Get(key);
+
             vm.DataStack.Push(result);
                         
             return true;
@@ -128,6 +134,7 @@ namespace Photon
             var key = cmd.Pkg.Constants.Get(cmd.DataA);
 
             var result = main.Select(key);
+
             vm.DataStack.Push(result);
 
             return true;
@@ -154,34 +161,35 @@ namespace Photon
                     // 创建快照
                 case 0:
                     {
-                        int regIndex = cmd.DataB + vm.RegBase;
+                        int Index = cmd.DataB;
 
                         var closure = vm.DataStack.Get(-1).CastClosure();
 
-                        closure.AddUpValue(vm.LocalReg, regIndex);
+                        closure.AddUpValue(vm.LocalReg, Index);
                     }
                     break;
                     // 直接引用
                 case 1:
                     {
-                        int regIndex = cmd.DataB + vm.RegBase;
-
-                        var v = vm.CurrFrame.Closure.GetRuntimeUpValue(regIndex);
+                        int Index = cmd.DataB;
 
                         var closure = vm.DataStack.Get(-1).CastClosure();
+
+                        // 当前函数执行体也是个闭包
+                        var v = vm.CurrFrame.Closure.GetUpValue(Index);
+                        
                         closure.AddUpValue(v.Reg, v.Index);
                     }
                     break;
             }
 
-          
-            
 
             return true;
         }
         public override string Print( Command cmd)
         {
             int upIndex = cmd.DataA;
+
             int regIndex = cmd.DataB;
 
             return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.LocalReg.Get(regIndex));
@@ -196,7 +204,7 @@ namespace Photon
         {
             int regIndex =  cmd.DataA;
 
-            var v = vm.CurrFrame.Closure.GetUpValue(regIndex);            
+            var v = vm.CurrFrame.Closure.GetValue(regIndex);            
 
             vm.DataStack.Push(v);
 
@@ -215,8 +223,10 @@ namespace Photon
         {
             
             var regIndex = cmd.DataA;
+
             var d = vm.DataStack.Pop();
-            vm.CurrFrame.Closure.SetUpValue(regIndex, d );            
+
+            vm.CurrFrame.Closure.SetValue(regIndex, d );            
 
             return true;
         }

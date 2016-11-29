@@ -34,6 +34,11 @@ namespace Photon
             get { return _regCount; }
         }
 
+        internal TokenPos CodePos
+        {
+            get { return _codePos; }
+        }
+
         public List<Command> Commands
         {
             get { return _cmds; }

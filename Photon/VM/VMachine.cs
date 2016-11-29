@@ -196,20 +196,17 @@ namespace Photon
 
             var newFrame = new RuntimeFrame(cmdSet);
 
-            if ( _currFrame != null )
-            {
-                _callStack.Push(_currFrame);
-            }
-
             _currFrame = newFrame;
+
+            _callStack.Push(_currFrame);
             
-            if ( !_currFrame.CmdSet.IsGlobal)
+            //if ( !_currFrame.CmdSet.IsGlobal)
             {
                 // 第一层的reg是0, 不记录
-                if (_regBaseStack.Count > 0)
-                {
-                    _regBase = _regBaseStack.Peek().Max;
-                }
+                //if (_regBaseStack.Count > 0)
+                //{
+                //    _regBase = _regBaseStack.Peek().Max;
+                //}
 
                 RegRange rr;
                 rr.Min = _regBase;
@@ -218,7 +215,7 @@ namespace Photon
                 LocalReg.SetUsedCount(rr.Max);
 
                 // 留作下次调用叠加时使用
-                _regBaseStack.Push(rr);
+                //_regBaseStack.Push(rr);
             }
   
         }
@@ -230,9 +227,9 @@ namespace Photon
                 _dataStack.Count = _currFrame.DataStackBase;
             }
                         
-            if (!_currFrame.CmdSet.IsGlobal)
-            {
-                _regBaseStack.Pop();
+            //if (!_currFrame.CmdSet.IsGlobal)
+            //{
+                //_regBaseStack.Pop();
 
                 //if (_regBaseStack.Count > 0)
                 //{
@@ -246,9 +243,11 @@ namespace Photon
                 //    LocalReg.SetUsedCount(0);
                 //}
                    
-            }
+           // }
 
-            _currFrame = _callStack.Pop();
+            _callStack.Pop();
+
+            _currFrame = _callStack.Peek();
 
 
             CallHook(DebugHook.Return);

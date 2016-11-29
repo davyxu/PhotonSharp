@@ -25,11 +25,10 @@ namespace PhotonCompiler
 
             testbox.Exe.RegisterPackage(typeof(MyMath));
 
-            testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3);            
+            testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3);
 
-           // new TestBox().RunFile("Array.pho").TestGlobalRegEqualNumber(2, 1);
-
-            new TestBox().RunFile("Package.pho");
+            new TestBox().RunFile("ComplexClosure.pho").TestGlobalRegEqualNumber(1, 15 );
+            new TestBox().RunFile("Package.pho").TestGlobalRegEqualNumber(0, 3);
             new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
             new TestBox().RunFile("Scope.pho");
             new TestBox().RunFile("DataStackBalance.pho");

@@ -1,6 +1,5 @@
-﻿
+﻿using SharpLexer;
 
-using SharpLexer;
 namespace Photon
 {
     [Instruction(Cmd = Opcode.JZ)]

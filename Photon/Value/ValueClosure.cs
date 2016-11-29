@@ -1,9 +1,8 @@
-﻿using SharpLexer;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Photon
 {
-    class RuntimeUpvalue
+    class RuntimeUpValue
     {
         public Register Reg;
         public int Index;
@@ -11,7 +10,7 @@ namespace Photon
 
     class ValueClosure : ValueFunc
     {
-        List<RuntimeUpvalue> _upvalues = new List<RuntimeUpvalue>();
+        List<RuntimeUpValue> _upvalues = new List<RuntimeUpValue>();
 
         internal ValueClosure(Procedure proc)
             : base(proc)
@@ -21,26 +20,26 @@ namespace Photon
 
         internal void AddUpValue( Register reg, int index )
         {
-            RuntimeUpvalue ru = new RuntimeUpvalue() ;
+            RuntimeUpValue ru = new RuntimeUpValue() ;
             ru.Reg = reg;
             ru.Index = index;
 
             _upvalues.Add(ru);
         }
 
-        internal void SetUpValue(int index, Value v)
+        internal void SetValue(int index, Value v)
         {
             var ru = _upvalues[index];
             ru.Reg.Set(ru.Index, v);
         }
 
-        internal Value GetUpValue(int index)
+        internal Value GetValue(int index)
         {
             var ru = _upvalues[index];
             return ru.Reg.Get(ru.Index);
         }
 
-        internal RuntimeUpvalue GetRuntimeUpValue( int index )
+        internal RuntimeUpValue GetUpValue( int index )
         {
             return _upvalues[index];
         }

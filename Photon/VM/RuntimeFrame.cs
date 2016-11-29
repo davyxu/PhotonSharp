@@ -24,13 +24,13 @@ namespace Photon
 
         public string DebugString()
         {
-            Command cmd = CmdSet.Commands[PC];
-            if ( cmd != null )
-            {
-                return string.Format("{0}", cmd.CodePos);
-            }
+            //Command cmd = CmdSet.Commands[PC];
+            //if ( cmd != null )
+            //{
+            //    return string.Format("{0}", cmd.CodePos);
+            //}
 
-            return string.Format("{0}", CmdSet.Name);
+            return string.Format("{0} {1}", CmdSet.CodePos, CmdSet.Name );
         }
 
         public override string ToString()

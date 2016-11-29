@@ -29,7 +29,7 @@ namespace Photon
                 }
                 else
                 {
-                    throw new Exception("file should under PHOTONPATH");
+                    throw new Exception("file should under PHOPATH");
                 }
             }
             else

@@ -13,9 +13,9 @@ namespace PhotonCompiler
 
         public TestBox Compile( string caseName, string src )
         {
-            _caseName = caseName;            
+            _caseName = caseName;
 
-            Debug.WriteLine(string.Format("==================={0}===================", _caseName));
+            Debug.WriteLine(string.Format("################### {0} ###################", _caseName));
 
             Compiler.Compile(_exe, src);            
 

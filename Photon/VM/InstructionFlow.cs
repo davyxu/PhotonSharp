@@ -22,7 +22,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            return string.Format("Condition: {0}, PC : {1}", vm.DataStack.Get(-1),  cmd.DataA);
+            return string.Format("PC : {0}", cmd.DataA);
         }
     }
 
@@ -122,7 +122,7 @@ namespace Photon
 
         public override string Print(Command cmd)
         {
-            return string.Format("ArgCount : {0}  Func: {1}  BalanceStack: {2}", cmd.DataA, vm.DataStack.Get(-1), cmd.DataB);
+            return string.Format("ArgCount : {0}  BalanceStack: {1}", cmd.DataA, cmd.DataB);
         }
     }
 

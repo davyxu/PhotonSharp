@@ -27,10 +27,6 @@ namespace Photon
             return true;
         }
 
-        public override string Print(Command cmd)
-        {
-            return string.Format("A: {0}, B: {1}", vm.DataStack.Get(-2), vm.DataStack.Get(-1));
-        }
     }
 
     class InstructionUnaryMath : Instruction
@@ -55,11 +51,6 @@ namespace Photon
             x = 0;
 
             return true;
-        }
-
-        public override string Print(Command cmd)
-        {
-            return string.Format("A: {0}", vm.DataStack.Get(-1));
         }
     }
 

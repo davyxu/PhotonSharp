@@ -16,11 +16,9 @@ namespace Photon
             return true;
         }
 
-        public static string Print( VMachine vm, Command cmd )
-        {
-            var pkg = vm.GetRuntimePackage(cmd.DataA);
-
-            return string.Format("S <- C{0}     | {1} C{2}: {3}", cmd.DataB, pkg.Name, cmd.DataB, pkg.Constants.Get(cmd.DataB));
+        public override string Print( Command cmd)
+        {            
+            return string.Format("Pkg: {0}  Const: {1}", cmd.DataA, cmd.DataB );
         }
     }
 
@@ -42,7 +40,7 @@ namespace Photon
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("S <- R{0}     | R{1}: {2}", regIndex, regIndex, vm.LocalReg.Get(regIndex));
+            return string.Format("Reg: {0}", regIndex);
         }
     }
 
@@ -63,7 +61,7 @@ namespace Photon
         {
             int regIndex = cmd.DataA + vm.RegBase;
 
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", regIndex, vm.DataStack.Get(-1));
+            return string.Format("Reg: {0}", regIndex);
         }
 
     }
@@ -83,7 +81,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- G{0}     | G{1}: {2}", cmd.DataA, cmd.DataA, vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB));
+            return string.Format("Pkg: {0}  Reg: {1}", cmd.DataA, cmd.DataB);
         }
     }
 
@@ -101,7 +99,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            return string.Format("G{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get(-1));
+            return string.Format("Pkg: {0}  Reg: {1}", cmd.DataA, cmd.DataB);
         }
     }
 
@@ -123,8 +121,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-2), vm.DataStack.Get(-1));
+            return string.Empty;
         }
     }
 
@@ -146,8 +143,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-
-            return string.Format("Body[Key]         | Body: {0}, Key: {1}", vm.DataStack.Get(-1), cmd.Pkg.Constants.Get(cmd.DataA));
+            return string.Format("Const: {0}", cmd.DataA);
         }
     }
 
@@ -192,11 +188,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            int upIndex = cmd.DataA;
-
-            int regIndex = cmd.DataB;
-
-            return string.Format("U{0} <- &R{1}     | R{2}: {3}", upIndex, regIndex, regIndex, vm.LocalReg.Get(regIndex));
+            return string.Format("Mode: {0} UpValue: {1}", cmd.DataA, cmd.DataB);
         }
     }
 
@@ -216,7 +208,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            return string.Format("S <- R{0}     | R{1}: {2}", cmd.DataA, cmd.DataA, vm.LocalReg.Get(cmd.DataA));
+            return string.Format("UpValue: {0}", cmd.DataA);
         }
     }
 
@@ -237,7 +229,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            return string.Format("R{0} <- S(Top)     | S(Top): {1}", cmd.DataA, vm.DataStack.Get(-1));
+            return string.Format("UpValue: {0}", cmd.DataA);
         }
     }
 
@@ -253,9 +245,9 @@ namespace Photon
             return true;
         }
 
-        public static string Print(VMachine vm, Command cmd)
+        public override string Print(Command cmd)
         {
-            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, cmd.Pkg.Constants.Get(cmd.DataA));
+            return string.Format("Proc: {0}", cmd.DataA);
         }
     }
 
@@ -269,6 +261,11 @@ namespace Photon
             vm.DataStack.Push(new ValueClosure(proc));
 
             return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("Proc: {0}", cmd.DataA);
         }
     }
 }

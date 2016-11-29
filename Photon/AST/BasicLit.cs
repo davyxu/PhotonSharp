@@ -8,6 +8,8 @@ namespace Photon
         public string Value;
         public TokenPos Pos;
 
+        int _constIndex;
+
         public BasicLit(string v, TokenType t, TokenPos pos )
         {
             Value = v;
@@ -17,15 +19,15 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("'{0}' ({1}) {2}", Value, Type, Pos);
+            return string.Format("'{0}' ({1}) {2} C{3}", Value, Type, Pos, _constIndex);
         }
 
         internal override void Compile(CompileParameter param)
         {
             var c = Lit2Const( );
-            var ci = param.Pkg.Constants.Add(c);
+            _constIndex = param.Pkg.Constants.Add(c);
 
-            param.CS.Add(new Command(Opcode.LOADC, param.Pkg.ID, ci)).SetComment(c.ToString()).SetCodePos(Pos);
+            param.CS.Add(new Command(Opcode.LOADC, param.Pkg.ID, _constIndex)).SetComment(c.ToString()).SetCodePos(Pos);
         }
 
         Value Lit2Const()

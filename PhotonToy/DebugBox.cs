@@ -181,7 +181,7 @@ namespace PhotonToy
             }
             else
             {
-                if (vm.CallStack.Count > 0)
+                if (vm.CallStack.Count > 1)
                 {
                     pkgReg = string.Empty;
                 }

@@ -5,6 +5,8 @@ namespace Photon
     enum Opcode
     {
         NOP = 0,
+
+        // 双目元操作
         ADD,    // S[Top] = S[I] + S[I+1]
         SUB,    // S[Top] = S[I] - S[I+1]
         MUL,    // S[Top] = S[I] * S[I+1]
@@ -16,6 +18,12 @@ namespace Photon
         EQ,     // S[Top] = S[I] == S[I+1]
         NE,     // S[Top] = S[I] != S[I+1]
 
+        // 单目元操作
+        MINUS,
+        NOT,
+        LEN,
+
+        // 存取操作
         LOADC,  // S[Top] = C[I]
         LOADR,  // S[Top] = R[I+ RegBase] 
         LOADG,  // S[Top] = R[I]
@@ -26,15 +34,17 @@ namespace Photon
         SETU,   // R[I] = * S[I+1]
         IDX,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
-                
+        LINKU,  // 让Upvalue与寄存器建立引用
+        CLOSURE, //  创建闭包
+
+        // 流程控制        
         CALL,  // S[I](S[I+1], ... ) 栈交换
         RET,    // 
         JZ,    // S[Top] != 0
         JMP,    // 无条件
-        CLOSURE, //  创建闭包
-        LINKU,  // 让Upvalue与寄存器建立引用
-        
         EXIT,
+
+
         MAX,
     }
 

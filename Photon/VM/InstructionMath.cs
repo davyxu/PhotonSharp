@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    class InstructionMath : Instruction
+    class InstructionBinaryMath : Instruction
     {
         public override bool Execute(Command cmd)
         {
@@ -33,9 +33,50 @@ namespace Photon
         }
     }
 
+    class InstructionUnaryMath : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var a = vm.DataStack.Pop().CastNumber();            
+
+            float c;
+
+            // 栈顺序是反的, 需要倒过来
+            var result = ExecuteOnValue(cmd, a, out c);
+
+            vm.DataStack.Push(new ValueNumber(c));
+
+            return result;
+        }
+
+
+        public virtual bool ExecuteOnValue(Command cmd, float a, out float x)
+        {
+            x = 0;
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("A: {0}", vm.DataStack.Get(-1));
+        }
+    }
+
+    [Instruction(Cmd = Opcode.MINUS)]
+    class CmdMinus : InstructionUnaryMath
+    {
+        public override bool ExecuteOnValue(Command cmd, float a, out float x)
+        {
+            x = -a;
+
+            return true;
+        }
+    }
+
 
     [Instruction(Cmd = Opcode.ADD)]
-    class CmdAdd : InstructionMath
+    class CmdAdd : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -46,7 +87,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.SUB)]
-    class CmdSub : InstructionMath
+    class CmdSub : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -57,7 +98,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.MUL)]
-    class CmdMul : InstructionMath
+    class CmdMul : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -68,7 +109,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.DIV)]
-    class CmdDiv : InstructionMath
+    class CmdDiv : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -79,7 +120,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.GT)]
-    class CmdGT : InstructionMath
+    class CmdGT : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -90,7 +131,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.GE)]
-    class CmdGE : InstructionMath
+    class CmdGE : InstructionBinaryMath
     {            
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -102,7 +143,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.LT)]
-    class CmdLT : InstructionMath
+    class CmdLT : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -113,7 +154,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.LE)]
-    class CmdLE : InstructionMath
+    class CmdLE : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -125,7 +166,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.EQ)]
-    class CmdEQ : InstructionMath
+    class CmdEQ : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {
@@ -136,7 +177,7 @@ namespace Photon
     }
 
     [Instruction(Cmd = Opcode.NE)]
-    class CmdNE : InstructionMath
+    class CmdNE : InstructionBinaryMath
     {
         public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
         {

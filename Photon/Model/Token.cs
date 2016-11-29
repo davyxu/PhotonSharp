@@ -20,6 +20,7 @@ namespace Photon
         GreatThan,      // >
         LessEqual,      // <=
         GreatEqual,     // >=
+        Not,            // !
         Add,            // +
         Sub,            // -
         Mul,            // *
@@ -33,6 +34,7 @@ namespace Photon
         RSqualBracket,  // ]
         LBrace,         // {
         RBrace,         // }
+        Len,            // len
         Func,           // func
         Nil,            // nil
         Var,            // var

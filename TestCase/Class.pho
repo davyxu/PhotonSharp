@@ -3,8 +3,9 @@ class Animal {
 	
 }
 
-func Animal.foo( self, a, b ){
-	
+func Animal:action( type ){
+
+
 }
 
 
@@ -12,12 +13,12 @@ class Dog : Anim {
 
 }
 
-func Dog:ctor( self ){
+func Dog:ctor( ){
 
-	base.
+	base.ctor( )
 }
 
-func Dog:foo( self, a, b ){
+func Dog:action( type ){
 
 
 }
@@ -25,5 +26,4 @@ func Dog:foo( self, a, b ){
 
 var ins = Dog( )
 
-// table的成员为函数时, 都叫方法, 方法调用时, 第一参数一律传入table本身
-ins.foo( 1, 2 )
+ins.action( "fly" )

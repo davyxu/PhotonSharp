@@ -36,7 +36,9 @@ namespace PhotonCompiler
 
             _vm.LocalReg.DebugPrint();
 
-            _vm.GetRuntimePackageByName("main").Reg.DebugPrint();
+            var G = _vm.GetRuntimePackageByName("main").Reg;
+            
+            G.DebugPrint();
             return this;
         }
 

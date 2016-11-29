@@ -1,19 +1,19 @@
-# ¶àÖØ¸³Öµ
+# å¤šé‡èµ‹å€¼
 a, b, c = 1, "hello", e
 
 
-# ¶à·µ»ØÖµ
+# å¤šè¿”å›å€¼
 func foo( a, b, c)
 {
 	return d, e, f
 }
 
-Êı×é
+æ•°ç»„
 a = {
 	1, 2, "hello"
 }
 
-±éÀúÆ÷, target¿ÉÒÔÊÇ range()ÊıÖµ±éÀúÆ÷
+éå†å™¨, targetå¯ä»¥æ˜¯ range()æ•°å€¼éå†å™¨
 for k, v in target
 {
 

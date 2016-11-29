@@ -21,6 +21,9 @@ namespace PhotonCompiler
 
         static void TestCase()
         {
+            new TestBox().RunFile("Math.pho").TestGlobalRegEqualNumber(0, -1);
+
+
             var testbox = new TestBox();
 
             testbox.Exe.RegisterPackage(typeof(MyMath));
@@ -30,7 +33,7 @@ namespace PhotonCompiler
             new TestBox().RunFile("ComplexClosure.pho").TestGlobalRegEqualNumber(1, 15 );
             new TestBox().RunFile("Package.pho").TestGlobalRegEqualNumber(0, 3);
             new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
-            new TestBox().RunFile("Scope.pho");
+            new TestBox().RunFile("Scope.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 1);
             new TestBox().RunFile("DataStackBalance.pho");
             new TestBox().RunFile("ForLoop.pho").TestGlobalRegEqualNumber(0, 8);
             new TestBox().RunFile("If.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 5);

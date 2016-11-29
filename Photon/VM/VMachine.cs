@@ -230,18 +230,18 @@ namespace Photon
             for( int i = 0;i<exe.PackageCount ;i++)
             {
                 var pkg = exe.GetPackage(i);                
-                _package.Add(new RuntimePackage(pkg.Name));
+                _package.Add(new RuntimePackage(pkg));
             }
             
             // 找到包入口
-            var proc = exe.GetProcedureByName(startPkg);
+            var proc = exe.GetProcedureByName( new ProcedureName("main", "main") );
             if ( proc == null )
             {
                 throw new RuntimeException("unknown start package name: " + startPkg);
             }
 
             var cs = proc as CommandSet;
-            GetRuntimePackage(proc.Pkg.ID).Reg.SetUsedCount(cs.RegCount);
+            GetRuntimePackageByName("main").Reg.SetUsedCount(cs.RegCount);
 
             EnterFrame(cs);
 
@@ -258,7 +258,7 @@ namespace Photon
                 if (ShowDebugInfo)
                 {
                     
-                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, cmd.Pkg.QuerySourceLine(cmd.CodePos));
+                    Debug.WriteLine("{0}|{1}", cmd.CodePos.Line, _exe.QuerySourceLine(cmd.CodePos));
                     Debug.WriteLine("---------------------");
                     Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
                 }

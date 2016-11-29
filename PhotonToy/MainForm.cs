@@ -57,11 +57,14 @@ namespace PhotonToy
 
         }
 
-        void OnLoad(Executable exe)
+        void OnLoad(Executable exe, string filename)
         {
+            this.Text = string.Format("PhotonToy - {0}", filename);
+
             RefreshRegisterCategoryList(exe);
 
             CodeList.Init(exe);
+
         }
 
         void OnBreak( VMState vms )
@@ -114,10 +117,6 @@ namespace PhotonToy
             
 
         }
-
-
-
-
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {

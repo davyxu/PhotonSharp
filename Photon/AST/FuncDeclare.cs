@@ -36,9 +36,9 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new CommandSet(Name.Name, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new CommandSet(new ProcedureName(param.Pkg.Name, Name.Name), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            param.Pkg.AddProcedure(newset);            
+            param.Pkg.Exe.AddProcedure(newset);            
 
             Body.Compile(param.SetLHS(false).SetComdSet(newset));
 

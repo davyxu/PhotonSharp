@@ -8,11 +8,59 @@ using System.Reflection;
 namespace Photon
 {
 
+    public class File
+    {
+        public SourceFile Source;
+    }
+
+
     public class Executable
     {
 
         List<Package> _packages = new List<Package>();
-      
+
+        // 所有函数执行体
+        List<Procedure> _proc = new List<Procedure>();
+
+        // 源码
+        List<File> _file = new List<File>();
+
+
+        public List<File> FileList
+        {
+            get { return _file; }
+        }
+
+        internal string QuerySourceLine(TokenPos pos)
+        {
+            foreach (var f in _file)
+            {
+                if (f.Source.Name == pos.SourceName)
+                {
+                    return f.Source.GetLine(pos.Line);
+                }
+            }
+
+            return string.Empty;
+        }
+
+        internal void AddSource(SourceFile source)
+        {
+            var f = new File();
+            f.Source = source;
+            _file.Add(f);
+        }
+
+
+        internal Procedure AddProcedure(Procedure f)
+        {            
+            _proc.Add(f);
+
+            f.ID = _proc.Count - 1;
+
+            return f;
+        }
+
 
         internal Package AddPackage( string name, Scope top )
         {
@@ -42,24 +90,20 @@ namespace Photon
             return null;
         }
 
-        internal Procedure GetProcedure( int packageID, int cmdSetID )
-        {            
-            var pkg = _packages[packageID];
-            if (pkg == null)
-                return null;
-
-            return pkg.GetProcedure(cmdSetID);
+        internal Procedure GetProcedure( int procid )
+        {
+            return _proc[procid];            
         }
 
-        internal Procedure GetProcedureByName(string name )
+        internal Procedure GetProcedureByName( ProcedureName name )
         {           
-            foreach( var pkg in _packages )
+            foreach( var pro in _proc )
             {
-                var proc = pkg.GetProcedureByName(name);
-                if (proc != null)
+                if ( pro.Name.Equals( name ) )
                 {
-                    return proc;
+                    return pro;
                 }
+
             }
             
             return null;
@@ -77,14 +121,12 @@ namespace Photon
 
         public SourceFile GetSourceFile(string filename)
         {
-            foreach (var pkg in _packages)
+
+            foreach (var f in FileList)
             {
-                foreach (var f in pkg.FileList)
+                if (f.Source.Name == filename)
                 {
-                    if (f.Source.Name == filename)
-                    {
-                        return f.Source;
-                    }
+                    return f.Source;
                 }
             }
 
@@ -122,7 +164,7 @@ namespace Photon
                 data.Usage = SymbolUsage.Func;
                 pkgScope.Insert(data);
 
-                var proc = pkg.AddProcedure(new Delegate(m.Name));
+                var proc = pkg.Exe.AddProcedure(new Delegate(new ProcedureName(pkg.Name, m.Name)));
               
                 var del = proc as Delegate;
                 del.Entry = dele;
@@ -141,6 +183,23 @@ namespace Photon
             }
 
             Debug.WriteLine("");
+
+
+            // 汇编
+            foreach (var p in _proc)
+            {
+                var cs = p as CommandSet;
+                if (cs != null)
+                {
+                    Debug.WriteLine(string.Format("cmdset: [{0}] id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
+                    cs.DebugPrint(this);
+                }
+                var del = p as Delegate;
+                if (del != null)
+                {
+                    Debug.WriteLine(string.Format("delegate: [{0}] id: {1}", del.Name, del.ID));
+                }
+            }
         }
     }
 }

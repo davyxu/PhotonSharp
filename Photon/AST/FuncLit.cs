@@ -46,11 +46,11 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new CommandSet("closure", TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new CommandSet(new ProcedureName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var proc = param.Pkg.AddProcedure(newset);
+            var proc = param.Pkg.Exe.AddProcedure(newset);
 
-            param.CS.Add(new Command(Opcode.CLOSURE, param.Pkg.ID, proc.ID)).SetCodePos(TypeInfo.FuncPos);
+            param.CS.Add(new Command(Opcode.CLOSURE, proc.ID)).SetCodePos(TypeInfo.FuncPos);
 
             // 深度遍历, 所以最终引用层会先被遍历到
             Body.Compile(param.SetLHS(false).SetComdSet(newset));

@@ -5,6 +5,8 @@ namespace Photon
     {
         public Register Reg= new Register("G", 10);
 
+        public ConstantSet Constants;
+
         string _name;
 
         public string Name
@@ -12,9 +14,10 @@ namespace Photon
             get { return _name; }
         }
 
-        internal RuntimePackage( string name )
+        internal RuntimePackage( Package pkg )
         {
-            _name = name;
+            _name = pkg.Name;
+            Constants = pkg.Constants;
         }
     }
 }

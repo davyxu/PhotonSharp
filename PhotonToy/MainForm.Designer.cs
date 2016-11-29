@@ -30,6 +30,7 @@
         {
             this.registerList = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pkgSel = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataStackList = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -47,7 +48,6 @@
             this.codeList = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.callStackList = new System.Windows.Forms.ListBox();
-            this.pkgSel = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -60,7 +60,7 @@
             this.registerList.ItemHeight = 12;
             this.registerList.Location = new System.Drawing.Point(6, 44);
             this.registerList.Name = "registerList";
-            this.registerList.Size = new System.Drawing.Size(142, 124);
+            this.registerList.Size = new System.Drawing.Size(99, 124);
             this.registerList.TabIndex = 1;
             // 
             // groupBox1
@@ -69,17 +69,27 @@
             this.groupBox1.Controls.Add(this.registerList);
             this.groupBox1.Location = new System.Drawing.Point(12, 254);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(155, 180);
+            this.groupBox1.Size = new System.Drawing.Size(114, 180);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Register";
             // 
+            // pkgSel
+            // 
+            this.pkgSel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.pkgSel.FormattingEnabled = true;
+            this.pkgSel.Location = new System.Drawing.Point(6, 18);
+            this.pkgSel.Name = "pkgSel";
+            this.pkgSel.Size = new System.Drawing.Size(99, 20);
+            this.pkgSel.TabIndex = 2;
+            this.pkgSel.SelectedIndexChanged += new System.EventHandler(this.pkgSel_SelectedIndexChanged);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dataStackList);
-            this.groupBox2.Location = new System.Drawing.Point(173, 254);
+            this.groupBox2.Location = new System.Drawing.Point(132, 254);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(155, 180);
+            this.groupBox2.Size = new System.Drawing.Size(196, 180);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "DataStack";
@@ -90,7 +100,7 @@
             this.dataStackList.ItemHeight = 12;
             this.dataStackList.Location = new System.Drawing.Point(6, 20);
             this.dataStackList.Name = "dataStackList";
-            this.dataStackList.Size = new System.Drawing.Size(142, 148);
+            this.dataStackList.Size = new System.Drawing.Size(184, 148);
             this.dataStackList.TabIndex = 1;
             // 
             // menuStrip1
@@ -222,16 +232,6 @@
             this.callStackList.Name = "callStackList";
             this.callStackList.Size = new System.Drawing.Size(142, 148);
             this.callStackList.TabIndex = 1;
-            // 
-            // pkgSel
-            // 
-            this.pkgSel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.pkgSel.FormattingEnabled = true;
-            this.pkgSel.Location = new System.Drawing.Point(6, 18);
-            this.pkgSel.Name = "pkgSel";
-            this.pkgSel.Size = new System.Drawing.Size(141, 20);
-            this.pkgSel.TabIndex = 2;
-            this.pkgSel.SelectedIndexChanged += new System.EventHandler(this.pkgSel_SelectedIndexChanged);
             // 
             // MainForm
             // 

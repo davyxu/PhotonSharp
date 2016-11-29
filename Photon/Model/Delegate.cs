@@ -6,7 +6,7 @@ namespace Photon
     {
         public DelegateEntry Entry;
 
-        internal Delegate( string name)
+        internal Delegate(ProcedureName name)
             : base( name )
         {
             

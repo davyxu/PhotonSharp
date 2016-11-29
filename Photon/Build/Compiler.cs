@@ -40,13 +40,13 @@ namespace Photon
             return final.Replace('\\', '/');
         }
 
-        static void ImportFile(Package pkg, Parser parser, string filename)
+        static void ImportFile(Executable exe, Parser parser, string filename)
         {
             var content = System.IO.File.ReadAllText(filename);
 
             SourceFile srcfile = new SourceFile(content, NormalizeFileName( filename ));
 
-            pkg.AddSource(srcfile);
+            exe.AddSource(srcfile);
 
             parser.Import(srcfile);            
         }
@@ -66,20 +66,20 @@ namespace Photon
 
                 foreach (var filename in files)
                 {                    
-                    ImportFile(pkg, parser, filename);
+                    ImportFile(exe, parser, filename);
                 }
             }
             else
             {
-                ImportFile(pkg, parser, packageFileName);
+                ImportFile(exe, parser, NormalizeFileName(packageFileName));
             }
 
             var initPos = TokenPos.Init;
-            initPos.SourceName = packageName;
+            initPos.SourceName = NormalizeFileName(packageFileName);
 
-            var cs = new CommandSet(pkg.Name, initPos, parser.PackageScope.RegCount, true);
+            var cs = new CommandSet( new ProcedureName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
 
-            pkg.AddProcedure(cs);
+            exe.AddProcedure(cs);
 
             var param = new CompileParameter();
 

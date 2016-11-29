@@ -28,7 +28,7 @@ namespace PhotonToy
         AutoResetEvent _exitSignal = new AutoResetEvent(false);
 
         public Action<VMState> OnBreak;
-        public Action<Executable> OnLoad;
+        public Action<Executable, string> OnLoad;
         public Action<string> OnError;
        
         VarGuard<int> _expectCallDepth = new VarGuard<int>(-1);
@@ -87,7 +87,7 @@ namespace PhotonToy
 
             if (OnLoad != null)
             {
-                OnLoad(_exe);
+                OnLoad(_exe, filename);
             }
 
             _vm = new VMachine();
@@ -187,7 +187,7 @@ namespace PhotonToy
                 }
                 else
                 {
-                    pkgReg = vm.CurrFrame.CmdSet.Pkg.Name;
+                    pkgReg = vm.CurrFrame.CmdSet.Name.PackageName;
                 }
             }
 

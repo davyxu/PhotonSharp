@@ -15,7 +15,7 @@ namespace Photon
 
         TokenPos _codePos;
 
-        internal CommandSet(string name, TokenPos codepos, int regCount, bool isGlobal)
+        internal CommandSet(ProcedureName name, TokenPos codepos, int regCount, bool isGlobal)
             : base(name)
         {            
             _regCount = regCount;
@@ -60,7 +60,7 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
-        public void DebugPrint( )
+        public void DebugPrint( Executable exe)
         {
             int index = 0;
 
@@ -80,7 +80,7 @@ namespace Photon
                     currLine = c.CodePos.Line;
 
                     // 显示源码
-                    Debug.WriteLine("{0}|{1}", currLine, Pkg.QuerySourceLine(c.CodePos));
+                    Debug.WriteLine("{0}|{1}", currLine, exe.QuerySourceLine(c.CodePos));
                 }
 
                 // 显示汇编

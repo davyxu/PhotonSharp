@@ -7,7 +7,9 @@ namespace Photon
     {
         public override bool Execute( Command cmd)
         {
-            var c = cmd.Pkg.Constants.Get(cmd.DataA);
+            var pkg = vm.GetRuntimePackage(cmd.DataA);
+
+            var c = pkg.Constants.Get(cmd.DataB);
 
             vm.DataStack.Push(c);
 
@@ -16,7 +18,9 @@ namespace Photon
 
         public static string Print( VMachine vm, Command cmd )
         {
-            return string.Format("S <- C{0}     | C{1}: {2}", cmd.DataA, cmd.DataA, cmd.Pkg.Constants.Get(cmd.DataA));
+            var pkg = vm.GetRuntimePackage(cmd.DataA);
+
+            return string.Format("S <- C{0}     | {1} C{2}: {3}", cmd.DataB, pkg.Name, cmd.DataB, pkg.Constants.Get(cmd.DataB));
         }
     }
 
@@ -242,7 +246,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
+            var proc = vm.Exec.GetProcedure(cmd.DataA );
 
             vm.DataStack.Push(new ValueFunc(proc));
 
@@ -260,7 +264,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var proc = cmd.Pkg.Exe.GetProcedure(cmd.DataA, cmd.DataB);
+            var proc = vm.Exec.GetProcedure(cmd.DataA );
 
             vm.DataStack.Push(new ValueClosure(proc));
 

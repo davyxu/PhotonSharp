@@ -32,7 +32,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            param.Pkg.AddProcedure(new Delegate(Name.Name ) );            
+            param.Pkg.Exe.AddProcedure(new Delegate( new ProcedureName( param.Pkg.Name, Name.Name ) ) );            
 
            // var c = new ValueDelegate( );            
 

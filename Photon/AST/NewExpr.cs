@@ -74,11 +74,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            // 先放参数
-            foreach (var arg in _call.Args)
-            {
-                arg.Compile(param.SetLHS(false));
-            }
+
 
             ObjectName on = ObjectName.Empty;
             on.EntryName = ClassName.Name;
@@ -96,7 +92,8 @@ namespace Photon
             {
                 throw new CompileException("class entry not found", NewPos);
             }
-
+            
+            // 类名
             param.CS.Add(new Command(Opcode.LOADC, c.ID))
                 .SetComment(on.ToString())
                 .SetCodePos(NewPos);
@@ -104,6 +101,20 @@ namespace Photon
             param.CS.Add(new Command(Opcode.NEW, _call.Args.Count, NeedBalanceDataStack))
                 .SetComment(on.ToString())
                 .SetCodePos(NewPos);
+
+
+
+            // 先放参数
+            foreach (var arg in _call.Args)
+            {
+                arg.Compile(param.SetLHS(false));
+            }
+
+            if ( c.Ctor != null )
+            {
+                param.CS.Add(new Command(Opcode.LOADF, c.Ctor.ID)).SetComment(c.Ctor.Name.ToString()).SetCodePos(NewPos);
+                param.CS.Add(new Command(Opcode.CALL, _call.Args.Count + 1, NeedBalanceDataStack)).SetCodePos(NewPos);
+            }
         }
     }
 }

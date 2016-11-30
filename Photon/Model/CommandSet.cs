@@ -59,6 +59,30 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
+        internal override bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
+        {
+            // 更换当前上下文
+            vm.EnterFrame(this);
+
+            vm.CurrFrame.RestoreDataStack = balanceStack;
+            vm.CurrFrame.Closure = closure;
+
+            // 将栈转为被调用函数的寄存器
+            for (int i = 0; i < argCount; i++)
+            {
+                var arg = vm.DataStack.Get(-i - 1);
+                vm.LocalReg.Set(argCount - i - 1 + vm.RegBase, arg);
+            }
+
+            // 清空栈
+            vm.DataStack.PopMulti(argCount);
+
+            // 记录当前的数据栈位置
+            vm.CurrFrame.DataStackBase = vm.DataStack.Count;
+
+            return false;
+        }
+
         public void DebugPrint( Executable exe)
         {
             int index = 0;

@@ -52,12 +52,16 @@ namespace Photon
             var obj = vm.DataStack.Pop();
 
             var c = obj.CastClassType().CoreClass;
-            if ( c.HasCtor )
+
+            var ins = new ValueClassIns(c);
+
+            // 调用函数后, 会把栈上的this删掉, 因此有构造函数时, 要多补一个self
+            if ( c.Ctor != null )
             {
-                // 构造函数调用
+                vm.DataStack.Push(ins);
             }
 
-            vm.DataStack.Push(new ValueClassIns(c));
+            vm.DataStack.Push(ins);
 
             return true;
         }
@@ -79,71 +83,10 @@ namespace Photon
 
             var func = obj.CastFunc();
 
-            var cmdSet = func.Proc as CommandSet;
-            if ( cmdSet != null )
-            {
-                return InvokeFunction(cmdSet, argCount, cmd.DataB != 0, obj as ValueClosure);
-            }
-            
-            var dg = func.Proc as Delegate;
-            if ( dg != null )
-            {
-                return InvokeDelegate(dg, argCount, cmd.DataB != 0);
-            }
+            return func.Proc.Invoke(vm, argCount, cmd.DataB != 0, obj as ValueClosure);
 
             throw new RuntimeException("expect function or delegate");
         }
-
-        bool InvokeFunction(CommandSet cmdSet, int argCount, bool balanceStack, ValueClosure closure )
-        {
-            // 更换当前上下文
-            vm.EnterFrame(cmdSet);
-
-            vm.CurrFrame.RestoreDataStack = balanceStack;
-            vm.CurrFrame.Closure = closure;
-
-            // 将栈转为被调用函数的寄存器
-            for (int i = 0; i < argCount; i++)
-            {
-                var arg = vm.DataStack.Get(-i - 1);
-                vm.LocalReg.Set(argCount - i - 1 + vm.RegBase, arg);
-            }
-
-            // 清空栈
-            vm.DataStack.PopMulti(argCount);
-
-            // 记录当前的数据栈位置
-            vm.CurrFrame.DataStackBase = vm.DataStack.Count;
-
-            return false;
-        }
-
-        bool InvokeDelegate(Delegate dg, int argCount, bool balanceStack)
-        {            
-            // 外部调用不进行栈调整
-            var stackBeforeCall = vm.DataStack.Count;
-
-            int retValueCount = 0;
-
-            if (dg.Entry != null)
-            {
-                retValueCount = dg.Entry(vm);
-            }
-
-            // 调用结束时需要平衡栈( 返回值没有被用到 )
-            if (balanceStack)
-            {
-                // 调用前(包含参数+ delegate)
-                vm.DataStack.Count = stackBeforeCall - argCount;
-            }
-            else
-            {
-                vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
-            }
-
-            return true;
-        }
-
 
         public override string Print(Command cmd)
         {

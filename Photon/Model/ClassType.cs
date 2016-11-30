@@ -15,6 +15,8 @@ namespace Photon
 
         Dictionary<int, string> _memberVar = new Dictionary<int, string>();
 
+        Procedure _ctor;
+
         Executable _exe;
         ObjectName _name;
 
@@ -24,13 +26,18 @@ namespace Photon
             _name = name;
         }
 
-        internal bool HasCtor
+        internal Procedure Ctor
         {
-            get { return false; }
+            get { return _ctor; }
         }
 
         internal void AddMethod( int nameKey, Procedure proc )
-        {           
+        {
+            if ( proc.Name.EntryName == "ctor" )
+            {
+                _ctor = proc;
+            }
+
             _methods.Add(nameKey, proc);
         }
 

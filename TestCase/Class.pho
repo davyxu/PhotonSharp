@@ -1,20 +1,27 @@
 
 class Animal {
 	
-	HP
+	Name
 	
 	Speed
 }
 
-func Animal.action( self ){
+func Animal.ctor( self, name ){
 	
-	self.HP = 5
-
-	return self.HP
+	self.Name = name
 
 }
 
 
-var a = new Animal()
+func Animal.Do( self ){
+	
+	self.HP = 5
 
-var k = a.action( )
+	return self.HP, self.Name
+
+}
+
+
+var a = new Animal("cat")
+
+var h, n = a.Do( )

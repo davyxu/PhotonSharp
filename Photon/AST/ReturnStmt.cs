@@ -34,8 +34,12 @@ namespace Photon
         internal override void Compile(CompileParameter param)
         {
             // TODO 多返回值打到comment里
-            Results[0].Compile(param.SetLHS(false));
-
+            for (int i = Results.Count - 1; i >= 0;i-- )
+            {
+                Results[i].Compile(param.SetLHS(false));
+            }
+            
+            
             param.CS.Add(new Command(Opcode.RET)).SetCodePos(RetPos);
         }
     }

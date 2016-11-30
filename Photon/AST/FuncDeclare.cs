@@ -29,7 +29,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("FuncDeclare {0} {1}", Name.Name, TypeInfo.ToString());
+            return string.Format("FuncDeclare '{0}' {1}", Name.Name, TypeInfo.ToString());
         }
 
         public override IEnumerable<Node> Child()

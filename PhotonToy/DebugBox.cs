@@ -101,27 +101,8 @@ namespace PhotonToy
         }
 
         public void Stop( )
-        {
-            switch( State )
-            {
-                case State.Breaking:
-                    {
-                        _vm.Stop();
-
-                        Operate(DebuggerMode.Continue);
-
-                        _exitSignal.WaitOne();    
-                    }
-                    break;
-                case State.Running:
-                    {
-                        // 在跑, 直接停
-
-                        _thread.Abort();
-                    }
-                    break;
-            }
-
+        {            
+            _thread.Abort();
 
             
         }

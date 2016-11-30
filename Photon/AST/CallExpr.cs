@@ -54,12 +54,14 @@ namespace Photon
         {
             int SelfCount = 0;
 
+
             // 尝试放入self作为第一个参数
             var selector = Func as SelectorExpr;
-            if (selector != null )
+            if (selector != null)
             {
                 SelfCount += selector.CompileSelfParameter(param.SetLHS(false));
             }
+            
 
             // 先放参数
             foreach (var arg in Args)

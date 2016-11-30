@@ -46,14 +46,16 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new CommandSet(new ProcedureName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new CommandSet(new ObjectName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var proc = param.Pkg.Exe.AddProcedure(newset);
+            var proc = param.Exe.AddProcedure(newset);
 
             param.CS.Add(new Command(Opcode.CLOSURE, proc.ID)).SetCodePos(TypeInfo.FuncPos);
 
+            var funcParam = param.SetLHS(false).SetComdSet(newset);
+
             // 深度遍历, 所以最终引用层会先被遍历到
-            Body.Compile(param.SetLHS(false).SetComdSet(newset));
+            Body.Compile(funcParam);
             
             // 找到这一层闭包用的upvalues集合(引用上面函数作用域的)            
             FindUsedUpvalue(Body );
@@ -95,6 +97,8 @@ namespace Photon
 
                 ThisLevelIndex++;
             }
+
+            TypeInfo.GenDefaultRet(Body.Child(), funcParam);
 
             newset.InputValueCount = TypeInfo.Params.Count;
 

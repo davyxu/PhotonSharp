@@ -25,6 +25,8 @@ namespace Photon
         // 源码
         List<File> _file = new List<File>();
 
+        // 类
+        List<ClassType> _class = new List<ClassType>();
 
         public List<File> FileList
         {
@@ -61,6 +63,31 @@ namespace Photon
             return f;
         }
 
+        internal ClassType AddClassType( ClassType c )
+        {
+            _class.Add(c);
+
+            c.ID = _class.Count - 1;
+
+            return c;
+        }
+
+        internal ClassType GetClassType(int cid )
+        {
+            return _class[cid];
+        }
+
+        internal ClassType GetClassTypeByName(ObjectName name)
+        {
+            foreach( var c in _class )
+            {
+                if (c.Name.Equals( name))
+                    return c;
+            }
+
+            return null;
+        }
+
 
         internal Package AddPackage( string name, Scope top )
         {
@@ -95,7 +122,7 @@ namespace Photon
             return _proc[procid];            
         }
 
-        internal Procedure GetProcedureByName( ProcedureName name )
+        internal Procedure GetProcedureByName( ObjectName name )
         {           
             foreach( var pro in _proc )
             {
@@ -164,7 +191,7 @@ namespace Photon
                 data.Usage = SymbolUsage.Func;
                 pkgScope.Insert(data);
 
-                var proc = pkg.Exe.AddProcedure(new Delegate(new ProcedureName(pkg.Name, m.Name)));
+                var proc = pkg.Exe.AddProcedure(new Delegate(new ObjectName(pkg.Name, m.Name)));
               
                 var del = proc as Delegate;
                 del.Entry = dele;

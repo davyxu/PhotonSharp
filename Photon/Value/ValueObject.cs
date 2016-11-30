@@ -9,32 +9,10 @@ namespace Photon
             throw new NotImplementedException();
         }
 
-        public override string ToString()
+        public override ValueType GetValueType()
         {
-            return "(object)";
+            return ValueType.Object;
         }
-
-
-
-        internal virtual Value Get(Value obj)
-        {
-            return Value.Nil;
-        }
-
-        internal virtual Value Select(Value obj)
-        {
-            return Value.Nil;
-        }
-
-        internal virtual void Set(Value obj, Value value)
-         {
-
-         }
-
-         public override ValueType GetValueType()
-         {
-             return ValueType.Object;
-         }
 
 
     }

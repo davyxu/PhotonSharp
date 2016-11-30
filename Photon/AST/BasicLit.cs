@@ -27,7 +27,7 @@ namespace Photon
             var c = Lit2Const( );
             _constIndex = param.Pkg.Constants.Add(c);
 
-            param.CS.Add(new Command(Opcode.LOADC, param.Pkg.ID, _constIndex)).SetComment(c.ToString()).SetCodePos(Pos);
+            param.CS.Add(new Command(Opcode.LOADK, param.Pkg.ID, _constIndex)).SetComment(c.ToString()).SetCodePos(Pos);
         }
 
         Value Lit2Const()

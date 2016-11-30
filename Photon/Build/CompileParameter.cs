@@ -10,6 +10,7 @@ namespace Photon
     internal struct CompileParameter
     {
         internal Package Pkg;
+        internal Executable Exe;
         internal CommandSet CS;
         internal bool LHS;
 

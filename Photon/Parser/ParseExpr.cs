@@ -91,7 +91,7 @@ namespace Photon
                         Next();
 
                         var scope = OpenScope(ScopeType.Closure, funcPos );
-                        var paramlist = ParseParameters(scope);
+                        var paramlist = ParseParameters(scope, false);
 
                         var body = ParseBody(scope);
 
@@ -133,6 +133,11 @@ namespace Photon
             if (xident == null)
                 return;
 
+            if ( xident.Symbol == null )
+            {
+                throw new CompileException(string.Format("{0} not defined", xident.Name), dotpos);
+            }
+
             switch (xident.Symbol.Usage)
             {
                 // 包.函数名
@@ -156,11 +161,19 @@ namespace Photon
                     break;
                 // 实例.函数名
                 case SymbolUsage.Variable:
+                case SymbolUsage.Parameter:
                     {
                         // Class Scope
                         Resolve(sel, _topScope);
                     }
                     break;
+                case SymbolUsage.SelfParameter:
+                    {
+
+                    }
+                    break;
+                default:
+                    throw new CompileException("unknown usage", dotpos);
             }
 
         }
@@ -240,16 +253,30 @@ namespace Photon
         }
         Expr ParseUnaryExpr(bool lhs)
         {
-            switch (CurrTokenType)
+            var op = CurrTokenType;
+
+            switch (op)
             {
                 case TokenType.Add:
                 case TokenType.Sub:
+                case TokenType.New:
                     {
-                        var op = CurrTokenType;
+                        
                         var oppos = CurrTokenPos;
 
                         Next();
                         var x = ParsePrimaryExpr( false );
+
+                        if (op == TokenType.New )
+                        {
+                            var call = x as CallExpr;
+                            if (call == null)
+                            {
+                                throw new CompileException("invalid new expression", oppos);
+                            }
+
+                            return new NewExpr(call, oppos);
+                        }
 
                         return new UnaryExpr(x, op, oppos);
                     }

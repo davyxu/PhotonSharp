@@ -2,8 +2,8 @@
 
 namespace Photon
 {
-    [Instruction(Cmd = Opcode.LOADC)]
-    class CmdLoadC : Instruction
+    [Instruction(Cmd = Opcode.LOADK)]
+    class CmdLoadK : Instruction
     {
         public override bool Execute( Command cmd)
         {
@@ -112,9 +112,9 @@ namespace Photon
 
             var main = vm.DataStack.Pop().CastObject();
 
-            var result = main.Get(key);
+            //var result = main.Get(key);
 
-            vm.DataStack.Push(result);
+            //vm.DataStack.Push(result);
                         
             return true;
         }
@@ -129,21 +129,17 @@ namespace Photon
     class CmdSelect : Instruction
     {
         public override bool Execute( Command cmd)
-        {            
-            var main = vm.DataStack.Pop().CastObject();
+        {
+            var c = vm.DataStack.Pop().CastClassInstance();
 
-            var key = cmd.Pkg.Constants.Get(cmd.DataA);
-
-            var result = main.Select(key);
-
-            vm.DataStack.Push(result);
+            vm.DataStack.Push(c.GetMember(cmd.DataA));
 
             return true;
         }
 
         public override string Print( Command cmd)
         {
-            return string.Format("Const: {0}", cmd.DataA);
+            return string.Format("NameKey: {0}", cmd.DataA);
         }
     }
 
@@ -266,6 +262,62 @@ namespace Photon
         public override string Print(Command cmd)
         {
             return string.Format("Proc: {0}", cmd.DataA);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADC)]
+    class CmdLoadC : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var c = vm.Exec.GetClassType(cmd.DataA);            
+
+            vm.DataStack.Push(new ValueClassType(c) );
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("Pkg: {0}  Const: {1}", cmd.DataA, cmd.DataB);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADM)]
+    class CmdLoadM : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var ci = vm.LocalReg.Get(cmd.DataA).CastClassInstance();
+
+            vm.DataStack.Push(ci.GetMember(cmd.DataB));
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("Self: {0} MemberKey: {1}", cmd.DataA, cmd.DataB);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.SETM)]
+    class CmdSetM : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var ci = vm.LocalReg.Get(cmd.DataA).CastClassInstance();
+
+            var v = vm.DataStack.Pop();
+
+            ci.SetMember(cmd.DataB, v);
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("Self: {0} MemberKey: {1}", cmd.DataA, cmd.DataB);
         }
     }
 }

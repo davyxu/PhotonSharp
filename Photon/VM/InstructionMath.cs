@@ -66,6 +66,8 @@ namespace Photon
     }
 
 
+
+
     [Instruction(Cmd = Opcode.ADD)]
     class CmdAdd : InstructionBinaryMath
     {

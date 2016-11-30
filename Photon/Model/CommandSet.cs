@@ -15,7 +15,7 @@ namespace Photon
 
         TokenPos _codePos;
 
-        internal CommandSet(ProcedureName name, TokenPos codepos, int regCount, bool isGlobal)
+        internal CommandSet(ObjectName name, TokenPos codepos, int regCount, bool isGlobal)
             : base(name)
         {            
             _regCount = regCount;
@@ -44,8 +44,7 @@ namespace Photon
         }
 
         internal Command Add(Command c)
-        {
-            c.Pkg = Pkg;            
+        {            
             _cmds.Add(c);            
             return c;
         }

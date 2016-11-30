@@ -39,7 +39,9 @@ namespace Photon
                 case TokenType.Not:
                     return Opcode.NOT;
                 case TokenType.Len:
-                    return Opcode.LEN;                
+                    return Opcode.LEN;
+                case TokenType.New:
+                    return Opcode.NEW;
             }
 
             return Opcode.NOP;

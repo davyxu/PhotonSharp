@@ -8,6 +8,8 @@ namespace Photon
         String,
         Func,
         Object,
+        ClassType,
+        ClassInstance,
     }
 
     class Value
@@ -19,9 +21,9 @@ namespace Photon
 
         public static Value Nil = new ValueNil();
 
-        public override string ToString()
+        public virtual string ToString()
         {
-            return "(NotImplementToString)";
+            return DebugString();
         }
 
         public virtual string DebugString( )
@@ -84,6 +86,28 @@ namespace Photon
             if (v == null)
             {
                 throw new RuntimeException("expect closure");
+            }
+
+            return v;
+        }
+
+        public ValueClassType CastClassType()
+        {
+            var v = this as ValueClassType;
+            if (v == null)
+            {
+                throw new RuntimeException("expect class type");
+            }
+
+            return v;
+        }
+
+        public ValueClassIns CastClassInstance()
+        {
+            var v = this as ValueClassIns;
+            if (v == null)
+            {
+                throw new RuntimeException("expect class instance");
             }
 
             return v;

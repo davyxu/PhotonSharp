@@ -72,7 +72,7 @@ namespace Photon
 
         static bool ResolveFuncEntry(Package pkg, string name, Command cmd)
         {
-            var proc = pkg.Exe.GetProcedureByName(new ProcedureName(pkg.Name, name));
+            var proc = pkg.Exe.GetProcedureByName(new ObjectName(pkg.Name, name));
 
             if ( proc != null )
             {
@@ -103,10 +103,10 @@ namespace Photon
 
             GenCode(param, 1);
 
-            if ( CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
-            {
-                throw new CompileException("code not resolve", DefinePos);
-            }
+            //if ( CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
+            //{
+            //    throw new CompileException("code not resolve", DefinePos);
+            //}
         }
 
 
@@ -131,8 +131,6 @@ namespace Photon
                 else if ( UpValue )
                 {
                     CmdGen.Op = Opcode.SETU;
-
-                    
                     CmdGen.DataA = Symbol.RegIndex;
                 }
                 else
@@ -186,6 +184,7 @@ namespace Photon
                             break;
                         case SymbolUsage.Variable:
                         case SymbolUsage.Parameter:
+                        case SymbolUsage.SelfParameter:
                             {
                                 // 将自己视为变量
 
@@ -207,6 +206,11 @@ namespace Photon
                                 }
 
                                 
+                            }
+                            break;
+                        case SymbolUsage.Class:
+                            {
+
                             }
                             break;
                         default:

@@ -234,7 +234,7 @@ namespace Photon
             }
             
             // 找到包入口
-            var proc = exe.GetProcedureByName( new ProcedureName("main", "main") );
+            var proc = exe.GetProcedureByName( new ObjectName("main", "main") );
             if ( proc == null )
             {
                 throw new RuntimeException("unknown start package name: " + startPkg);

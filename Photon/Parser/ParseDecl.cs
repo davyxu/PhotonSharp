@@ -14,17 +14,36 @@ namespace Photon
 
             var scope = OpenScope(ScopeType.Function, funcPos );
 
-            var ident = ParseIdent();
+            Ident funcName;
+            Ident className = null ;
 
-            var paramlist = ParseParameters(scope);
+            var NameA = ParseIdent();
 
+            if (CurrTokenType == TokenType.Dot)
+            {
+                Next();
+
+                funcName = ParseIdent();
+
+                className = NameA;                
+            }
+            else
+            {
+                funcName = NameA;
+            }
+
+
+            var paramlist = ParseParameters(scope, className != null );
+            
             if ( CurrTokenType == TokenType.LBrace )
             {
+
                 var body = ParseBody(scope);
 
-                var decl = new FuncDeclare(ident, body, new FuncType(funcPos, paramlist, scope) );
+                var decl = new FuncDeclare(funcName, body, new FuncType(funcPos, paramlist, scope) );
+                decl.ClassName = className;
 
-                ident.Symbol = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Func);
+                funcName.Symbol = Declare(decl, _global, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
 
                 return decl;
             }
@@ -34,16 +53,16 @@ namespace Photon
                 CloseScope();
 
                 // 函数前置声明
-                var decl = new DelegateDeclare(ident, new FuncType(funcPos, paramlist, scope) );
+                var decl = new DelegateDeclare(funcName, new FuncType(funcPos, paramlist, scope) );
 
-                ident.Symbol = Declare(decl, _global, ident.Name, ident.DefinePos, SymbolUsage.Delegate);
+                funcName.Symbol = Declare(decl, _global, funcName.Name, funcName.DefinePos, SymbolUsage.Delegate);
 
                 return decl;
             }
             
         }
 
-        List<Ident> ParseParameters( Scope s )
+        List<Ident> ParseParameters( Scope s, bool isMethod )
         {
             Expect(TokenType.LBracket);
 
@@ -57,7 +76,19 @@ namespace Photon
                     var param = ParseIdent();
                     p.Add(param);
 
-                    Declare(param, s, param.Name, param.DefinePos, SymbolUsage.Parameter);
+
+                    SymbolUsage usage;
+                    if (isMethod && p.Count == 1 )
+                    {
+                        usage = SymbolUsage.SelfParameter;
+                    }
+                    else
+                    {
+                        usage = SymbolUsage.Parameter;
+                    }
+
+
+                    Declare(param, s, param.Name, param.DefinePos, usage);
 
                     if (CurrTokenType != TokenType.Comma)
                     {
@@ -123,6 +154,41 @@ namespace Photon
             }
 
             return new VarDeclareStmt(idents, defpos);
+        }
+
+
+        Stmt ParseClassDecl( )
+        {
+            List<Ident> memberVar = new List<Ident>();
+
+            var defpos = CurrTokenPos;
+            Expect(TokenType.Class);
+
+            var scope = OpenScope(ScopeType.Class, defpos);
+
+            var className = ParseIdent();
+
+            var decl = new ClassDeclare(className, scope, memberVar, defpos);
+
+            className.Symbol = Declare(decl, _global, className.Name, className.DefinePos, SymbolUsage.Class);
+
+            Expect(TokenType.LBrace);
+            
+            
+
+            while (CurrTokenType != TokenType.RBrace)
+            {
+                var param = ParseIdent();
+                memberVar.Add(param);                
+
+                Declare(param, scope, param.Name, param.DefinePos, SymbolUsage.Member);                
+            }
+
+            CloseScope();
+
+            Next();
+
+            return decl;
         }
 
 

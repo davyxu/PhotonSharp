@@ -71,7 +71,7 @@ namespace Photon
                         // 包.函数名
                     case SymbolUsage.Package:
                         {
-                            var pkg = param.Pkg.Exe.GetPackageByName(xident.Name);
+                            var pkg = param.Exe.GetPackageByName(xident.Name);
 
                             if (pkg == null)
                             {
@@ -90,6 +90,23 @@ namespace Photon
                             Selector.Compile(param.SetLHS(false));
                         }
                         break;
+                    case SymbolUsage.SelfParameter:
+                        {
+                            // 使用字符串的Const值作为成员函数的key索引                            
+                            var classIns = xident.Symbol.RegIndex;
+
+                            var c = new ValueString(Selector.Name);
+
+                            var ci = param.Pkg.Constants.Add(c);
+
+                            Opcode cm = param.LHS ? Opcode.SETM : Opcode.LOADM;
+
+                            param.CS.Add(new Command(cm, classIns, ci))
+                                .SetCodePos(DotPos).SetComment(Selector.Name);
+                        }
+                        break;
+                    default:
+                        throw new CompileException("unknown symbol usage", DotPos);
                 }
 
             }
@@ -102,7 +119,8 @@ namespace Photon
 
                 var ci = param.Pkg.Constants.Add(c);
 
-                param.CS.Add(new Command(Opcode.SEL, ci));
+                param.CS.Add(new Command(Opcode.SEL, ci))
+                    .SetCodePos(DotPos).SetComment(Selector.Name);
             }
 
            

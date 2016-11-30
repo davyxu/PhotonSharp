@@ -14,6 +14,7 @@ namespace Photon
         Block,
         For,
         Closure,
+        Class,
     }
 
     class Scope
@@ -165,6 +166,7 @@ namespace Photon
             switch( usage )
             {
                 case SymbolUsage.Parameter:
+                case SymbolUsage.SelfParameter:
                 case SymbolUsage.Variable:
                     return true;
             }

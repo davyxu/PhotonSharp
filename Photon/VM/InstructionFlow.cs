@@ -42,6 +42,31 @@ namespace Photon
         }
     }
 
+    [Instruction(Cmd = Opcode.NEW)]
+    class CmdNew : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var argCount = cmd.DataA;
+
+            var obj = vm.DataStack.Pop();
+
+            var c = obj.CastClassType().CoreClass;
+            if ( c.HasCtor )
+            {
+                // 构造函数调用
+            }
+
+            vm.DataStack.Push(new ValueClassIns(c));
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("ArgCount : {0}  BalanceStack: {1}", cmd.DataA, cmd.DataB);
+        }
+    }
 
     [Instruction(Cmd = Opcode.CALL)]
     class CmdCallF : Instruction

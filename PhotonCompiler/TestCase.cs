@@ -21,7 +21,7 @@ namespace PhotonCompiler
 
         static void TestCase()
         {
-            new TestBox().RunFile("Scope.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 1);
+            new TestBox().RunFile("Class.pho").TestGlobalRegEqualNumber(1, 5);
             new TestBox().RunFile("Math.pho").TestGlobalRegEqualNumber(0, -1);
 
             {

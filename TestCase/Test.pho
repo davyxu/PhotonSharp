@@ -1,8 +1,16 @@
 
-func foo( self, b ){
+class Animal {
 	
-	return self+ b
+	HP
+	
+	Speed
 }
 
-var a = 1
-var c = a.foo( 2 )
+
+//func foo( self, b ){
+	
+	//return self+ b
+//}
+
+//var a = 1
+//var c = a.foo( 2 )

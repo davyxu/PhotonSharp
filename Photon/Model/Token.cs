@@ -26,7 +26,7 @@ namespace Photon
         Mul,            // *
         Div,            // /
         Comma,          // ,
-        Dot,            // .
+        Dot,            // .        
         SemiColon,      // ;
         LBracket,       // (
         RBracket,       // )
@@ -46,7 +46,9 @@ namespace Photon
         While,          // while
         Break,          // break
         Continue,       // continue
-        Import,       // import
+        Import,         // import
+        Class,          // class
+        New,            // new
     }
    
 }

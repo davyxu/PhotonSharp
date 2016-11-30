@@ -49,10 +49,7 @@ namespace Photon
             return string.Format("{0} (closure)", _proc.ToString());
         }
 
-        public override string ToString()
-        {
-            return DebugString();
-        }
+
     }
 
  

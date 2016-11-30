@@ -77,7 +77,7 @@ namespace Photon
             var initPos = TokenPos.Init;
             initPos.SourceName = NormalizeFileName(packageFileName);
 
-            var cs = new CommandSet( new ProcedureName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
+            var cs = new CommandSet( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
 
             exe.AddProcedure(cs);
 
@@ -85,6 +85,7 @@ namespace Photon
 
             param.Pkg = pkg;
             param.CS = cs;
+            param.Exe = exe;
 
             // 遍历AST,生成代码
             parser.Chunk.Compile(param);

@@ -1,29 +1,20 @@
 
 class Animal {
 	
+	HP
+	
+	Speed
 }
 
-func Animal:action( type ){
+func Animal.action( self ){
+	
+	self.HP = 5
 
-
-}
-
-
-class Dog : Anim {
-
-}
-
-func Dog:ctor( ){
-
-	base.ctor( )
-}
-
-func Dog:action( type ){
-
+	return self.HP
 
 }
 
 
-var ins = Dog( )
+var a = new Animal()
 
-ins.action( "fly" )
+var k = a.action( )

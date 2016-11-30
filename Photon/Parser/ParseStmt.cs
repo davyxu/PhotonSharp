@@ -85,6 +85,8 @@ namespace Photon
                     return ParseVarDecl();
                 case TokenType.Import:
                     return ParseImportStmt();
+                case TokenType.Class:
+                    return ParseClassDecl();
             }
 
             return new BadStmt();

@@ -8,8 +8,11 @@ namespace Photon
         Delegate,
         Func,
         Variable,
+        SelfParameter,
         Parameter,
+        Member,
         Package,
+        Class,
     }
 
 

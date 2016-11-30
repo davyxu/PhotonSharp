@@ -162,11 +162,6 @@ namespace Photon
                 // 实例.函数名
                 case SymbolUsage.Variable:
                 case SymbolUsage.Parameter:
-                    {
-                        // Class Scope
-                        Resolve(sel, _topScope);
-                    }
-                    break;
                 case SymbolUsage.SelfParameter:
                     {
 

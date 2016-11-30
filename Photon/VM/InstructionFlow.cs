@@ -42,35 +42,7 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.NEW)]
-    class CmdNew : Instruction
-    {
-        public override bool Execute(Command cmd)
-        {
-            var argCount = cmd.DataA;
 
-            var obj = vm.DataStack.Pop();
-
-            var c = obj.CastClassType().CoreClass;
-
-            var ins = new ValueClassIns(c);
-
-            // 调用函数后, 会把栈上的this删掉, 因此有构造函数时, 要多补一个self
-            if ( c.Ctor != null )
-            {
-                vm.DataStack.Push(ins);
-            }
-
-            vm.DataStack.Push(ins);
-
-            return true;
-        }
-
-        public override string Print(Command cmd)
-        {
-            return string.Format("ArgCount : {0}  BalanceStack: {1}", cmd.DataA, cmd.DataB);
-        }
-    }
 
     [Instruction(Cmd = Opcode.CALL)]
     class CmdCallF : Instruction

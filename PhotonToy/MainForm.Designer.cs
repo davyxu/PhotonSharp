@@ -30,6 +30,7 @@
         {
             this.registerList = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.splitRegisterSpliter = new System.Windows.Forms.SplitContainer();
             this.pkgSel = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataStackList = new System.Windows.Forms.ListBox();
@@ -51,8 +52,11 @@
             this.splitUpDown = new System.Windows.Forms.SplitContainer();
             this.splitLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitDataRegister = new System.Windows.Forms.SplitContainer();
-            this.splitRegisterSpliter = new System.Windows.Forms.SplitContainer();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitRegisterSpliter)).BeginInit();
+            this.splitRegisterSpliter.Panel1.SuspendLayout();
+            this.splitRegisterSpliter.Panel2.SuspendLayout();
+            this.splitRegisterSpliter.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -68,10 +72,6 @@
             this.splitDataRegister.Panel1.SuspendLayout();
             this.splitDataRegister.Panel2.SuspendLayout();
             this.splitDataRegister.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitRegisterSpliter)).BeginInit();
-            this.splitRegisterSpliter.Panel1.SuspendLayout();
-            this.splitRegisterSpliter.Panel2.SuspendLayout();
-            this.splitRegisterSpliter.SuspendLayout();
             this.SuspendLayout();
             // 
             // registerList
@@ -94,6 +94,26 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Register";
+            // 
+            // splitRegisterSpliter
+            // 
+            this.splitRegisterSpliter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitRegisterSpliter.IsSplitterFixed = true;
+            this.splitRegisterSpliter.Location = new System.Drawing.Point(3, 17);
+            this.splitRegisterSpliter.Name = "splitRegisterSpliter";
+            this.splitRegisterSpliter.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitRegisterSpliter.Panel1
+            // 
+            this.splitRegisterSpliter.Panel1.Controls.Add(this.pkgSel);
+            // 
+            // splitRegisterSpliter.Panel2
+            // 
+            this.splitRegisterSpliter.Panel2.Controls.Add(this.registerList);
+            this.splitRegisterSpliter.Size = new System.Drawing.Size(195, 258);
+            this.splitRegisterSpliter.SplitterDistance = 25;
+            this.splitRegisterSpliter.SplitterWidth = 1;
+            this.splitRegisterSpliter.TabIndex = 3;
             // 
             // pkgSel
             // 
@@ -318,26 +338,6 @@
             this.splitDataRegister.SplitterDistance = 201;
             this.splitDataRegister.TabIndex = 0;
             // 
-            // splitRegisterSpliter
-            // 
-            this.splitRegisterSpliter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitRegisterSpliter.IsSplitterFixed = true;
-            this.splitRegisterSpliter.Location = new System.Drawing.Point(3, 17);
-            this.splitRegisterSpliter.Name = "splitRegisterSpliter";
-            this.splitRegisterSpliter.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitRegisterSpliter.Panel1
-            // 
-            this.splitRegisterSpliter.Panel1.Controls.Add(this.pkgSel);
-            // 
-            // splitRegisterSpliter.Panel2
-            // 
-            this.splitRegisterSpliter.Panel2.Controls.Add(this.registerList);
-            this.splitRegisterSpliter.Size = new System.Drawing.Size(195, 258);
-            this.splitRegisterSpliter.SplitterDistance = 25;
-            this.splitRegisterSpliter.SplitterWidth = 1;
-            this.splitRegisterSpliter.TabIndex = 3;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -351,6 +351,10 @@
             this.Text = "PhotonToy";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.groupBox1.ResumeLayout(false);
+            this.splitRegisterSpliter.Panel1.ResumeLayout(false);
+            this.splitRegisterSpliter.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitRegisterSpliter)).EndInit();
+            this.splitRegisterSpliter.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -367,10 +371,6 @@
             this.splitDataRegister.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitDataRegister)).EndInit();
             this.splitDataRegister.ResumeLayout(false);
-            this.splitRegisterSpliter.Panel1.ResumeLayout(false);
-            this.splitRegisterSpliter.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitRegisterSpliter)).EndInit();
-            this.splitRegisterSpliter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

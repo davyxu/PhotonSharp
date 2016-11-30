@@ -20,12 +20,17 @@ namespace Photon
 
         public override string DebugString()
         {
-            return string.Format("{0}(class type)", CoreClass.Name);
+            return string.Format("{0}(class type)", TypeName);
         }
 
-        public override ValueType GetValueType()
+        public override string TypeName
         {
-            return ValueType.ClassType;
+            get { return CoreClass.Name.ToString(); }
+        }
+
+        public override ValueKind Kind
+        {
+            get { return ValueKind.ClassType; }
         }
 
 

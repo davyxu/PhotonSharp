@@ -30,9 +30,10 @@ namespace Photon
             return string.Format("{0} (proc)", _proc.ToString());
         }
 
-        public override ValueType GetValueType()
+        
+        public override ValueKind Kind
         {
-            return ValueType.Func;
+            get { return ValueKind.Func; }
         }
     }
 

@@ -49,6 +49,7 @@ namespace Photon
                 var c = param.Exe.GetClassTypeByName( new ObjectName( param.Pkg.Name, ClassName.Name) );
                 if (c == null )
                 {
+                    // 类本体还没有解析
                     if (pass == 1)
                     {
                         param.NextPassToResolve(this);
@@ -60,7 +61,7 @@ namespace Photon
                 }
                 else
                 {
-                    int nameKey = param.Pkg.Constants.Add(new ValueString(Name.Name));
+                    int nameKey = param.Pkg.Constants.AddString(Name.Name);
                     c.AddMethod(nameKey, _proc);
 
                     return true;

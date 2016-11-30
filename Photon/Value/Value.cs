@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public enum ValueType
+    public enum ValueKind
     {
         Nil = 0,
         Number,
@@ -21,7 +21,7 @@ namespace Photon
 
         public static Value Nil = new ValueNil();
 
-        public virtual string ToString()
+        public override string ToString()
         {
             return DebugString();
         }
@@ -31,9 +31,14 @@ namespace Photon
             return "(NotImplementToString)";
         }
 
-        public virtual ValueType GetValueType()
+        public virtual ValueKind Kind
         {
-            return ValueType.Nil;
+            get { return ValueKind.Nil; }
+        }
+
+        public virtual string TypeName
+        {
+            get { return string.Empty; }
         }
 
         public float CastNumber( )

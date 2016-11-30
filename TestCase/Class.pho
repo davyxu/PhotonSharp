@@ -15,9 +15,9 @@ func Animal.ctor( self, name ){
 
 func Animal.Do( self ){
 	
-	self.HP = 5
+	self.Speed = 5
 
-	return self.HP, self.Name
+	return self.Speed, self.Name
 
 }
 

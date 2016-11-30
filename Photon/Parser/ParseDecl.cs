@@ -19,16 +19,28 @@ namespace Photon
 
             var NameA = ParseIdent();
 
+            Scope funcAtScope;
+
             if (CurrTokenType == TokenType.Dot)
             {
                 Next();
 
                 funcName = ParseIdent();
 
-                className = NameA;                
+                className = NameA;
+                
+                funcAtScope = GetClassScope(className.Name);
+
+                // 主定义文件还未出现， 所以暂时创建空的scope
+                if ( funcAtScope == null )
+                {
+                    funcAtScope = OpenClassScope(className.Name, funcPos);
+                    CloseScope();
+                }
             }
             else
             {
+                funcAtScope = _global;
                 funcName = NameA;
             }
 
@@ -43,7 +55,8 @@ namespace Photon
                 var decl = new FuncDeclare(funcName, body, new FuncType(funcPos, paramlist, scope) );
                 decl.ClassName = className;
 
-                funcName.Symbol = Declare(decl, _global, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
+
+                funcName.Symbol = Declare(decl, funcAtScope, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
 
                 return decl;
             }
@@ -164,17 +177,32 @@ namespace Photon
             var defpos = CurrTokenPos;
             Expect(TokenType.Class);
 
-            var scope = OpenScope(ScopeType.Class, defpos);
-
             var className = ParseIdent();
 
-            var decl = new ClassDeclare(className, scope, memberVar, defpos);
+            var scope = OpenClassScope( className.Name, defpos);
 
-            className.Symbol = Declare(decl, _global, className.Name, className.DefinePos, SymbolUsage.Class);
+            
+            Ident parentName = null;
+            var colonPos = CurrTokenPos;
+            if ( CurrTokenType == TokenType.Colon )
+            {
+
+                Next();
+
+                parentName = ParseIdent();
+            }
 
             Expect(TokenType.LBrace);
-            
-            
+
+
+            var decl = new ClassDeclare(className, parentName, scope, memberVar, defpos);
+
+            if (parentName != null )
+            {
+                decl.ColonPos = colonPos;
+            }
+
+            className.Symbol = Declare(decl, _global, className.Name, className.DefinePos, SymbolUsage.Class);
 
             while (CurrTokenType != TokenType.RBrace)
             {

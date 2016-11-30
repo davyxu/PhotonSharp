@@ -56,9 +56,7 @@ namespace Photon
             var parser = new Parser();
             parser.Exe = exe;
 
-            var pkg = exe.AddPackage(packageName, parser.PackageScope);
-            
-            parser.PackageScope.RelatePackage = packageName;
+            var pkg = exe.AddPackage(packageName, parser.PackageScope);                        
 
             if ( mode == ImportMode.Directory)
             {

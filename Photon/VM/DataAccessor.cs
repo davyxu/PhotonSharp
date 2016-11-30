@@ -14,9 +14,9 @@ namespace Photon
             throw new NotImplementedException();
         }
 
-        public ValueType GetValueType( int index )
+        public ValueKind GetValueKind( int index )
         {
-            return Get(index).GetValueType();
+            return Get(index).Kind;
         }
 
         public float GetFloat32( int index )
@@ -31,7 +31,7 @@ namespace Photon
 
         public bool IsNil(int index)
         {
-            return Get(index).GetValueType() != ValueType.Nil;
+            return Get(index).Kind != ValueKind.Nil;
         }
 
         public void SetNil(int index)

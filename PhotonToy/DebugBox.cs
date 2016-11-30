@@ -1,5 +1,6 @@
 ﻿using Photon;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -72,17 +73,26 @@ namespace PhotonToy
 
             var pureName = Path.GetFileName(filename);
 
-            try
+            if ( Debugger.IsAttached )
             {
                 _exe = Compiler.Compile(filename);
             }
-            catch( Exception e )
+            else
             {
-                if (OnError != null)
-                    OnError(e.ToString());
+                try
+                {
+                    _exe = Compiler.Compile(filename);
+                }
+                catch (Exception e)
+                {
+                    if (OnError != null)
+                        OnError(e.ToString());
 
-                return;
+                    return;
+                }
             }
+
+            
             _exe.DebugPrint();
 
             if (OnLoad != null)
@@ -101,8 +111,11 @@ namespace PhotonToy
         }
 
         public void Stop( )
-        {            
-            _thread.Abort();
+        {
+            if (_thread != null)
+            {
+                _thread.Abort();
+            }
 
             
         }

@@ -33,9 +33,9 @@ namespace Photon
             return _number.ToString();
         }
 
-        public override ValueType GetValueType()
+        public override ValueKind Kind
         {
-            return ValueType.Number;
+            get { return ValueKind.Number; }
         }
     }
 

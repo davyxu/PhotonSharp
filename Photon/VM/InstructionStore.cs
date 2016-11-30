@@ -265,23 +265,32 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.LOADC)]
-    class CmdLoadC : Instruction
+    [Instruction(Cmd = Opcode.NEW)]
+    class CmdNew : Instruction
     {
         public override bool Execute(Command cmd)
         {
-            var c = vm.Exec.GetClassType(cmd.DataA);            
+            var c = vm.Exec.GetClassType(cmd.DataA);
 
-            vm.DataStack.Push(new ValueClassType(c) );
+            var ins = new ValueClassIns(c);
+
+            // 调用函数后, 会把栈上的this删掉, 因此有构造函数时, 要多补一个self
+            if (c.Ctor != null)
+            {
+                vm.DataStack.Push(ins);
+            }
+
+            vm.DataStack.Push(ins);
 
             return true;
         }
 
         public override string Print(Command cmd)
         {
-            return string.Format("Pkg: {0}  Const: {1}", cmd.DataA, cmd.DataB);
+            return string.Format("ClassNameKey : {0}", cmd.DataA);
         }
     }
+
 
     [Instruction(Cmd = Opcode.LOADM)]
     class CmdLoadM : Instruction
@@ -318,6 +327,24 @@ namespace Photon
         public override string Print(Command cmd)
         {
             return string.Format("Self: {0} MemberKey: {1}", cmd.DataA, cmd.DataB);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.IDXM)]
+    class CmdIndexM : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {            
+            var v = vm.DataStack.Get(-1).CastClassInstance();
+
+            vm.DataStack.Push( v.GetMember(cmd.DataA));
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("MemberKey: {0}", cmd.DataA);
         }
     }
 }

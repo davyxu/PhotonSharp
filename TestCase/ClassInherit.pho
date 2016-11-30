@@ -1,0 +1,27 @@
+
+class Animal {
+	type
+}
+
+func Animal.ctor( self ){
+	self.type = "animal"
+}
+
+
+func Animal.Do( self ){
+	return self.type
+}
+
+
+class Cat : Animal{
+
+}
+
+func Cat.ctor( self ){
+	self.type = "cat"
+}
+
+
+var c = new Cat( )
+
+var k = c.Do( )

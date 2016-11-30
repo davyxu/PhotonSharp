@@ -103,10 +103,10 @@ namespace Photon
 
             GenCode(param, 1);
 
-            //if ( CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this) )
-            //{
-            //    throw new CompileException("code not resolve", DefinePos);
-            //}
+            if (CmdGen.Op == Opcode.NOP && !param.IsNodeInNextPass(this))
+            {
+                throw new CompileException("code not resolve", DefinePos);
+            }
         }
 
 

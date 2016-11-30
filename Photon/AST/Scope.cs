@@ -22,15 +22,25 @@ namespace Photon
         Scope _outter;        
         ScopeType _type;
         TokenPos _defpos;
-
-        // 关联的包名, 调试用
-        public string RelatePackage;
+       
+        public string ClassName;
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
         List<Symbol> _regs = new List<Symbol>();
 
         List<Scope> _child = new List<Scope>();
+
+        internal List<Scope> Child
+        {
+            get { return _child; }
+        }
+
+        internal TokenPos CodePos
+        {
+            get { return _defpos; }
+            set { _defpos = value; }
+        }
 
         public Scope(Scope outter, ScopeType type, TokenPos pos )
         {

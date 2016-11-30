@@ -9,9 +9,9 @@ namespace Photon
             throw new NotImplementedException();
         }
 
-        public override ValueType GetValueType()
+        public override ValueKind Kind
         {
-            return ValueType.Object;
+            get { return ValueKind.Object; }
         }
 
 

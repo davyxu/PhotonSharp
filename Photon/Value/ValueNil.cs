@@ -22,9 +22,9 @@ namespace Photon
             return "nil";
         }
 
-        public override ValueType GetValueType()
+        public override ValueKind Kind
         {
-            return ValueType.Nil;
+            get { return ValueKind.Nil; }
         }
     }
 }

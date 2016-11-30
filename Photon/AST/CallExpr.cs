@@ -52,6 +52,15 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
+            int SelfCount = 0;
+
+            // 尝试放入self作为第一个参数
+            var selector = Func as SelectorExpr;
+            if (selector != null )
+            {
+                SelfCount += selector.CompileSelfParameter(param.SetLHS(false));
+            }
+
             // 先放参数
             foreach (var arg in Args)
             {
@@ -61,7 +70,7 @@ namespace Photon
                 // 本包及动态闭包调用
             Func.Compile(param.SetLHS(false));
 
-            param.CS.Add(new Command(Opcode.CALL, Args.Count, NeedBalanceDataStack)).SetCodePos(LParen);
+            param.CS.Add(new Command(Opcode.CALL, Args.Count + SelfCount, NeedBalanceDataStack)).SetCodePos(LParen);
         }
     }
 }

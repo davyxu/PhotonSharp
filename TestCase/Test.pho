@@ -1,3 +1,8 @@
 
+func foo( self, b ){
+	
+	return self+ b
+}
+
 var a = 1
-a = -a
+var c = a.foo( 2 )

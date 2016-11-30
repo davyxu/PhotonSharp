@@ -1,5 +1,4 @@
-﻿
-using SharpLexer;
+﻿using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon
@@ -32,7 +31,30 @@ namespace Photon
             return "SelectorExpr";
         }
 
+        internal int CompileSelfParameter(CompileParameter param)
+        {
+            var xident = X as Ident;
+            if (xident != null)
+            {
+                if (xident.Symbol == null)
+                {
+                    throw new CompileException("undefined symbol: " + xident.Name, DotPos);
+                }
 
+
+                switch( xident.Symbol.Usage )
+                {
+                    case SymbolUsage.Parameter:
+                    case SymbolUsage.Variable:
+                        {
+                            X.Compile(param.SetLHS(false));
+                            return 1;
+                        }                     
+                }
+            }
+
+            return 0;
+        }
 
         internal override void Compile(CompileParameter param)
         {
@@ -43,18 +65,31 @@ namespace Photon
                 {
                     throw new CompileException("undefined symbol: " + xident.Name, DotPos);
                 }
-
-                if ( xident.Symbol.Usage == SymbolUsage.Package )
+                
+                switch( xident.Symbol.Usage )
                 {
-                    var pkg = param.Pkg.Exe.GetPackageByName(xident.Name);
+                        // 包.函数名
+                    case SymbolUsage.Package:
+                        {
+                            var pkg = param.Pkg.Exe.GetPackageByName(xident.Name);
 
-                    if (pkg == null)
-                    {
-                        throw new CompileException("package not found: " + xident.Name, DotPos);
-                    }
+                            if (pkg == null)
+                            {
+                                throw new CompileException("package not found: " + xident.Name, DotPos);
+                            }
 
-                    // Ident直接出代码
-                    Selector.Compile(param.SetLHS(false).SetPackage(pkg));
+                            // Ident直接出代码
+                            Selector.Compile(param.SetLHS(false).SetPackage(pkg));
+                        }
+                        break;
+                    // 实例.函数名  转换为  函数名( 实例, p2...)
+                    case SymbolUsage.Parameter:
+                    case SymbolUsage.Variable:
+                        {                            
+                            // 使用字符串的Const值作为成员函数的key索引                            
+                            Selector.Compile(param.SetLHS(false));
+                        }
+                        break;
                 }
 
             }

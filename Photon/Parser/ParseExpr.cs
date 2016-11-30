@@ -127,6 +127,43 @@ namespace Photon
             return new CallExpr(func, new List<Expr>(), _topScope, lpos, rpos2);
         }
 
+        void ResolveSelectorElement( Expr x, Ident sel, TokenPos dotpos )
+        {
+            var xident = x as Ident;
+            if (xident == null)
+                return;
+
+            switch (xident.Symbol.Usage)
+            {
+                // 包.函数名
+                case SymbolUsage.Package:
+                    {
+                        var pkg = Exe.GetPackageByName(xident.Name);
+                        if (pkg == null)
+                        {
+                            throw new CompileException("package not found: " + xident.Name, dotpos);
+                        }
+
+                        // 包必须有一个顶级作用域
+                        if (pkg.TopScope == null)
+                        {
+                            throw new CompileException("package should have a scope: " + xident.Name, dotpos);
+                        }
+
+
+                        Resolve(sel, pkg.TopScope);
+                    }
+                    break;
+                // 实例.函数名
+                case SymbolUsage.Variable:
+                    {
+                        // Class Scope
+                        Resolve(sel, _topScope);
+                    }
+                    break;
+            }
+
+        }
        
 
         Expr ParsePrimaryExpr(bool lhs)
@@ -154,28 +191,9 @@ namespace Photon
                                 case TokenType.Identifier:
                                     {
                                         var sel = ParseIdent();
-                                        
 
-                                        var xident = x as Ident;
-                                        if (xident != null && xident.Symbol.Usage == SymbolUsage.Package)
-                                        {
-
-                                            var pkg = Exe.GetPackageByName(xident.Name);
-                                            if (pkg == null)
-                                            {
-                                                throw new CompileException("package not found: " + xident.Name, dotpos);
-                                            }
-
-                                            // 包必须有一个顶级作用域
-                                            if ( pkg.TopScope == null )
-                                            {
-                                                throw new CompileException("package should have a scope: " + xident.Name, dotpos);
-                                            }
-
-
-                                            Resolve(sel, pkg.TopScope);
-                                        }
-
+                                        ResolveSelectorElement(x, sel, dotpos);
+                        
                                         x = new SelectorExpr(x, sel, dotpos);
                                     }
                                     break;

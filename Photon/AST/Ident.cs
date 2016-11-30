@@ -86,7 +86,7 @@ namespace Photon
         internal override void Resolve(CompileParameter param)
         {
             // 故地重游, 再次拨叫
-            if ( Symbol == null )
+            if (Symbol == null && BaseScope != null )
             {
                 Symbol = BaseScope.FindSymbolOutter(Name);
             }

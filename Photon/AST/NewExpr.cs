@@ -112,7 +112,7 @@ namespace Photon
 
             if ( c.Ctor != null )
             {
-                param.CS.Add(new Command(Opcode.LOADF, c.Ctor.ID)).SetComment(c.Ctor.Name.ToString()).SetCodePos(NewPos);
+                param.CS.Add(new Command(Opcode.LOADF, c.Ctor.ID)).SetComment(c.Ctor.Name.EntryName).SetCodePos(NewPos);
                 param.CS.Add(new Command(Opcode.CALL, _call.Args.Count + 1, NeedBalanceDataStack)).SetCodePos(NewPos);
             }
         }

@@ -8,14 +8,15 @@ namespace Photon
         public int Index;
     }
 
-    class ValueClosure : ValueFunc
+    public class ValueClosure : ValueFunc
     {
         List<RuntimeUpValue> _upvalues = new List<RuntimeUpValue>();
 
-        internal ValueClosure(Procedure proc)
-            : base(proc)
+        ValueFunc _func;
+        internal ValueClosure( ValueFunc func )
+            : base( func.Name )
         {
-            
+            _func = func;
         }
 
         internal void AddUpValue( Register reg, int index )
@@ -44,9 +45,14 @@ namespace Photon
             return _upvalues[index];
         }
 
+        internal override bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
+        {
+            return _func.Invoke(vm, argCount, balanceStack, closure );
+        }
+
         public override string DebugString()
         {
-            return string.Format("{0} (closure)", _proc.ToString());
+            return string.Format("{0} (closure)", _func.ToString());
         }
 
 

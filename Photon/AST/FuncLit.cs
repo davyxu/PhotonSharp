@@ -48,7 +48,7 @@ namespace Photon
         {
             var newset = new CommandSet(new ObjectName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
 
-            var proc = param.Exe.AddProcedure(newset);
+            var proc = param.Exe.AddFunc(newset);
 
             param.CS.Add(new Command(Opcode.CLOSURE, proc.ID)).SetCodePos(TypeInfo.FuncPos);
 

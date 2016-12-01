@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Photon
 {
 
-    public class CommandSet : Procedure
+    public class CommandSet : ValueFunc
     {
         List<Command> _cmds = new List<Command>();
 

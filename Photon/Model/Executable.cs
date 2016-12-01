@@ -1,5 +1,4 @@
-﻿
-using SharpLexer;
+﻿using SharpLexer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,13 +19,13 @@ namespace Photon
         List<Package> _packages = new List<Package>();
 
         // 所有函数执行体
-        List<Procedure> _proc = new List<Procedure>();
+        List<ValueFunc> _proc = new List<ValueFunc>();
 
         // 源码
         List<File> _file = new List<File>();
 
         // 类
-        List<ClassType> _class = new List<ClassType>();
+        List<ValueClassType> _class = new List<ValueClassType>();
 
         public List<File> FileList
         {
@@ -54,7 +53,7 @@ namespace Photon
         }
 
 
-        internal Procedure AddProcedure(Procedure f)
+        internal ValueFunc AddFunc(ValueFunc f)
         {            
             _proc.Add(f);
 
@@ -63,7 +62,7 @@ namespace Photon
             return f;
         }
 
-        internal ClassType AddClassType( ClassType c )
+        internal ValueClassType AddClassType(ValueClassType c)
         {
             _class.Add(c);
 
@@ -72,12 +71,12 @@ namespace Photon
             return c;
         }
 
-        internal ClassType GetClassType(int cid )
+        internal ValueClassType GetClassType(int cid)
         {
             return _class[cid];
         }
 
-        internal ClassType GetClassTypeByName(ObjectName name)
+        internal ValueClassType GetClassTypeByName(ObjectName name)
         {
             foreach( var c in _class )
             {
@@ -117,12 +116,12 @@ namespace Photon
             return null;
         }
 
-        internal Procedure GetProcedure( int procid )
+        internal ValueFunc GetFunc( int procid )
         {
             return _proc[procid];            
         }
 
-        internal Procedure GetProcedureByName( ObjectName name )
+        internal ValueFunc GetFuncByName(ObjectName name)
         {           
             foreach( var pro in _proc )
             {
@@ -160,44 +159,47 @@ namespace Photon
             return null;
         }
 
-
-        public void RegisterPackage(Type classType)
+        public void RegisterNativeClass( Type classType, string pkgNameRegTo )
         {
-            // 这个scope是给通过代码导入定义时使用                    
-            var pkg = GetPackageByName(classType.Name);
-            if ( pkg != null )
+            var pkg = GetPackageByName(pkgNameRegTo);
+            if (pkg == null)
             {
-                throw new RuntimeException("class package already define in code");
+                Scope pkgScope = new Scope(null, ScopeType.Package, TokenPos.Init);
+
+                pkg = AddPackage(pkgNameRegTo, pkgScope);
             }
 
-            Scope pkgScope = new Scope(null, ScopeType.Package, TokenPos.Init );
+            var lanClass = new ValueNativeClassType(this, classType);
 
-            pkg = AddPackage( classType.Name, pkgScope );
+            AddClassType(lanClass);
 
-            foreach( var m in classType.GetMembers() )
+            foreach (var m in classType.GetMembers())
             {
                 var attr = m.GetCustomAttribute<DelegateAttribute>();
                 if (attr == null)
                     continue;
-                
+
                 var mm = classType.GetMethod(m.Name);
-                var dele = mm.CreateDelegate(typeof(DelegateEntry)) as DelegateEntry;
-                                
+
+                var dele = mm.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
+
+                // TODO 添加自定义属性可以自定义导入后使用的名称
+
+                if ( pkg.TopScope.FindSymbol(m.Name) != null )
+                {
+                    throw new RuntimeException("name duplicate: " + m.Name);
+                }
 
                 // 让导入的代码能认识这个函数
                 Symbol data = new Symbol();
                 data.Name = m.Name;
-                data.Decl = null;                
+                data.Decl = null;
                 data.Usage = SymbolUsage.Func;
-                pkgScope.Insert(data);
+                pkg.TopScope.Insert(data);
 
-                var proc = pkg.Exe.AddProcedure(new Delegate(new ObjectName(pkg.Name, m.Name)));
-              
-                var del = proc as Delegate;
-                del.Entry = dele;
+                AddFunc(new NativeFunc(new ObjectName(pkg.Name, m.Name), dele));
             }
         }
-
 
 
         public void DebugPrint()
@@ -221,7 +223,7 @@ namespace Photon
                     Debug.WriteLine(string.Format("{0} id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
                     cs.DebugPrint(this);
                 }
-                var del = p as Delegate;
+                var del = p as NativeFunc;
                 if (del != null)
                 {
                     Debug.WriteLine(string.Format("{0} id: {1}", del.Name, del.ID));

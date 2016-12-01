@@ -2,34 +2,39 @@
 using SharpLexer;
 namespace Photon
 {
-    class ValueFunc : Value
+    public class ValueFunc : Value
     {
-        protected Procedure _proc;        
+        internal int ID { get; set; }
 
-        internal ValueFunc( Procedure p)
+        ObjectName _name;
+        public ObjectName Name
         {
-            _proc = p;            
+            get { return _name; }
         }
 
-        internal Procedure Proc
+        // 传入参数数量
+        internal int InputValueCount { get; set; }
+
+        // 返回值数量
+        internal int OutputValueCount { get; set; }
+
+        internal ValueFunc(ObjectName name)
         {
-            get { return _proc; }
+            _name = name;
         }
 
-        internal override bool Equal(Value other)
+        internal virtual bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
         {
-            var otherT = other as ValueFunc;
-            if (otherT == null)
-                return false;
-
-            return otherT._proc == _proc;
+            return false;
         }
 
-        public override string DebugString()
-        {
-            return string.Format("{0} (proc)", _proc.ToString());
-        }
 
+        internal override bool Equal(Value v)
+        {
+            var other = v as ValueFunc;
+
+            return _name.Equals(other._name);
+        }
         
         public override ValueKind Kind
         {

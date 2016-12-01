@@ -5,24 +5,6 @@ namespace PhotonCompiler
 
     partial class Program
     {
-        class Animal
-        {
-
-            public void foo( )
-            {
-
-            }
-        }
-
-        class Cat :Animal
-        {
-
-            public void foo()
-            {
-
-            }
-        }
-
         static void Main(string[] args)
         {
             if ( args.Length < 2 )

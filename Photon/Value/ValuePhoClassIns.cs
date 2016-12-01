@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Photon
 {
-    class ValueClassIns : ValueObject
+    public class ValuePhoClassIns : ValueObject
     {
-        ClassType _type;
+        ValuePhoClassType _type;
 
         Dictionary<int, Value> _memberVar = new Dictionary<int, Value>();
 
-        internal ValueClassIns(ClassType t)
+        internal ValuePhoClassIns(ValuePhoClassType t)
         {
             _type = t;
         }
 
-        internal void SetMember( int nameKey, Value v )
+        internal override void SetMember(int nameKey, Value v)
         {
             Value tt;
             if (!_type.GetVirtualMember( nameKey, out tt ))
@@ -39,7 +38,7 @@ namespace Photon
             }
         }
 
-        internal Value GetMember(int nameKey )
+        internal override Value GetMember(int nameKey)
         {
             // 从类型虚表中取
             Value tt;

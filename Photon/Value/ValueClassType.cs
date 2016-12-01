@@ -1,39 +1,40 @@
-﻿using System;
-
+﻿
 namespace Photon
 {
-    class ValueClassType : ValueObject
+    public class ValueClassType : Value
     {
-        public ClassType CoreClass;
+        internal int ID { get; set; }
 
-        internal ValueClassType(ClassType c)
+        protected ObjectName _name;
+        public ObjectName Name
         {
-            CoreClass = c;
+            get { return _name; }
+        }
+
+        Executable _exe;
+
+        internal ValueClassType(Executable exe, ObjectName name)
+        {
+            _exe = exe;
+            _name = name;
         }
 
         internal override bool Equal(Value v)
         {
             var other = v as ValueClassType;
 
-            return other.CoreClass == this.CoreClass;
-        }
-
-        public override string DebugString()
-        {
-            return string.Format("{0}(class type)", TypeName);
+            return _name.Equals(other._name);
         }
 
         public override string TypeName
         {
-            get { return CoreClass.Name.ToString(); }
+            get { return Name.ToString(); }
         }
 
-        public override ValueKind Kind
+        internal virtual ValueObject CreateInstance( )
         {
-            get { return ValueKind.ClassType; }
+            return null;
         }
-
-
     }
 
 }

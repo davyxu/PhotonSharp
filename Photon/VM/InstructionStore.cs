@@ -234,9 +234,9 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var proc = vm.Exec.GetProcedure(cmd.DataA );
+            var proc = vm.Exec.GetFunc(cmd.DataA );
 
-            vm.DataStack.Push(new ValueFunc(proc));
+            vm.DataStack.Push(proc);
 
             return true;
         }
@@ -252,7 +252,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var proc = vm.Exec.GetProcedure(cmd.DataA );
+            var proc = vm.Exec.GetFunc(cmd.DataA );
 
             vm.DataStack.Push(new ValueClosure(proc));
 
@@ -270,9 +270,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var c = vm.Exec.GetClassType(cmd.DataA);
-
-            var ins = new ValueClassIns(c);
+            var ins = vm.Exec.GetClassType(cmd.DataA).CreateInstance();            
 
             vm.DataStack.Push(ins);
 

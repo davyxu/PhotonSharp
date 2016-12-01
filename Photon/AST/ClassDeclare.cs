@@ -19,7 +19,7 @@ namespace Photon
 
         public List<Ident> Member;
 
-        ClassType _class;
+        ValuePhoClassType _class;
 
         public ClassDeclare(Ident name, Ident parentName, Scope s, List<Ident> member, TokenPos classpos)
         {
@@ -46,8 +46,8 @@ namespace Photon
         }
 
         bool ResolveParent(CompileParameter param, int pass )
-        {
-            _class.Parent = param.Exe.GetClassTypeByName( new ObjectName(param.Pkg.Name, ParentName.Name));
+        {            
+            _class.Parent = param.Exe.GetClassTypeByName( new ObjectName(param.Pkg.Name, ParentName.Name)) as ValuePhoClassType;
             if (_class.Parent != null)
             {
                 return true;
@@ -68,7 +68,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            _class = new ClassType(param.Exe, new ObjectName(param.Pkg.Name, Name.Name));
+            _class = new ValuePhoClassType(param.Exe, new ObjectName(param.Pkg.Name, Name.Name));
 
             foreach( var m in Member )
             {

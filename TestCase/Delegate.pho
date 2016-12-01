@@ -1,2 +1,5 @@
-import "MyMath"
-var c = MyMath.AddValue( 1, 2 )
+import "DelegateTest"
+var c = DelegateTest.AddValue( 1, 2 )
+
+//var c = new(DelegateTest.Cat)
+//c.foo(2016)

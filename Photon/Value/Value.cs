@@ -10,9 +10,12 @@ namespace Photon
         Object,
         ClassType,
         ClassInstance,
+
+        NativeClassType,
+        NativeClassInstance,
     }
 
-    class Value
+    public class Value
     {
         internal virtual bool Equal(Value other)
         {
@@ -107,9 +110,9 @@ namespace Photon
             return v;
         }
 
-        public ValueClassIns CastClassInstance()
+        public ValuePhoClassIns CastClassInstance()
         {
-            var v = this as ValueClassIns;
+            var v = this as ValuePhoClassIns;
             if (v == null)
             {
                 throw new RuntimeException("expect class instance");

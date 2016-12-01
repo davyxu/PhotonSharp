@@ -14,7 +14,7 @@ namespace Photon
 
         public Ident ClassName;
 
-        Procedure _proc;
+        ValueFunc _proc;
 
         CommandSet _bodyCS;
 
@@ -49,7 +49,8 @@ namespace Photon
             else
             {
                 int nameKey = param.Pkg.Constants.AddString(Name.Name);
-                c.AddMethod(nameKey, _proc);
+                var cc = c as ValuePhoClassType;
+                cc.AddMethod(nameKey, _proc);
             } 
         }
 
@@ -59,7 +60,7 @@ namespace Photon
             var newset = new CommandSet(new ObjectName(param.Pkg.Name, Name.Name), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
             _bodyCS = newset;
 
-            _proc = param.Exe.AddProcedure(newset);
+            _proc = param.Exe.AddFunc(newset);
 
             if ( ClassName != null )
             {

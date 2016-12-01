@@ -21,7 +21,7 @@ namespace Photon
         MAX,
     }
 
-    public delegate int DelegateEntry(VMachine vm);
+    public delegate int NativeDelegate(VMachine vm);
 
     public sealed class DelegateAttribute : Attribute
     {
@@ -234,7 +234,7 @@ namespace Photon
             }
             
             // 找到包入口
-            var proc = exe.GetProcedureByName( new ObjectName("main", "main") );
+            var proc = exe.GetFuncByName( new ObjectName("main", "main") );
             if ( proc == null )
             {
                 throw new RuntimeException("unknown start package name: " + startPkg);

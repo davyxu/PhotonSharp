@@ -19,6 +19,17 @@ namespace Photon
             return Get(index).Kind;
         }
 
+        public string GetString(int index)
+        {
+            return Get(index).CastString();
+        }
+
+        public void SetString(int index, string v)
+        {
+            Set(index, new ValueString(v));
+        }
+
+
         public float GetFloat32( int index )
         {
             return Get(index).CastNumber();

@@ -3,29 +3,21 @@
 
 语言特性
 
-* C系的大括号block分隔
-
-* var变量声明
-
 * 无类型
 
-* 类javascript的外置array及类golang的外置map, 没有lua的table通用容器
+* 多返回值
 
-* 不以分号语句结尾, 表达式无需多加括号
+* 面向对象类支持, 无构造函数系统
+
+* 包系统支持
+
+* 静态类绑定
 
 * 采用通用的词法分析器
 
-整体设计目的
-
-* 以易读性为前提, 不一味追求性能
-
-* 强大的扩展性
-
-
-
-
 语言一览
-	
+
+```golang
 	// 函数调用
 	func mul( a, b ){
 	    return a * b
@@ -47,7 +39,7 @@
 	    x = x - 1
 	}
 
-	// 闭包
+	// 支持多层复杂闭包
 	func foo( ){
 		var a = 2
 
@@ -57,8 +49,52 @@
 		}
 	}
 
+	// 包支持	
+	import "MyPackage"
+	
+	var c = MyPackage.AddValue( 1, 2 )
+	
+
+	// 面向对象支持
+	class Animal {
+		type
+	}
+	
+	func Animal.foo( self ){
+		self.type = "animal"
+	}
+	
+	func Animal.out( self ){
+		return self.type
+	}
+	
+	
+	class Cat : Animal{
+	
+	}
+	
+	func Cat.foo( self ){
+		self.type = "cat"
+	}
+	
+	
+	var c = new(Cat)
+	
+	c.foo( )
+	
+	var k = c.out( )
+```
+
+
 # 调试器
 ![调试器](ScreenShot/debugger.png)
+
+## 特性
+
+基本的StepIn, StepOut, StepOver 指令调试
+
+数据栈, 调用栈和本地,包寄存器查看
+
 	
 # 备注
 

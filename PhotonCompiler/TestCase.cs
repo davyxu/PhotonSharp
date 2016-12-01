@@ -4,7 +4,7 @@ namespace PhotonCompiler
     public class MyMath
     {
         // TODO 在特性上标注进入参数, 在编译期检查
-        [DelegateAttribute(typeof(DelegateEntry))]
+        [DelegateAttribute(typeof(NativeDelegate))]
         public static int AddValue( VMachine vm )
         {                        
             var a = vm.DataStack.GetFloat32(-1);
@@ -16,12 +16,60 @@ namespace PhotonCompiler
         }
     }
 
+    class Animal
+    {
+        //public virtual string foo()
+        //{
+        //    return "animal";
+        //}
+
+        [DelegateAttribute(typeof(NativeDelegate))]
+        public int foo(VMachine vm)
+        {
+            var a = vm.DataStack.GetFloat32(-1);
+
+            vm.DataStack.PushString("animal");
+
+            return 1;
+        }
+    }
+
+    class Cat : Animal
+    {
+        //public override string foo()
+        //{
+        //    return "cat";
+        //}
+
+        [DelegateAttribute(typeof(NativeDelegate))]
+        public int CatCtor(VMachine vm)
+        {
+            
+
+            vm.DataStack.PushString("cat");
+
+            return 1;
+        }
+
+        [DelegateAttribute(typeof(NativeDelegate))]
+        public int foo(VMachine vm)
+        {
+            var a = vm.DataStack.GetFloat32(-1);
+
+            vm.DataStack.PushString("cat");
+
+            return 1;
+        }
+    }
+
+
     partial class Program
     {
 
         static void TestCase()
-        {
-           // new TestBox().RunFile("ClassInherit.pho").TestGlobalRegEqualNumber(1, 5);
+        {            
+
+            new TestBox().RunFile("ClassInherit.pho").TestGlobalRegEqualString(1, "cat");
 
             new TestBox().RunFile("Class.pho").TestGlobalRegEqualNumber(1, 5);
             new TestBox().RunFile("Math.pho").TestGlobalRegEqualNumber(0, -1);
@@ -29,7 +77,8 @@ namespace PhotonCompiler
             {
                 var testbox = new TestBox();
 
-                testbox.Exe.RegisterPackage(typeof(MyMath));
+                testbox.Exe.RegisterNativeClass(typeof(MyMath), "DelegateTest");
+               // testbox.Exe.RegisterNativeClass(typeof(Cat), "DelegateTest");
 
                 testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3);
             }

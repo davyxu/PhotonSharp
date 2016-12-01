@@ -86,6 +86,11 @@ namespace PhotonCompiler
             return TestRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
         }
 
+        public TestBox TestGlobalRegEqualString(int index, string s)
+        {
+            return TestRegEqualString(index, s, _vm.GetRuntimePackageByName("main").Reg);
+        }
+
         TestBox TestRegEqualNumber(int index, float num, Register reg )
         {
             var v = reg.GetFloat32( index );            
@@ -93,6 +98,19 @@ namespace PhotonCompiler
             if (v != num)
             {
                 Error(string.Format("value not equal on index: {0}, expect {1}", index, num));
+                return this;
+            }
+
+            return this;
+        }
+
+        TestBox TestRegEqualString(int index, string str, Register reg)
+        {
+            var v = reg.GetString(index);
+
+            if (v != str)
+            {
+                Error(string.Format("value not equal on index: {0}, expect {1}", index, str));
                 return this;
             }
 

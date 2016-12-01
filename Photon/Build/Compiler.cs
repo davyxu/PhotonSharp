@@ -77,7 +77,7 @@ namespace Photon
 
             var cs = new CommandSet( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
 
-            exe.AddProcedure(cs);
+            exe.AddFunc(cs);
 
             var param = new CompileParameter();
 

@@ -45,7 +45,7 @@ namespace Photon
 
 
     [Instruction(Cmd = Opcode.CALL)]
-    class CmdCallF : Instruction
+    class CmdCall : Instruction
     {
         public override bool Execute(Command cmd)
         {
@@ -55,7 +55,7 @@ namespace Photon
 
             var func = obj.CastFunc();
 
-            return func.Proc.Invoke(vm, argCount, cmd.DataB != 0, obj as ValueClosure);
+            return func.Invoke(vm, argCount, cmd.DataB != 0, obj as ValueClosure);
 
             throw new RuntimeException("expect function or delegate");
         }

@@ -2,14 +2,20 @@
 namespace Photon
 {
 
-    class Delegate : Procedure
+    class NativeFunc : ValueFunc
     {
-        public DelegateEntry Entry;
+        NativeDelegate _entry;
 
-        internal Delegate(ObjectName name)
+        internal NativeFunc(ObjectName name)
             : base( name )
         {
             
+        }
+
+        internal NativeFunc(ObjectName name, NativeDelegate entry)
+            : base(name)
+        {
+            _entry = entry;
         }
 
         public override string ToString()
@@ -24,9 +30,9 @@ namespace Photon
 
             int retValueCount = 0;
 
-            if (Entry != null)
+            if (_entry != null)
             {
-                retValueCount = Entry(vm);
+                retValueCount = _entry(vm);
             }
 
             // 调用结束时需要平衡栈( 返回值没有被用到 )

@@ -13,9 +13,6 @@ namespace Photon
 
         Dictionary<int, Value> _member = new Dictionary<int, Value>();
         
-
-        Procedure _ctor;
-
         Executable _exe;
 
         ObjectName _name;
@@ -28,18 +25,9 @@ namespace Photon
             _name = name;
         }
 
-        internal Procedure Ctor
-        {
-            get { return _ctor; }
-        }
 
         internal void AddMethod( int nameKey, Procedure proc )
         {
-            if ( proc.Name.EntryName == "ctor" )
-            {
-                _ctor = proc;
-            }
-
             _member.Add(nameKey, new ValueFunc(proc));
         }
 

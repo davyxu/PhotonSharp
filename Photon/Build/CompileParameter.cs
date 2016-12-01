@@ -16,19 +16,22 @@ namespace Photon
 
         internal CompileParameter SetLHS(bool lhs)
         {
-            LHS = lhs;
-            return this;
+            var copy = (CompileParameter)this.MemberwiseClone();
+            copy.LHS = lhs;
+            return copy;
         }
 
         internal CompileParameter SetComdSet(CommandSet cs)
         {
-            CS = cs;
-            return this;
+            var copy = (CompileParameter)this.MemberwiseClone();
+            copy.CS = cs;
+            return copy;
         }
         internal CompileParameter SetPackage(Package pkg)
         {
-            Pkg = pkg;
-            return this;
+            var copy = (CompileParameter)this.MemberwiseClone();
+            copy.Pkg = pkg;
+            return copy;
         }
 
 

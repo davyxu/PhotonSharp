@@ -249,15 +249,14 @@ namespace Photon
         Expr ParseUnaryExpr(bool lhs)
         {
             var op = CurrTokenType;
+            var oppos = CurrTokenPos;
 
             switch (op)
             {
                 case TokenType.Add:
                 case TokenType.Sub:
-                case TokenType.New:
-                    {
+                    {   
                         
-                        var oppos = CurrTokenPos;
 
                         Next();
                         var x = ParsePrimaryExpr( false );
@@ -268,12 +267,37 @@ namespace Photon
                             if (call == null)
                             {
                                 throw new CompileException("invalid new expression", oppos);
-                            }
-
-                            return new NewExpr(call, oppos);
+                            }   
                         }
 
                         return new UnaryExpr(x, op, oppos);
+                    }
+                case TokenType.New:
+                    {
+                        Next();
+                        Expect(TokenType.LBracket);
+
+                        Ident pkgName = null;
+                        Ident className;
+
+                        Ident nameA = ParseIdent();
+                        Ident nameB;
+
+                        if (CurrTokenType == TokenType.Dot)
+                        {
+                            nameB = ParseIdent();
+                            className = nameB;
+                            pkgName = nameA;
+                        }
+                        else
+                        {
+                            className = nameA;
+                        }
+
+                        Expect(TokenType.RBracket);
+
+
+                        return new NewExpr(className, pkgName, oppos);
                     }
             }
 

@@ -7,7 +7,8 @@ namespace PhotonCompiler
     {
         class Animal
         {
-            public Animal( )
+
+            public void foo( )
             {
 
             }
@@ -15,7 +16,8 @@ namespace PhotonCompiler
 
         class Cat :Animal
         {
-            public Cat( )
+
+            public void foo()
             {
 
             }
@@ -23,8 +25,6 @@ namespace PhotonCompiler
 
         static void Main(string[] args)
         {
-            new Cat();
-
             if ( args.Length < 2 )
             {
                 return;

@@ -35,7 +35,6 @@ namespace Photon
         SETG,   // R[I] = S[I+1]
         SETU,   // R[I] = * S[I+1]
         SETM,   // Class[C].Member[I] = S[I+1]
-        IDXM,   // S[Top] = S[Top].Member[I]
         IDX,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
         LINKU,  // 让Upvalue与寄存器建立引用

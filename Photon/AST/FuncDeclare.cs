@@ -16,6 +16,8 @@ namespace Photon
 
         Procedure _proc;
 
+        CommandSet _bodyCS;
+
         public FuncDeclare(Ident name, BlockStmt body, FuncType ft )
         {
             Name = name;
@@ -39,46 +41,30 @@ namespace Photon
 
         internal override void Resolve(CompileParameter param)
         {
-            ResolveClassName(param, 2);
-        }
-
-        bool ResolveClassName(CompileParameter param, int pass)
-        {
-            if (ClassName != null)
+            var c = param.Exe.GetClassTypeByName(new ObjectName(param.Pkg.Name, ClassName.Name));
+            if (c == null)
             {
-                var c = param.Exe.GetClassTypeByName( new ObjectName( param.Pkg.Name, ClassName.Name) );
-                if (c == null )
-                {
-                    // 类本体还没有解析
-                    if (pass == 1)
-                    {
-                        param.NextPassToResolve(this);
-                    }
-                    else
-                    {
-                        throw new CompileException("unknown class name: " + ClassName.Name, TypeInfo.FuncPos);
-                    }
-                }
-                else
-                {
-                    int nameKey = param.Pkg.Constants.AddString(Name.Name);
-                    c.AddMethod(nameKey, _proc);
-
-                    return true;
-                }
+                throw new CompileException("unknown class name: " + ClassName.Name, TypeInfo.FuncPos);
             }
-
-            return false;
+            else
+            {
+                int nameKey = param.Pkg.Constants.AddString(Name.Name);
+                c.AddMethod(nameKey, _proc);
+            } 
         }
 
 
         internal override void Compile(CompileParameter param)
         {
             var newset = new CommandSet(new ObjectName(param.Pkg.Name, Name.Name), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            _bodyCS = newset;
 
             _proc = param.Exe.AddProcedure(newset);
 
-            ResolveClassName(param,  1);
+            if ( ClassName != null )
+            {
+                param.NextPassToResolve(this);
+            }            
 
             var funcParam = param.SetLHS(false).SetComdSet(newset);
             Body.Compile(funcParam);

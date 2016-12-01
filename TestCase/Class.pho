@@ -6,13 +6,6 @@ class Animal {
 	Speed
 }
 
-func Animal.ctor( self, name ){
-	
-	self.Name = name
-
-}
-
-
 func Animal.Do( self ){
 	
 	self.Speed = 5
@@ -21,7 +14,13 @@ func Animal.Do( self ){
 
 }
 
+func newAnimal( name ){
 
-var a = new Animal("cat")
+	var self = new(Animal)	
+	self.Name = name
+	return self
+}
+
+var a = newAnimal( "cat" )
 
 var h, n = a.Do( )

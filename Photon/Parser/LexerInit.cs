@@ -15,7 +15,8 @@ namespace Photon
             lex.AddMatcher(new LineEndMatcher(TokenType.LineEnd).Ignore());
             lex.AddMatcher(new CStyleCommentMatcher(TokenType.Comment).Ignore());
 
-            lex.AddMatcher(new SignMatcher(TokenType.Nil, "nil"));
+            lex.AddMatcher(new SignMatcher(TokenType.LBrace, "{"));
+            lex.AddMatcher(new SignMatcher(TokenType.RBrace, "}"));
             lex.AddMatcher(new SignMatcher(TokenType.Equal, "=="));
             lex.AddMatcher(new SignMatcher(TokenType.GreatEqual, ">="));
             lex.AddMatcher(new SignMatcher(TokenType.LessEqual, "<="));
@@ -33,25 +34,26 @@ namespace Photon
             lex.AddMatcher(new SignMatcher(TokenType.Comma, ","));
             lex.AddMatcher(new SignMatcher(TokenType.Dot, "."));
             lex.AddMatcher(new SignMatcher(TokenType.Colon, ":"));            
-            lex.AddMatcher(new SignMatcher(TokenType.SemiColon, ";"));            
-            lex.AddMatcher(new SignMatcher(TokenType.Len, "len"));
-            lex.AddMatcher(new SignMatcher(TokenType.Func, "func"));
-            lex.AddMatcher(new SignMatcher(TokenType.Var, "var"));
+            lex.AddMatcher(new SignMatcher(TokenType.SemiColon, ";"));
             lex.AddMatcher(new SignMatcher(TokenType.LSqualBracket, "["));
             lex.AddMatcher(new SignMatcher(TokenType.RSqualBracket, "]"));
-            lex.AddMatcher(new SignMatcher(TokenType.LBrace, "{"));
-            lex.AddMatcher(new SignMatcher(TokenType.RBrace, "}"));
-            lex.AddMatcher(new SignMatcher(TokenType.Return, "return"));
-            lex.AddMatcher(new SignMatcher(TokenType.If, "if"));
-            lex.AddMatcher(new SignMatcher(TokenType.Else, "else"));
-            lex.AddMatcher(new SignMatcher(TokenType.For, "for"));
-            lex.AddMatcher(new SignMatcher(TokenType.Foreach, "foreach"));
-            lex.AddMatcher(new SignMatcher(TokenType.While, "while"));
-            lex.AddMatcher(new SignMatcher(TokenType.Break, "break"));
-            lex.AddMatcher(new SignMatcher(TokenType.Continue, "continue"));
-            lex.AddMatcher(new SignMatcher(TokenType.Import, "import"));
-            lex.AddMatcher(new SignMatcher(TokenType.Class, "class"));
-            lex.AddMatcher(new SignMatcher(TokenType.New, "new"));
+
+
+            lex.AddMatcher(new KeywordMatcher(TokenType.Nil, "nil"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Len, "len"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Func, "func"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Var, "var"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.For, "for"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Foreach, "foreach"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.While, "while"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Break, "break"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Continue, "continue"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Import, "import"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Class, "class"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.New, "new"));
 
             lex.AddMatcher(new IdentifierMatcher(TokenType.Identifier));
             lex.AddMatcher(new UnknownMatcher(TokenType.Unknown));

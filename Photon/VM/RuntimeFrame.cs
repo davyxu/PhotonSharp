@@ -6,7 +6,7 @@ namespace Photon
     {
         public int PC;
 
-        public CommandSet CmdSet;
+        public ValuePhoFunc CmdSet;
 
         internal int DataStackBase;
 
@@ -17,7 +17,7 @@ namespace Photon
 
         internal Register Reg = new Register("R", 10);
 
-        public RuntimeFrame(CommandSet cs)
+        public RuntimeFrame(ValuePhoFunc cs)
         {            
             CmdSet = cs; 
         }

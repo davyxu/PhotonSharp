@@ -16,7 +16,7 @@ namespace Photon
 
         ValueFunc _proc;
 
-        CommandSet _bodyCS;
+        ValuePhoFunc _bodyCS;
 
         public FuncDeclare(Ident name, BlockStmt body, FuncType ft )
         {
@@ -57,7 +57,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new CommandSet(new ObjectName(param.Pkg.Name, Name.Name), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new ValuePhoFunc(new ObjectName(param.Pkg.Name, Name.Name), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
             _bodyCS = newset;
 
             _proc = param.Exe.AddFunc(newset);

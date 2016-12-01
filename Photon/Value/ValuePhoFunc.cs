@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Photon
 {
 
-    public class CommandSet : ValueFunc
+    public class ValuePhoFunc : ValueFunc
     {
         List<Command> _cmds = new List<Command>();
 
@@ -15,7 +15,7 @@ namespace Photon
 
         TokenPos _codePos;
 
-        internal CommandSet(ObjectName name, TokenPos codepos, int regCount, bool isGlobal)
+        internal ValuePhoFunc(ObjectName name, TokenPos codepos, int regCount, bool isGlobal)
             : base(name)
         {            
             _regCount = regCount;

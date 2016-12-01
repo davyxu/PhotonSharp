@@ -68,7 +68,7 @@
     <Compile Include="Model\CommandSet.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
-    <Compile Include="Model\NativeFunc.cs" />
+    <Compile Include="Value\ValueNativeFunc.cs" />
     <Compile Include="Model\Exception.cs" />
     <Compile Include="Model\ObjectName.cs" />
     <Compile Include="Model\Package.cs" />

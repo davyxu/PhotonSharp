@@ -11,7 +11,7 @@ namespace Photon
     {
         internal Package Pkg;
         internal Executable Exe;
-        internal CommandSet CS;
+        internal ValuePhoFunc CS;
         internal bool LHS;
 
         internal CompileParameter SetLHS(bool lhs)
@@ -21,7 +21,7 @@ namespace Photon
             return copy;
         }
 
-        internal CompileParameter SetComdSet(CommandSet cs)
+        internal CompileParameter SetComdSet(ValuePhoFunc cs)
         {
             var copy = (CompileParameter)this.MemberwiseClone();
             copy.CS = cs;

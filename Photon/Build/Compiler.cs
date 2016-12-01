@@ -75,7 +75,7 @@ namespace Photon
             var initPos = TokenPos.Init;
             initPos.SourceName = NormalizeFileName(packageFileName);
 
-            var cs = new CommandSet( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
+            var cs = new ValuePhoFunc( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
 
             exe.AddFunc(cs);
 

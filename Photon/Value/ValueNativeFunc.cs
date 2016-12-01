@@ -2,17 +2,17 @@
 namespace Photon
 {
 
-    class NativeFunc : ValueFunc
+    class ValueNativeFunc : ValueFunc
     {
         NativeDelegate _entry;
 
-        internal NativeFunc(ObjectName name)
+        internal ValueNativeFunc(ObjectName name)
             : base( name )
         {
             
         }
 
-        internal NativeFunc(ObjectName name, NativeDelegate entry)
+        internal ValueNativeFunc(ObjectName name, NativeDelegate entry)
             : base(name)
         {
             _entry = entry;

@@ -133,7 +133,7 @@ namespace Photon
             _hook[(int)hook] = callback;
         }
 
-        internal void EnterFrame( CommandSet cmdSet )
+        internal void EnterFrame( ValuePhoFunc cmdSet )
         {
             CallHook(DebugHook.Call);
 
@@ -240,7 +240,7 @@ namespace Photon
                 throw new RuntimeException("unknown start package name: " + startPkg);
             }
 
-            var cs = proc as CommandSet;
+            var cs = proc as ValuePhoFunc;
             GetRuntimePackageByName("main").Reg.SetUsedCount(cs.RegCount);
 
             EnterFrame(cs);

@@ -197,7 +197,7 @@ namespace Photon
                 data.Usage = SymbolUsage.Func;
                 pkg.TopScope.Insert(data);
 
-                AddFunc(new NativeFunc(new ObjectName(pkg.Name, m.Name), dele));
+                AddFunc(new ValueNativeFunc(new ObjectName(pkg.Name, m.Name), dele));
             }
         }
 
@@ -217,13 +217,13 @@ namespace Photon
             // 汇编
             foreach (var p in _proc)
             {
-                var cs = p as CommandSet;
+                var cs = p as ValuePhoFunc;
                 if (cs != null)
                 {
                     Debug.WriteLine(string.Format("{0} id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
                     cs.DebugPrint(this);
                 }
-                var del = p as NativeFunc;
+                var del = p as ValueNativeFunc;
                 if (del != null)
                 {
                     Debug.WriteLine(string.Format("{0} id: {1}", del.Name, del.ID));

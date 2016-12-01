@@ -5,8 +5,26 @@ namespace PhotonCompiler
 
     partial class Program
     {
+        class Animal
+        {
+            public Animal( )
+            {
+
+            }
+        }
+
+        class Cat :Animal
+        {
+            public Cat( )
+            {
+
+            }
+        }
+
         static void Main(string[] args)
         {
+            new Cat();
+
             if ( args.Length < 2 )
             {
                 return;

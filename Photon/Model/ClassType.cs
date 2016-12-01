@@ -11,14 +11,16 @@ namespace Photon
             get { return _name; }
         }
 
-        Dictionary<int, Procedure> _methods = new Dictionary<int, Procedure>();
-
-        Dictionary<int, string> _memberVar = new Dictionary<int, string>();
+        Dictionary<int, Value> _member = new Dictionary<int, Value>();
+        
 
         Procedure _ctor;
 
         Executable _exe;
+
         ObjectName _name;
+
+        internal ClassType Parent { get; set; }
 
         internal ClassType(Executable exe, ObjectName name)
         {
@@ -38,13 +40,33 @@ namespace Photon
                 _ctor = proc;
             }
 
-            _methods.Add(nameKey, proc);
+            _member.Add(nameKey, new ValueFunc(proc));
         }
 
         internal void AddMemeber( int nameKey, string name )
         {
-            _memberVar.Add(nameKey, name);
+            _member.Add(nameKey, new ValueNil());
         }
+
+        internal bool GetVirtualMember( int nameKey, out Value v )
+        {
+            v = Value.Nil;
+
+            ClassType ct = this;
+
+            while( ct != null )
+            {                
+                if (ct._member.TryGetValue(nameKey, out v))
+                {
+                    return true;
+                }
+
+                ct = ct.Parent;
+            }
+
+            return false;
+        }
+
 
         public override string ToString()
         {

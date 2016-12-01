@@ -30,6 +30,34 @@ namespace Photon
             _topScope = _topScope.Outter;
         }
 
+        Scope OpenClassScope( string name, TokenPos pos )
+        {
+            var exists = GetClassScope(name);
+            if ( exists != null )
+            {
+                // 被函数提前定义， 所以这里补下主定义位置
+                exists.CodePos = pos;
+                return exists;
+            }
+
+            var s = OpenScope(ScopeType.Class, pos);
+            s.ClassName = name;
+            return s;
+        }
+
+        Scope GetClassScope(string name)
+        {
+            foreach( var s in _global.Child )
+            {
+                if ( s.Type == ScopeType.Class && s.ClassName == name )
+                {
+                    return s;
+                }
+            }
+
+            return null;
+        }
+
         static internal Symbol Declare(Node n, Scope s, string name, TokenPos pos, SymbolUsage usage )
         {
             var pre = s.FindSymbol(name);

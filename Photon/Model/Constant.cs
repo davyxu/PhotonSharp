@@ -22,6 +22,10 @@ namespace Photon
 
             return _cset.Count - 1;
         }
+        internal int AddString( string s )
+        {
+            return Add(new ValueString(s));
+        }
 
         internal int Count
         {

@@ -32,6 +32,7 @@ namespace Photon
             lex.AddMatcher(new SignMatcher(TokenType.RBracket, ")"));
             lex.AddMatcher(new SignMatcher(TokenType.Comma, ","));
             lex.AddMatcher(new SignMatcher(TokenType.Dot, "."));
+            lex.AddMatcher(new SignMatcher(TokenType.Colon, ":"));            
             lex.AddMatcher(new SignMatcher(TokenType.SemiColon, ";"));            
             lex.AddMatcher(new SignMatcher(TokenType.Len, "len"));
             lex.AddMatcher(new SignMatcher(TokenType.Func, "func"));

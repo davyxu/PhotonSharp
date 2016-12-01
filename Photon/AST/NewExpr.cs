@@ -74,8 +74,6 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-
-
             ObjectName on = ObjectName.Empty;
             on.EntryName = ClassName.Name;
             if ( PackageName != null )
@@ -94,15 +92,9 @@ namespace Photon
             }
             
             // 类名
-            param.CS.Add(new Command(Opcode.LOADC, c.ID))
+            param.CS.Add(new Command(Opcode.NEW, c.ID))
                 .SetComment(on.ToString())
                 .SetCodePos(NewPos);
-
-            param.CS.Add(new Command(Opcode.NEW, _call.Args.Count, NeedBalanceDataStack))
-                .SetComment(on.ToString())
-                .SetCodePos(NewPos);
-
-
 
             // 先放参数
             foreach (var arg in _call.Args)
@@ -110,6 +102,7 @@ namespace Photon
                 arg.Compile(param.SetLHS(false));
             }
 
+            // 有构造函数就生成指令
             if ( c.Ctor != null )
             {
                 param.CS.Add(new Command(Opcode.LOADF, c.Ctor.ID)).SetComment(c.Ctor.Name.EntryName).SetCodePos(NewPos);

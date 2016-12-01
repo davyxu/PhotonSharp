@@ -83,11 +83,14 @@ namespace Photon
                         }
                         break;
                     // 实例.函数名  转换为  函数名( 实例, p2...)
+                    // 类成员访问
                     case SymbolUsage.Parameter:
                     case SymbolUsage.Variable:
-                        {                            
-                            // 使用字符串的Const值作为成员函数的key索引                            
-                            Selector.Compile(param.SetLHS(false));
+                        {
+                            var ci = param.Pkg.Constants.AddString(Selector.Name);
+                            
+                            param.CS.Add(new Command(Opcode.IDXM, ci))
+                                .SetCodePos(DotPos).SetComment(Selector.Name);
                         }
                         break;
                     case SymbolUsage.SelfParameter:
@@ -95,9 +98,7 @@ namespace Photon
                             // 使用字符串的Const值作为成员函数的key索引                            
                             var classIns = xident.Symbol.RegIndex;
 
-                            var c = new ValueString(Selector.Name);
-
-                            var ci = param.Pkg.Constants.Add(c);
+                            var ci = param.Pkg.Constants.AddString(Selector.Name);
 
                             Opcode cm = param.LHS ? Opcode.SETM : Opcode.LOADM;
 
@@ -113,11 +114,9 @@ namespace Photon
             else
             {
                 // 动态表达式, 需要用指令解析
-                X.Compile(param);
+                X.Compile(param);                
 
-                var c = new ValueString(Selector.Name);
-
-                var ci = param.Pkg.Constants.Add(c);
+                var ci = param.Pkg.Constants.AddString(Selector.Name);
 
                 param.CS.Add(new Command(Opcode.SEL, ci))
                     .SetCodePos(DotPos).SetComment(Selector.Name);

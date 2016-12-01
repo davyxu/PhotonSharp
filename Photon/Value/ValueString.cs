@@ -34,9 +34,9 @@ namespace Photon
             return _str;
         }
 
-        public override ValueType GetValueType()
+        public override ValueKind Kind
         {
-            return ValueType.String;
+            get { return ValueKind.String; }
         }
     }
 

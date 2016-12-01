@@ -27,6 +27,7 @@ namespace Photon
         Div,            // /
         Comma,          // ,
         Dot,            // .        
+        Colon,          // :
         SemiColon,      // ;
         LBracket,       // (
         RBracket,       // )

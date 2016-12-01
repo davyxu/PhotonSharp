@@ -65,7 +65,7 @@
     <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Node.cs" />
-    <Compile Include="Model\CommandSet.cs" />
+    <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
     <Compile Include="Value\ValueNativeFunc.cs" />

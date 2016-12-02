@@ -1,5 +1,5 @@
 import "DelegateTest"
-var c = DelegateTest.AddValue( 1, 2 )
+var a = DelegateTest.AddValue( 1, 2 )
 
-//var c = new(DelegateTest.Cat)
-//c.foo(2016)
+var x = new(DelegateTest.Cat)
+var c, d = x.foo(2016)

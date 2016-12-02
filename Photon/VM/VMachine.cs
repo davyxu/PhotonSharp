@@ -23,9 +23,9 @@ namespace Photon
 
     public delegate int NativeDelegate(VMachine vm);
 
-    public sealed class DelegateAttribute : Attribute
+    public sealed class NativeEntryAttribute : Attribute
     {
-        public DelegateAttribute(Type type)
+        public NativeEntryAttribute( )
         {
         }
     }

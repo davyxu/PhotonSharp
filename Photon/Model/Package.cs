@@ -14,10 +14,6 @@ namespace Photon
         // 调试Symbol
         Chunk _chunk;
 
-
-        // 常量表
-        ConstantSet _constSet = new ConstantSet();
-
         // 父级
         Executable _exe;
 
@@ -49,10 +45,7 @@ namespace Photon
             get { return _exe; }
         }
 
-        internal ConstantSet Constants
-        {
-            get { return _constSet; }
-        }
+
 
         internal int ID
         {
@@ -134,13 +127,6 @@ namespace Photon
                 _top.DebugPrint("");
                 Debug.WriteLine("");
             }
-
-            if (Constants.Count >0 )
-            {
-                // 常量
-                Constants.DebugPrint();
-            }
-            
 
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace Photon
 {
@@ -6,11 +7,14 @@ namespace Photon
     {
         ValueNativeClassType _type;
 
-        Dictionary<int, Value> _memberVar = new Dictionary<int, Value>();        
+        Dictionary<int, ValueNativeFunc> _memberVar = new Dictionary<int, ValueNativeFunc>();
 
-        internal ValueNativeClassIns(ValueNativeClassType t)
+        object _nativeIns;
+
+        internal ValueNativeClassIns(ValueNativeClassType t, object nativeIns )
         {
             _type = t;
+            _nativeIns = nativeIns;
         }
 
         internal override void SetMember( int nameKey, Value v )
@@ -20,7 +24,24 @@ namespace Photon
 
         internal override Value GetMember(int nameKey)
         {
-            return Value.Nil;
+            ValueNativeFunc func;
+            if (_memberVar.TryGetValue( nameKey, out func ))
+            {
+                return func;
+            }
+
+            MethodInfo methodInfo;
+            var nativeDel = _type.CreateMethodDelegate(nameKey, _nativeIns, out methodInfo);
+            if (nativeDel == null)
+            {
+                throw new RuntimeException("method not found: " + methodInfo.Name);
+            }
+
+            func = new ValueNativeFunc(new ObjectName(_type.Pkg.Name, methodInfo.Name), nativeDel);
+
+            _memberVar.Add(nameKey, func );
+
+            return func;
         }
 
         public override string DebugString()

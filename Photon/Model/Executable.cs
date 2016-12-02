@@ -27,9 +27,17 @@ namespace Photon
         // 类
         List<ValueClassType> _class = new List<ValueClassType>();
 
+        // 常量表
+        ConstantSet _constSet = new ConstantSet();
+
         public List<File> FileList
         {
             get { return _file; }
+        }
+
+        internal ConstantSet Constants
+        {
+            get { return _constSet; }
         }
 
         internal string QuerySourceLine(TokenPos pos)
@@ -169,36 +177,9 @@ namespace Photon
                 pkg = AddPackage(pkgNameRegTo, pkgScope);
             }
 
-            var lanClass = new ValueNativeClassType(this, classType);
+            var lanClass = new ValueNativeClassType(pkg, classType, new ObjectName( pkg.Name, classType.Name) );
 
             AddClassType(lanClass);
-
-            foreach (var m in classType.GetMembers())
-            {
-                var attr = m.GetCustomAttribute<DelegateAttribute>();
-                if (attr == null)
-                    continue;
-
-                var mm = classType.GetMethod(m.Name);
-
-                var dele = mm.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
-
-                // TODO 添加自定义属性可以自定义导入后使用的名称
-
-                if ( pkg.TopScope.FindSymbol(m.Name) != null )
-                {
-                    throw new RuntimeException("name duplicate: " + m.Name);
-                }
-
-                // 让导入的代码能认识这个函数
-                Symbol data = new Symbol();
-                data.Name = m.Name;
-                data.Decl = null;
-                data.Usage = SymbolUsage.Func;
-                pkg.TopScope.Insert(data);
-
-                AddFunc(new ValueNativeFunc(new ObjectName(pkg.Name, m.Name), dele));
-            }
         }
 
 
@@ -212,6 +193,12 @@ namespace Photon
             }
 
             Debug.WriteLine("");
+
+            if (Constants.Count > 0)
+            {
+                // 常量
+                Constants.DebugPrint();
+            }
 
 
             // 汇编

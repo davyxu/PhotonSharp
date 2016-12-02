@@ -9,13 +9,10 @@ namespace Photon
         public ObjectName Name
         {
             get { return _name; }
-        }
+        }        
 
-        Executable _exe;
-
-        internal ValueClassType(Executable exe, ObjectName name)
-        {
-            _exe = exe;
+        internal ValueClassType( ObjectName name)
+        {            
             _name = name;
         }
 

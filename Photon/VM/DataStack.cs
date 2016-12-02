@@ -79,13 +79,14 @@ namespace Photon
         }
 
         // preTop + 废数据 + 有效数据,  将废弃部分去掉, 有效部分前移覆盖
-        internal void Cut( int preTop, int validCount )
+        internal void Adjust( int preTop, int validCount )
         {
             int validBegin = Count - validCount;
 
             for (int i = 0; i < validCount; i++)
             {
-                _values[preTop + i] = _values[validBegin + i];
+                // 手工填充习惯按声明顺序进行返回, 但是栈里要倒过来
+                _values[preTop + i] = _values[ validBegin + validCount - i - 1 ];
             }
 
             _count = preTop + validCount;

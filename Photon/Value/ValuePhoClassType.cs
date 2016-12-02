@@ -8,8 +8,8 @@ namespace Photon
 
         internal ValuePhoClassType Parent { get; set; }
 
-        internal ValuePhoClassType(Executable exe, ObjectName name)
-            : base( exe, name )
+        internal ValuePhoClassType( ObjectName name)
+            : base( name )
         {
 
         }

@@ -91,8 +91,8 @@ namespace Photon
                             
                             X.Compile(param.SetLHS(false));
 
-                            
-                            var ci = param.Pkg.Constants.AddString(Selector.Name);
+
+                            var ci = param.Exe.Constants.AddString(Selector.Name);
 
                             Opcode cm = param.LHS ? Opcode.SETM : Opcode.LOADM;
 
@@ -109,9 +109,9 @@ namespace Photon
             else
             {
                 // 动态表达式, 需要用指令解析
-                X.Compile(param);                
+                X.Compile(param);
 
-                var ci = param.Pkg.Constants.AddString(Selector.Name);
+                var ci = param.Exe.Constants.AddString(Selector.Name);
 
                 param.CS.Add(new Command(Opcode.SEL, ci))
                     .SetCodePos(DotPos).SetComment(Selector.Name);

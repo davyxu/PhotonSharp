@@ -6,10 +6,8 @@ namespace Photon
     class CmdLoadK : Instruction
     {
         public override bool Execute( Command cmd)
-        {
-            var pkg = vm.GetRuntimePackage(cmd.DataA);
-
-            var c = pkg.Constants.Get(cmd.DataB);
+        {            
+            var c = vm.Exec.Constants.Get(cmd.DataA);
 
             vm.DataStack.Push(c);
 
@@ -130,7 +128,7 @@ namespace Photon
     {
         public override bool Execute( Command cmd)
         {
-            var c = vm.DataStack.Pop().CastClassInstance();
+            var c = vm.DataStack.Pop().CastObject();
 
             vm.DataStack.Push(c.GetMember(cmd.DataA));
 
@@ -289,7 +287,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var ci = vm.DataStack.Pop().CastClassInstance();
+            var ci = vm.DataStack.Pop().CastObject();
 
             vm.DataStack.Push(ci.GetMember(cmd.DataA));
 
@@ -307,7 +305,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var ci = vm.DataStack.Pop().CastClassInstance();
+            var ci = vm.DataStack.Pop().CastObject();
 
             var v = vm.DataStack.Pop();
 

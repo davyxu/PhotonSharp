@@ -43,7 +43,7 @@ namespace Photon
             }
             else
             {
-                vm.DataStack.Cut(stackBeforeCall - argCount, retValueCount);
+                vm.DataStack.Adjust(stackBeforeCall - argCount, retValueCount);
             }
 
             return true;

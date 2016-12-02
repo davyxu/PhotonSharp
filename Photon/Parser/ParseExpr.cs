@@ -285,6 +285,7 @@ namespace Photon
 
                         if (CurrTokenType == TokenType.Dot)
                         {
+                            Next();
                             nameB = ParseIdent();
                             className = nameB;
                             pkgName = nameA;

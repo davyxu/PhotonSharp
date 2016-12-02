@@ -48,7 +48,7 @@ namespace Photon
             }
             else
             {
-                int nameKey = param.Pkg.Constants.AddString(Name.Name);
+                int nameKey = param.Exe.Constants.AddString(Name.Name);
                 var cc = c as ValuePhoClassType;
                 cc.AddMethod(nameKey, _proc);
             } 

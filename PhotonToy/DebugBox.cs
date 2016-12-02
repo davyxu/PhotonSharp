@@ -166,7 +166,7 @@ namespace PhotonToy
 
         void CallBreak( VMachine vm, bool manulSwichPkgReg)
         {
-            var cmd = vm.CurrFrame.GetCurrCommand();
+            //var cmd = vm.CurrFrame.GetCurrCommand();
 
             string pkgReg;
             if ( manulSwichPkgReg )

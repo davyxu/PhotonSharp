@@ -1,12 +1,13 @@
 ﻿
 
+using SharpLexer;
 namespace Photon
 {
     public class RuntimeFrame
     {
         public int PC;
 
-        public ValuePhoFunc CmdSet;
+        internal ValuePhoFunc CmdSet;
 
         internal int DataStackBase;
 
@@ -17,12 +18,23 @@ namespace Photon
 
         internal Register Reg = new Register("R", 10);
 
-        public RuntimeFrame(ValuePhoFunc cs)
+        public TokenPos CodePos
+        {
+            get {
+                var cmd = GetCurrCommand();
+                if (cmd == null)
+                    return TokenPos.Invalid;
+
+                return cmd.CodePos;
+            }
+        }
+
+        internal RuntimeFrame(ValuePhoFunc cs)
         {            
             CmdSet = cs; 
         }
 
-        public Command GetCurrCommand()
+        internal Command GetCurrCommand()
         {
             if (PC >= CmdSet.Commands.Count || PC < 0)
             {

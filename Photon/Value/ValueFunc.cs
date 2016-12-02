@@ -2,7 +2,7 @@
 using SharpLexer;
 namespace Photon
 {
-    public class ValueFunc : Value
+    class ValueFunc : Value
     {
         internal int ID { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public struct ObjectName
+    internal struct ObjectName
     {
         public string PackageName;
         public string EntryName;

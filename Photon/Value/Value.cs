@@ -15,7 +15,7 @@ namespace Photon
         NativeClassInstance,
     }
 
-    public class Value
+    class Value
     {
         internal virtual bool Equal(Value other)
         {

@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class ValuePhoClassType : ValueClassType
+    class ValuePhoClassType : ValueClassType
     {
         Dictionary<int, Value> _member = new Dictionary<int, Value>();
 

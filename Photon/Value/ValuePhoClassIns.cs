@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class ValuePhoClassIns : ValueObject
+    class ValuePhoClassIns : ValueObject
     {
         ValuePhoClassType _type;
 

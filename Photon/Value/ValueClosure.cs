@@ -8,7 +8,7 @@ namespace Photon
         public int Index;
     }
 
-    public class ValueClosure : ValueFunc
+    class ValueClosure : ValueFunc
     {
         List<RuntimeUpValue> _upvalues = new List<RuntimeUpValue>();
 

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Photon
 {
-    public class ValueNativeClassType : ValueClassType
+    class ValueNativeClassType : ValueClassType
     {                   
         Type _t;
 

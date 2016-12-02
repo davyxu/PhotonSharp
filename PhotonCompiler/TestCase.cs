@@ -65,9 +65,7 @@ namespace PhotonCompiler
 
                 testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualNumber(2, 2016).TestGlobalRegEqualString(3, "cat");
             }
-
-
-
+            
 
             new TestBox().RunFile("ClassInherit.pho").TestGlobalRegEqualString(1, "cat");
 

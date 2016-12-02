@@ -17,11 +17,8 @@ namespace PhotonToy
             Location.Pos = vm.CurrFrame.PC;
             RegPackage = regpkg;
 
-            var cmd = vm.CurrFrame.GetCurrCommand();
-            if ( cmd != null )
-            {
-                Location.FileName = cmd.CodePos.SourceName;            
-            }
+            
+            Location.FileName = vm.CurrFrame.CodePos.SourceName;                        
 
             if (string.IsNullOrEmpty(regpkg ))
             {

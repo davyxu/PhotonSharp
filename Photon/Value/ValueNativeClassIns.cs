@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Photon
 {
-    public class ValueNativeClassIns : ValueObject
+    class ValueNativeClassIns : ValueObject
     {
         ValueNativeClassType _type;
 

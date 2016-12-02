@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    public class ValueObject : Value
+    class ValueObject : Value
     {
         internal override bool Equal(Value other)
         {

@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    public class ValueClassType : Value
+    class ValueClassType : Value
     {
         internal int ID { get; set; }
 

@@ -71,7 +71,7 @@ namespace Photon
 
         public string DebugString()
         {
-            return string.Format("{0} {1}", CmdSet.DefPos, CmdSet.Name );
+            return string.Format("{0} {1}", CodePos, CmdSet.Name);
         }
 
         public override string ToString()

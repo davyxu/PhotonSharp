@@ -118,11 +118,6 @@ namespace Photon
             Push(new ValueString(v));
         }
 
-        //public void PushClassInstance( V ins )
-        //{
-        //    Push( new ValueClassIns( ))
-        //}
-
         public void PushNil( )
         {
             Push(new ValueNil());

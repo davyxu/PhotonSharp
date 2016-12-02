@@ -21,7 +21,7 @@ namespace Photon
             get { return _pkg; }
         }
 
-        Dictionary<int, MethodInfo> _methods = new Dictionary<int, MethodInfo>();
+        Dictionary<int, ValueNativeFunc> _methods = new Dictionary<int, ValueNativeFunc>();
 
         internal ValueNativeClassType(Package pkg, Type t, ObjectName name )
             : base( name )
@@ -47,52 +47,80 @@ namespace Photon
 
                 var methodInfo = _t.GetMethod(m.Name);
 
-                // 让导入的代码能认识这个函数
-                Symbol symb = new Symbol();
-                symb.Name = m.Name;
-                symb.Decl = null;
-                symb.Usage = SymbolUsage.Func;
+                if (!methodInfo.IsStatic)
+                    continue;
 
-                if ( methodInfo.IsStatic )
+                string methodName;
+                if (string.IsNullOrEmpty(attr.EntryName))
                 {
-                    var dele = methodInfo.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
-
-                    // TODO 添加自定义属性可以自定义导入后使用的名称
-
-                    if (_pkg.TopScope.FindSymbol(m.Name) != null)
-                    {
-                        throw new RuntimeException("name duplicate: " + m.Name);
-                    }
-
-
-                    _pkg.TopScope.Insert(symb);
-
-                    _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, m.Name), dele));
+                    methodName = methodInfo.Name;
                 }
                 else
                 {
-                    if ( classScope.FindSymbol(m.Name ) != null )
-                    {
-                        throw new RuntimeException("class method symbol duplicate: " + m.Name );
-                    }                    
+                    methodName = attr.EntryName;
+                }
 
-                    classScope.Insert( symb );
+                // 让导入的代码能认识这个函数
+                Symbol symb = new Symbol();
+                symb.Name = methodName;
+                symb.Decl = null;
+                symb.Usage = SymbolUsage.Func;
 
-                    var ci = _pkg.Exe.Constants.AddString(m.Name);
+                var ci = _pkg.Exe.Constants.AddString(methodName);
 
-                    _methods.Add(ci, methodInfo);
+                var dele = methodInfo.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
+
+                switch ( attr.Type )
+                {
+                    case NativeEntryType.StaticFunc:
+                        {
+                            // TODO 添加自定义属性可以自定义导入后使用的名称
+
+                            if (_pkg.TopScope.FindSymbol(methodName) != null)
+                            {
+                                throw new RuntimeException("name duplicate: " + methodName);
+                            }
+
+                            _pkg.TopScope.Insert(symb);
+
+                            _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, methodName), dele));
+                        }
+                        break;
+                    case NativeEntryType.ClassMethod:
+                        {
+                            if (classScope.FindSymbol(methodName) != null)
+                            {
+                                throw new RuntimeException("class method symbol duplicate: " + methodName);
+                            }
+
+                            classScope.Insert(symb);
+
+                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, _t.Name, methodName), dele));
+                        }
+                        break;
                 }
             }
         }
 
-        internal NativeDelegate CreateMethodDelegate(int nameKey, object ins, out MethodInfo methodInfo)
-        {            
-            if ( _methods.TryGetValue(nameKey, out methodInfo ))
+
+        internal string Key2Name(int key)
+        {
+            var v = Pkg.Exe.Constants.Get(key) as ValueString;
+            if (v == null)
+                return string.Empty;
+
+            return v.String;
+        }
+
+        internal Value GetMethod(int nameKey)
+        {
+            ValueNativeFunc func;
+            if (_methods.TryGetValue(nameKey, out func))
             {
-                return Delegate.CreateDelegate(typeof(NativeDelegate), ins, methodInfo) as NativeDelegate;
+                return func;
             }
 
-            return null;
+            return Value.Nil;
         }
 
         internal override ValueObject CreateInstance()

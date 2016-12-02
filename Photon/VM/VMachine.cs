@@ -23,12 +23,41 @@ namespace Photon
 
     public delegate int NativeDelegate(VMachine vm);
 
+    public enum NativeEntryType
+    {
+        StaticFunc,
+        ClassMethod,
+    }
+
     public sealed class NativeEntryAttribute : Attribute
     {
-        public NativeEntryAttribute( )
+
+        string _entryName;
+        NativeEntryType _type;
+
+        internal NativeEntryType Type
         {
+            get { return _type; }
+        }
+
+        internal string EntryName
+        {
+            get { return _entryName; }
+        }
+
+        public NativeEntryAttribute(NativeEntryType type)
+        {
+            _type = type;
+        }
+
+        public NativeEntryAttribute(NativeEntryType type, string entryName)
+        {
+            _type = type;
+            _entryName = entryName;
         }
     }
+
+ 
 
     public partial class VMachine
     {

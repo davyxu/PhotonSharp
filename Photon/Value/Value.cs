@@ -22,7 +22,7 @@ namespace Photon
             return false;
         }
 
-        public static Value Nil = new ValueNil();
+        internal static Value Nil = new ValueNil();
 
         public override string ToString()
         {

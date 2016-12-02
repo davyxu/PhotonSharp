@@ -24,6 +24,11 @@ namespace Photon
             return Value.Nil;
         }
 
+        internal virtual object Instance
+        {
+            get { return null; }
+        }
+
 
     }
 

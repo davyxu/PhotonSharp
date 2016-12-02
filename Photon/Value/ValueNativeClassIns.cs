@@ -5,11 +5,14 @@ namespace Photon
 {
     class ValueNativeClassIns : ValueObject
     {
-        ValueNativeClassType _type;
-
-        Dictionary<int, ValueNativeFunc> _memberVar = new Dictionary<int, ValueNativeFunc>();
+        ValueNativeClassType _type;        
 
         object _nativeIns;
+
+        internal override object Instance
+        {
+            get { return _nativeIns; }
+        }
 
         internal ValueNativeClassIns(ValueNativeClassType t, object nativeIns )
         {
@@ -22,26 +25,10 @@ namespace Photon
 
         }
 
+
         internal override Value GetMember(int nameKey)
         {
-            ValueNativeFunc func;
-            if (_memberVar.TryGetValue( nameKey, out func ))
-            {
-                return func;
-            }
-
-            MethodInfo methodInfo;
-            var nativeDel = _type.CreateMethodDelegate(nameKey, _nativeIns, out methodInfo);
-            if (nativeDel == null)
-            {
-                throw new RuntimeException("method not found: " + methodInfo.Name);
-            }
-
-            func = new ValueNativeFunc(new ObjectName(_type.Pkg.Name, methodInfo.Name), nativeDel);
-
-            _memberVar.Add(nameKey, func );
-
-            return func;
+            return _type.GetMethod(nameKey);
         }
 
         public override string DebugString()

@@ -29,6 +29,10 @@ namespace Photon
             Set(index, new ValueString(v));
         }
 
+        public T GetNativeInstance<T>(int index) where T:class
+        {
+            return Get(index).CastObject().Instance as T;
+        }
 
         public float GetFloat32( int index )
         {

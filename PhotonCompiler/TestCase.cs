@@ -2,12 +2,13 @@
 using System;
 namespace PhotonCompiler
 {
-    public class MyMath
+    public class DelegateTest
     {
         // TODO 在特性上标注进入参数, 在编译期检查
-        [NativeEntry]
+        [NativeEntry( NativeEntryType.StaticFunc, "add")]
         public static int AddValue( VMachine vm )
-        {                        
+        {                 
+            
             var a = vm.DataStack.GetFloat32(-1);
             var b = vm.DataStack.GetFloat32(-2);
 
@@ -17,36 +18,24 @@ namespace PhotonCompiler
         }
     }
 
-    class Animal
+    class Cat
     {
-        [NativeEntry]
-        public int foo(VMachine vm)
+        public string realFoo( int a )
         {
-            var a = vm.DataStack.GetFloat32(-1);
+            return "cat";
+        }
 
-            vm.DataStack.PushString("animal");
+        [NativeEntry(NativeEntryType.ClassMethod, "foo")]
+        public static int VMFoo(VMachine vm )
+        {
+            var instance = vm.DataStack.GetNativeInstance<Cat>(0);
+            var a = vm.DataStack.GetFloat32(1);
+
+            var str = instance.realFoo((int)a);
+
+            vm.DataStack.PushString(str);
 
             return 1;
-        }
-    }
-
-    class Cat : Animal
-    {
-        //public override string foo()
-        //{
-        //    return "cat";
-        //}
-
-        [NativeEntry]
-        public int foo(VMachine vm)
-        {
-            var a = vm.DataStack.GetFloat32(-1);            
-
-            vm.DataStack.PushFloat32(a);
-
-            vm.DataStack.PushString("cat");
-
-            return 2;
         }
     }
 
@@ -60,10 +49,10 @@ namespace PhotonCompiler
             {
                 var testbox = new TestBox();
 
-                testbox.Exe.RegisterNativeClass(typeof(MyMath), "DelegateTest");
+                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
                 testbox.Exe.RegisterNativeClass(typeof(Cat), "DelegateTest");
 
-                testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualNumber(2, 2016).TestGlobalRegEqualString(3, "cat");
+                testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualString(2, "cat");
             }
             
 

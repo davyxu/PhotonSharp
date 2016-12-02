@@ -1,37 +1,43 @@
 ﻿
 using Photon;
+using SharpLexer;
+using System.Collections.Generic;
 namespace PhotonToy
 {
     public struct AssemblyLocation
     {
-        public CommandSet CmdSet;
-        public int Pos;
-        public string FileName;
+        public int FuncID;
+        public string FuncName;
+        public TokenPos FuncDefPos;
 
-        public AssemblyLocation(CommandSet cmdset, int pos, string filename)
+        public int PC;// 汇编位置
+        public TokenPos CodePos;//当前代码运行位置
+        public List<Command> Commands;
+
+
+        public bool IsDiff( AssemblyLocation other )
         {
-            CmdSet = cmdset;
-            Pos = pos;
-            FileName = filename;
+            return this.FuncID != other.FuncID ||               
+                this.CodePos.SourceName != other.CodePos.SourceName;
         }
 
         public override bool Equals(object obj)
         {
             var other = (AssemblyLocation)obj;
 
-            return this.CmdSet == other.CmdSet && 
-                this.Pos == other.Pos &&
-                this.FileName == other.FileName;
+            return this.FuncID == other.FuncID && 
+                this.PC == other.PC &&
+                this.CodePos.SourceName == other.CodePos.SourceName;
         }
 
         public override int GetHashCode()
         {
-            return Pos.GetHashCode() + CmdSet.GetHashCode() + FileName.GetHashCode();
+            return PC.GetHashCode() + FuncID.GetHashCode() + CodePos.SourceName.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", CmdSet.Name, Pos, FileName);
+            return string.Format("{0} {1} {2}", FuncName, PC, CodePos.SourceName);
         }
     }
 }

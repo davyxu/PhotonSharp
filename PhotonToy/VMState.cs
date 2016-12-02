@@ -9,16 +9,19 @@ namespace PhotonToy
         public List<string> Register = new List<string>();
         public List<string> DataStack = new List<string>();
         public List<string> CallStack = new List<string>();
-        public string RegPackage;
+        public string RegPackage;        
 
         public VMState(VMachine vm, string regpkg)
         {
-            Location.CmdSet = vm.CurrFrame.CmdSet;
-            Location.Pos = vm.CurrFrame.PC;
+            Location.FuncID = vm.CurrFrame.FuncID;
+            Location.FuncName = vm.CurrFrame.FuncName;
+            Location.PC = vm.CurrFrame.PC;
+            Location.Commands = vm.CurrFrame.Commands;
+            Location.FuncDefPos = vm.CurrFrame.FuncDefPos;
             RegPackage = regpkg;
 
-            
-            Location.FileName = vm.CurrFrame.CodePos.SourceName;                        
+
+            Location.CodePos = vm.CurrFrame.CodePos;
 
             if (string.IsNullOrEmpty(regpkg ))
             {

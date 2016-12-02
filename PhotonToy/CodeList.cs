@@ -1,5 +1,6 @@
 ﻿
 using Photon;
+using SharpLexer;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -75,16 +76,17 @@ namespace PhotonToy
         internal static void Init( Executable e)
         {
             Exe = e;
-            lastAL.CmdSet = null;
-            lastAL.FileName = null;
-            lastAL.Pos = -1;
+            lastAL.FuncID = -1;
+            lastAL.FuncName = string.Empty;
+            lastAL.CodePos = TokenPos.Invalid;
+            lastAL.PC = -1;
         }
         
 
         internal static void SetCurrLine(this ListBox self, AssemblyLocation al)
         {
 
-            if (lastAL.FileName != al.FileName || lastAL.CmdSet != al.CmdSet)
+            if (lastAL.IsDiff(al) )
             {
                 ShowCode(self, al, Exe);
                 lastAL = al;
@@ -92,14 +94,19 @@ namespace PhotonToy
 
 
             int index = -1;
-            if ( !string.IsNullOrEmpty(al.FileName))
+            if (!string.IsNullOrEmpty(al.CodePos.SourceName))
             {
                 _listIndexByLocation.TryGetValue(al, out index);
             }
 
-            currIndex = index;
-            self.SelectedIndex = index;
-            self.Refresh();
+            
+            if ( self.Items.Count > 0 )
+            {
+                currIndex = index;
+                self.SelectedIndex = index;
+                self.Refresh();
+            }
+            
         }
 
 
@@ -120,25 +127,25 @@ namespace PhotonToy
         {
 
 
-            var sf = exec.GetSourceFile(al.FileName);
+            var sf = exec.GetSourceFile(al.CodePos.SourceName);
 
             if (sf != null)
             {
                 _listIndexByLocation.Clear();
                 self.Items.Clear();
 
-                ShowCommandSet(self, sf, al);
+                ShowCommandSet(self, sf, al, exec);
             }
 
             
         }
 
-        static void ShowCommandSet(ListBox self, SourceFile file, AssemblyLocation al)
+        static void ShowCommandSet(ListBox self, SourceFile file, AssemblyLocation al, Executable exec)
         {
             int currSourceLine = 0;
-            al.Pos = 0;
+            al.PC = 0;
 
-            foreach (var c in al.CmdSet.Commands)
+            foreach (var c in al.Commands)
             {
                 // 到新的源码行
                 if (c.CodePos.Line > currSourceLine)
@@ -153,13 +160,13 @@ namespace PhotonToy
 
                     // 显示源码
 
-                    AddCodeLine(self, al, CodeType.Source, "{0,3}({1})| {2}", currSourceLine, al.CmdSet.ToString(), file.GetLine(currSourceLine));                    
+                    AddCodeLine(self, al, CodeType.Source, "{0,3}({1} {2})| {3}", currSourceLine, al.FuncName, al.FuncDefPos, file.GetLine(currSourceLine));                    
                 }
                 
                 // 显示汇编
-                AddCodeLine(self, al, CodeType.Assembly, "{0,3}| {1}", al.Pos, c.ToString());
+                AddCodeLine(self, al, CodeType.Assembly, "{0,3}| {1}", al.PC, c.ToString());
 
-                al.Pos++;
+                al.PC++;
             }
         }
     }

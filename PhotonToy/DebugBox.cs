@@ -181,7 +181,7 @@ namespace PhotonToy
                 }
                 else
                 {
-                    pkgReg = vm.CurrFrame.CmdSet.Name.PackageName;
+                    pkgReg = vm.CurrFrame.PkgName;
                 }
             }
 

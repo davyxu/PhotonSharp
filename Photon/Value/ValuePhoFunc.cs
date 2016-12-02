@@ -13,14 +13,14 @@ namespace Photon
 
         bool _isGlobal;
 
-        TokenPos _codePos;
+        TokenPos _defpos;
 
         internal ValuePhoFunc(ObjectName name, TokenPos codepos, int regCount, bool isGlobal)
             : base(name)
         {            
             _regCount = regCount;
             _isGlobal = isGlobal;
-            _codePos = codepos;            
+            _defpos = codepos;            
         }
 
         internal bool IsGlobal
@@ -33,9 +33,9 @@ namespace Photon
             get { return _regCount; }
         }
 
-        internal TokenPos CodePos
+        internal TokenPos DefPos
         {
-            get { return _codePos; }
+            get { return _defpos; }
         }
 
         public List<Command> Commands
@@ -51,7 +51,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", Name, _codePos);
+            return string.Format("{0} {1}", Name, _defpos);
         }
 
         internal int CurrCmdID

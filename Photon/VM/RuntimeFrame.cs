@@ -1,6 +1,7 @@
 ﻿
 
 using SharpLexer;
+using System.Collections.Generic;
 namespace Photon
 {
     public class RuntimeFrame
@@ -17,6 +18,30 @@ namespace Photon
         internal ValueClosure Closure;
 
         internal Register Reg = new Register("R", 10);
+
+        public int FuncID
+        {
+            get { return CmdSet.ID; }
+        }
+        public string FuncName
+        {
+            get { return CmdSet.Name.EntryName; }
+        }
+
+        public TokenPos FuncDefPos
+        {
+            get { return CmdSet.DefPos; }
+        }
+
+        public string PkgName
+        {
+            get { return CmdSet.Name.PackageName; }
+        }
+
+        public List<Command> Commands
+        {
+            get { return CmdSet.Commands; }
+        }
 
         public TokenPos CodePos
         {
@@ -46,7 +71,7 @@ namespace Photon
 
         public string DebugString()
         {
-            return string.Format("{0} {1}", CmdSet.CodePos, CmdSet.Name );
+            return string.Format("{0} {1}", CmdSet.DefPos, CmdSet.Name );
         }
 
         public override string ToString()

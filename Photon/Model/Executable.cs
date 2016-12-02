@@ -19,7 +19,7 @@ namespace Photon
         List<Package> _packages = new List<Package>();
 
         // 所有函数执行体
-        List<ValueFunc> _proc = new List<ValueFunc>();
+        List<ValueFunc> _func = new List<ValueFunc>();
 
         // 源码
         List<File> _file = new List<File>();
@@ -63,9 +63,9 @@ namespace Photon
 
         internal ValueFunc AddFunc(ValueFunc f)
         {            
-            _proc.Add(f);
+            _func.Add(f);
 
-            f.ID = _proc.Count - 1;
+            f.ID = _func.Count - 1;
 
             return f;
         }
@@ -124,14 +124,14 @@ namespace Photon
             return null;
         }
 
-        internal ValueFunc GetFunc( int procid )
+        internal ValueFunc GetFunc( int funcid )
         {
-            return _proc[procid];            
+            return _func[funcid];            
         }
 
         internal ValueFunc GetFuncByName(ObjectName name)
         {           
-            foreach( var pro in _proc )
+            foreach( var pro in _func )
             {
                 if ( pro.Name.Equals( name ) )
                 {
@@ -202,7 +202,7 @@ namespace Photon
 
 
             // 汇编
-            foreach (var p in _proc)
+            foreach (var p in _func)
             {
                 var cs = p as ValuePhoFunc;
                 if (cs != null)

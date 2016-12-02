@@ -4,7 +4,7 @@ using System.Text;
 namespace Photon
 {
 
-    class Command
+    public class Command
     {
         internal Opcode Op;
 

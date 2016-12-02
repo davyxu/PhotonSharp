@@ -65,6 +65,9 @@
     <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Node.cs" />
+    <Compile Include="CodeGen\CodeGenerator.cs" />
+    <Compile Include="CodeGen\WrapperGenModel.cs" />
+    <Compile Include="CodeGen\WrapperCodeGenerator.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
@@ -73,7 +76,6 @@
     <Compile Include="Model\ObjectName.cs" />
     <Compile Include="Model\Package.cs" />
     <Compile Include="Parser\LexerInit.cs" />
-    <Compile Include="Value\Slot.cs" />
     <Compile Include="Model\SourceFile.cs" />
     <Compile Include="Value\ValuePhoClassType.cs" />
     <Compile Include="Value\ValueNativeClassIns.cs" />

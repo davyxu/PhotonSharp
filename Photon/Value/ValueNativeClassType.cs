@@ -7,13 +7,14 @@ namespace Photon
 {
     class ValueNativeClassType : ValueClassType
     {                   
-        Type _t;
+        Type _wrapper;
+        Type _target;
 
         Package _pkg;
 
         internal Type Raw
         {
-            get { return _t; }
+            get { return _target; }
         }
 
         internal Package Pkg
@@ -23,10 +24,11 @@ namespace Photon
 
         Dictionary<int, ValueNativeFunc> _methods = new Dictionary<int, ValueNativeFunc>();
 
-        internal ValueNativeClassType(Package pkg, Type t, ObjectName name )
+        internal ValueNativeClassType(Package pkg, Type wrapper, Type tgt, ObjectName name )
             : base( name )
         {            
-            _t = t;
+            _wrapper = wrapper;            
+            _target = tgt;
             _pkg = pkg;
 
             BuildMember();
@@ -36,16 +38,19 @@ namespace Photon
         {
             Scope classScope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
 
-            foreach (var m in _t.GetMembers())
+
+
+            foreach (var m in _wrapper.GetMembers())
             {
                 var attr = m.GetCustomAttribute<NativeEntryAttribute>();
                 if (attr == null)
                     continue;
 
-                if (m.DeclaringType != _t)
+                // 必须是本类自己的成员
+                if (m.DeclaringType != _wrapper)
                     continue;
 
-                var methodInfo = _t.GetMethod(m.Name);
+                var methodInfo = _wrapper.GetMethod(m.Name);
 
                 if (!methodInfo.IsStatic)
                     continue;
@@ -95,7 +100,7 @@ namespace Photon
 
                             classScope.Insert(symb);
 
-                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, _t.Name, methodName), dele));
+                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, _target.Name, methodName), dele));
                         }
                         break;
                 }
@@ -125,7 +130,7 @@ namespace Photon
 
         internal override ValueObject CreateInstance()
         {
-            var obj = Activator.CreateInstance(_t);
+            var obj = Activator.CreateInstance(_target);
 
             return new ValueNativeClassIns(this, obj);
         }
@@ -134,7 +139,7 @@ namespace Photon
         {
             var other = v as ValueNativeClassType;
 
-            return _t.Equals(other._t);
+            return _wrapper.Equals(other._wrapper);
         }
 
         public override string DebugString()
@@ -144,7 +149,7 @@ namespace Photon
 
         public override string TypeName
         {
-            get { return _t.Name; }
+            get { return _wrapper.Name; }
         }
 
         public override ValueKind Kind

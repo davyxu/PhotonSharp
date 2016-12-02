@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Photon
 {
@@ -111,6 +112,11 @@ namespace Photon
         public void PushFloat32( float v )
         {
             Push(new ValueNumber(v));
+        }
+
+        public void PushInteger32(Int32 v)
+        {
+            Push(new ValueNumber((float)v));
         }
 
         public void PushString(string v)

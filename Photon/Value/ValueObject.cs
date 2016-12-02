@@ -9,11 +9,6 @@ namespace Photon
             throw new NotImplementedException();
         }
 
-        public override ValueKind Kind
-        {
-            get { return ValueKind.Object; }
-        }
-
         internal virtual void SetMember( int nameKey, Value v )
         {
 

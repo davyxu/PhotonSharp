@@ -5,7 +5,7 @@ namespace Photon
 {
     public class Register : DataAccessor
     {
-        Slot[] _values;
+        Value[] _values;
         int _usedSlot = 0;
         string _usage;
 
@@ -19,7 +19,8 @@ namespace Photon
         internal Register( string usage, int maxReg )
         {
             _usage = usage;
-            _values = new Slot[maxReg];
+            _values = new Value[maxReg];
+            Clear();
         }
 
         public int Count
@@ -29,40 +30,15 @@ namespace Photon
 
         internal void SetUsedCount( int count )
         {            
-            // 扩展
-            if ( count > _usedSlot )
-            {
-                for (int i = _usedSlot; i < count; i++)
-                {
-                    // 重新分配槽, 避免覆盖原来的值
-                    _values[i] = new Slot(GenSlotID());
-                }
-            }
-            // 缩减
-            else if ( count < _usedSlot )
-            {
-                for( int i = count; i < _usedSlot; i++ )
-                {
-                    // 重新分配槽, 避免覆盖原来的值
-                    _values[i] = new Slot(GenSlotID());
-                }
-
-            }
-
             _usedSlot = count;
         }
 
         internal override void Set( int index, Value v )
         {            
-            _values[index].SetData(v);
+            _values[index] = v;
         }
 
         internal override Value Get(int index)
-        {
-            return _values[index].Data;
-        }
-
-        internal Slot GetSlot( int index )
         {
             return _values[index];
         }
@@ -71,7 +47,7 @@ namespace Photon
         {
             for (int i = 0; i < _values.Length; i++)
             {
-                _values[i].SetData( Value.Nil );
+                _values[i] = Value.Nil;
             }
 
             _usedSlot = 0;
@@ -86,7 +62,7 @@ namespace Photon
         {            
             for (int i = 0; i < _usedSlot; i++)
             {
-                var v = _values[i].Data;
+                var v = _values[i];
 
                 Debug.WriteLine("{0}{1}: {2}", _usage, i, v.ToString());
             }

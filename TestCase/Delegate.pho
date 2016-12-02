@@ -3,3 +3,5 @@ var a = DelegateTest.add( 1, 2 )
 
 var x = new(DelegateTest.Cat)
 var b = x.foo(2016)
+var c, d = x.xx(10, "a")
+// 没有接收的参数要舍弃

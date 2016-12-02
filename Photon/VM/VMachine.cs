@@ -27,6 +27,20 @@ namespace Photon
     {
         StaticFunc,
         ClassMethod,
+        Class,
+    }
+    public sealed class NativeWrapperClassAttribute : Attribute
+    {
+        Type _bindingClassType;
+        public Type BindingClass
+        {
+            get { return _bindingClassType; }
+        }
+
+        public NativeWrapperClassAttribute( Type t )
+        {
+            _bindingClassType = t;
+        }
     }
 
     public sealed class NativeEntryAttribute : Attribute

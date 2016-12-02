@@ -39,9 +39,19 @@ namespace Photon
             return Get(index).CastNumber();
         }
 
+        public Int32 GetInteger32(int index)
+        {
+            return (Int32)Get(index).CastNumber();
+        }
+
         public void SetFloat32(int index, float v)
         {
             Set(index, new ValueNumber(v));
+        }
+
+        public void SetInteger32(int index, Int32 v)
+        {
+            Set(index, new ValueNumber((float)v));
         }
 
         public bool IsNil(int index)

@@ -6,11 +6,9 @@ namespace Photon
         Nil = 0,
         Number,
         String,
-        Func,
-        Object,
+        Func,        
         ClassType,
         ClassInstance,
-
         NativeClassType,
         NativeClassInstance,
     }
@@ -31,6 +29,8 @@ namespace Photon
 
         public virtual string DebugString( )
         {
+            throw new RuntimeException("NotImplementToString");
+
             return "(NotImplementToString)";
         }
 

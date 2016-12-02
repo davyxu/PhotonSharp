@@ -1,5 +1,5 @@
 ﻿using Photon;
-using System;
+
 namespace PhotonCompiler
 {
     public class DelegateTest
@@ -20,23 +20,32 @@ namespace PhotonCompiler
 
     class Cat
     {
-        public string realFoo( int a )
+        public string xx(int a, string c, out int b)
+        {
+            b = 89;
+
+            return "xx";
+        }
+
+
+        public string foo( int a )
         {
             return "cat";
         }
 
-        [NativeEntry(NativeEntryType.ClassMethod, "foo")]
-        public static int VMFoo(VMachine vm )
-        {
-            var instance = vm.DataStack.GetNativeInstance<Cat>(0);
-            var a = vm.DataStack.GetFloat32(1);
+        //[NativeEntry(NativeEntryType.ClassMethod, "foo")]
+        //public static int VMFoo(VMachine vm )
+        //{
+        //    var instance = vm.DataStack.GetNativeInstance<Cat>(0);
 
-            var str = instance.realFoo((int)a);
+        //    var a = vm.DataStack.GetInteger32(1);
 
-            vm.DataStack.PushString(str);
+        //    var str = instance.foo((int)a);
 
-            return 1;
-        }
+        //    vm.DataStack.PushString(str);
+
+        //    return 1;
+        //}
     }
 
 
@@ -45,12 +54,15 @@ namespace PhotonCompiler
 
         static void TestCase()
         {
+            WrapperCodeGenerator gen = new WrapperCodeGenerator();
+            gen.GenerateClass(typeof(Cat), "PhotonCompiler", "../PhotonCompiler/CatWrapper.cs");
+
 
             {
                 var testbox = new TestBox();
 
-                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
-                testbox.Exe.RegisterNativeClass(typeof(Cat), "DelegateTest");
+                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");                
+                testbox.Exe.RegisterNativeClass(typeof(CatWrapper), "DelegateTest");
 
                 testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualString(2, "cat");
             }

@@ -49,7 +49,7 @@ namespace Photon
             return c;
         }
 
-        public override string ToString()
+        public override string DebugString()
         {
             return string.Format("{0} {1}", Name, _defpos);
         }

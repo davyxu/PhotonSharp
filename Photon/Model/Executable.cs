@@ -1,5 +1,6 @@
 ﻿using SharpLexer;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -168,6 +169,11 @@ namespace Photon
 
         public void RegisterNativeClass( Type classType, string pkgNameRegTo )
         {
+            if (!classType.IsClass)
+            {
+                throw new RuntimeException("Require class type");
+            }
+
             var pkg = GetPackageByName(pkgNameRegTo);
             if (pkg == null)
             {
@@ -176,7 +182,19 @@ namespace Photon
                 pkg = AddPackage(pkgNameRegTo, pkgScope);
             }
 
-            var lanClass = new ValueNativeClassType(pkg, classType, new ObjectName( pkg.Name, classType.Name) );
+            Type targetClass;
+            var classAttr = classType.GetCustomAttribute<NativeWrapperClassAttribute>();
+            // 自动生成代码绑定
+            if (classAttr != null)
+            {
+                targetClass = classAttr.BindingClass;
+            }
+            else
+            {
+                targetClass = classType;
+            }
+
+            var lanClass = new ValueNativeClassType(pkg, classType, targetClass, new ObjectName(pkg.Name, targetClass.Name));
 
             AddClassType(lanClass);
         }

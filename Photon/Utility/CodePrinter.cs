@@ -6,7 +6,7 @@ namespace Photon
     /// <summary>
     /// 代码生成类
     /// </summary>
-    public class CodeGenerator
+    public class CodePrinter
     {
         StringBuilder _builder = new StringBuilder();
         string _indend;

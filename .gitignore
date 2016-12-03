@@ -1,8 +1,10 @@
 *.suo
+*.user
 /Photon/bin
 /Photon/obj
 /PhotonCompiler/bin
 /PhotonCompiler/obj
-*.user
-PhotonToy/bin
-PhotonToy/obj
+/PhotonToy/bin
+/PhotonToy/obj
+/UnitTest/bin
+/UnitTest/obj

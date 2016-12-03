@@ -65,9 +65,11 @@
     <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Node.cs" />
-    <Compile Include="CodeGen\CodeGenerator.cs" />
-    <Compile Include="CodeGen\WrapperGenModel.cs" />
-    <Compile Include="CodeGen\WrapperCodeGenerator.cs" />
+    <Compile Include="Utility\CodePrinter.cs" />
+    <Compile Include="CodeGen\Generator.cs" />
+    <Compile Include="CodeGen\Printer.cs" />
+    <Compile Include="CodeGen\Model.cs" />
+    <Compile Include="CodeGen\Collector.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />

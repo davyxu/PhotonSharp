@@ -1,47 +1,76 @@
 ﻿using Photon;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 namespace PhotonCompiler
 {
 
     partial class Program
     {
-        static void Main(string[] args)
+        static void Help( )
+        {
+            Console.WriteLine("Usage:");
+            Console.WriteLine("pho command [arguments] pho files...");
+            Console.WriteLine("The commands are:");
+            Console.WriteLine("     compile     compile packages and dependencies");
+            Console.WriteLine("     run         compile and run");
+        }
+
+        static int Main(string[] args)
         {
             if ( args.Length < 2 )
             {
-                return;
+                Help();
+                return 1;
             }
 
             var mode = args[0];
-            
+            var fs = new FlagSet(args, 1);
+            bool needRun = false;
+
             switch( mode )
             {
-                case "unittest":
-                    {
-                        TestCase();
-                    }
-                    break;
                 case "compile":
                     {
-                        var fs = new FlagSet(args, 1);
-                        Run(fs.Args, false, fs.BoolOption("-l"));
+                        needRun = false;
                     }
                     break;
                 case "run":
                     {
-                        var fs = new FlagSet(args, 1);
+                        needRun = true;
 
-                        Run(fs.Args, true, fs.BoolOption("-l"));
                     }
                     break;
+                default:
+                    Help();
+                    return 1;
             }
-            
+            int ret = 0;
+
+            if ( Debugger.IsAttached )
+            {
+                Run(fs.Args, needRun, fs.BoolOption("-l"));
+            }
+            else
+            {
+                try
+                {
+                    Run(fs.Args, needRun, fs.BoolOption("-l"));
+                }
+                catch (Exception ex )
+                {
+                    Console.WriteLine(ex.ToString());
+                    ret = 1;
+                }
+            }
+
+            return ret;
         }
 
         static void Run( List<string> files, bool run, bool debugInfo )
         {
             if (files.Count == 0)
-                return;            
+                return;
 
             var exe = Compiler.Compile(files[0]);
 
@@ -58,9 +87,6 @@ namespace PhotonCompiler
 
                 vm.Run(exe );
             }
-
-
-            
         }
     }
 }

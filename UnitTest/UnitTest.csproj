@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0ACC0994-F7F2-4CE8-AC21-306712CF6A0A}</ProjectGuid>
+    <ProjectGuid>{0AB986D1-0226-417A-A87D-ECDF6C020282}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PhotonCompiler</RootNamespace>
@@ -41,9 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlagSet.cs" />
+    <Compile Include="CatWrapper.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBox.cs" />
+    <Compile Include="TestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -53,6 +54,9 @@
       <Project>{129399c8-6ed0-47da-8829-5781d54c2a48}</Project>
       <Name>PhotonLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

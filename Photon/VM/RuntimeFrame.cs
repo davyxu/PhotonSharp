@@ -12,8 +12,8 @@ namespace Photon
 
         internal int DataStackBase;
 
-        // 结束运行后, 需要恢复数据栈
-        internal bool RestoreDataStack;
+        // 函数返回值接收变量数量
+        internal int ReceiverCount;
 
         internal ValueClosure Closure;
 

@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CatWrapper.cs" />
+    <Compile Include="DataStackBalanceTestWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="TestBox.cs" />
     <Compile Include="TestCase.cs" />

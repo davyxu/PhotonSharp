@@ -167,6 +167,11 @@ namespace Photon
             return null;
         }
 
+        public void RegisterNativeClass(Assembly ass, string className, string pkgNameRegTo)
+        {
+            RegisterNativeClass(ass.GetType(className), pkgNameRegTo);
+        }
+
         public void RegisterNativeClass( Type classType, string pkgNameRegTo )
         {
             if (!classType.IsClass)
@@ -182,19 +187,26 @@ namespace Photon
                 pkg = AddPackage(pkgNameRegTo, pkgScope);
             }
 
-            Type targetClass;
+            Type instClass;
             var classAttr = classType.GetCustomAttribute<NativeWrapperClassAttribute>();
             // 自动生成代码绑定
             if (classAttr != null)
             {
-                targetClass = classAttr.BindingClass;
+                instClass = classAttr.BindingClass;
             }
             else
             {
-                targetClass = classType;
+                instClass = classType;
             }
 
-            var lanClass = new ValueNativeClassType(pkg, classType, targetClass, new ObjectName(pkg.Name, targetClass.Name));
+            var lanClass = new ValueNativeClassType(pkg, instClass, new ObjectName(pkg.Name, instClass.Name));
+            lanClass.BuildMember(instClass.Name, classType);
+
+            // 还需要扫描实例类本体有手动添加的
+            if ( instClass != classType )
+            {
+                lanClass.BuildMember(instClass.Name, instClass);
+            }
 
             AddClassType(lanClass);
         }

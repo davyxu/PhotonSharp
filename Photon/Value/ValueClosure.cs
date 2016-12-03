@@ -45,9 +45,9 @@ namespace Photon
             return _upvalues[index];
         }
 
-        internal override bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
+        internal override bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)
         {
-            return _func.Invoke(vm, argCount, balanceStack, closure );
+            return _func.Invoke(vm, argCount, receiverCount, closure );
         }
 
         public override string DebugString()

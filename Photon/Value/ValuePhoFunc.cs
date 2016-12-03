@@ -59,12 +59,12 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
-        internal override bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
+        internal override bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)
         {
             // 更换当前上下文
             vm.EnterFrame(this);
 
-            vm.CurrFrame.RestoreDataStack = balanceStack;
+            vm.CurrFrame.ReceiverCount = receiverCount;
             vm.CurrFrame.Closure = closure;
 
             // 将栈转为被调用函数的寄存器

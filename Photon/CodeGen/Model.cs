@@ -69,15 +69,21 @@ namespace Photon
         }
     }
 
+    enum WrapperFuncMode
+    {
+        PackageFunc,
+        ClassMethod,
+    }
+
     class WrapperGenFunc
     {
         public string Name;
+        public WrapperFuncMode Mode;
         public List<WrapperGenParameter> InputParameters = new List<WrapperGenParameter>();
         public List<WrapperGenParameter> OutputParameters = new List<WrapperGenParameter>();
 
         public WrapperGenParameter RetParameter;
-        
-
+       
     }
 
     class WrapperGenClass
@@ -89,6 +95,8 @@ namespace Photon
 
     class WrapperGenPackage
     {
+        public string Name;
+
         public List<WrapperGenClass> Classes = new List<WrapperGenClass>();
 
         public List<WrapperGenFunc> PackageFuncs = new List<WrapperGenFunc>();

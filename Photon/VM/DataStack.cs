@@ -80,7 +80,7 @@ namespace Photon
         }
 
         // preTop + 废数据 + 有效数据,  将废弃部分去掉, 有效部分前移覆盖
-        internal void Adjust( int preTop, int validCount )
+        internal void AdjustNative( int preTop, int validCount )
         {
             int validBegin = Count - validCount;
 
@@ -91,6 +91,36 @@ namespace Photon
             }
 
             _count = preTop + validCount;
+        }
+
+        internal void AdjustPho( int expect )
+        {
+            // 收的多, 返回的变量少
+            if ( expect <= _count )
+            {
+                // 从期望的到最终数量间填充nil
+                for (int i = expect; i < _count; i++)
+                {
+                    _values[i] = Value.Nil;
+                }
+            }
+            else
+            { // 收的少, 返回的变量多, 在当前返回量前填充nil
+                
+                int padding = expect - _count;
+
+                for (int i = _count - 1; i < expect - 1; i++)
+                {
+                    // 将老值放到更高的位置
+                    _values[i + padding] = _values[i];
+
+                    // 前边(右边)留空
+                    _values[i] = Value.Nil;
+                }
+            }
+
+
+            _count = expect;
         }
 
         public int Count

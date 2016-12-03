@@ -1,5 +1,29 @@
-func add( a, b ){
-    return a+b
+import "DataStackBalanceTest"
+	
+// 将输入数加上一个返回
+func ret2( x ){
+    return x, 1
 }
 
-add(1, 2)
+func less( ){
+
+	return
+}
+
+// 在上一级上继续返回
+func more( ){
+	return ret2( 3 ), 4
+}
+
+
+// 填充返回值
+var a, b = less()
+
+// 丢弃返回值
+var c = more()
+
+
+
+//var d, e = DataStackBalanceTest.native_less( )
+
+//var f = DataStackBalanceTest.native_more( )

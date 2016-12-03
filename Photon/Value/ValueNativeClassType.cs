@@ -8,13 +8,13 @@ namespace Photon
     class ValueNativeClassType : ValueClassType
     {                   
         Type _wrapper;
-        Type _target;
+        Type _instClass;
 
         Package _pkg;
 
         internal Type Raw
         {
-            get { return _target; }
+            get { return _instClass; }
         }
 
         internal Package Pkg
@@ -24,33 +24,32 @@ namespace Photon
 
         Dictionary<int, ValueNativeFunc> _methods = new Dictionary<int, ValueNativeFunc>();
 
-        internal ValueNativeClassType(Package pkg, Type wrapper, Type tgt, ObjectName name )
+        Scope _scope;
+
+        internal ValueNativeClassType(Package pkg, Type instClass, ObjectName name )
             : base( name )
-        {            
-            _wrapper = wrapper;            
-            _target = tgt;
+        {                        
+            _instClass = instClass;
             _pkg = pkg;
 
-            BuildMember();
+            _scope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
         }
 
-        void BuildMember()
+        internal void BuildMember(string className, Type typeToScan)
         {
-            Scope classScope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
+            
 
-
-
-            foreach (var m in _wrapper.GetMembers())
+            foreach (var m in typeToScan.GetMembers())
             {
                 var attr = m.GetCustomAttribute<NativeEntryAttribute>();
                 if (attr == null)
                     continue;
 
                 // 必须是本类自己的成员
-                if (m.DeclaringType != _wrapper)
+                if (m.DeclaringType != typeToScan)
                     continue;
 
-                var methodInfo = _wrapper.GetMethod(m.Name);
+                var methodInfo = typeToScan.GetMethod(m.Name);
 
                 if (!methodInfo.IsStatic)
                     continue;
@@ -93,14 +92,14 @@ namespace Photon
                         break;
                     case NativeEntryType.ClassMethod:
                         {
-                            if (classScope.FindSymbol(methodName) != null)
+                            if (_scope.FindSymbol(methodName) != null)
                             {
                                 throw new RuntimeException("class method symbol duplicate: " + methodName);
                             }
 
-                            classScope.Insert(symb);
+                            _scope.Insert(symb);
 
-                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, _target.Name, methodName), dele));
+                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, className, methodName), dele));
                         }
                         break;
                 }
@@ -130,7 +129,7 @@ namespace Photon
 
         internal override ValueObject CreateInstance()
         {
-            var obj = Activator.CreateInstance(_target);
+            var obj = Activator.CreateInstance(_instClass);
 
             return new ValueNativeClassIns(this, obj);
         }
@@ -139,7 +138,7 @@ namespace Photon
         {
             var other = v as ValueNativeClassType;
 
-            return _wrapper.Equals(other._wrapper);
+            return _instClass.Equals(other._instClass);
         }
 
         public override string DebugString()
@@ -149,7 +148,7 @@ namespace Photon
 
         public override string TypeName
         {
-            get { return _wrapper.Name; }
+            get { return _instClass.Name; }
         }
 
         public override ValueKind Kind

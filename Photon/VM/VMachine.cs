@@ -37,9 +37,9 @@ namespace Photon
             get { return _bindingClassType; }
         }
 
-        public NativeWrapperClassAttribute( Type t )
+        public NativeWrapperClassAttribute( Type bindingClass )
         {
-            _bindingClassType = t;
+            _bindingClassType = bindingClass;
         }
     }
 
@@ -185,51 +185,21 @@ namespace Photon
             _currFrame = newFrame;
 
             _callStack.Push(_currFrame);
-            
-            //if ( !_currFrame.CmdSet.IsGlobal)
-            {
-                // 第一层的reg是0, 不记录
-                //if (_regBaseStack.Count > 0)
-                //{
-                //    _regBase = _regBaseStack.Peek().Max;
-                //}
+                        
+            RegRange rr;
+            rr.Min = _regBase;
+            rr.Max = _regBase + newFrame.CmdSet.RegCount;
 
-                RegRange rr;
-                rr.Min = _regBase;
-                rr.Max = _regBase + newFrame.CmdSet.RegCount;
-
-                LocalReg.SetUsedCount(rr.Max);
-
-                // 留作下次调用叠加时使用
-                //_regBaseStack.Push(rr);
-            }
+            LocalReg.SetUsedCount(rr.Max);
   
         }
 
         internal void LeaveFrame()
         {
-            if ( _currFrame.RestoreDataStack )
+            if ( _currFrame.ReceiverCount != -1 )
             {
-                _dataStack.Count = _currFrame.DataStackBase;
+                _dataStack.AdjustPho(_currFrame.DataStackBase + _currFrame.ReceiverCount );                
             }
-                        
-            //if (!_currFrame.CmdSet.IsGlobal)
-            //{
-                //_regBaseStack.Pop();
-
-                //if (_regBaseStack.Count > 0)
-                //{
-                //    var rr = _regBaseStack.Peek();
-                //    _regBase = rr.Min;
-
-                //    LocalReg.SetUsedCount(rr.Max);
-                //}
-                //else
-                //{
-                //    LocalReg.SetUsedCount(0);
-                //}
-                   
-           // }
 
             _callStack.Pop();
 

@@ -33,6 +33,15 @@ namespace Photon
                 var genFunc = new WrapperGenFunc( );
                 genFunc.Name = m.Name;
 
+                if ( methodInfo.IsStatic )
+                {
+                    genFunc.Mode = WrapperFuncMode.PackageFunc;
+                }
+                else
+                {
+                    genFunc.Mode = WrapperFuncMode.ClassMethod;
+                }
+
                 genFunc.RetParameter = WrapperGenParameter.FromParameterInfo(methodInfo.ReturnParameter);
 
                 foreach( var param in methodInfo.GetParameters() )

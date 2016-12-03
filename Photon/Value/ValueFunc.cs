@@ -23,7 +23,7 @@ namespace Photon
             _name = name;
         }
 
-        internal virtual bool Invoke(VMachine vm, int argCount, bool balanceStack, ValueClosure closure)
+        internal virtual bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)
         {
             return false;
         }

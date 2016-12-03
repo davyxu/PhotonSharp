@@ -55,14 +55,14 @@ namespace Photon
 
             var func = obj.CastFunc();
 
-            return func.Invoke(vm, argCount, cmd.DataB != 0, obj as ValueClosure);
+            return func.Invoke(vm, argCount, cmd.DataB, obj as ValueClosure);
 
             throw new RuntimeException("expect function or delegate");
         }
 
         public override string Print(Command cmd)
         {
-            return string.Format("ArgCount : {0}  BalanceStack: {1}", cmd.DataA, cmd.DataB);
+            return string.Format("ArgCount : {0}  ReceiverCount: {1}", cmd.DataA, cmd.DataB);
         }
     }
 

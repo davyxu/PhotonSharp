@@ -39,15 +39,23 @@ namespace Photon
             return "CallExpr";
         }
 
-        int NeedBalanceDataStack
-        {
-            get {
-                // 单独的一句时, 需要平衡数据栈
-                if (Parent is ExprStmt)
-                    return 1;
-
-                return 0;
+        int GetReceiverCount( )
+        {            
+            // 单独的一句时, 需要平衡数据栈
+            var assign = Parent as AssignStmt;
+            if (assign != null )
+            {
+                return assign.LHS.Count;
             }
+
+            // 无需处理返回值
+            if ( Parent is ReturnStmt )
+            {
+                return -1;
+            }
+
+
+            return 0;
         }
 
         internal override void Compile(CompileParameter param)
@@ -72,7 +80,7 @@ namespace Photon
                 // 本包及动态闭包调用
             Func.Compile(param.SetLHS(false));
 
-            param.CS.Add(new Command(Opcode.CALL, Args.Count + SelfCount, NeedBalanceDataStack)).SetCodePos(LParen);
+            param.CS.Add(new Command(Opcode.CALL, Args.Count + SelfCount, GetReceiverCount())).SetCodePos(LParen);
         }
     }
 }

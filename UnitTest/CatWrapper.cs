@@ -3,7 +3,7 @@
 using Photon;
 using System;
 
-namespace PhotonCompiler
+namespace UnitTest
 {
 	[NativeWrapperClass(typeof(Cat))]
 	public class CatWrapper

@@ -2,7 +2,7 @@
 using System;
 using Photon;
 
-namespace PhotonCompiler
+namespace UnitTest
 {
     class TestBox
     {
@@ -86,9 +86,27 @@ namespace PhotonCompiler
             return TestRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
         }
 
+        public TestBox TestGlobalRegEqualNil(int index)
+        {
+            return TestRegEqualNil(index, _vm.GetRuntimePackageByName("main").Reg);
+        }
+
         public TestBox TestGlobalRegEqualString(int index, string s)
         {
             return TestRegEqualString(index, s, _vm.GetRuntimePackageByName("main").Reg);
+        }
+
+        TestBox TestRegEqualNil(int index,  Register reg)
+        {
+            var v = reg.IsNil(index);
+
+            if (!v)
+            {
+                Error(string.Format("value not equal on index: {0}, expect nil", index));
+                return this;
+            }
+
+            return this;
         }
 
         TestBox TestRegEqualNumber(int index, float num, Register reg )

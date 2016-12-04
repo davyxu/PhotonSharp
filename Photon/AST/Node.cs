@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using SharpLexer;
 
 namespace Photon
 {
@@ -39,7 +40,10 @@ namespace Photon
 
     internal class BadStmt : Stmt
     {
-
+        internal virtual void Compile(CompileParameter param)
+        {
+            throw new CompileException("Bad statement", TokenPos.Invalid);
+        }
     }
 
     internal class Expr : Node

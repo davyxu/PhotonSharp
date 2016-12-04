@@ -56,7 +56,7 @@ namespace Photon
 
         public bool IsNil(int index)
         {
-            return Get(index).Kind != ValueKind.Nil;
+            return Get(index).Kind == ValueKind.Nil;
         }
 
         public void SetNil(int index)

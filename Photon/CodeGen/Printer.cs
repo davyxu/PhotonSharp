@@ -67,7 +67,7 @@ namespace Photon
                     argIndex = 1;
                     foreach (var pm in method.OutputParameters)
                     {
-                        codeGen.PrintLine(pm.NativeKindString, " ", pm.Name, ";");
+                        codeGen.PrintLine(pm.NativeKindString, " ", pm.Name," = default(",pm.NativeKindString, ");");
 
                         argIndex++;
                     }

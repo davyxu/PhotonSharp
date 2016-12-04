@@ -3,7 +3,7 @@
 using Photon;
 using System;
 
-namespace PhotonCompiler
+namespace UnitTest
 {
 	[NativeWrapperClass(typeof(DataStackBalanceTest))]
 	public class DataStackBalanceTestWrapper
@@ -21,14 +21,16 @@ namespace PhotonCompiler
 		[NativeEntry(NativeEntryType.StaticFunc)]
 		public static int native_more( VMachine vm )
 		{
-			Int32 out1;
-			Int32 out2;
-			DataStackBalanceTest.native_more( out out1, out out2 );
+			Int32 out1 = default(Int32);
+			Int32 out2 = default(Int32);
+			Int32 out3 = default(Int32);
+			DataStackBalanceTest.native_more( out out1, out out2, out out3 );
 
 			vm.DataStack.PushInteger32( out1 );
 			vm.DataStack.PushInteger32( out2 );
+			vm.DataStack.PushInteger32( out3 );
 			
-			return 2;
+			return 3;
 		}
 		
 	}

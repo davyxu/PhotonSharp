@@ -180,6 +180,8 @@ namespace Photon
 
             bool parsing = true;
 
+            int callTimes = 0;
+
             while (parsing)
             {
                 switch( CurrTokenType )
@@ -228,13 +230,19 @@ namespace Photon
                             x = new IndexExpr(x, index[0], lpos, rpos);
                         }
                         break;
-                    case TokenType.LBracket:
+                    case TokenType.LBracket: 
                         {
+                            callTimes++;
+
+                            // 函数调用不能连续， foo()()是不可以的
+                            if ( callTimes >1)
+                            {
+                                throw new CompileException("invalid call statement", CurrTokenPos);
+                            }
 
                             Resolve(x);
 
-                            x = ParseCallExpr(x);
-
+                            x = ParseCallExpr(x);                            
                         }
                         break;
                     default:

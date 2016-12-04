@@ -1,6 +1,6 @@
 ﻿using Photon;
 using System.Collections.Generic;
-namespace PhotonCompiler
+namespace UnitTest
 {
 
     partial class Program

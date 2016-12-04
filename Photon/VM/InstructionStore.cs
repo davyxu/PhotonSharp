@@ -16,7 +16,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {            
-            return string.Format("Pkg: {0}  Const: {1}", cmd.DataA, cmd.DataB );
+            return string.Format("Const: {0}", cmd.DataA);
         }
     }
 

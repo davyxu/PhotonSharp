@@ -20,4 +20,6 @@ func foo( ){
 
 var c = foo( )
 
-var x = c()( 9 )
+var x = c()
+
+var y = x( 9 )

@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace PhotonCompiler
+namespace UnitTest
 {
     public class DelegateTest
     {
@@ -27,10 +27,11 @@ namespace PhotonCompiler
             return 9;
         }
 
-        public static void native_more(out int out1, out int out2)
+        public static void native_more(out int out1, out int out2, out int out3)
         {
             out1 = 2;
             out2 = 4;
+            out3 = 6;
         }
     }
 
@@ -66,21 +67,35 @@ namespace PhotonCompiler
 
     partial class Program
     {
-
         static void TestCase()
         {
 
-            //WrapperCodeGenerator.GenerateClass(typeof(Cat), "PhotonCompiler", "../UnitTest/CatWrapper.cs");
-            //WrapperCodeGenerator.GenerateClass(typeof(DataStackBalanceTest), "PhotonCompiler", "../UnitTest/DataStackBalanceTestWrapper.cs");
+            //WrapperCodeGenerator.GenerateClass(typeof(Cat), "UnitTest", "../UnitTest/CatWrapper.cs");
+            //WrapperCodeGenerator.GenerateClass(typeof(DataStackBalanceTest), "UnitTest", "../UnitTest/DataStackBalanceTestWrapper.cs");
 
             {
                 var testbox = new TestBox();
-                testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(), "PhotonCompiler.DataStackBalanceTestWrapper", "DataStackBalanceTest");
 
-                testbox.RunFile("DataStackBalance.pho").TestGlobalRegEqualNumber(0, 2).TestGlobalRegEqualNumber(2, 4);
+                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
+                testbox.Exe.RegisterNativeClass(typeof(CatWrapper), "DelegateTest");
+
+                testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualString(2, "cat");
             }
+            {
+                var testbox = new TestBox();
+                testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(), "UnitTest.DataStackBalanceTestWrapper", "DataStackBalanceTest");
 
-
+                testbox.RunFile("DataStackBalance.pho")
+                    .TestGlobalRegEqualNumber(0, 2)
+                    .TestGlobalRegEqualNumber(1, 4)
+                    .TestGlobalRegEqualNil(2)
+                    .TestGlobalRegEqualNumber(3, 3)
+                    .TestGlobalRegEqualNumber(4, 1)
+                    .TestGlobalRegEqualNumber(5, 9)
+                    .TestGlobalRegEqualNil(6)
+                    .TestGlobalRegEqualNumber(7, 2)
+                    .TestGlobalRegEqualNumber(8, 4);  
+            }
 
             new TestBox().RunFile("ClassInherit.pho").TestGlobalRegEqualString(1, "cat");
 
@@ -89,7 +104,7 @@ namespace PhotonCompiler
 
 
 
-            new TestBox().RunFile("ComplexClosure.pho").TestGlobalRegEqualNumber(1, 15 );
+            new TestBox().RunFile("ComplexClosure.pho").TestGlobalRegEqualNumber(2, 15 );
             new TestBox().RunFile("Package.pho").TestGlobalRegEqualNumber(0, 3);
             new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
             new TestBox().RunFile("Scope.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 1);
@@ -106,14 +121,6 @@ namespace PhotonCompiler
 
 
 
-            {
-                var testbox = new TestBox();
-
-                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
-                testbox.Exe.RegisterNativeClass(typeof(CatWrapper), "DelegateTest");
-
-                testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualString(2, "cat");
-            }
             
         }
     }

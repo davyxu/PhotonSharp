@@ -48,6 +48,12 @@ namespace Photon
                 return assign.LHS.Count;
             }
 
+            // 没有任何接收者
+            if ( Parent is ExprStmt )
+            {
+                return 0;
+            }
+
             // 无需处理返回值
             if ( Parent is ReturnStmt )
             {
@@ -55,7 +61,7 @@ namespace Photon
             }
 
 
-            return 0;
+            return 1;
         }
 
         internal override void Compile(CompileParameter param)

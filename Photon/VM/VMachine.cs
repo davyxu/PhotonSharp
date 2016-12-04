@@ -198,7 +198,7 @@ namespace Photon
         {
             if ( _currFrame.ReceiverCount != -1 )
             {
-                _dataStack.AdjustPho(_currFrame.DataStackBase + _currFrame.ReceiverCount );                
+                _dataStack.Adjust(_currFrame.DataStackBase, _currFrame.ReceiverCount, false);                
             }
 
             _callStack.Pop();

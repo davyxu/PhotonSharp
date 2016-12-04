@@ -79,64 +79,73 @@ namespace Photon
             _count -= count;
         }
 
-        // preTop + 废数据 + 有效数据,  将废弃部分去掉, 有效部分前移覆盖
-        internal void AdjustNative( int preTop, int validCount )
-        {
-            int validBegin = Count - validCount;
 
-            for (int i = 0; i < validCount; i++)
+        internal void Adjust(int preTop, int recvCount, bool reverse)
+        {
+            int retCount = _count - preTop;
+
+            int finalTop = preTop + recvCount;
+
+            _count = preTop + recvCount;
+
+            // 手工push值是按从左到右顺序， 和栈顺序反的， 需要倒置
+            if (reverse)
             {
-                // 手工填充习惯按声明顺序进行返回, 但是栈里要倒过来
-                _values[preTop + i] = _values[ validBegin + validCount - i - 1 ];
+                for (int i = 0; i < retCount/2; i++)
+                {
+                    int a = preTop + i;
+                    int b = preTop + retCount - i - 1;
+
+                    var t = _values[a];
+                    _values[a] = _values[b];
+                    _values[b] = t;
+                }
             }
 
-            _count = preTop + validCount;
-        }
+            // var a, b, c 对应  栈  -1, -2, -3
 
-        internal void AdjustPho( int expect )
-        {
-            // 收的多, 返回的变量少
-            if ( expect <= _count )
-            {
-                // 从期望的到最终数量间填充nil
-                for (int i = expect; i < _count; i++)
+            // 返回数据的多, 接收的变量少
+            if (retCount > recvCount)
+            {                
+                int nilCount = retCount - recvCount;
+
+                // 将数据上移（往栈底）
+                for (int i = 0; i < recvCount; i++)
                 {
-                    _values[i] = Value.Nil;
+                    _values[preTop + i] = _values[preTop + nilCount + i];
+                }
+                
+                // 在栈顶补Nil
+                for (int i = 0; i < nilCount;i++ )
+                {
+                    _values[preTop + recvCount + i ] = Value.Nil;
                 }
             }
             else
-            { // 收的少, 返回的变量多, 在当前返回量前填充nil
-                
-                int padding = expect - _count;
+            {   
+                int nilCount = recvCount - retCount;
 
-                for (int i = _count - 1; i < expect - 1; i++)
+                // 将数据下移（往Top）
+                for (int i = recvCount - 1; i >= 0 ; i--)
                 {
-                    // 将老值放到更高的位置
-                    _values[i + padding] = _values[i];
+                    _values[preTop + nilCount + i ] = _values[preTop + i];
+                }
 
-                    // 前边(右边)留空
-                    _values[i] = Value.Nil;
+                // 在栈底补Nil
+                for (int i = 0; i < nilCount; i++)
+                {
+                    _values[preTop + i] = Value.Nil;
                 }
             }
 
 
-            _count = expect;
+
+            
         }
 
         public int Count
         {
             get { return _count; }
-            set
-            {
-                // 设置到希望的高度
-
-                for (int i = value; i < _count; i++)
-                {
-                    _values[i] = Value.Nil;
-                }
-
-                _count = value;
-            }
         }
 
         public void PushFloat32( float v )

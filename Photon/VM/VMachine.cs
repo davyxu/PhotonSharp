@@ -22,13 +22,16 @@ namespace Photon
     }
 
     public delegate int NativeDelegate(VMachine vm);
+    public delegate void NativePropertyDelegate(object phoIns, ref object value, bool isGet );
 
     public enum NativeEntryType
     {
         StaticFunc,
         ClassMethod,
         Class,
+        Property,        
     }
+
     public sealed class NativeWrapperClassAttribute : Attribute
     {
         Type _bindingClassType;
@@ -169,6 +172,16 @@ namespace Photon
         public VMachine()
         {
             _insset = new InstructionSet(this);
+        }
+
+        public static object String2Value(string s)
+        {
+            return new ValueString(s);
+        }
+
+        public static string Value2String(object v)
+        {
+            return (v as ValueString).String;
         }
 
         public void SetHook(DebugHook hook, Action<VMachine> callback )

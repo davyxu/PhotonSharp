@@ -27,129 +27,16 @@ namespace Photon
 
                 foreach (var method in cls.Methods)
                 {
-                    if (method.Mode == WrapperFuncMode.ClassMethod)
+                    switch( method.Mode )
                     {
-                        codeGen.PrintLine("[NativeEntry(NativeEntryType.ClassMethod)]");
-                    }
-                    else
-                    {
-                        codeGen.PrintLine("[NativeEntry(NativeEntryType.StaticFunc)]");
-                    }
-                    
-
-
-                    codeGen.PrintLine("public static int ", method.Name, "( VMachine vm )");
-                    codeGen.PrintLine("{");
-                    codeGen.In();
-
-                    if (method.Mode == WrapperFuncMode.ClassMethod)
-                    {
-                        codeGen.PrintLine("var phoClassIns = vm.DataStack.GetNativeInstance<", cls.Name, ">(0);");
-                        codeGen.PrintLine();
-                    }
-
-                    
-                    // 获取输入参数
-                    int argIndex = 1;
-                    foreach (var pm in method.InputParameters)
-                    {
-                        codeGen.PrintLine("var ", pm.Name, " = vm.DataStack.Get", pm.KindString, "(", argIndex, ");");
-
-                        argIndex++;
-                    }
-
-                    if (argIndex > 1)
-                    {
-                        codeGen.PrintLine();
-                    }
-
-                    // 声明输出参数
-                    argIndex = 1;
-                    foreach (var pm in method.OutputParameters)
-                    {
-                        codeGen.PrintLine(pm.NativeKindString, " ", pm.Name," = default(",pm.NativeKindString, ");");
-
-                        argIndex++;
-                    }
-
-                    // 调用本体函数
-                    codeGen.BeginLine();
-
-                    if (method.RetParameter.Kind != ValueKind.Nil)
-                    {
-                        codeGen.Print("var phoRetArg = ");
-                    }
-
-
-                    if (method.Mode == WrapperFuncMode.ClassMethod)
-                    {
-                        codeGen.Print("phoClassIns.", method.Name, "( ");
-                    }
-                    else
-                    {
-                        codeGen.Print(cls.Name, ".", method.Name, "( ");
+                        case WrapperFuncMode.ClassMethod:
+                        case WrapperFuncMode.PackageFunc:
+                            {
+                                GenStaticOrMethod(codeGen, method, cls);
+                            }
+                            break;
                     }
                     
-
-                    // 传入输入参数
-                    argIndex = 1;
-                    foreach (var pm in method.InputParameters)
-                    {
-                        if (argIndex > 1)
-                        {
-                            codeGen.Print(", ");
-                        }
-
-                        codeGen.Print(pm.Name);
-
-                        argIndex++;
-                    }
-
-                    // 传入输出参数
-                    foreach (var pm in method.OutputParameters)
-                    {
-                        if (argIndex > 1)
-                        {
-                            codeGen.Print(", ");
-                        }
-
-                        codeGen.Print("out ", pm.Name);
-
-                        argIndex++;
-                    }
-
-                    codeGen.Print(" );\n");
-
-                    codeGen.EndLine();
-
-                    // 栈推入输出参数
-                    foreach (var pm in method.OutputParameters)
-                    {
-                        codeGen.PrintLine("vm.DataStack.Push", pm.KindString, "( ", pm.Name, " );");
-
-                        argIndex++;
-                    }
-
-                    int totalRet = method.OutputParameters.Count;
-
-                    // 栈推入返回参数
-                    if (method.RetParameter.Kind != ValueKind.Nil)
-                    {
-                        codeGen.PrintLine("vm.DataStack.Push", method.RetParameter.KindString, "( phoRetArg );");
-                        totalRet++;
-                    }
-
-
-
-
-                    // 返回返回值数量
-                    codeGen.PrintLine();
-
-                    codeGen.PrintLine("return ", totalRet, ";");
-
-
-                    codeGen.Out();
-                    codeGen.PrintLine("}");
                     codeGen.PrintLine();
                 }
 
@@ -165,6 +52,133 @@ namespace Photon
 
 
             return codeGen.ToString();
+        }
+
+        private static void GenStaticOrMethod(CodePrinter codeGen, WrapperGenFunc func, WrapperGenClass cls)
+        {
+            if (func.Mode == WrapperFuncMode.ClassMethod)
+            {
+                codeGen.PrintLine("[NativeEntry(NativeEntryType.ClassMethod)]");
+            }
+            else
+            {
+                codeGen.PrintLine("[NativeEntry(NativeEntryType.StaticFunc)]");
+            }
+
+
+
+            codeGen.PrintLine("public static int ", func.Name, "( VMachine vm )");
+            codeGen.PrintLine("{");
+            codeGen.In();
+
+            if (func.Mode == WrapperFuncMode.ClassMethod)
+            {
+                codeGen.PrintLine("var phoClassIns = vm.DataStack.GetNativeInstance<", cls.Name, ">(0);");
+                codeGen.PrintLine();
+            }
+
+
+            // 获取输入参数
+            int argIndex = 1;
+            foreach (var pm in func.InputParameters)
+            {
+                codeGen.PrintLine("var ", pm.Name, " = vm.DataStack.Get", pm.KindString, "(", argIndex, ");");
+
+                argIndex++;
+            }
+
+            if (argIndex > 1)
+            {
+                codeGen.PrintLine();
+            }
+
+            // 声明输出参数
+            argIndex = 1;
+            foreach (var pm in func.OutputParameters)
+            {
+                codeGen.PrintLine(pm.NativeKindString, " ", pm.Name, " = default(", pm.NativeKindString, ");");
+
+                argIndex++;
+            }
+
+            // 调用本体函数
+            codeGen.BeginLine();
+
+            if (func.RetParameter.Kind != ValueKind.Nil)
+            {
+                codeGen.Print("var phoRetArg = ");
+            }
+
+
+            if (func.Mode == WrapperFuncMode.ClassMethod)
+            {
+                codeGen.Print("phoClassIns.", func.Name, "( ");
+            }
+            else
+            {
+                codeGen.Print(cls.Name, ".", func.Name, "( ");
+            }
+
+
+            // 传入输入参数
+            argIndex = 1;
+            foreach (var pm in func.InputParameters)
+            {
+                if (argIndex > 1)
+                {
+                    codeGen.Print(", ");
+                }
+
+                codeGen.Print(pm.Name);
+
+                argIndex++;
+            }
+
+            // 传入输出参数
+            foreach (var pm in func.OutputParameters)
+            {
+                if (argIndex > 1)
+                {
+                    codeGen.Print(", ");
+                }
+
+                codeGen.Print("out ", pm.Name);
+
+                argIndex++;
+            }
+
+            codeGen.Print(" );\n");
+
+            codeGen.EndLine();
+
+            // 栈推入输出参数
+            foreach (var pm in func.OutputParameters)
+            {
+                codeGen.PrintLine("vm.DataStack.Push", pm.KindString, "( ", pm.Name, " );");
+
+                argIndex++;
+            }
+
+            int totalRet = func.OutputParameters.Count;
+
+            // 栈推入返回参数
+            if (func.RetParameter.Kind != ValueKind.Nil)
+            {
+                codeGen.PrintLine("vm.DataStack.Push", func.RetParameter.KindString, "( phoRetArg );");
+                totalRet++;
+            }
+
+
+
+
+            // 返回返回值数量
+            codeGen.PrintLine();
+
+            codeGen.PrintLine("return ", totalRet, ";");
+
+
+            codeGen.Out();
+            codeGen.PrintLine("}");
         }
     }
 }

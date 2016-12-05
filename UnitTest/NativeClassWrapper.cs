@@ -24,6 +24,22 @@ namespace UnitTest
 			
 			return 2;
 		}
+
+
+        [NativeEntry(NativeEntryType.Property)]
+        public static void MyProp(object phoIns, ref object value, bool isGet )
+        {
+            var phoClassIns = phoIns as NativeClass;
+
+            if (isGet)
+            {
+                VMachine.String2Value(phoClassIns.MyProp);
+            }
+            else
+            {
+                phoClassIns.MyProp = VMachine.Value2String(value);
+            }
+        }
 		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int foo( VMachine vm )

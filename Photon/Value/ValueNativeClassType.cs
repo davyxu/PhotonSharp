@@ -74,6 +74,13 @@ namespace Photon
             {
                 PropertyInfo pi = mi as PropertyInfo;
 
+                var mm = typeToScan.GetMethod(mi.Name);
+                if ( mm != null && mm.IsStatic )
+                {
+                    var dele = mm.CreateDelegate(typeof(NativePropertyDelegate)) as NativePropertyDelegate;
+                }
+                
+
                 var ci = _pkg.Exe.Constants.AddString(memberName);
 
                 _member.Add(ci, pi);
@@ -95,6 +102,12 @@ namespace Photon
 
                 if (!m.IsStatic)
                     return;
+
+                if ( attr.Type != NativeEntryType.StaticFunc &&
+                    attr.Type != NativeEntryType.ClassMethod)
+                {
+                    return;
+                }
 
                 // 让导入的代码能认识这个函数
                 Symbol symb = new Symbol();
@@ -159,6 +172,8 @@ namespace Photon
 
             return null;
         }
+
+
 
         internal static Value NativeValue2PhoValue( Type t, object v )
         {

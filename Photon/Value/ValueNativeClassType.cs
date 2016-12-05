@@ -22,7 +22,7 @@ namespace Photon
             get { return _pkg; }
         }
 
-        Dictionary<int, ValueNativeFunc> _methods = new Dictionary<int, ValueNativeFunc>();
+        Dictionary<int, object> _member = new Dictionary<int, object>();
 
         Scope _scope;
 
@@ -35,75 +35,108 @@ namespace Photon
             _scope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
         }
 
-        internal void BuildMember(string className, Type typeToScan)
+
+
+        static void IterateMember(Type typeToScan, MemberInfo[] minfo, Action<string, MemberInfo, NativeEntryAttribute> callback )
         {
-            
-
-            foreach (var m in typeToScan.GetMembers())
+            foreach (var m in minfo)
             {
-                var attr = m.GetCustomAttribute<NativeEntryAttribute>();
-                if (attr == null)
-                    continue;
-
                 // 必须是本类自己的成员
                 if (m.DeclaringType != typeToScan)
                     continue;
 
-                var methodInfo = typeToScan.GetMethod(m.Name);
+                var attr = m.GetCustomAttribute<NativeEntryAttribute>();    
 
-                if (!methodInfo.IsStatic)
-                    continue;
-
-                string methodName;
-                if (string.IsNullOrEmpty(attr.EntryName))
+                string memberName;
+                if (attr != null && !string.IsNullOrEmpty(attr.EntryName))
                 {
-                    methodName = methodInfo.Name;
+                    memberName = attr.EntryName;
                 }
                 else
                 {
-                    methodName = attr.EntryName;
+                    memberName = m.Name;
                 }
+
+                callback(memberName, m, attr);
+            }
+        }
+
+        internal void BuildMember(string className, Type typeToScan)
+        {
+            BuildMethods(className, typeToScan);
+            BuildProperties(className, typeToScan);
+        }
+
+        void BuildProperties(string className, Type typeToScan)
+        {
+
+            IterateMember(typeToScan, typeToScan.GetProperties(), (memberName, mi, attr) =>
+            {
+                PropertyInfo pi = mi as PropertyInfo;
+
+                var ci = _pkg.Exe.Constants.AddString(memberName);
+
+                _member.Add(ci, pi);
+            });
+        }
+
+        void BuildMethods(string className, Type typeToScan)
+        {
+
+            IterateMember(typeToScan, typeToScan.GetMethods(), ( memberName, mi, attr) =>
+            {
+                if (attr == null)
+                    return;                
+
+                MethodInfo m = mi as MethodInfo;
+
+                if (m.IsConstructor)
+                    return;
+
+                if (!m.IsStatic)
+                    return;
 
                 // 让导入的代码能认识这个函数
                 Symbol symb = new Symbol();
-                symb.Name = methodName;
+                symb.Name = memberName;
                 symb.Decl = null;
                 symb.Usage = SymbolUsage.Func;
 
-                var ci = _pkg.Exe.Constants.AddString(methodName);
+                var ci = _pkg.Exe.Constants.AddString(memberName);
 
-                var dele = methodInfo.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
+                var dele = m.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
 
-                switch ( attr.Type )
+                switch (attr.Type)
                 {
                     case NativeEntryType.StaticFunc:
                         {
                             // TODO 添加自定义属性可以自定义导入后使用的名称
 
-                            if (_pkg.TopScope.FindSymbol(methodName) != null)
+                            if (_pkg.TopScope.FindSymbol(memberName) != null)
                             {
-                                throw new RuntimeException("name duplicate: " + methodName);
+                                throw new RuntimeException("name duplicate: " + memberName);
                             }
 
                             _pkg.TopScope.Insert(symb);
 
-                            _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, methodName), dele));
+                            _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, memberName), dele));
                         }
                         break;
                     case NativeEntryType.ClassMethod:
                         {
-                            if (_scope.FindSymbol(methodName) != null)
+                            if (_scope.FindSymbol(memberName) != null)
                             {
-                                throw new RuntimeException("class method symbol duplicate: " + methodName);
+                                throw new RuntimeException("class method symbol duplicate: " + memberName);
                             }
 
                             _scope.Insert(symb);
 
-                            _methods.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, className, methodName), dele));
+                            _member.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, className, memberName), dele));
                         }
                         break;
                 }
-            }
+
+            });         
         }
 
 
@@ -116,15 +149,73 @@ namespace Photon
             return v.String;
         }
 
-        internal Value GetMethod(int nameKey)
+        internal object GetMember(int nameKey)
         {
-            ValueNativeFunc func;
-            if (_methods.TryGetValue(nameKey, out func))
+            object obj;
+            if (_member.TryGetValue(nameKey, out obj))
             {
-                return func;
+                return obj;
             }
 
-            return Value.Nil;
+            return null;
+        }
+
+        internal static Value NativeValue2PhoValue( Type t, object v )
+        {
+            if (t == typeof(Int32) || t == typeof(float))
+            {
+                return new ValueNumber((float)v);
+            }            
+            else if (t == typeof(string))
+            {
+                return new ValueString((string)v);
+            }            
+            else if ( t == typeof(void))
+            {
+                return Value.Nil;
+            }
+            else 
+            {
+                throw new RuntimeException("Unsupported native type mapping to language type: "+ t.ToString());
+            }
+        }
+
+        internal static object PhoValue2NativeValue(Type t, Value v)
+        {
+            switch (v.Kind) {
+                case ValueKind.Number:
+                    {
+                        var number = (v as ValueNumber).Number;
+                    
+                        if ( t == typeof(Int32) )
+                        {
+                            return (Int32)number;
+                        }
+                        else if (t == typeof(float))
+                        {
+                            return number;
+                        }
+                    }
+                    break;
+                case ValueKind.String:
+
+                    if ( t != typeof(string))
+                    {
+                        break;
+                    }
+
+                    return (v as ValueString).String;
+                case ValueKind.Nil:
+
+                    if (t != typeof(void))
+                    {
+                        break;
+                    }
+
+                    return null;
+            }
+
+            throw new RuntimeException("language type can not mapping to native type : " + v.Kind.ToString() + "," + t.ToString() );            
         }
 
         internal override ValueObject CreateInstance()

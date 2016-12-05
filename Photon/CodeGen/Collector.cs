@@ -14,7 +14,7 @@ namespace Photon
 
             var genClass = new WrapperGenClass();
             genClass.Name = cls.Name;
-            genPkg.Classes.Add(genClass);
+            genPkg.Classes.Add(genClass);            
 
             foreach (var m in cls.GetMembers())
             {

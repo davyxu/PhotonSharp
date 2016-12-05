@@ -11,6 +11,7 @@ namespace UnitTest
     {
         static void TestCase()
         {
+            TestNativeClass();
 
             TestDelegate();
 

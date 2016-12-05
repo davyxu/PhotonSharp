@@ -5,13 +5,13 @@ using System;
 
 namespace UnitTest
 {
-	[NativeWrapperClass(typeof(Cat))]
-	public class CatWrapper
-	{
+	[NativeWrapperClass(typeof(NativeClass))]
+	public class NativeClassWrapper
+	{		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int outAsRetValue( VMachine vm )
 		{
-			var phoClassIns = vm.DataStack.GetNativeInstance<Cat>(0);
+			var phoClassIns = vm.DataStack.GetNativeInstance<NativeClass>(0);
 			
 			var a = vm.DataStack.GetInteger32(1);
 			var c = vm.DataStack.GetString(2);
@@ -28,7 +28,7 @@ namespace UnitTest
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int foo( VMachine vm )
 		{
-			var phoClassIns = vm.DataStack.GetNativeInstance<Cat>(0);
+			var phoClassIns = vm.DataStack.GetNativeInstance<NativeClass>(0);
 			
 			var a = vm.DataStack.GetInteger32(1);
 			

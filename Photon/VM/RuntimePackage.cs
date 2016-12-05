@@ -12,6 +12,11 @@ namespace Photon
             get { return _name; }
         }
 
+        public override string ToString()
+        {
+            return _name;
+        }
+
         internal RuntimePackage( Package pkg )
         {
             _name = pkg.Name;            

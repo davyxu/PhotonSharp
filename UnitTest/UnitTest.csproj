@@ -41,8 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NativeClassTest.cs" />
     <Compile Include="DelegateTest.cs" />
-    <Compile Include="DelegateTestWrapper.cs" />
+    <Compile Include="NativeClassWrapper.cs" />
     <Compile Include="DataStackBalanceTest.cs" />
     <Compile Include="DataStackBalanceTestWrapper.cs">
       <SubType>Code</SubType>

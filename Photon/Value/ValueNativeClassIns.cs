@@ -22,13 +22,39 @@ namespace Photon
 
         internal override void SetMember( int nameKey, Value v )
         {
+            object obj = _type.GetMember(nameKey);
 
+            var prop = obj as PropertyInfo;
+
+            if (prop != null)
+            {
+                var lanV = ValueNativeClassType.PhoValue2NativeValue(prop.PropertyType, v);
+
+                prop.SetValue(_nativeIns, lanV);
+                return;
+            }
+
+            throw new RuntimeException("member not exists: "+ _type.Key2Name(nameKey));
         }
 
 
         internal override Value GetMember(int nameKey)
         {
-            return _type.GetMethod(nameKey);
+            object obj = _type.GetMember(nameKey);
+            var func = obj as ValueNativeFunc;
+            if (func != null)
+                return func;
+
+            var prop = obj as PropertyInfo;
+
+            if ( prop != null )
+            {                
+                var v = prop.GetValue(_nativeIns);
+
+                return ValueNativeClassType.NativeValue2PhoValue(prop.PropertyType, v);
+            }
+
+            return Value.Nil;
         }
 
         public override string DebugString()

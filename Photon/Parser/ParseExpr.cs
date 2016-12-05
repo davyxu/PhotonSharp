@@ -410,7 +410,7 @@ namespace Photon
             }
 
             // 函数调用
-            return new ExprStmt( x );
+            return new ExprStmt( x, CurrTokenPos );
         }
     }
 }

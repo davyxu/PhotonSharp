@@ -196,6 +196,7 @@ namespace Photon
 
         internal void LeaveFrame()
         {
+            // -1表示多返回值传递
             if ( _currFrame.ReceiverCount != -1 )
             {
                 _dataStack.Adjust(_currFrame.DataStackBase, _currFrame.ReceiverCount );                

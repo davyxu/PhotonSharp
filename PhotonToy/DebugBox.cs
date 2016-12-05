@@ -139,6 +139,9 @@ namespace PhotonToy
             if (_vm == null)
                 return;
 
+            if (!_thread.IsAlive)
+                return;
+
             _mode.Value = hookmode;
             switch ( hookmode )
             {

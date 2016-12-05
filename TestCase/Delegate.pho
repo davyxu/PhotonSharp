@@ -1,8 +1,12 @@
 import "DelegateTest"
 var a = DelegateTest.add( 1, 2 )
 
+// Native类访问
 var x = new(DelegateTest.Cat)
 var b = x.foo(2016)
-var c, d = x.xx(10, "a")
-var e = x.foo2(567)
-// 没有接收的参数要舍弃
+
+// C#的out出参作为语言的多返回值
+var c, d = x.outAsRetValue(10, "a")
+
+// 手动绑定
+var e = x.manualBinding(567)

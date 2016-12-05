@@ -174,14 +174,34 @@ namespace Photon
             _insset = new InstructionSet(this);
         }
 
-        public static object String2Value(string s)
+        public static object StringToValue(string s)
         {
             return new ValueString(s);
+        }        
+
+        public static object Int32ToValue(Int32 v)
+        {
+            return new ValueNumber((float)v);
         }
 
-        public static string Value2String(object v)
+        public static object FloatToValue(float v)
+        {
+            return new ValueNumber(v);
+        }
+
+        public static string ValueToString(object v)
         {
             return (v as ValueString).String;
+        }
+
+        public static Int32 ValueToInt32(object v)
+        {
+            return (Int32)(v as ValueNumber).Number;
+        }
+
+        public static float ValueToFloat(object v)
+        {
+            return (v as ValueNumber).Number;
         }
 
         public void SetHook(DebugHook hook, Action<VMachine> callback )

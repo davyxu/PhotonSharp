@@ -25,18 +25,16 @@ namespace Photon
                 codeGen.PrintLine("{");
                 codeGen.In();
 
+                foreach (var prop in cls.Properties)
+                {
+                    GenProperty(codeGen, prop, cls);
+                    codeGen.PrintLine();
+                }
+
                 foreach (var method in cls.Methods)
                 {
-                    switch( method.Mode )
-                    {
-                        case WrapperFuncMode.ClassMethod:
-                        case WrapperFuncMode.PackageFunc:
-                            {
-                                GenStaticOrMethod(codeGen, method, cls);
-                            }
-                            break;
-                    }
-                    
+
+                    GenStaticOrMethod(codeGen, method, cls);
                     codeGen.PrintLine();
                 }
 
@@ -54,7 +52,34 @@ namespace Photon
             return codeGen.ToString();
         }
 
-        private static void GenStaticOrMethod(CodePrinter codeGen, WrapperGenFunc func, WrapperGenClass cls)
+        static void GenProperty(CodePrinter codeGen, WrapperGenProperty prop, WrapperGenClass cls)
+        {
+            codeGen.PrintLine("[NativeEntry(NativeEntryType.Property)]");
+            codeGen.PrintLine("public static void ", prop.Name, "(object phoIns, ref object value, bool isGet )");
+            codeGen.PrintLine("{");
+            codeGen.In();
+
+            codeGen.PrintLine("var phoClassIns = phoIns as ", cls.Name, ";");
+            codeGen.PrintLine();
+
+            codeGen.PrintLine("if (isGet)");
+            codeGen.PrintLine("{");
+            codeGen.In();
+            codeGen.PrintLine("value = VMachine.", prop.TypeString, "ToValue(phoClassIns.",prop.Name,");");
+            codeGen.Out();
+            codeGen.PrintLine("}");
+            codeGen.PrintLine("else");
+            codeGen.PrintLine("{");
+            codeGen.In();
+            codeGen.PrintLine("phoClassIns.",prop.Name," = VMachine.ValueTo",prop.TypeString,"(value);");
+            codeGen.Out();
+            codeGen.PrintLine("}");
+
+            codeGen.Out();
+            codeGen.PrintLine("}");
+        }
+
+        static void GenStaticOrMethod(CodePrinter codeGen, WrapperGenFunc func, WrapperGenClass cls)
         {
             if (func.Mode == WrapperFuncMode.ClassMethod)
             {
@@ -82,7 +107,7 @@ namespace Photon
             int argIndex = 1;
             foreach (var pm in func.InputParameters)
             {
-                codeGen.PrintLine("var ", pm.Name, " = vm.DataStack.Get", pm.KindString, "(", argIndex, ");");
+                codeGen.PrintLine("var ", pm.Name, " = vm.DataStack.Get", pm.TypeString, "(", argIndex, ");");
 
                 argIndex++;
             }
@@ -96,7 +121,7 @@ namespace Photon
             argIndex = 1;
             foreach (var pm in func.OutputParameters)
             {
-                codeGen.PrintLine(pm.NativeKindString, " ", pm.Name, " = default(", pm.NativeKindString, ");");
+                codeGen.PrintLine(pm.NativeTypeString, " ", pm.Name, " = default(", pm.NativeTypeString, ");");
 
                 argIndex++;
             }
@@ -104,7 +129,7 @@ namespace Photon
             // 调用本体函数
             codeGen.BeginLine();
 
-            if (func.RetParameter.Kind != ValueKind.Nil)
+            if (func.RetParameter.NativeTypeString != "Nil")
             {
                 codeGen.Print("var phoRetArg = ");
             }
@@ -154,7 +179,7 @@ namespace Photon
             // 栈推入输出参数
             foreach (var pm in func.OutputParameters)
             {
-                codeGen.PrintLine("vm.DataStack.Push", pm.KindString, "( ", pm.Name, " );");
+                codeGen.PrintLine("vm.DataStack.Push", pm.TypeString, "( ", pm.Name, " );");
 
                 argIndex++;
             }
@@ -162,9 +187,9 @@ namespace Photon
             int totalRet = func.OutputParameters.Count;
 
             // 栈推入返回参数
-            if (func.RetParameter.Kind != ValueKind.Nil)
+            if (func.RetParameter.TypeString != "Nil")
             {
-                codeGen.PrintLine("vm.DataStack.Push", func.RetParameter.KindString, "( phoRetArg );");
+                codeGen.PrintLine("vm.DataStack.Push", func.RetParameter.TypeString, "( phoRetArg );");
                 totalRet++;
             }
 

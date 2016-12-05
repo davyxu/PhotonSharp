@@ -7,7 +7,22 @@ namespace UnitTest
 {
 	[NativeWrapperClass(typeof(NativeClass))]
 	public class NativeClassWrapper
-	{		
+	{
+		[NativeEntry(NativeEntryType.Property)]
+		public static void MyProp(object phoIns, ref object value, bool isGet )
+		{
+			var phoClassIns = phoIns as NativeClass;
+			
+			if (isGet)
+			{
+				value = VMachine.StringToValue(phoClassIns.MyProp);
+			}
+			else
+			{
+				phoClassIns.MyProp = VMachine.ValueToString(value);
+			}
+		}
+		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int outAsRetValue( VMachine vm )
 		{
@@ -24,22 +39,6 @@ namespace UnitTest
 			
 			return 2;
 		}
-
-
-        [NativeEntry(NativeEntryType.Property)]
-        public static void MyProp(object phoIns, ref object value, bool isGet )
-        {
-            var phoClassIns = phoIns as NativeClass;
-
-            if (isGet)
-            {
-                VMachine.String2Value(phoClassIns.MyProp);
-            }
-            else
-            {
-                phoClassIns.MyProp = VMachine.Value2String(value);
-            }
-        }
 		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int foo( VMachine vm )

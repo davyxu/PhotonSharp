@@ -40,7 +40,7 @@ namespace Photon
 
     internal class BadStmt : Stmt
     {
-        internal virtual void Compile(CompileParameter param)
+        internal override void Compile(CompileParameter param)
         {
             throw new CompileException("Bad statement", TokenPos.Invalid);
         }

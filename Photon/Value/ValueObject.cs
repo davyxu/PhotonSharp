@@ -9,12 +9,12 @@ namespace Photon
             throw new NotImplementedException();
         }
 
-        internal virtual void SetMember( int nameKey, Value v )
+        internal virtual void SetValue( int nameKey, Value v )
         {
 
         }
 
-        internal virtual Value GetMember(int nameKey)
+        internal virtual Value GetValue(int nameKey)
         {
             return Value.Nil;
         }

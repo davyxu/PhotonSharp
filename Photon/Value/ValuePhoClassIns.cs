@@ -13,7 +13,7 @@ namespace Photon
             _type = t;
         }
 
-        internal override void SetMember(int nameKey, Value v)
+        internal override void SetValue(int nameKey, Value v)
         {
             Value tt;
             if (!_type.GetVirtualMember( nameKey, out tt ))
@@ -38,7 +38,7 @@ namespace Photon
             }
         }
 
-        internal override Value GetMember(int nameKey)
+        internal override Value GetValue(int nameKey)
         {
             // 从类型虚表中取
             Value tt;

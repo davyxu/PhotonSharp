@@ -64,7 +64,9 @@ namespace Photon
         internal void BuildMember(string className, Type typeToScan)
         {
             BuildMethods(className, typeToScan);
-            BuildProperties(className, typeToScan);
+
+            // 添加使用反射的成员
+            //BuildProperties(className, typeToScan);
         }
 
         void BuildProperties(string className, Type typeToScan)
@@ -73,13 +75,6 @@ namespace Photon
             IterateMember(typeToScan, typeToScan.GetProperties(), (memberName, mi, attr) =>
             {
                 PropertyInfo pi = mi as PropertyInfo;
-
-                var mm = typeToScan.GetMethod(mi.Name);
-                if ( mm != null && mm.IsStatic )
-                {
-                    var dele = mm.CreateDelegate(typeof(NativePropertyDelegate)) as NativePropertyDelegate;
-                }
-                
 
                 var ci = _pkg.Exe.Constants.AddString(memberName);
 
@@ -103,51 +98,56 @@ namespace Photon
                 if (!m.IsStatic)
                     return;
 
-                if ( attr.Type != NativeEntryType.StaticFunc &&
-                    attr.Type != NativeEntryType.ClassMethod)
-                {
-                    return;
-                }
-
-                // 让导入的代码能认识这个函数
-                Symbol symb = new Symbol();
-                symb.Name = memberName;
-                symb.Decl = null;
-                symb.Usage = SymbolUsage.Func;
-
                 var ci = _pkg.Exe.Constants.AddString(memberName);
-
-                var dele = m.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
 
                 switch (attr.Type)
                 {
                     case NativeEntryType.StaticFunc:
-                        {
-                            // TODO 添加自定义属性可以自定义导入后使用的名称
-
-                            if (_pkg.TopScope.FindSymbol(memberName) != null)
-                            {
-                                throw new RuntimeException("name duplicate: " + memberName);
-                            }
-
-                            _pkg.TopScope.Insert(symb);
-
-                            _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, memberName), dele));
-                        }
-                        break;
                     case NativeEntryType.ClassMethod:
                         {
-                            if (_scope.FindSymbol(memberName) != null)
+                            // 让导入的代码能认识这个函数
+                            Symbol symb = new Symbol();
+                            symb.Name = memberName;
+                            symb.Decl = null;
+                            symb.Usage = SymbolUsage.Func;
+
+                            var dele = m.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
+
+                            if (attr.Type == NativeEntryType.StaticFunc)
                             {
-                                throw new RuntimeException("class method symbol duplicate: " + memberName);
+                                if (_pkg.TopScope.FindSymbol(memberName) != null)
+                                {
+                                    throw new RuntimeException("name duplicate: " + memberName);
+                                }
+
+                                _pkg.TopScope.Insert(symb);
+
+                                _pkg.Exe.AddFunc(new ValueNativeFunc(new ObjectName(_pkg.Name, memberName), dele));
                             }
+                            else
+                            {
+                                if (_scope.FindSymbol(memberName) != null)
+                                {
+                                    throw new RuntimeException("class method symbol duplicate: " + memberName);
+                                }
 
-                            _scope.Insert(symb);
+                                _scope.Insert(symb);
 
-                            _member.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, className, memberName), dele));
+                                _member.Add(ci, new ValueNativeFunc(new ObjectName(_pkg.Name, className, memberName), dele));
+                            }
+                        }
+                        break;
+                    case NativeEntryType.Property:
+                        {
+                            var dele = m.CreateDelegate(typeof(NativePropertyDelegate)) as NativePropertyDelegate;
+
+                            _member.Add(ci, dele);
                         }
                         break;
                 }
+
+
+               
 
             });         
         }

@@ -130,7 +130,7 @@ namespace Photon
         {
             var c = vm.DataStack.Pop().CastObject();
 
-            vm.DataStack.Push(c.GetMember(cmd.DataA));
+            vm.DataStack.Push(c.GetValue(cmd.DataA));
 
             return true;
         }
@@ -289,7 +289,7 @@ namespace Photon
         {
             var ci = vm.DataStack.Pop().CastObject();
 
-            vm.DataStack.Push(ci.GetMember(cmd.DataA));
+            vm.DataStack.Push(ci.GetValue(cmd.DataA));
 
             return true;
         }
@@ -309,7 +309,7 @@ namespace Photon
 
             var v = vm.DataStack.Pop();
 
-            ci.SetMember(cmd.DataA, v);
+            ci.SetValue(cmd.DataA, v);
 
             return true;
         }

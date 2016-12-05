@@ -47,7 +47,7 @@ namespace UnitTest
     {
         static void TestNativeClass()
         {
-           // WrapperCodeGenerator.GenerateClass(typeof(NativeClass), "UnitTest", "../UnitTest/NativeClassWrapper.cs");
+            //WrapperCodeGenerator.GenerateClass(typeof(NativeClass), "UnitTest", "../UnitTest/NativeClassWrapper.cs");
 
             var testbox = new TestBox();
             testbox.Exe.RegisterNativeClass(typeof(NativeClassWrapper), "NativeClassTest");
@@ -56,7 +56,8 @@ namespace UnitTest
                 .TestGlobalRegEqualString(1, "cat")
                 .TestGlobalRegEqualNumber(2, 89)
                 .TestGlobalRegEqualString(3, "xx")
-                .TestGlobalRegEqualString(4, "wa");
+                .TestGlobalRegEqualString(4, "wa")
+                .TestGlobalRegEqualString(5, "HP");
         }
     }
 }

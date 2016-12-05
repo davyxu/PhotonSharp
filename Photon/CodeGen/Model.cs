@@ -8,16 +8,30 @@ namespace Photon
     class WrapperGenParameter
     {
         public string Name;
-        public ValueKind Kind;
-        public string KindString;
-        public string NativeKindString;
+        public string TypeString;
+        public string NativeTypeString;
 
         internal static WrapperGenParameter FromParameterInfo(ParameterInfo pi)
         {
             var genParam = new WrapperGenParameter();
             genParam.Name = pi.Name;
 
-            if (!genParam.SetKindByType(pi.ParameterType))
+            Type t;
+            // out类型, 要转下
+            if (pi.ParameterType.IsByRef)
+            {
+                t = pi.ParameterType.GetElementType();
+            }
+            else
+            {
+                t = pi.ParameterType;
+            }
+
+            genParam.NativeTypeString = t.Name;
+
+            genParam.TypeString = GetTypeString(t);
+
+            if (string.IsNullOrEmpty(genParam.TypeString))
             {
                 throw new RuntimeException("Unknown parameter type: " + pi.ToString());
             }
@@ -25,47 +39,26 @@ namespace Photon
             return genParam;
         }
 
-        internal bool SetKindByType(Type t )
+        internal static string GetTypeString(Type t )
         {
-            // out类型, 要转下
-            if ( t.IsByRef )
-            {
-                t = t.GetElementType();
-            }
-
-            NativeKindString = t.Name;
-
             if (t == typeof(Int32))
             {
-                Kind = ValueKind.Number;
-                KindString = "Integer32";
+                return "Integer32";
             }
             else if ( t == typeof(float))
             {
-                Kind = ValueKind.Number;
-                KindString = "Float32";
+                return "Float32";
             }
             else if (t == typeof(string))
             {
-                Kind = ValueKind.String;
-                KindString = "String";
+                return "String";
             }
             else if ( t == typeof(void))
             {
-                Kind = ValueKind.Nil;
-                KindString = "Nil";
+                return "Nil";
             }
-            else if ( t.IsClass )
-            {
-                Kind = ValueKind.NativeClassInstance;
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
-
+            
+            return string.Empty;
         }
     }
 
@@ -86,10 +79,17 @@ namespace Photon
        
     }
 
+    class WrapperGenProperty
+    {
+        public string Name;
+        public string TypeString;
+    }
+
     class WrapperGenClass
     {
         public string Name;
         public List<WrapperGenFunc> Methods = new List<WrapperGenFunc>();
+        public List<WrapperGenProperty> Properties = new List<WrapperGenProperty>();
     }
 
 

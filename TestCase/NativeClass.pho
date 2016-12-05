@@ -12,6 +12,8 @@ var c, d = x.outAsRetValue(10, "a")
 // 手动绑定
 var e = x.manualBinding(567)
 
+// 访问C#的属性
 var f = x.MyProp
 
+// 设置C#的属性
 x.MyProp = "MP"

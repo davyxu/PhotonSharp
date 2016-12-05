@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Photon
 {
@@ -20,39 +19,57 @@ namespace Photon
             _nativeIns = nativeIns;
         }
 
-        internal override void SetMember( int nameKey, Value v )
+        internal override void SetValue( int nameKey, Value v )
         {
             object obj = _type.GetMember(nameKey);
 
-            var prop = obj as PropertyInfo;
-
-            if (prop != null)
+            var fastProp = obj as NativePropertyDelegate;
+            if (fastProp != null)
             {
-                var lanV = ValueNativeClassType.PhoValue2NativeValue(prop.PropertyType, v);
-
-                prop.SetValue(_nativeIns, lanV);
+                object retValue = v;
+                fastProp(_nativeIns, ref retValue, false);
                 return;
             }
+
+            //var prop = obj as PropertyInfo;
+            //if (prop != null)
+            //{
+            //    var lanV = ValueNativeClassType.PhoValue2NativeValue(prop.PropertyType, v);
+
+            //    prop.SetValue(_nativeIns, lanV);
+            //    return;
+            //}
 
             throw new RuntimeException("member not exists: "+ _type.Key2Name(nameKey));
         }
 
 
-        internal override Value GetMember(int nameKey)
+        internal override Value GetValue(int nameKey)
         {
             object obj = _type.GetMember(nameKey);
             var func = obj as ValueNativeFunc;
             if (func != null)
                 return func;
 
-            var prop = obj as PropertyInfo;
-
-            if ( prop != null )
-            {                
-                var v = prop.GetValue(_nativeIns);
-
-                return ValueNativeClassType.NativeValue2PhoValue(prop.PropertyType, v);
+            var fastProp = obj as NativePropertyDelegate;
+            if (fastProp != null)
+            {
+                object retValue = null;
+                fastProp(_nativeIns, ref retValue, true);
+                return retValue as Value;
             }
+
+            // 使用反射访问的属性
+            //var prop = obj as PropertyInfo;
+
+            //if (prop != null)
+            //{
+            //    var v = prop.GetValue(_nativeIns);
+
+            //    return ValueNativeClassType.NativeValue2PhoValue(prop.PropertyType, v);
+            //}
+
+            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));
 
             return Value.Nil;
         }

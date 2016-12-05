@@ -28,14 +28,20 @@ namespace Photon
             // 外部调用不进行栈调整
             var preTop = vm.DataStack.Count - argCount;
 
-
             if (_entry != null)
             {
                 // 暂时不使用返回值， 可以通过前后top差判断出来
                 _entry(vm);
             }
 
-            vm.DataStack.Adjust(preTop, receiverCount, true );
+            // 手工push值是按从左到右顺序， 和栈顺序反的， 需要倒置
+            vm.DataStack.Reverse(preTop);
+
+            // 去掉输入参数
+            vm.DataStack.PopMulti(argCount);
+
+            // 调整返回参
+            vm.DataStack.Adjust(preTop, receiverCount );
 
             return true;
         }

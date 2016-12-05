@@ -11,10 +11,10 @@ namespace UnitTest
         public static int AddValue( VMachine vm )
         {                 
             
-            var a = vm.DataStack.GetFloat32(-1);
-            var b = vm.DataStack.GetFloat32(-2);
+            var a = vm.DataStack.GetInteger32(0);
+            var b = vm.DataStack.GetInteger32(1);
 
-            vm.DataStack.PushFloat32(a + b);            
+            vm.DataStack.PushInteger32(a + b);            
 
             return 1;
         }
@@ -79,11 +79,15 @@ namespace UnitTest
                 testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
                 testbox.Exe.RegisterNativeClass(typeof(CatWrapper), "DelegateTest");
 
-                testbox.RunFile("Delegate.pho").TestGlobalRegEqualNumber(0, 3).TestGlobalRegEqualString(2, "cat");
+                testbox.RunFile("Delegate.pho")
+                    .TestGlobalRegEqualNumber(0, 3)
+                    .TestGlobalRegEqualString(2, "cat");
             }
             {
                 var testbox = new TestBox();
-                testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(), "UnitTest.DataStackBalanceTestWrapper", "DataStackBalanceTest");
+                testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(), 
+                    "UnitTest.DataStackBalanceTestWrapper", 
+                    "DataStackBalanceTest");
 
                 testbox.RunFile("DataStackBalance.pho")
                     .TestGlobalRegEqualNumber(0, 2)
@@ -97,31 +101,45 @@ namespace UnitTest
                     .TestGlobalRegEqualNumber(8, 4);  
             }
 
-            new TestBox().RunFile("ClassInherit.pho").TestGlobalRegEqualString(1, "cat");
+            new TestBox().RunFile("ClassInherit.pho")
+                .TestGlobalRegEqualString(1, "cat");
 
-            new TestBox().RunFile("Class.pho").TestGlobalRegEqualNumber(1, 5);
-            new TestBox().RunFile("Math.pho").TestGlobalRegEqualNumber(0, -1);
+            new TestBox().RunFile("Class.pho")
+                .TestGlobalRegEqualNumber(1, 5);
 
+            new TestBox().RunFile("Math.pho")
+                .TestGlobalRegEqualNumber(0, -1);
 
+            new TestBox().RunFile("ComplexClosure.pho")
+                .TestGlobalRegEqualNumber(2, 15 );
 
-            new TestBox().RunFile("ComplexClosure.pho").TestGlobalRegEqualNumber(2, 15 );
-            new TestBox().RunFile("Package.pho").TestGlobalRegEqualNumber(0, 3);
-            new TestBox().RunFile("Closure.pho").TestGlobalRegEqualNumber(1, 12);
-            new TestBox().RunFile("Scope.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 1);
+            new TestBox().RunFile("Package.pho")
+                .TestGlobalRegEqualNumber(0, 3);
+
+            new TestBox().RunFile("Closure.pho")
+                .TestGlobalRegEqualNumber(1, 12);
+
+            new TestBox().RunFile("Scope.pho")
+                .TestGlobalRegEqualNumber(0, 1)
+                .TestGlobalRegEqualNumber(1, 1);
             
-            new TestBox().RunFile("ForLoop.pho").TestGlobalRegEqualNumber(0, 8);
-            new TestBox().RunFile("If.pho").TestGlobalRegEqualNumber(0, 1).TestGlobalRegEqualNumber(1, 5);
-            new TestBox().RunFile("MultiCall.pho").TestGlobalRegEqualNumber(0, 15);
-            new TestBox().RunFile("SwapVar.pho").TestGlobalRegEqualNumber(0, 2).TestGlobalRegEqualNumber(1, 1);
-            new TestBox().RunFile("WhileLoop.pho").TestGlobalRegEqualNumber(0, 3);
+            new TestBox().RunFile("ForLoop.pho")
+                .TestGlobalRegEqualNumber(0, 8);
 
+            new TestBox().RunFile("If.pho")
+                .TestGlobalRegEqualNumber(0, 1)
+                .TestGlobalRegEqualNumber(1, 5);
 
-            
+            new TestBox().RunFile("MultiCall.pho")
+                .TestGlobalRegEqualNumber(0, 15);
 
+            new TestBox().RunFile("SwapVar.pho")
+                .TestGlobalRegEqualNumber(0, 2)
+                .TestGlobalRegEqualNumber(1, 1);
 
+            new TestBox().RunFile("WhileLoop.pho")
+                .TestGlobalRegEqualNumber(0, 3);
 
-
-            
         }
     }
 }

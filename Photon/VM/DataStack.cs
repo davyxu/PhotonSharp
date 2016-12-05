@@ -79,28 +79,28 @@ namespace Photon
             _count -= count;
         }
 
+        internal void Reverse(int preTop )
+        {
+            int retCount = _count - preTop;
 
-        internal void Adjust(int preTop, int recvCount, bool reverse)
+            for (int i = 0; i < retCount / 2; i++)
+            {
+                int a = preTop + i;
+                int b = preTop + retCount - i - 1;
+
+                var t = _values[a];
+                _values[a] = _values[b];
+                _values[b] = t;
+            }
+        }
+
+        internal void Adjust(int preTop, int recvCount )
         {
             int retCount = _count - preTop;
 
             int finalTop = preTop + recvCount;
 
             _count = preTop + recvCount;
-
-            // 手工push值是按从左到右顺序， 和栈顺序反的， 需要倒置
-            if (reverse)
-            {
-                for (int i = 0; i < retCount/2; i++)
-                {
-                    int a = preTop + i;
-                    int b = preTop + retCount - i - 1;
-
-                    var t = _values[a];
-                    _values[a] = _values[b];
-                    _values[b] = t;
-                }
-            }
 
             // var a, b, c 对应  栈  -1, -2, -3
 
@@ -121,7 +121,7 @@ namespace Photon
                     _values[preTop + recvCount + i ] = Value.Nil;
                 }
             }
-            else
+            else if (retCount < recvCount)
             {   
                 int nilCount = recvCount - retCount;
 

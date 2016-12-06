@@ -8,7 +8,7 @@ namespace Photon
 
         object _nativeIns;
 
-        internal override object Instance
+        internal override object Raw
         {
             get { return _nativeIns; }
         }
@@ -23,7 +23,7 @@ namespace Photon
         {
             object obj = _type.GetMember(nameKey);
 
-            var fastProp = obj as NativePropertyDelegate;
+            var fastProp = obj as NativeProperty;
             if (fastProp != null)
             {
                 object retValue = v;
@@ -51,7 +51,7 @@ namespace Photon
             if (func != null)
                 return func;
 
-            var fastProp = obj as NativePropertyDelegate;
+            var fastProp = obj as NativeProperty;
             if (fastProp != null)
             {
                 object retValue = null;

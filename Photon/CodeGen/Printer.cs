@@ -20,7 +20,7 @@ namespace Photon
 
             foreach (var cls in genPkg.Classes)
             {
-                codeGen.PrintLine("[NativeWrapperClass(typeof(", cls.Name, "))]");
+                codeGen.PrintLine("[NativeWrapperClass(typeof(", cls.FullName, "))]");
                 codeGen.PrintLine("public class ", cls.Name, "Wrapper");
                 codeGen.PrintLine("{");
                 codeGen.In();
@@ -62,18 +62,31 @@ namespace Photon
             codeGen.PrintLine("var phoClassIns = phoIns as ", cls.Name, ";");
             codeGen.PrintLine();
 
-            codeGen.PrintLine("if (isGet)");
-            codeGen.PrintLine("{");
-            codeGen.In();
-            codeGen.PrintLine("value = VMachine.", prop.TypeString, "ToValue(phoClassIns.",prop.Name,");");
-            codeGen.Out();
-            codeGen.PrintLine("}");
-            codeGen.PrintLine("else");
-            codeGen.PrintLine("{");
-            codeGen.In();
-            codeGen.PrintLine("phoClassIns.",prop.Name," = VMachine.ValueTo",prop.TypeString,"(value);");
-            codeGen.Out();
-            codeGen.PrintLine("}");
+            if (prop.CanRead)
+            {
+                codeGen.PrintLine("if (isGet)");
+                codeGen.PrintLine("{");
+                codeGen.In();
+                codeGen.PrintLine("value = Convertor.", prop.TypeString, "ToValue(phoClassIns.", prop.Name, ");");
+                codeGen.Out();
+                codeGen.PrintLine("}");
+            }
+            
+
+            if (prop.CanWrite)
+            {
+                if (prop.CanRead)
+                {
+                    codeGen.PrintLine("else");
+                }
+
+                codeGen.PrintLine("{");
+                codeGen.In();
+                codeGen.PrintLine("phoClassIns.", prop.Name, " = Convertor.ValueTo", prop.TypeString, "(value);");
+                codeGen.Out();
+                codeGen.PrintLine("}");
+            }
+            
 
             codeGen.Out();
             codeGen.PrintLine("}");
@@ -92,13 +105,13 @@ namespace Photon
 
 
 
-            codeGen.PrintLine("public static int ", func.Name, "( VMachine vm )");
+            codeGen.PrintLine("public static int ", func.Name, "( VMachine phoVM )");
             codeGen.PrintLine("{");
-            codeGen.In();
+            codeGen.In();            
 
             if (func.Mode == WrapperFuncMode.ClassMethod)
             {
-                codeGen.PrintLine("var phoClassIns = vm.DataStack.GetNativeInstance<", cls.Name, ">(0);");
+                codeGen.PrintLine("var phoClassIns = phoVM.DataStack.GetNativeInstance<", cls.FullName, ">(0);");
                 codeGen.PrintLine();
             }
 
@@ -107,7 +120,7 @@ namespace Photon
             int argIndex = 1;
             foreach (var pm in func.InputParameters)
             {
-                codeGen.PrintLine("var ", pm.Name, " = vm.DataStack.Get", pm.TypeString, "(", argIndex, ");");
+                codeGen.PrintLine("var ", pm.Name, " = phoVM.DataStack.Get", pm.TypeString, "(", argIndex, ");");
 
                 argIndex++;
             }
@@ -129,7 +142,8 @@ namespace Photon
             // 调用本体函数
             codeGen.BeginLine();
 
-            if (func.RetParameter.NativeTypeString != "Nil")
+            if (func.RetParameter.NativeTypeString != "Nil" &&
+                func.RetParameter.NativeTypeString != "Void")
             {
                 codeGen.Print("var phoRetArg = ");
             }
@@ -141,7 +155,7 @@ namespace Photon
             }
             else
             {
-                codeGen.Print(cls.Name, ".", func.Name, "( ");
+                codeGen.Print(cls.FullName, ".", func.Name, "( ");
             }
 
 
@@ -179,7 +193,7 @@ namespace Photon
             // 栈推入输出参数
             foreach (var pm in func.OutputParameters)
             {
-                codeGen.PrintLine("vm.DataStack.Push", pm.TypeString, "( ", pm.Name, " );");
+                codeGen.PrintLine("phoVM.DataStack.Push", pm.TypeString, "( ", pm.Name, " );");
 
                 argIndex++;
             }
@@ -189,7 +203,7 @@ namespace Photon
             // 栈推入返回参数
             if (func.RetParameter.TypeString != "Nil")
             {
-                codeGen.PrintLine("vm.DataStack.Push", func.RetParameter.TypeString, "( phoRetArg );");
+                codeGen.PrintLine("phoVM.DataStack.Push", func.RetParameter.TypeString, "( phoRetArg );");
                 totalRet++;
             }
 

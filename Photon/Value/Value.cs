@@ -5,6 +5,7 @@ namespace Photon
     {
         Nil = 0,
         Number,
+        Bool,
         String,
         Func,        
         ClassType,
@@ -13,7 +14,7 @@ namespace Photon
         NativeClassInstance,
     }
 
-    class Value
+    partial class Value
     {
         internal virtual bool Equal(Value other)
         {
@@ -29,9 +30,7 @@ namespace Photon
 
         public virtual string DebugString( )
         {
-            throw new RuntimeException("NotImplementToString");
-
-            return "(NotImplementToString)";
+            throw new RuntimeException("NotImplementToString");            
         }
 
         public virtual ValueKind Kind
@@ -44,82 +43,7 @@ namespace Photon
             get { return string.Empty; }
         }
 
-        public float CastNumber( )
-        {
-            var v = this as ValueNumber;
-            if (v == null)
-            {
-                throw new RuntimeException("expect number");                
-            }
-
-            return v.Number;
-        }
-        public string CastString()
-        {
-            var v = this as ValueString;
-            if (v == null)
-            {
-                throw new RuntimeException("expect string");
-            }
-
-            return v.String;
-        }
-
-
-        public ValueObject CastObject()
-        {
-            var v = this as ValueObject;
-            if (v == null)
-            {
-                throw new RuntimeException("expect object");
-            }
-
-            return v;
-        }
-
-        public ValueFunc CastFunc()
-        {
-            var v = this as ValueFunc;
-            if (v == null)
-            {
-                throw new RuntimeException("expect function");
-            }
-
-            return v;
-        }
-
-        public ValueClosure CastClosure()
-        {
-            var v = this as ValueClosure;
-            if (v == null)
-            {
-                throw new RuntimeException("expect closure");
-            }
-
-            return v;
-        }
-
-        public ValueClassType CastClassType()
-        {
-            var v = this as ValueClassType;
-            if (v == null)
-            {
-                throw new RuntimeException("expect class type");
-            }
-
-            return v;
-        }
-
-        public ValuePhoClassIns CastClassInstance()
-        {
-            var v = this as ValuePhoClassIns;
-            if (v == null)
-            {
-                throw new RuntimeException("expect class instance");
-            }
-
-            return v;
-        }
+     
     }
 
 

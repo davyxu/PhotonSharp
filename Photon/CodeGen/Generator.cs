@@ -5,10 +5,10 @@ namespace Photon
 {
     public class WrapperCodeGenerator
     {
-        public static void GenerateClass(Type cls, string pkgName, string filename)
+        public static void GenerateClass(Type cls, string csharpNamespaceName, string filename)
         {
             var genPkg = new WrapperGenPackage();
-            genPkg.Name = pkgName;
+            genPkg.Name = csharpNamespaceName;
             WrapperCodeCollector.CollectClassInfo(genPkg, cls, filename);
 
             var content = WrapperCodePrinter.Print(genPkg );

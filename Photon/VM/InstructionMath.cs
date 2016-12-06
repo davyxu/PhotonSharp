@@ -6,8 +6,8 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var a = vm.DataStack.Pop().CastNumber();
-            var b = vm.DataStack.Pop().CastNumber();
+            var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
+            var b = Convertor.ValueToFloat32(vm.DataStack.Pop());
 
             float c;
 
@@ -33,7 +33,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var a = vm.DataStack.Pop().CastNumber();            
+            var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
 
             float c;
 

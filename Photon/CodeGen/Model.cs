@@ -29,7 +29,7 @@ namespace Photon
 
             genParam.NativeTypeString = t.Name;
 
-            genParam.TypeString = GetTypeString(t);
+            genParam.TypeString = Convertor.NativeTypeToTypeName(t);
 
             if (string.IsNullOrEmpty(genParam.TypeString))
             {
@@ -37,28 +37,6 @@ namespace Photon
             }
 
             return genParam;
-        }
-
-        internal static string GetTypeString(Type t )
-        {
-            if (t == typeof(Int32))
-            {
-                return "Integer32";
-            }
-            else if ( t == typeof(float))
-            {
-                return "Float32";
-            }
-            else if (t == typeof(string))
-            {
-                return "String";
-            }
-            else if ( t == typeof(void))
-            {
-                return "Nil";
-            }
-            
-            return string.Empty;
         }
     }
 
@@ -83,13 +61,21 @@ namespace Photon
     {
         public string Name;
         public string TypeString;
+        public bool CanRead;
+        public bool CanWrite;
     }
 
     class WrapperGenClass
     {
         public string Name;
+        public string NativePackageName;
         public List<WrapperGenFunc> Methods = new List<WrapperGenFunc>();
         public List<WrapperGenProperty> Properties = new List<WrapperGenProperty>();
+
+        public string FullName
+        {
+            get { return NativePackageName + "." + Name; }
+        }
     }
 
 

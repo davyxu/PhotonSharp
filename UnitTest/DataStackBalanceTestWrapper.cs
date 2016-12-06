@@ -5,13 +5,13 @@ using System;
 
 namespace UnitTest
 {
-	[NativeWrapperClass(typeof(DataStackBalanceTest))]
+	[NativeWrapperClass(typeof(UnitTest.DataStackBalanceTest))]
 	public class DataStackBalanceTestWrapper
 	{
 		[NativeEntry(NativeEntryType.StaticFunc)]
 		public static int native_less( VMachine vm )
 		{
-			var phoRetArg = DataStackBalanceTest.native_less(  );
+			var phoRetArg = UnitTest.DataStackBalanceTest.native_less(  );
 
 			vm.DataStack.PushInteger32( phoRetArg );
 			
@@ -24,7 +24,7 @@ namespace UnitTest
 			Int32 out1 = default(Int32);
 			Int32 out2 = default(Int32);
 			Int32 out3 = default(Int32);
-			DataStackBalanceTest.native_more( out out1, out out2, out out3 );
+			UnitTest.DataStackBalanceTest.native_more( out out1, out out2, out out3 );
 
 			vm.DataStack.PushInteger32( out1 );
 			vm.DataStack.PushInteger32( out2 );

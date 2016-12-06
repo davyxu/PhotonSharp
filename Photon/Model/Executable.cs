@@ -30,6 +30,11 @@ namespace Photon
         // 常量表
         ConstantSet _constSet = new ConstantSet();
 
+        public Executable()
+        {
+            Array.Register(this);
+        }
+
         public List<File> FileList
         {
             get { return _file; }

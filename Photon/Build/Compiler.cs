@@ -93,7 +93,10 @@ namespace Photon
             cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
         }
 
-
+        public static void InitBuildin()
+        {
+            Array.GenerateWrapper();
+        }
 
         public static Executable Compile(string filename)
         {            

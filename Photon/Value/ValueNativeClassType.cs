@@ -6,8 +6,7 @@ using System.Reflection;
 namespace Photon
 {
     class ValueNativeClassType : ValueClassType
-    {                   
-        Type _wrapper;
+    {                           
         Type _instClass;
 
         Package _pkg;
@@ -111,7 +110,7 @@ namespace Photon
                             symb.Decl = null;
                             symb.Usage = SymbolUsage.Func;
 
-                            var dele = m.CreateDelegate(typeof(NativeDelegate)) as NativeDelegate;
+                            var dele = m.CreateDelegate(typeof(NativeFunction)) as NativeFunction;
 
                             if (attr.Type == NativeEntryType.StaticFunc)
                             {
@@ -139,7 +138,7 @@ namespace Photon
                         break;
                     case NativeEntryType.Property:
                         {
-                            var dele = m.CreateDelegate(typeof(NativePropertyDelegate)) as NativePropertyDelegate;
+                            var dele = m.CreateDelegate(typeof(NativeProperty)) as NativeProperty;
 
                             _member.Add(ci, dele);
                         }
@@ -159,7 +158,7 @@ namespace Photon
             if (v == null)
                 return string.Empty;
 
-            return v.String;
+            return v.Raw;
         }
 
         internal object GetMember(int nameKey)
@@ -171,66 +170,6 @@ namespace Photon
             }
 
             return null;
-        }
-
-
-
-        internal static Value NativeValue2PhoValue( Type t, object v )
-        {
-            if (t == typeof(Int32) || t == typeof(float))
-            {
-                return new ValueNumber((float)v);
-            }            
-            else if (t == typeof(string))
-            {
-                return new ValueString((string)v);
-            }            
-            else if ( t == typeof(void))
-            {
-                return Value.Nil;
-            }
-            else 
-            {
-                throw new RuntimeException("Unsupported native type mapping to language type: "+ t.ToString());
-            }
-        }
-
-        internal static object PhoValue2NativeValue(Type t, Value v)
-        {
-            switch (v.Kind) {
-                case ValueKind.Number:
-                    {
-                        var number = (v as ValueNumber).Number;
-                    
-                        if ( t == typeof(Int32) )
-                        {
-                            return (Int32)number;
-                        }
-                        else if (t == typeof(float))
-                        {
-                            return number;
-                        }
-                    }
-                    break;
-                case ValueKind.String:
-
-                    if ( t != typeof(string))
-                    {
-                        break;
-                    }
-
-                    return (v as ValueString).String;
-                case ValueKind.Nil:
-
-                    if (t != typeof(void))
-                    {
-                        break;
-                    }
-
-                    return null;
-            }
-
-            throw new RuntimeException("language type can not mapping to native type : " + v.Kind.ToString() + "," + t.ToString() );            
         }
 
         internal override ValueObject CreateInstance()

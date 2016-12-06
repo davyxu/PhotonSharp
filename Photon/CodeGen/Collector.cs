@@ -14,6 +14,7 @@ namespace Photon
 
             var genClass = new WrapperGenClass();
             genClass.Name = cls.Name;
+            genClass.NativePackageName = cls.Namespace;
             genPkg.Classes.Add(genClass);
 
 
@@ -25,7 +26,9 @@ namespace Photon
 
                 var prop = new WrapperGenProperty();
                 prop.Name = propInfo.Name;
-                prop.TypeString = WrapperGenParameter.GetTypeString(propInfo.PropertyType);
+                prop.TypeString = Convertor.NativeTypeToTypeName(propInfo.PropertyType);
+                prop.CanRead = propInfo.CanRead;
+                prop.CanWrite = propInfo.CanWrite;
                 genClass.Properties.Add(prop);
             }
 

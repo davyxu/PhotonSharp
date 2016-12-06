@@ -65,11 +65,19 @@
     <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Node.cs" />
+    <Compile Include="Builtin\Array.cs" />
+    <Compile Include="Builtin\ArrayWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\NativeType.cs" />
+    <Compile Include="TypeInterface\StackAccessor.cs" />
+    <Compile Include="TypeInterface\Convertor.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />
     <Compile Include="CodeGen\Printer.cs" />
     <Compile Include="CodeGen\Model.cs" />
     <Compile Include="CodeGen\Collector.cs" />
+    <Compile Include="Value\ValueBool.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
@@ -99,7 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\OpCode.cs" />
     <Compile Include="Model\Token.cs" />
-    <Compile Include="VM\DataAccessor.cs" />
+    <Compile Include="TypeInterface\DataAccessor.cs" />
     <Compile Include="VM\Instruction.cs" />
     <Compile Include="VM\InstructionFlow.cs" />
     <Compile Include="VM\InstructionMath.cs" />

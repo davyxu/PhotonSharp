@@ -24,7 +24,10 @@ namespace UnitTest
 
         static void TestDataStackBalance()
         {
-            //WrapperCodeGenerator.GenerateClass(typeof(DataStackBalanceTest), "UnitTest", "../UnitTest/DataStackBalanceTestWrapper.cs");
+            if (GenAllFile)
+            {
+                WrapperCodeGenerator.GenerateClass(typeof(DataStackBalanceTest), "UnitTest", "../UnitTest/DataStackBalanceTestWrapper.cs");
+            }
 
             var testbox = new TestBox();
             testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(),
@@ -32,15 +35,15 @@ namespace UnitTest
                 "DataStackBalanceTest");
 
             testbox.RunFile("DataStackBalance.pho")
-                .TestGlobalRegEqualNumber(0, 2)
-                .TestGlobalRegEqualNumber(1, 4)
-                .TestGlobalRegEqualNil(2)
-                .TestGlobalRegEqualNumber(3, 3)
-                .TestGlobalRegEqualNumber(4, 1)
-                .TestGlobalRegEqualNumber(5, 9)
-                .TestGlobalRegEqualNil(6)
-                .TestGlobalRegEqualNumber(7, 2)
-                .TestGlobalRegEqualNumber(8, 4);  
+                .CheckGlobalRegEqualNumber(0, 2)
+                .CheckGlobalRegEqualNumber(1, 4)
+                .CheckGlobalRegEqualNil(2)
+                .CheckGlobalRegEqualNumber(3, 3)
+                .CheckGlobalRegEqualNumber(4, 1)
+                .CheckGlobalRegEqualNumber(5, 9)
+                .CheckGlobalRegEqualNil(6)
+                .CheckGlobalRegEqualNumber(7, 2)
+                .CheckGlobalRegEqualNumber(8, 4);  
         }
     }
 }

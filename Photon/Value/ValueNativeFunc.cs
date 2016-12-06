@@ -4,7 +4,7 @@ namespace Photon
 
     class ValueNativeFunc : ValueFunc
     {
-        NativeDelegate _entry;
+        NativeFunction _entry;
 
         internal ValueNativeFunc(ObjectName name)
             : base( name )
@@ -12,7 +12,7 @@ namespace Photon
             
         }
 
-        internal ValueNativeFunc(ObjectName name, NativeDelegate entry)
+        internal ValueNativeFunc(ObjectName name, NativeFunction entry)
             : base(name)
         {
             _entry = entry;

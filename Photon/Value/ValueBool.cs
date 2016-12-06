@@ -1,23 +1,23 @@
 ﻿
 namespace Photon
 {
-    class ValueNumber : Value
+    class ValueBool : Value
     {
-        float _data = 0;
+        bool _data;
 
-        public ValueNumber( float data )
+        public ValueBool(bool data)
         {
             _data = data;
         }
 
-        public float Raw
+        public bool Raw
         {
             get { return _data; }
         }
 
         internal override bool Equal(Value other)
         {
-            var otherT = other as ValueNumber;
+            var otherT = other as ValueBool;
             if (otherT == null)
                 return false;
 
@@ -25,7 +25,7 @@ namespace Photon
         }
         public override string DebugString()
         {
-            return _data.ToString() + "(number)";
+            return _data.ToString() + "(bool)";
         }
 
         public override string ToString()
@@ -35,7 +35,7 @@ namespace Photon
 
         public override ValueKind Kind
         {
-            get { return ValueKind.Number; }
+            get { return ValueKind.Bool; }
         }
     }
 

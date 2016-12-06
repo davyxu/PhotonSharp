@@ -1,9 +1,4 @@
 ﻿using Photon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest
 {
@@ -13,7 +8,6 @@ namespace UnitTest
         [NativeEntry(NativeEntryType.StaticFunc, "add")]
         public static int AddValue(VMachine vm)
         {
-
             var a = vm.DataStack.GetInteger32(0);
             var b = vm.DataStack.GetInteger32(1);
 
@@ -33,7 +27,7 @@ namespace UnitTest
             testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
 
             testbox.RunFile("Delegate.pho")
-                .TestGlobalRegEqualNumber(0, 3);                
+                .CheckGlobalRegEqualNumber(0, 3);                
         }
     }
 }

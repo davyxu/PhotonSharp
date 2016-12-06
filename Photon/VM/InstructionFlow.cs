@@ -9,7 +9,7 @@ namespace Photon
         {
             var targetPC = cmd.DataA;
 
-            var d = vm.DataStack.Pop().CastNumber();
+            var d = Convertor.ValueToFloat32(vm.DataStack.Pop());
 
             if ( d == 0 )
             {
@@ -53,7 +53,7 @@ namespace Photon
 
             var obj = vm.DataStack.Pop();
 
-            var func = obj.CastFunc();
+            var func = Convertor.CastFunc(obj);
 
             return func.Invoke(vm, argCount, cmd.DataB, obj as ValueClosure);
 

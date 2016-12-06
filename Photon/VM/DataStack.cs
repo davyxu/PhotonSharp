@@ -3,18 +3,43 @@ using System.Diagnostics;
 
 namespace Photon
 {
-    public class DataStack : DataAccessor
+    public partial class DataStack : DataAccessor
     {
         Value[] _values;
         int _count = 0;
 
-        internal DataStack(int max)
+        internal DataStack( )
         {
-            _values = new Value[max];
+            ValidCount(4);
+        }
 
-            for (int i = 0; i < _values.Length; i++)
+        void ValidCount(int count)
+        {
+            if (_values == null || count > _values.Length)
             {
-                _values[i] = Value.Nil;
+                count = count * 2;
+
+                var newValues = new Value[count];
+
+                if ( _values == null )
+                {
+                    for (int i = 0; i < newValues.Length; i++)
+                    {
+                        newValues[i] = Value.Nil;
+                    }
+                }
+                else
+                {
+                    System.Array.Copy(_values, newValues, _values.Length);
+
+                    for (int i = _values.Length; i < newValues.Length; i++)
+                    {
+                        newValues[i] = Value.Nil;
+                    }
+                                        
+                }
+
+                _values = newValues;
             }
         }
 
@@ -31,8 +56,12 @@ namespace Photon
 
         internal void Push(Value v)
         {
+            ValidCount(_count + 1);
+
             _values[_count] = v;
             _count++;
+
+            
         }
 
         internal override Value Get(int index)
@@ -137,37 +166,12 @@ namespace Photon
                     _values[preTop + i] = Value.Nil;
                 }
             }
-
-
-
-            
         }
 
         public int Count
         {
             get { return _count; }
         }
-
-        public void PushFloat32( float v )
-        {
-            Push(new ValueNumber(v));
-        }
-
-        public void PushInteger32(Int32 v)
-        {
-            Push(new ValueNumber((float)v));
-        }
-
-        public void PushString(string v)
-        {
-            Push(new ValueString(v));
-        }
-
-        public void PushNil( )
-        {
-            Push(new ValueNil());
-        }
-
 
         public void DebugPrint( )
         {            

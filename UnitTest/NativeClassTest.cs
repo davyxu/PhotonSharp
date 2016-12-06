@@ -1,4 +1,5 @@
 ﻿using Photon;
+using System.Reflection;
 
 namespace UnitTest
 {
@@ -47,17 +48,20 @@ namespace UnitTest
     {
         static void TestNativeClass()
         {
-            //WrapperCodeGenerator.GenerateClass(typeof(NativeClass), "UnitTest", "../UnitTest/NativeClassWrapper.cs");
+            if (GenAllFile)
+            {
+                WrapperCodeGenerator.GenerateClass(typeof(NativeClass), "UnitTest", "../UnitTest/NativeClassWrapper.cs");
+            }
 
             var testbox = new TestBox();
-            testbox.Exe.RegisterNativeClass(typeof(NativeClassWrapper), "NativeClassTest");
+            testbox.Exe.RegisterNativeClass(Assembly.GetExecutingAssembly(), "UnitTest.NativeClassWrapper", "NativeClassTest");
 
             testbox.RunFile("NativeClass.pho")
-                .TestGlobalRegEqualString(1, "cat")
-                .TestGlobalRegEqualNumber(2, 89)
-                .TestGlobalRegEqualString(3, "xx")
-                .TestGlobalRegEqualString(4, "wa")
-                .TestGlobalRegEqualString(5, "HP");
+                .CheckGlobalRegEqualString(1, "cat")
+                .CheckGlobalRegEqualNumber(2, 89)
+                .CheckGlobalRegEqualString(3, "xx")
+                .CheckGlobalRegEqualString(4, "wa")
+                .CheckGlobalRegEqualString(5, "HP");
         }
     }
 }

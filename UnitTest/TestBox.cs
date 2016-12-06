@@ -56,7 +56,7 @@ namespace UnitTest
 
         public TestBox RunFile( string filename )
         {                        
-            return CompileFile(filename ).Run().TestStackClear();
+            return CompileFile(filename ).Run().CheckStackClear();
         }
 
         public void Error( string info )
@@ -65,7 +65,7 @@ namespace UnitTest
             throw new Exception(info);
         }
 
-        public TestBox TestStackClear()
+        public TestBox CheckStackClear()
         {
             if (_vm.DataStack.Count != 0)
             {
@@ -76,27 +76,27 @@ namespace UnitTest
         }        
 
 
-        public TestBox TestLocalRegEqualNumber(int index, float num)
+        public TestBox CheckLocalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _vm.LocalReg);
+            return CheckRegEqualNumber(index, num, _vm.LocalReg);
         }
 
-        public TestBox TestGlobalRegEqualNumber(int index, float num)
+        public TestBox CheckGlobalRegEqualNumber(int index, float num)
         {
-            return TestRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
+            return CheckRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
         }
 
-        public TestBox TestGlobalRegEqualNil(int index)
+        public TestBox CheckGlobalRegEqualNil(int index)
         {
-            return TestRegEqualNil(index, _vm.GetRuntimePackageByName("main").Reg);
+            return CheckRegEqualNil(index, _vm.GetRuntimePackageByName("main").Reg);
         }
 
-        public TestBox TestGlobalRegEqualString(int index, string s)
+        public TestBox CheckGlobalRegEqualString(int index, string s)
         {
             return TestRegEqualString(index, s, _vm.GetRuntimePackageByName("main").Reg);
         }
 
-        TestBox TestRegEqualNil(int index,  Register reg)
+        TestBox CheckRegEqualNil(int index,  Register reg)
         {
             var v = reg.IsNil(index);
 
@@ -109,7 +109,7 @@ namespace UnitTest
             return this;
         }
 
-        TestBox TestRegEqualNumber(int index, float num, Register reg )
+        TestBox CheckRegEqualNumber(int index, float num, Register reg )
         {
             var v = reg.GetFloat32( index );            
 

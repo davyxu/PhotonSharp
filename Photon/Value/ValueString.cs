@@ -10,7 +10,7 @@ namespace Photon
             _str = v;
         }
 
-        public string String
+        public string Raw
         {
             get { return _str; }
         }

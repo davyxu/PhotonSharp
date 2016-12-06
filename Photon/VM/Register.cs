@@ -9,13 +9,6 @@ namespace Photon
         int _usedSlot = 0;
         string _usage;
 
-        int _slotIDGen = 0;
-
-        int GenSlotID( )
-        {
-            return ++_slotIDGen;
-        }
-
         internal Register( string usage, int maxReg )
         {
             _usage = usage;

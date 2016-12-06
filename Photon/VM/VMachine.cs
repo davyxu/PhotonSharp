@@ -21,65 +21,10 @@ namespace Photon
         MAX,
     }
 
-    public delegate int NativeDelegate(VMachine vm);
-    public delegate void NativePropertyDelegate(object phoIns, ref object value, bool isGet );
-
-    public enum NativeEntryType
-    {
-        StaticFunc,
-        ClassMethod,
-        Class,
-        Property,        
-    }
-
-    public sealed class NativeWrapperClassAttribute : Attribute
-    {
-        Type _bindingClassType;
-        public Type BindingClass
-        {
-            get { return _bindingClassType; }
-        }
-
-        public NativeWrapperClassAttribute( Type bindingClass )
-        {
-            _bindingClassType = bindingClass;
-        }
-    }
-
-    public sealed class NativeEntryAttribute : Attribute
-    {
-
-        string _entryName;
-        NativeEntryType _type;
-
-        internal NativeEntryType Type
-        {
-            get { return _type; }
-        }
-
-        internal string EntryName
-        {
-            get { return _entryName; }
-        }
-
-        public NativeEntryAttribute(NativeEntryType type)
-        {
-            _type = type;
-        }
-
-        public NativeEntryAttribute(NativeEntryType type, string entryName)
-        {
-            _type = type;
-            _entryName = entryName;
-        }
-    }
-
- 
-
     public partial class VMachine
     {
         // 数据交换栈
-        DataStack _dataStack = new DataStack(10);
+        DataStack _dataStack = new DataStack();
 
         // 包内存
         List<RuntimePackage> _package = new List<RuntimePackage>();
@@ -172,36 +117,6 @@ namespace Photon
         public VMachine()
         {
             _insset = new InstructionSet(this);
-        }
-
-        public static object StringToValue(string s)
-        {
-            return new ValueString(s);
-        }        
-
-        public static object Int32ToValue(Int32 v)
-        {
-            return new ValueNumber((float)v);
-        }
-
-        public static object FloatToValue(float v)
-        {
-            return new ValueNumber(v);
-        }
-
-        public static string ValueToString(object v)
-        {
-            return (v as ValueString).String;
-        }
-
-        public static Int32 ValueToInt32(object v)
-        {
-            return (Int32)(v as ValueNumber).Number;
-        }
-
-        public static float ValueToFloat(object v)
-        {
-            return (v as ValueNumber).Number;
         }
 
         public void SetHook(DebugHook hook, Action<VMachine> callback )

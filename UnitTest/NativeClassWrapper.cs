@@ -5,7 +5,7 @@ using System;
 
 namespace UnitTest
 {
-	[NativeWrapperClass(typeof(NativeClass))]
+	[NativeWrapperClass(typeof(UnitTest.NativeClass))]
 	public class NativeClassWrapper
 	{
 		[NativeEntry(NativeEntryType.Property)]
@@ -15,18 +15,18 @@ namespace UnitTest
 			
 			if (isGet)
 			{
-				value = VMachine.StringToValue(phoClassIns.MyProp);
+				value = Convertor.StringToValue(phoClassIns.MyProp);
 			}
 			else
 			{
-				phoClassIns.MyProp = VMachine.ValueToString(value);
+                phoClassIns.MyProp = Convertor.ValueToString(value);
 			}
 		}
 		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int outAsRetValue( VMachine vm )
 		{
-			var phoClassIns = vm.DataStack.GetNativeInstance<NativeClass>(0);
+			var phoClassIns = vm.DataStack.GetNativeInstance<UnitTest.NativeClass>(0);
 			
 			var a = vm.DataStack.GetInteger32(1);
 			var c = vm.DataStack.GetString(2);
@@ -43,7 +43,7 @@ namespace UnitTest
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int foo( VMachine vm )
 		{
-			var phoClassIns = vm.DataStack.GetNativeInstance<NativeClass>(0);
+			var phoClassIns = vm.DataStack.GetNativeInstance<UnitTest.NativeClass>(0);
 			
 			var a = vm.DataStack.GetInteger32(1);
 			

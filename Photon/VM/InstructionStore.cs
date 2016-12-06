@@ -108,7 +108,7 @@ namespace Photon
         {
             var key = vm.DataStack.Pop();
 
-            var main = vm.DataStack.Pop().CastObject();
+            //var main = vm.DataStack.Pop().CastObject();
 
             //var result = main.Get(key);
 
@@ -128,7 +128,7 @@ namespace Photon
     {
         public override bool Execute( Command cmd)
         {
-            var c = vm.DataStack.Pop().CastObject();
+            var c = Convertor.CastObject(vm.DataStack.Pop());
 
             vm.DataStack.Push(c.GetValue(cmd.DataA));
 
@@ -157,7 +157,7 @@ namespace Photon
                     {
                         int Index = cmd.DataB;
 
-                        var closure = vm.DataStack.Get(-1).CastClosure();
+                        var closure = Convertor.CastClosure(vm.DataStack.Get(-1));
 
                         closure.AddUpValue(vm.LocalReg, Index);
                     }
@@ -167,7 +167,7 @@ namespace Photon
                     {
                         int Index = cmd.DataB;
 
-                        var closure = vm.DataStack.Get(-1).CastClosure();
+                        var closure = Convertor.CastClosure(vm.DataStack.Get(-1));
 
                         // 当前函数执行体也是个闭包
                         var v = vm.CurrFrame.Closure.GetUpValue(Index);
@@ -287,7 +287,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var ci = vm.DataStack.Pop().CastObject();
+            var ci = Convertor.CastObject(vm.DataStack.Pop());
 
             vm.DataStack.Push(ci.GetValue(cmd.DataA));
 
@@ -305,7 +305,7 @@ namespace Photon
     {
         public override bool Execute(Command cmd)
         {
-            var ci = vm.DataStack.Pop().CastObject();
+            var ci = Convertor.CastObject(vm.DataStack.Pop());
 
             var v = vm.DataStack.Pop();
 

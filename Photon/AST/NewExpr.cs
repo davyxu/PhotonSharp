@@ -49,10 +49,16 @@ namespace Photon
             else
             {
                 on.PackageName = param.Pkg.Name;
-            }
-
+            }            
 
             var c = param.Exe.GetClassTypeByName(on);
+            if ( c == null )
+            {
+                on.PackageName = "Builtin";
+                c = param.Exe.GetClassTypeByName(on);
+            }
+
+            
 
             if ( pass == 1 )
             {
@@ -61,7 +67,7 @@ namespace Photon
             }
             else if (c == null)
             {
-                throw new CompileException("class entry not found", NewPos);
+                throw new CompileException("class entry not found: " + ClassName.Name, NewPos);
             }
 
             _cmd.DataA = c.ID;

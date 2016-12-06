@@ -33,6 +33,32 @@ namespace Photon
 		}
 		
 		[NativeEntry(NativeEntryType.ClassMethod)]
+		public static int Remove( VMachine phoVM )
+		{
+			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
+			
+			var v = phoVM.DataStack.GetValue(1);
+			
+			phoClassIns.Remove( v );
+
+			
+			return 0;
+		}
+		
+		[NativeEntry(NativeEntryType.ClassMethod)]
+		public static int RemoveAt( VMachine phoVM )
+		{
+			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
+			
+			var index = phoVM.DataStack.GetInteger32(1);
+			
+			phoClassIns.RemoveAt( index );
+
+			
+			return 0;
+		}
+		
+		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int TryGet( VMachine phoVM )
 		{
 			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
@@ -86,6 +112,45 @@ namespace Photon
 			var v = phoVM.DataStack.GetValue(2);
 			
 			phoClassIns.Set( index, v );
+
+			
+			return 0;
+		}
+		
+		[NativeEntry(NativeEntryType.ClassMethod)]
+		public static int Contains( VMachine phoVM )
+		{
+			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
+			
+			var v = phoVM.DataStack.GetValue(1);
+			
+			var phoRetArg = phoClassIns.Contains( v );
+
+			phoVM.DataStack.PushBool( phoRetArg );
+			
+			return 1;
+		}
+		
+		[NativeEntry(NativeEntryType.ClassMethod)]
+		public static int IndexOf( VMachine phoVM )
+		{
+			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
+			
+			var v = phoVM.DataStack.GetValue(1);
+			
+			var phoRetArg = phoClassIns.IndexOf( v );
+
+			phoVM.DataStack.PushInteger32( phoRetArg );
+			
+			return 1;
+		}
+		
+		[NativeEntry(NativeEntryType.ClassMethod)]
+		public static int Clear( VMachine phoVM )
+		{
+			var phoClassIns = phoVM.DataStack.GetNativeInstance<Photon.Array>(0);
+			
+			phoClassIns.Clear(  );
 
 			
 			return 0;

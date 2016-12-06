@@ -4,7 +4,7 @@ namespace UnitTest
 {
     partial class Program
     {
-        static bool GenAllFile;
+        static bool GenAllFile = false;
 
         static void TestCase()
         {
@@ -13,7 +13,7 @@ namespace UnitTest
                 Compiler.InitBuildin(); 
             }
 
-            TestArray();
+            TestContainer();
 
             TestNativeClass();
 

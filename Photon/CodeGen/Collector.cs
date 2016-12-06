@@ -24,6 +24,12 @@ namespace Photon
                 if (propInfo.DeclaringType != cls)
                     continue;
 
+                if (propInfo.GetCustomAttribute<NoGenWrapperAttribute>() != null)
+                {
+                    continue;
+                }
+
+
                 var prop = new WrapperGenProperty();
                 prop.Name = propInfo.Name;
                 prop.TypeString = Convertor.NativeTypeToTypeName(propInfo.PropertyType);
@@ -48,6 +54,12 @@ namespace Photon
                 if (attr != null)
                     continue;
 
+                // 不生成wrapper
+                if (methodInfo.GetCustomAttribute<NoGenWrapperAttribute>() != null)
+                {
+                    continue;
+                }
+                
 
                 var genFunc = new WrapperGenFunc( );
                 genFunc.Name = methodInfo.Name;

@@ -12,6 +12,16 @@ namespace Photon
             _data.Add(v);
         }
 
+        public void Remove(Value v)
+        {
+            _data.Remove(v);
+        }
+
+        public void RemoveAt(int index)
+        {
+            _data.RemoveAt(index);
+        }
+
         public bool TryGet(int index, out Value v )
         {
             if (index > 0 || index >= _data.Count)
@@ -58,12 +68,29 @@ namespace Photon
             _data[index] = v;
         }
 
+        public bool Contains(Value v)
+        {
+            return _data.Contains(v);
+        }
+
+        public int IndexOf(Value v)
+        {
+            return _data.IndexOf(v);
+        }
+
+        public void Clear()
+        {
+            _data.Clear();
+        }
+
+        [NoGenWrapper]
         public void SetKeyValue(Value k, Value v)
         {
             int key = Convertor.ValueToInteger32(k);
             Set(key, v);
         }
 
+        [NoGenWrapper]
         public Value GetKeyValue(Value k)
         {
             int key = Convertor.ValueToInteger32(k);
@@ -82,7 +109,7 @@ namespace Photon
 
         internal static void GenerateWrapper()
         {
-            WrapperCodeGenerator.GenerateClass(typeof(Array), "Photon", "../Photon/Builtin/ArrayWrapper.cs");
+            WrapperCodeGenerator.GenerateClass(typeof(Photon.Array), "Photon", "../Photon/Builtin/ArrayWrapper.cs");
         }
     }
 }

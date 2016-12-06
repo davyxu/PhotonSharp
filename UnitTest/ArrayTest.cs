@@ -8,12 +8,20 @@ namespace UnitTest
 
     partial class Program
     {
-        static void TestArray()
+        static void TestContainer()
         {
-            var testbox = new TestBox();
-            //testbox.Exe.RegisterNativeClass(typeof(Builtin.ArrayWrapper), "Builtin");
+            {
+                var testbox = new TestBox();
 
-            testbox.RunFile("Array.pho");
+                testbox.RunFile("Map.pho");
+            }
+
+            //{
+            //    var testbox = new TestBox();
+
+            //    testbox.RunFile("Array.pho");
+            //}
+            
         }
     }
 }

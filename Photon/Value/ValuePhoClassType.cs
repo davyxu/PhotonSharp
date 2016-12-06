@@ -45,9 +45,11 @@ namespace Photon
         }
 
 
-        internal override bool Equal(Value v)
+        public override bool Equals(object v)
         {
             var other = v as ValuePhoClassType;
+            if (other == null)
+                return false;
 
             return _name.Equals(other._name);
         }

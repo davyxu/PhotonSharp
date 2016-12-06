@@ -33,6 +33,7 @@ namespace Photon
         public Executable()
         {
             Array.Register(this);
+            Map.Register(this);
         }
 
         public List<File> FileList

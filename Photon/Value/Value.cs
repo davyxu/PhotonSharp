@@ -23,10 +23,10 @@ namespace Photon
 
     partial class Value
     {
-        internal virtual bool Equal(Value other)
+        public override bool Equals(object obj)
         {
-            return false;
-        }
+ 	         return false;
+        }        
 
         internal static Value Nil = new ValueNil();
 

@@ -28,13 +28,6 @@ namespace Photon
             return false;
         }
 
-
-        internal override bool Equal(Value v)
-        {
-            var other = v as ValueFunc;
-
-            return _name.Equals(other._name);
-        }
         
         public override ValueKind Kind
         {

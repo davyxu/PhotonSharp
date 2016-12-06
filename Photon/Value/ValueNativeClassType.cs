@@ -179,9 +179,11 @@ namespace Photon
             return new ValueNativeClassIns(this, obj);
         }
 
-        internal override bool Equal(Value v)
+        public override bool Equals(object v)
         {
             var other = v as ValueNativeClassType;
+            if (other == null)
+                return false;
 
             return _instClass.Equals(other._instClass);
         }

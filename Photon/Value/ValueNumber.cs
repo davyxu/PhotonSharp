@@ -15,7 +15,7 @@ namespace Photon
             get { return _data; }
         }
 
-        internal override bool Equal(Value other)
+        public override bool Equals(object other)
         {
             var otherT = other as ValueNumber;
             if (otherT == null)

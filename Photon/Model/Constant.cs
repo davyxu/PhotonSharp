@@ -12,7 +12,7 @@ namespace Photon
             int index = 0;
             foreach( var c in _cset )
             {
-                if (c.Equal(inc))
+                if (c.Equals(inc))
                     return index;
 
                 index++;

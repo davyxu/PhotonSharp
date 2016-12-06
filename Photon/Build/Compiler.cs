@@ -96,6 +96,7 @@ namespace Photon
         public static void InitBuildin()
         {
             Array.GenerateWrapper();
+            Map.GenerateWrapper();
         }
 
         public static Executable Compile(string filename)

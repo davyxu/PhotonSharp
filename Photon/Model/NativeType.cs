@@ -27,6 +27,13 @@ namespace Photon
         }
     }
 
+    // 不生成自动绑定类
+    public sealed class NoGenWrapperAttribute : Attribute
+    {
+
+    }
+
+    // 绑定到语言的入口
     public sealed class NativeEntryAttribute : Attribute
     {
 

@@ -11,14 +11,18 @@
 
 * 包系统支持
 
-* 静态类绑定
+* 自动生成C#类绑定。
 
-* 采用通用的词法分析器
+* C#类绑定实例化，成员函数及属性访问
+
+* 内建容器支持Array，Map
+
+* 通用的词法分析器
 
 语言一览
 
 ```golang
-	// 函数调用
+	// 函数调用(支持多返回值)
 	func mul( a, b ){
 	    return a * b
 	}
@@ -83,6 +87,32 @@
 	c.foo( )
 	
 	var k = c.out( )
+	
+	// 数组，映射支持
+	
+	var arr = new(Array)
+
+	arr.Add(1)
+
+	arr[0] = 1
+	 
+	var x = arr[0]
+
+	var g = arr.Get(0)
+
+	arr.Set(0, "hello")
+
+	var count = arr.Count
+
+	var v, ok = arr.TryGet(119)
+
+	// 映射支持
+	var map = new(Map)
+	
+	map["hello"] = 1678
+	
+	var c = map["hello"]
+
 ```
 
 

@@ -3,13 +3,9 @@ namespace Photon
 {
     class ValueNil : Value
     {
-        internal override bool Equal(Value other)
+        public override bool Equals(object other)
         {
-            var otherT = other as ValueNil;
-            if (otherT == null)
-                return false;
-
-            return true;
+            return (other as ValueNil) != null;
         }
 
         public override string DebugString()

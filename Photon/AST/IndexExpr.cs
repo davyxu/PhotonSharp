@@ -38,11 +38,22 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            X.Compile(param);
-
             Index.Compile(param);
 
-            param.CS.Add(new Command(Opcode.IDX));
+            X.Compile(param.SetLHS(false));
+
+            if ( param.LHS )
+            {
+                // 赋值
+                param.CS.Add(new Command(Opcode.SETI));
+            }
+            else
+            {
+                // 取值
+                param.CS.Add(new Command(Opcode.LOADI));
+            }
+
+            
         }
     }
 }

@@ -1,12 +1,7 @@
 ﻿using Photon;
-using System;
-using System.Reflection;
 
 namespace UnitTest
 {
-
-
-
     partial class Program
     {
         static bool GenAllFile;

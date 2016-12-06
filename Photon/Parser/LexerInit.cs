@@ -14,6 +14,7 @@ namespace Photon
             lex.AddMatcher(new WhitespaceMatcher(TokenType.Whitespace).Ignore());
             lex.AddMatcher(new LineEndMatcher(TokenType.LineEnd).Ignore());
             lex.AddMatcher(new CStyleCommentMatcher(TokenType.Comment).Ignore());
+            lex.AddMatcher(new BlockCommentMatcher(TokenType.Comment).Ignore());
 
             lex.AddMatcher(new SignMatcher(TokenType.LBrace, "{"));
             lex.AddMatcher(new SignMatcher(TokenType.RBrace, "}"));

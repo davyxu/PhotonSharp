@@ -19,6 +19,16 @@ namespace Photon
             return Value.Nil;
         }
 
+        internal virtual void SetKeyValue(Value k, Value v)
+        {
+
+        }
+
+        internal virtual Value GetKeyValue(Value k)
+        {
+            return Value.Nil;
+        }
+
         internal virtual object Raw
         {
             get { return null; }

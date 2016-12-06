@@ -125,6 +125,25 @@ namespace Photon
             return real;
         }
 
+        internal static IContainer CastContainer(Value v)
+        {
+            var real = (v as ValueObject);
+
+            if (real == null)
+            {
+                throw new RuntimeException("Expect 'Object' value");
+            }
+
+            var con = real.Raw as IContainer;
+
+            if (con == null)
+            {
+                throw new RuntimeException("Expect 'IContainer'");
+            }
+
+            return con;
+        }
+
 
         internal static string NativeTypeToTypeName(Type t)
         {

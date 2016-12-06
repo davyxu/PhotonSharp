@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Photon
 {
-    class Array
+    class Array : IContainer
     {
         List<Value> _data = new List<Value>();
 
@@ -56,6 +56,18 @@ namespace Photon
             }            
 
             _data[index] = v;
+        }
+
+        public void SetKeyValue(Value k, Value v)
+        {
+            int key = Convertor.ValueToInteger32(k);
+            Set(key, v);
+        }
+
+        public Value GetKeyValue(Value k)
+        {
+            int key = Convertor.ValueToInteger32(k);
+            return Get(key);
         }
 
         public int Count

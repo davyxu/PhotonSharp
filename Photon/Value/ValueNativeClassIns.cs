@@ -31,15 +31,6 @@ namespace Photon
                 return;
             }
 
-            //var prop = obj as PropertyInfo;
-            //if (prop != null)
-            //{
-            //    var lanV = ValueNativeClassType.PhoValue2NativeValue(prop.PropertyType, v);
-
-            //    prop.SetValue(_nativeIns, lanV);
-            //    return;
-            //}
-
             throw new RuntimeException("member not exists: "+ _type.Key2Name(nameKey));
         }
 
@@ -59,20 +50,10 @@ namespace Photon
                 return retValue as Value;
             }
 
-            // 使用反射访问的属性
-            //var prop = obj as PropertyInfo;
-
-            //if (prop != null)
-            //{
-            //    var v = prop.GetValue(_nativeIns);
-
-            //    return ValueNativeClassType.NativeValue2PhoValue(prop.PropertyType, v);
-            //}
-
-            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));
-
-            return Value.Nil;
+            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));            
         }
+
+
 
         public override string DebugString()
         {

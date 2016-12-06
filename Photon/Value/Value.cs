@@ -14,6 +14,13 @@ namespace Photon
         NativeClassInstance,
     }
 
+    internal interface IContainer
+    {
+        void SetKeyValue(Value k, Value v);
+
+        Value GetKeyValue(Value k);        
+    }
+
     partial class Value
     {
         internal virtual bool Equal(Value other)

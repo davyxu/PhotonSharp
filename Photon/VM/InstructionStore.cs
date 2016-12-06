@@ -101,23 +101,45 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.IDX)]
-    class CmdIndex : Instruction
+    [Instruction(Cmd = Opcode.LOADI)]
+    class CmdLoadI : Instruction
     {
         public override bool Execute( Command cmd)
         {
+            var obj = Convertor.CastContainer(vm.DataStack.Pop());
+
             var key = vm.DataStack.Pop();
 
-            //var main = vm.DataStack.Pop().CastObject();
+            var value = obj.GetKeyValue(key);
 
-            //var result = main.Get(key);
+            vm.DataStack.Push(value);
 
-            //vm.DataStack.Push(result);
-                        
             return true;
         }
 
         public override string Print( Command cmd)
+        {
+            return string.Empty;
+        }
+    }
+
+    [Instruction(Cmd = Opcode.SETI)]
+    class CmdSetI : Instruction
+    {
+        public override bool Execute(Command cmd)
+        {
+            var obj = Convertor.CastContainer(vm.DataStack.Pop());
+
+            var key = vm.DataStack.Pop();
+
+            var value = vm.DataStack.Pop();
+
+            obj.SetKeyValue(key, value);            
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
         {
             return string.Empty;
         }

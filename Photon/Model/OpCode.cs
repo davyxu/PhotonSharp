@@ -31,11 +31,12 @@ namespace Photon
         LOADU,  // S[Top] = & R[I]           // Upvalue
         LOADF,  // S[Top] = F[PackageID + CmdSetID]        
         LOADM,  // S[Top] = Class[C].Member[I]
+        LOADI,
         SETR,   // R[I+RegBase] = S[I+1]
         SETG,   // R[I] = S[I+1]
         SETU,   // R[I] = * S[I+1]
         SETM,   // Class[C].Member[I] = S[I+1]
-        IDX,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
+        SETI,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
         LINKU,  // 让Upvalue与寄存器建立引用
         CLOSURE, //  创建闭包

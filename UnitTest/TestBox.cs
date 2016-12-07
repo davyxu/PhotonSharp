@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System;
 using Photon;
+using System.IO;
 
 namespace UnitTest
 {
@@ -27,7 +28,7 @@ namespace UnitTest
 
             Debug.WriteLine(string.Format("################### {0} ###################", _caseName));
 
-            Compiler.Compile(_exe, src);            
+            Compiler.Compile(_exe, new FileLoader(Directory.GetCurrentDirectory()), src);            
 
             _exe.DebugPrint();            
 

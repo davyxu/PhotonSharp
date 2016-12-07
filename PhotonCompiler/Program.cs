@@ -72,7 +72,7 @@ namespace PhotonCompiler
             if (files.Count == 0)
                 return;
 
-            var exe = Compiler.Compile(files[0]);
+            var exe = Compiler.CompileFile(files[0]);
 
             if ( debugInfo )
             {
@@ -85,7 +85,7 @@ namespace PhotonCompiler
 
                 vm.ShowDebugInfo = debugInfo;
 
-                vm.Run(exe );
+                vm.Execute( exe, "main", "main");
             }
         }
     }

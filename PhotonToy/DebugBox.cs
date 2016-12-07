@@ -75,13 +75,13 @@ namespace PhotonToy
 
             if ( Debugger.IsAttached )
             {
-                _exe = Compiler.Compile(filename);
+                _exe = Compiler.CompileFile(filename);
             }
             else
             {
                 try
                 {
-                    _exe = Compiler.Compile(filename);
+                    _exe = Compiler.CompileFile(filename);
                 }
                 catch (Exception e)
                 {

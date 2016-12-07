@@ -65,6 +65,8 @@
     <Compile Include="AST\IfStmt.cs" />
     <Compile Include="AST\Scope.cs" />
     <Compile Include="AST\Node.cs" />
+    <Compile Include="Build\ContentLoader.cs" />
+    <Compile Include="Build\FileLoader.cs" />
     <Compile Include="Builtin\Map.cs" />
     <Compile Include="Builtin\Array.cs" />
     <Compile Include="Builtin\ArrayWrapper.cs">

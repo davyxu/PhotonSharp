@@ -11,10 +11,18 @@ namespace Photon
 
         Chunk _chunk = new Chunk();
 
+        Executable _exe;
+
+        ContentLoader _loader;
+
         internal Executable Exe
         {
-            get;
-            set;
+            get { return _exe; }
+        }
+
+        internal ContentLoader Loader
+        {
+            get { return _loader; }
         }
 
         public Chunk Chunk
@@ -22,12 +30,15 @@ namespace Photon
             get { return _chunk; }
         }
 
-        public Parser()
+        public Parser(Executable exe, ContentLoader loader)
         {
+            _exe = exe;
+            _loader = loader;
+
             InitScope();
         }
 
-        public void Import(SourceFile file)
+        public void Parse(SourceFile file)
         {
             _lexer = NewLexer(file);
 

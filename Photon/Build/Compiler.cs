@@ -1,5 +1,4 @@
 ﻿using SharpLexer;
-using System;
 using System.IO;
 
 namespace Photon
@@ -10,70 +9,27 @@ namespace Photon
         File,
     }
 
-
     public class Compiler
     {
-
-        static string NormalizeFileName( string filename )
+        public static void GenerateBuildinFiles()
         {
-            var curr = Directory.GetCurrentDirectory().ToLower() + "\\";
-            filename = filename.ToLower();
-
-            string final;
-
-            if ( Path.IsPathRooted( filename ) )
-            {
-                if ( filename.IndexOf(curr) == 0 )
-                {
-                    final = filename.Substring(curr.Length);
-                }
-                else
-                {
-                    throw new Exception("file should under PHOPATH");
-                }
-            }
-            else
-            {
-                final = filename;
-            }
-
-            return final.Replace('\\', '/');
+            Array.GenerateWrapper();
+            Map.GenerateWrapper();
         }
 
-        static void ImportFile(Executable exe, Parser parser, string filename)
+
+        internal static void Import(Executable exe, ContentLoader loader, string packageName,  string sourceName, ImportMode mode )
         {
-            var content = System.IO.File.ReadAllText(filename);
+            var parser = new Parser(exe, loader );
 
-            SourceFile srcfile = new SourceFile(content, NormalizeFileName( filename ));
+            loader.Init(parser, exe);
 
-            exe.AddSource(srcfile);
+            var pkg = exe.AddPackage(packageName, parser.PackageScope);
 
-            parser.Import(srcfile);            
-        }
-
-        public static void Import(Executable exe, string packageName,  string packageFileName, ImportMode mode)
-        {
-            var parser = new Parser();
-            parser.Exe = exe;
-
-            var pkg = exe.AddPackage(packageName, parser.PackageScope);                        
-
-            if ( mode == ImportMode.Directory)
-            {
-                var files = Directory.GetFiles(packageFileName, "*.pho", SearchOption.TopDirectoryOnly);
-
-                foreach (var filename in files)
-                {                    
-                    ImportFile(exe, parser, filename);
-                }
-            }
-            else
-            {
-                ImportFile(exe, parser, NormalizeFileName(packageFileName));
-            }
+            loader.Load(sourceName, mode);
 
             var initPos = TokenPos.Init;
-            initPos.SourceName = NormalizeFileName(packageFileName);
+            initPos.SourceName = sourceName;
 
             var cs = new ValuePhoFunc( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, parser.PackageScope);
 
@@ -93,24 +49,18 @@ namespace Photon
             cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
         }
 
-        public static void GenerateBuildinFiles()
+        public static Executable CompileFile(string filename)
         {
-            Array.GenerateWrapper();
-            Map.GenerateWrapper();
-        }
+            Executable exe = new Executable();
 
-        public static Executable Compile(string filename)
-        {            
-            var exe = new Executable( );
-
-            Compile(exe, filename);
+            Compiler.Compile(exe, new FileLoader(Directory.GetCurrentDirectory()), filename);
 
             return exe;
         }
 
-        public static void Compile(Executable exe, string filename)
+        public static void Compile(Executable exe, ContentLoader loader, string filename)
         {            
-            Import(exe, "main", filename, ImportMode.File); 
+            Import(exe, loader, "main", filename, ImportMode.File); 
         
             for( int i = 0;i<exe.PackageCount;i++)
             {

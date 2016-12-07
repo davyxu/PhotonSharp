@@ -98,26 +98,7 @@ namespace UnitTest
 
         public TestBox CheckGlobalVarMatchValue(string name, object value)
         {
-            bool equal = false;
-
-            if ( value.GetType() == typeof(int))
-            {
-                equal = (MainPackage.GetVarAsInteger32(name) == (int)value);
-            }
-            else if (value.GetType() == typeof(float))
-            {
-                equal = (MainPackage.GetVarAsFloat32(name) == (float)value);
-            }
-            else if (value.GetType() == typeof(string))
-            {
-                equal = (MainPackage.GetVarAsString(name) == (string)value);
-            }
-            else if (value.GetType() == typeof(bool))
-            {
-                equal = (MainPackage.GetVarAsBool(name) == (bool)value);
-            }
-
-            if ( !equal )
+            if (!MainPackage.EqualsValue(name, value ))
             {
                 Error("CheckGlobalSymbolMatchValue failed, name: " + name);
             }

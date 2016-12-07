@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Photon
 {
     class ValueFloat64 : Value
@@ -41,7 +42,24 @@ namespace Photon
         internal override Value BinaryOperate(Opcode code, Value other)
         {
             var a = RawValue;
-            var b = Convertor.ValueToFloat64(other);
+
+            double b;
+
+            // 类型匹配
+            switch (other.Kind)
+            {
+                case ValueKind.Integer32:
+                    return new ValueInteger32((Int32)this.RawValue).BinaryOperate(code, other);
+                case ValueKind.Integer64:
+                    return new ValueInteger64((Int64)this.RawValue).BinaryOperate(code, other);                    
+                case ValueKind.Float32:
+                    return new ValueFloat32((float)this.RawValue).BinaryOperate(code, other);
+                case ValueKind.Float64:
+                    b = (other as ValueFloat64).RawValue;
+                    break;
+                default:
+                    throw new RuntimeException("Binary operator value type not match:" + other.ToString());
+            }
 
             switch (code)
             {
@@ -78,6 +96,14 @@ namespace Photon
             {
                 case Opcode.MINUS:
                     return new ValueFloat64(-a);
+                case Opcode.INT32:
+                    return new ValueInteger32((Int32)a);
+                case Opcode.INT64:
+                    return new ValueInteger64((Int64)a);
+                case Opcode.FLOAT32:
+                    return new ValueFloat32((float)a);
+                case Opcode.FLOAT64:
+                    return this;
                 default:
                     throw new RuntimeException("Unknown unary operator:" + code.ToString());
             }

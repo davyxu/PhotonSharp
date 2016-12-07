@@ -17,25 +17,6 @@ namespace Photon
         }
     }
 
-    class InstructionUnaryMath : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            var a = vm.DataStack.Pop();
-
-            var x = a.UnaryOperate(cmd.Op);
-
-            vm.DataStack.Push(x);
-
-            return true;
-        }
-    }
-
-    [Instruction(Cmd = Opcode.MINUS)]
-    class CmdMinus : InstructionUnaryMath
-    {
-    }
-
 
     [Instruction(Cmd = Opcode.ADD)]
     class CmdAdd : InstructionBinaryMath
@@ -88,5 +69,42 @@ namespace Photon
     }
 
 
+    class InstructionUnaryMath : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            var a = vm.DataStack.Pop();
 
+            var x = a.UnaryOperate(cmd.Op);
+
+            vm.DataStack.Push(x);
+
+            return true;
+        }
+    }
+
+    [Instruction(Cmd = Opcode.MINUS)]
+    class CmdMinus : InstructionUnaryMath
+    {
+    }
+
+    [Instruction(Cmd = Opcode.INT32)]
+    class CmdInt32 : InstructionUnaryMath
+    {
+    }
+
+    [Instruction(Cmd = Opcode.INT64)]
+    class CmdInt64 : InstructionUnaryMath
+    {
+    }
+
+    [Instruction(Cmd = Opcode.FLOAT32)]
+    class CmdFloat32 : InstructionUnaryMath
+    {
+    }
+
+    [Instruction(Cmd = Opcode.FLOAT64)]
+    class CmdFloat64 : InstructionUnaryMath
+    {
+    }
 }

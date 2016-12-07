@@ -7,6 +7,7 @@ namespace Photon
         internal CompileParameter parameter;
     }
 
+
     internal struct CompileParameter
     {
         internal Package Pkg;

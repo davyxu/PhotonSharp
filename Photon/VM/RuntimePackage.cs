@@ -3,7 +3,7 @@ namespace Photon
 {
     public partial class RuntimePackage
     {
-        public Register Reg= new Register("G", 10);        
+        public Register Reg = new Register("G", 10);        
 
         Package _pkg;
 
@@ -23,7 +23,7 @@ namespace Photon
             Reg.AttachScope(pkg.TopScope);
         }
 
-        Value GetRegisterValue(string name)
+        internal Value GetRegisterValue(string name)
         {
             if (_pkg == null)
                 return Value.Nil;

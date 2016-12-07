@@ -42,6 +42,14 @@ namespace Photon
                     return Opcode.LEN;
                 case TokenType.New:
                     return Opcode.NEW;
+                case TokenType.Int32:
+                    return Opcode.INT32;
+                case TokenType.Int64:
+                    return Opcode.INT64;
+                case TokenType.Float32:
+                    return Opcode.FLOAT32;
+                case TokenType.Float64:
+                    return Opcode.FLOAT64;
             }
 
             return Opcode.NOP;

@@ -42,7 +42,25 @@ namespace Photon
         internal override Value BinaryOperate(Opcode code, Value other )
         {
             var a = RawValue;
-            var b = Convertor.ValueToInteger32(other);
+
+            Int32 b;
+
+            // 类型匹配
+            switch( other.Kind )
+            {
+                case ValueKind.Integer32:
+                    b = (other as ValueInteger32).RawValue;
+                    break;
+                case ValueKind.Integer64:
+                    return new ValueInteger64((Int64)this.RawValue).BinaryOperate(code, other);
+                case ValueKind.Float32:
+                    return new ValueFloat32((float)this.RawValue).BinaryOperate(code, other);
+                case ValueKind.Float64:
+                    return new ValueFloat64((double)this.RawValue).BinaryOperate(code, other);
+                default:
+                    throw new RuntimeException("Binary operator value type not match:" + other.ToString());
+            }
+                        
 
             switch (code)
             {
@@ -78,7 +96,15 @@ namespace Photon
             switch (code)
             {
                 case Opcode.MINUS:
-                    return new ValueInteger32(-a);               
+                    return new ValueInteger32(-a);
+                case Opcode.INT32:
+                    return this;
+                case Opcode.INT64:
+                    return new ValueInteger64((Int64)a);
+                case Opcode.FLOAT32:
+                    return new ValueFloat32((float)a);
+                case Opcode.FLOAT64:
+                    return new ValueFloat64((double)a);
                 default:
                     throw new RuntimeException("Unknown unary operator:" + code.ToString());
             }

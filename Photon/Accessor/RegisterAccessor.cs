@@ -23,6 +23,11 @@ namespace Photon
             return Convertor.ValueToString(GetRegisterValue(name));
         }
 
+        public bool EqualsValue(string name, object v )
+        {            
+            return GetRegisterValue(name).Equals(Convertor.NativeValueToValue(v));
+        }
+
         public T GetVarAsNativeInstance<T>(string name) where T:class
         {
             return Convertor.ValueToObject(GetRegisterValue(name)) as T;

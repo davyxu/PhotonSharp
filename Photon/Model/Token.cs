@@ -50,6 +50,11 @@ namespace Photon
         Import,         // import
         Class,          // class
         New,            // new
+        Is,             // is
+        Int32,          // int32
+        Int64,          // int64
+        Float32,        // float32
+        Float64,        // float64
     }
    
 }

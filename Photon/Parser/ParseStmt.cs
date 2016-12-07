@@ -89,7 +89,7 @@ namespace Photon
                     return ParseClassDecl();
             }
 
-            return new BadStmt();
+            throw new CompileException("Invalid statement", CurrTokenPos);
         }
 
         IfStmt ParseIfStmt()

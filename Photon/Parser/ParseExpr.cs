@@ -101,7 +101,7 @@ namespace Photon
                     }                    
             }
 
-            return new BadExpr();
+            throw new CompileException("Unknown operand", CurrTokenPos);
         }
 
         CallExpr ParseCallExpr( Expr func )
@@ -264,20 +264,20 @@ namespace Photon
                 case TokenType.Add:
                 case TokenType.Sub:
                     {   
-                        
-
                         Next();
                         var x = ParsePrimaryExpr( false );
 
-                        if (op == TokenType.New )
-                        {
-                            var call = x as CallExpr;
-                            if (call == null)
-                            {
-                                throw new CompileException("invalid new expression", oppos);
-                            }   
-                        }
-
+                        return new UnaryExpr(x, op, oppos);
+                    }
+                case TokenType.Int32:
+                case TokenType.Int64:
+                case TokenType.Float32:
+                case TokenType.Float64:
+                    {
+                        Next();
+                        Expect(TokenType.LBracket);
+                        var x = ParsePrimaryExpr(false);
+                        Expect(TokenType.RBracket);
                         return new UnaryExpr(x, op, oppos);
                     }
                 case TokenType.New:

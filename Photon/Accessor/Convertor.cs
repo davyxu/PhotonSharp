@@ -16,7 +16,6 @@ namespace Photon
             return new ValueInteger64(v);
         }
 
-
         public static object Float32ToValue(float v)
         {
             return new ValueFloat32(v);
@@ -45,7 +44,7 @@ namespace Photon
             {
                 return new ValueInteger32((Int32)v);
             }
-            else if (vt == typeof(float))
+            else if (vt == typeof(Int64))
             {
                 return new ValueInteger64((Int64)v);
             }

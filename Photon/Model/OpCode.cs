@@ -22,21 +22,25 @@ namespace Photon
         MINUS,
         NOT,
         LEN,
+        INT32,
+        INT64,
+        FLOAT32,
+        FLOAT64,
         
 
         // 存取操作
         LOADK,  // S[Top] = K[I]
-        LOADR,  // S[Top] = R[I+ RegBase] 
-        LOADG,  // S[Top] = R[I]
-        LOADU,  // S[Top] = & R[I]           // Upvalue
+        LOADR,  // S[Top] = R[I] 
+        LOADG,  // S[Top] = G[I]
+        LOADU,  // S[Top] = U[I]           // Upvalue
         LOADF,  // S[Top] = F[PackageID + CmdSetID]        
         LOADM,  // S[Top] = Class[C].Member[I]
         LOADI,
-        SETR,   // R[I+RegBase] = S[I+1]
-        SETG,   // R[I] = S[I+1]
-        SETU,   // R[I] = * S[I+1]
+        SETR,   // R[I] = S[I+1]
+        SETG,   // G[I] = S[I+1]
+        SETU,   // U[I] = * S[I+1]
         SETM,   // Class[C].Member[I] = S[I+1]
-        SETI,    // S[Top] = S[I][ S[I+1] ]  key为非字符串
+        SETI,   // S[Top] = S[I][ S[I+1] ]  key为非字符串
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
         LINKU,  // 让Upvalue与寄存器建立引用
         CLOSURE, //  创建闭包

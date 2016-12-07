@@ -14,7 +14,7 @@ namespace Photon
             // 栈顺序是反的, 需要倒过来
             var result = ExecuteOn2Value(vm, cmd, b, a, out c );
 
-            vm.DataStack.Push(new ValueNumber(c));
+            vm.DataStack.Push(new ValueFloat32(c));
 
             return result;
         }
@@ -40,7 +40,7 @@ namespace Photon
             // 栈顺序是反的, 需要倒过来
             var result = ExecuteOnValue(vm,cmd, a, out c);
 
-            vm.DataStack.Push(new ValueNumber(c));
+            vm.DataStack.Push(new ValueFloat32(c));
 
             return result;
         }

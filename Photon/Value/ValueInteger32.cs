@@ -1,16 +1,17 @@
-﻿
+﻿using System;
+
 namespace Photon
 {
-    class ValueNumber : Value
+    class ValueInteger32 : Value
     {
-        float _data = 0;
+        Int32 _data = 0;
 
-        public ValueNumber( float data )
+        public ValueInteger32(Int32 data)
         {
             _data = data;
         }
 
-        public float RawValue
+        public Int32 RawValue
         {
             get { return _data; }
         }
@@ -22,7 +23,7 @@ namespace Photon
 
         public override bool Equals(object other)
         {
-            var otherT = other as ValueNumber;
+            var otherT = other as ValueInteger32;
             if (otherT == null)
                 return false;
 
@@ -30,12 +31,12 @@ namespace Photon
         }
         public override string DebugString()
         {
-            return _data.ToString() + " (number)";
+            return _data.ToString() + " (int32)";
         }
 
         public override ValueKind Kind
         {
-            get { return ValueKind.Number; }
+            get { return ValueKind.Integer32; }
         }
     }
 

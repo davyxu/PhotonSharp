@@ -8,11 +8,11 @@ namespace Photon
 
         public static object Integer32ToValue(Int32 v)
         {
-            return new ValueNumber((float)v);
+            return new ValueFloat32((float)v);
         }
         public static object Float32ToValue(float v)
         {
-            return new ValueNumber(v);
+            return new ValueFloat32(v);
         }
 
         public static object BoolToValue(bool v)
@@ -31,11 +31,11 @@ namespace Photon
 
             if (vt == typeof(Int32))
             {
-                return new ValueNumber((float)(int)v);
+                return new ValueFloat32((float)(int)v);
             }
             else if (vt == typeof(float))
             {
-                return new ValueNumber((float)v);
+                return new ValueFloat32((float)v);
             }
             else if (vt == typeof(string))
             {
@@ -55,7 +55,7 @@ namespace Photon
 
         public static Int32 ValueToInteger32(object v)
         {
-            var real = (v as ValueNumber);
+            var real = (v as ValueFloat32);
 
             if (real == null)
             {
@@ -67,7 +67,7 @@ namespace Photon
 
         public static float ValueToFloat32(object v)
         {
-            var real = (v as ValueNumber);
+            var real = (v as ValueFloat32);
 
             if (real == null)
             {

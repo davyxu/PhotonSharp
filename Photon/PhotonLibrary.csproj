@@ -83,6 +83,7 @@
     <Compile Include="CodeGen\Model.cs" />
     <Compile Include="CodeGen\Collector.cs" />
     <Compile Include="Value\ValueBool.cs" />
+    <Compile Include="Value\ValueInteger32.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
     <Compile Include="Model\Constant.cs" />
@@ -102,7 +103,7 @@
     <Compile Include="Value\ValueClassType.cs" />
     <Compile Include="Value\ValueString.cs" />
     <Compile Include="Value\ValueObject.cs" />
-    <Compile Include="Value\ValueNumber.cs" />
+    <Compile Include="Value\ValueFloat32.cs" />
     <Compile Include="Model\Executable.cs" />
     <Compile Include="Parser\ParseExpr.cs" />
     <Compile Include="Parser\ParseDecl.cs" />

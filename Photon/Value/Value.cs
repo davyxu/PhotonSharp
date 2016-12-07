@@ -4,7 +4,8 @@ namespace Photon
     public enum ValueKind
     {
         Nil = 0,
-        Number,
+        Float32,
+        Integer32,
         Bool,
         String,
         Func,        

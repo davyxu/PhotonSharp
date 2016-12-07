@@ -63,7 +63,7 @@ namespace Photon
 
         internal void SetInteger32(int index, Int32 v)
         {
-            Set(index, new ValueNumber((float)v));
+            Set(index, new ValueFloat32((float)v));
         }
 
        
@@ -74,7 +74,7 @@ namespace Photon
 
         internal void SetFloat32(int index, float v)
         {
-            Set(index, new ValueNumber(v));
+            Set(index, new ValueFloat32(v));
         }
 
         public void SetString(int index, string v)

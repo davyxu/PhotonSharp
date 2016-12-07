@@ -6,7 +6,7 @@ namespace Photon
     {        
         public void PushInteger32(Int32 v)
         {
-            Push(new ValueNumber((float)v));
+            Push(new ValueFloat32((float)v));
         }
 
         public void PushBool(bool v)
@@ -16,7 +16,7 @@ namespace Photon
 
         public void PushFloat32(float v)
         {
-            Push(new ValueNumber(v));
+            Push(new ValueFloat32(v));
         }
 
         public void PushString(string v)

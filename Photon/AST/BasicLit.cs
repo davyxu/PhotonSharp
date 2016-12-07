@@ -42,7 +42,7 @@ namespace Photon
                         if (!float.TryParse(Value, out v))
                             return null;
 
-                        c = new ValueNumber(v);
+                        c = new ValueFloat32(v);
                     }
                     break;
                 case TokenType.QuotedString:

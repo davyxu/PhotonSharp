@@ -26,7 +26,7 @@ namespace UnitTest
         {
             _caseName = caseName;
 
-            Debug.WriteLine(string.Format("################### {0} ###################", _caseName));
+            Logger.DebugLine(string.Format("################### {0} ###################", _caseName));
 
             Compiler.Compile(_exe, new FileLoader(Directory.GetCurrentDirectory()), src);            
 
@@ -37,12 +37,12 @@ namespace UnitTest
 
         public TestBox Run( )
         {
-            Debug.WriteLine(string.Format(">>>>>>>>>Start {0}", _caseName));
+            Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
             _vm.Execute(_exe, "main", "main");
 
-            Debug.WriteLine(string.Format(">>>>>>>>>End {0}", _caseName));
+            Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            
 
             _vm.LocalReg.DebugPrint();
@@ -72,7 +72,7 @@ namespace UnitTest
 
         public void Error( string info )
         {
-            Debug.WriteLine("[{0}] failed, {1}", _caseName, info);
+            Logger.DebugLine("[{0}] failed, {1}", _caseName, info);
             throw new Exception(info);
         }
 

@@ -178,11 +178,11 @@ namespace Photon
 
         public void DebugPrint( string indent )
         {
-            Debug.WriteLine(indent + _type.ToString());
+            Logger.DebugLine(indent + _type.ToString());
 
             foreach( var kv in _symbolByName )
             {
-                Debug.WriteLine(string.Format("{0} {1}", indent,kv.Value ));                
+                Logger.DebugLine(string.Format("{0} {1}", indent,kv.Value ));                
             }
 
 

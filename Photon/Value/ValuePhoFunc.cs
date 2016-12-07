@@ -92,21 +92,21 @@ namespace Photon
                     // 每个源码下的汇编成为一块, 块与块之间空行
                     if ( currLine != 0 )
                     {
-                        Debug.WriteLine("");
+                        Logger.DebugLine("");
                     }
                     
                     currLine = c.CodePos.Line;
 
                     // 显示源码
-                    Debug.WriteLine("{0}|{1}", currLine, exe.QuerySourceLine(c.CodePos));
+                    Logger.DebugLine("{0}|{1}", currLine, exe.QuerySourceLine(c.CodePos));
                 }
 
                 // 显示汇编
-                Debug.WriteLine("{0,2}| {1}", index, c.ToString());
+                Logger.DebugLine("{0,2}| {1}", index, c.ToString());
                 index++;
             }
 
-            Debug.WriteLine("");
+            Logger.DebugLine("");
         }
     }
 

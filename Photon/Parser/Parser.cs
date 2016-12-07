@@ -94,7 +94,7 @@ namespace Photon
 
         public static void PrintAST(Node n, string indent = "")
         {
-            Debug.WriteLine(indent + n.ToString());
+            Logger.DebugLine(indent + n.ToString());
 
             foreach (var c in n.Child())
             {

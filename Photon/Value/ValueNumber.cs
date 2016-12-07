@@ -10,7 +10,12 @@ namespace Photon
             _data = data;
         }
 
-        public float Raw
+        public float RawValue
+        {
+            get { return _data; }
+        }
+
+        internal override object Raw
         {
             get { return _data; }
         }

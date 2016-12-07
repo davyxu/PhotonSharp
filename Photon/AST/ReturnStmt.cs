@@ -32,8 +32,7 @@ namespace Photon
         }
 
         internal override void Compile(CompileParameter param)
-        {
-            // TODO 多返回值打到comment里
+        {            
             for (int i = Results.Count - 1; i >= 0;i-- )
             {
                 Results[i].Compile(param.SetLHS(false));

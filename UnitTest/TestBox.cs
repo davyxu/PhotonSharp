@@ -9,7 +9,17 @@ namespace UnitTest
         Executable _exe = new Executable();
         VMachine _vm = new VMachine();
 
-        string _caseName;        
+        string _caseName;
+
+        public VMachine VM
+        {
+            get { return _vm; }
+        }
+
+        public Executable Exe
+        {
+            get { return _exe; }
+        }
 
         public TestBox Compile( string caseName, string src )
         {
@@ -29,7 +39,7 @@ namespace UnitTest
             Debug.WriteLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            _vm.Run(_exe );
+            _vm.Execute(_exe, "main", "main");
 
             Debug.WriteLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            
@@ -42,10 +52,7 @@ namespace UnitTest
             return this;
         }
 
-        public Executable Exe
-        {
-            get { return _exe; }
-        }
+
 
         public TestBox CompileFile(string filename)
         {

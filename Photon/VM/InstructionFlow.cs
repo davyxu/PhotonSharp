@@ -5,7 +5,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.JZ)]
     class CmdJZ : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var targetPC = cmd.DataA;
 
@@ -29,7 +29,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.JMP)]
     class CmdJmp : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             vm.CurrFrame.PC = cmd.DataA;
 
@@ -47,7 +47,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.CALL)]
     class CmdCall : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var argCount = cmd.DataA;
 
@@ -55,9 +55,7 @@ namespace Photon
 
             var func = Convertor.CastFunc(obj);
 
-            return func.Invoke(vm, argCount, cmd.DataB, obj as ValueClosure);
-
-            throw new RuntimeException("expect function or delegate");
+            return func.Invoke(vm, argCount, cmd.DataB, obj as ValueClosure);            
         }
 
         public override string Print(Command cmd)
@@ -70,10 +68,11 @@ namespace Photon
     [Instruction(Cmd = Opcode.RET)]
     class CmdRet : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             vm.LeaveFrame();
 
+            // 让指令完CALL后, 往后走
             return true;
         }
     }
@@ -81,7 +80,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.EXIT)]
     class CmdExit : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {            
             vm.CurrFrame.PC = -1;
 
@@ -91,7 +90,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.NOP)]
     class CmdNop : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {            
 
             return true;

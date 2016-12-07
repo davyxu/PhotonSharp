@@ -67,12 +67,7 @@ namespace Photon
             vm.CurrFrame.ReceiverCount = receiverCount;
             vm.CurrFrame.Closure = closure;
 
-            // 将栈转为被调用函数的寄存器
-            for (int i = 0; i < argCount; i++)
-            {
-                var arg = vm.DataStack.Get(-i - 1);
-                vm.LocalReg.Set(argCount - i - 1 + vm.RegBase, arg);
-            }
+            vm.MoveArgStack2Local(argCount);
 
             // 清空栈
             vm.DataStack.PopMulti(argCount);

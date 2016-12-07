@@ -41,25 +41,9 @@ namespace Photon
         // 运行状态
         State _state = State.Standby;
 
-        struct RegRange
-        {
-            public int Min;
-            public int Max;
-        }
-
-        // 寄存器使用范围栈
-        Stack<RegRange> _regBaseStack = new Stack<RegRange>();
-        int _regBase = 0;
-
         Executable _exe;
 
         InstructionSet _insset;
-
-        // 当前寄存器最小使用位置
-        internal int RegBase
-        {
-            get { return _regBase; }
-        }
 
         public State State 
         {
@@ -124,6 +108,16 @@ namespace Photon
             _hook[(int)hook] = callback;
         }
 
+        internal void MoveArgStack2Local(int argCount)
+        {
+            // 将栈转为被调用函数的寄存器
+            for (int i = 0; i < argCount; i++)
+            {
+                var arg = DataStack.Get(-i - 1);
+                LocalReg.Set(argCount - i - 1, arg);
+            }
+        }
+
         internal void EnterFrame( ValuePhoFunc func )
         {
             CallHook(DebugHook.Call);
@@ -133,14 +127,10 @@ namespace Photon
             _currFrame = newFrame;
 
             _callStack.Push(_currFrame);
-                        
-            RegRange rr;
-            rr.Min = _regBase;
-            rr.Max = _regBase + newFrame.CmdSet.RegCount;
+                               
+            LocalReg.SetUsedCount(newFrame.Func.RegCount);
 
-            LocalReg.SetUsedCount(rr.Max);
-            LocalReg.AttachScope(func.Scope);
-  
+            LocalReg.AttachScope(func.Scope);  
         }
 
         internal void LeaveFrame()
@@ -153,9 +143,16 @@ namespace Photon
 
             _callStack.Pop();
 
-            _currFrame = _callStack.Peek();
-
-
+            if (_callStack.Count > 0) 
+            {
+                _currFrame = _callStack.Peek();
+            }
+            else
+            {
+                // 单独运行函数后, 结束
+                _currFrame = null;
+            }
+            
             CallHook(DebugHook.Return);
         }
 
@@ -177,36 +174,25 @@ namespace Photon
             _currFrame.PC = -1;
         }
 
-       
-        public void Run(Executable exe, string startPkg = "main" )
+
+        internal void ExecuteFunc(RuntimePackage rtpkg, ValuePhoFunc func, int argCount, int retValueCount)
         {
-            if ( ShowDebugInfo )
+            if (ShowDebugInfo)
             {
-                Debug.WriteLine("============ VM Start ============");
+                Debug.WriteLine(string.Format("============ Run entry{0} ============", func.Name));
             }
 
-            _exe = exe;
-            _callStack.Clear();
-            _dataStack.Clear();
+            rtpkg.Reg.SetUsedCount(func.RegCount);
 
-            // 包全局寄存器初始化
-            for( int i = 0;i<exe.PackageCount ;i++)
+            EnterFrame(func);
+
+            CurrFrame.ReceiverCount = retValueCount;
+
+            if (argCount > 0)
             {
-                var pkg = exe.GetPackage(i);                
-                _package.Add(new RuntimePackage(pkg));
+                MoveArgStack2Local(argCount);
+                _dataStack.Clear();
             }
-            
-            // 找到包入口
-            var proc = exe.GetFuncByName( new ObjectName("main", "main") );
-            if ( proc == null )
-            {
-                throw new RuntimeException("unknown start package name: " + startPkg);
-            }
-
-            var cs = proc as ValuePhoFunc;
-            GetRuntimePackageByName("main").Reg.SetUsedCount(cs.RegCount);
-
-            EnterFrame(cs);
 
             int currSrcLine = 0;
 
@@ -223,7 +209,7 @@ namespace Photon
                     
                     Debug.WriteLine("{0}|{1}", cmd.CodePos, _exe.QuerySourceLine(cmd.CodePos));
                     Debug.WriteLine("---------------------");
-                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.CmdSet.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
+                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.Func.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
                 }
 
                 // 源码行有变化时
@@ -241,8 +227,11 @@ namespace Photon
                 // 每条指令执行前
                 CallHook(DebugHook.AssemblyLine);
 
-                if (_insset.ExecCode(cmd))
+                if (_insset.ExecCode(this, cmd))
                 {
+                    if (_currFrame == null)
+                        break;
+
                     _currFrame.PC++;
                 }
 
@@ -269,6 +258,62 @@ namespace Photon
             {
                 Debug.WriteLine("============ VM End ============");
             }
+        
+
         }
+
+        public object[] Execute(Executable exe, string pkgname, string entryName, object[] paramToExec = null, int retValueCount = 0)
+        {
+            _exe = exe;
+            _callStack.Clear();
+            _dataStack.Clear();
+
+            if (paramToExec != null)
+            {
+                foreach (var obj in paramToExec)
+                {
+                    var v = Convertor.NativeValueToValue(obj);
+                    _dataStack.Push(v);
+                }
+            }
+            
+
+            // 包全局寄存器初始化
+            // TODO 按import顺序, 顺序初始, 调用init
+            for (int i = 0; i < exe.PackageCount; i++)
+            {
+                var pkg = exe.GetPackage(i);
+                _package.Add(new RuntimePackage(pkg));
+            }
+
+
+            // 找到包入口
+            var func = _exe.GetFuncByName(new ObjectName(pkgname, entryName)) as ValuePhoFunc;
+            if (func == null)
+            {
+                throw new RuntimeException("unknown start package name: " + pkgname);
+            }
+
+            var rtpkg = GetRuntimePackageByName(pkgname);
+
+            var argCount = paramToExec != null ? paramToExec.Length:0;            
+
+            ExecuteFunc(rtpkg, func, argCount, retValueCount);
+
+            if (retValueCount > 0 )
+            {
+                var retValue = new object[retValueCount];
+                for (int i = 0; i < retValueCount; i++)
+                {
+                     retValue[i] = Convertor.ValueToNativeValue( DataStack.Get(-(i + 1)) );
+                }
+
+                return retValue;
+            }
+
+            return null;
+
+            
+        }  
     }
 }

@@ -15,10 +15,8 @@ namespace Photon
 
 
     class Instruction
-    {
-        public VMachine vm;
-
-        public virtual bool Execute( Command cmd )
+    {        
+        public virtual bool Execute( VMachine vm, Command cmd )
         {
             // true表示下一条指令
             return true;
@@ -46,8 +44,7 @@ namespace Photon
                 if (att == null)
                     continue;
 
-                var cmd = Activator.CreateInstance(t) as Instruction;
-                cmd.vm = vm;
+                var cmd = Activator.CreateInstance(t) as Instruction;                
                 _instruction[(int)att.Cmd] = cmd;
             }
         }
@@ -64,7 +61,7 @@ namespace Photon
             return inc.Print(cmd);
         }
 
-        internal bool ExecCode(Command cmd)
+        internal bool ExecCode(VMachine vm, Command cmd)
         {
             var inc = _instruction[(int)cmd.Op];
 
@@ -74,7 +71,7 @@ namespace Photon
             }
 
 
-            return inc.Execute(cmd);
+            return inc.Execute(vm,cmd);
         }
     }
 

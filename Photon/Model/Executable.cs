@@ -25,7 +25,8 @@ namespace Photon
         List<File> _file = new List<File>();
 
         // 类
-        List<ValueClassType> _class = new List<ValueClassType>();
+        List<ValueClassType> _classType = new List<ValueClassType>();
+        Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
 
         // 常量表
         ConstantSet _constSet = new ConstantSet();
@@ -78,21 +79,27 @@ namespace Photon
 
         internal ValueClassType AddClassType(ValueClassType c)
         {
-            _class.Add(c);
+            var nativeClass = c as ValueNativeClassType;
+            if ( nativeClass != null )
+            {
+                _classTypeByNativeType.Add(nativeClass.Raw, c);
+            }
 
-            c.ID = _class.Count - 1;
+            _classType.Add(c);
+
+            c.ID = _classType.Count - 1;
 
             return c;
         }
 
         internal ValueClassType GetClassType(int cid)
         {
-            return _class[cid];
+            return _classType[cid];
         }
 
         internal ValueClassType GetClassTypeByName(ObjectName name)
         {
-            foreach( var c in _class )
+            foreach( var c in _classType )
             {
                 if (c.Name.Equals( name))
                     return c;
@@ -101,6 +108,17 @@ namespace Photon
             return null;
         }
 
+        // 通过native类的原始类型获取注册好的类型
+        internal ValueClassType GetClassTypeByNativeType(Type t )
+        {
+            ValueClassType ct;
+            if (_classTypeByNativeType.TryGetValue( t, out ct ))
+            {
+                return ct;
+            }
+
+            return null;
+        }
 
         internal Package AddPackage( string name, Scope top )
         {
@@ -137,11 +155,11 @@ namespace Photon
 
         internal ValueFunc GetFuncByName(ObjectName name)
         {           
-            foreach( var pro in _func )
+            foreach( var func in _func )
             {
-                if ( pro.Name.Equals( name ) )
+                if ( func.Name.Equals( name ) )
                 {
-                    return pro;
+                    return func;
                 }
 
             }

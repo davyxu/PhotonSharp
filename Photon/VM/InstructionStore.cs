@@ -5,7 +5,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADK)]
     class CmdLoadK : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {            
             var c = vm.Exec.Constants.Get(cmd.DataA);
 
@@ -23,9 +23,9 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADR)]
     class CmdLoadR : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
-            int regIndex = cmd.DataA + vm.RegBase;
+            int regIndex = cmd.DataA;
 
             Value v = vm.LocalReg.Get(regIndex);
 
@@ -36,7 +36,7 @@ namespace Photon
 
         public override string Print( Command cmd)
         {
-            int regIndex = cmd.DataA + vm.RegBase;
+            int regIndex = cmd.DataA;
 
             return string.Format("Reg: {0}", regIndex);
         }
@@ -45,9 +45,9 @@ namespace Photon
     [Instruction(Cmd = Opcode.SETR)]
     class CmdSetR : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
-            int regIndex = cmd.DataA + vm.RegBase;
+            int regIndex = cmd.DataA;
 
             var d = vm.DataStack.Pop();
 
@@ -57,7 +57,7 @@ namespace Photon
         }
         public override string Print( Command cmd)
         {
-            int regIndex = cmd.DataA + vm.RegBase;
+            int regIndex = cmd.DataA;
 
             return string.Format("Reg: {0}", regIndex);
         }
@@ -68,7 +68,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADG)]
     class CmdLoadG : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
 
             Value v = vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB);
@@ -86,7 +86,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SETG)]
     class CmdSetG : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {            
             var d = vm.DataStack.Pop();
 
@@ -104,7 +104,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADI)]
     class CmdLoadI : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var obj = Convertor.CastContainer(vm.DataStack.Pop());
 
@@ -126,7 +126,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SETI)]
     class CmdSetI : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var obj = Convertor.CastContainer(vm.DataStack.Pop());
 
@@ -148,7 +148,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SEL)]
     class CmdSelect : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var c = Convertor.CastObject(vm.DataStack.Pop());
 
@@ -167,7 +167,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LINKU)]
     class CmdLinkU : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             // 使用寄存器的地方和引用地方scope之差
             int mode = cmd.DataA;
@@ -212,7 +212,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADU)]
     class CmdLoadU : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             int regIndex =  cmd.DataA;
 
@@ -231,7 +231,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SETU)]
     class CmdSetU : Instruction
     {
-        public override bool Execute( Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             
             var regIndex = cmd.DataA;
@@ -252,7 +252,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADF)]
     class CmdLoadF : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var proc = vm.Exec.GetFunc(cmd.DataA );
 
@@ -270,7 +270,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.CLOSURE)]
     class CmdClosure : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var proc = vm.Exec.GetFunc(cmd.DataA );
 
@@ -288,7 +288,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.NEW)]
     class CmdNew : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var ins = vm.Exec.GetClassType(cmd.DataA).CreateInstance();            
 
@@ -307,7 +307,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LOADM)]
     class CmdLoadM : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var ci = Convertor.CastObject(vm.DataStack.Pop());
 
@@ -325,7 +325,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SETM)]
     class CmdSetM : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var ci = Convertor.CastObject(vm.DataStack.Pop());
 

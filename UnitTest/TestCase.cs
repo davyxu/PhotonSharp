@@ -13,6 +13,9 @@ namespace UnitTest
                 Compiler.GenerateBuildinFiles(); 
             }
 
+   
+
+
             new TestBox().RunFile("Math.pho")
                 .CheckGlobalVarMatchValue("a", -1);
 
@@ -24,7 +27,7 @@ namespace UnitTest
 
             TestFuncPackage();
 
-            TestDelegate();
+            TestDelegateExecute();
 
             TestFlow();
 

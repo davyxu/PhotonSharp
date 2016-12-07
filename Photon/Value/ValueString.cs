@@ -3,16 +3,21 @@ namespace Photon
 {
     class ValueString : Value
     {
-        string _str;
+        string _data;
 
         public ValueString(string v)
         {
-            _str = v;
+            _data = v;
         }
 
-        public string Raw
+        public string RawValue
         {
-            get { return _str; }
+            get { return _data; }
+        }
+
+        internal override object Raw
+        {
+            get { return _data; }
         }
 
         public override bool Equals(object other)
@@ -21,12 +26,12 @@ namespace Photon
             if (otherT == null)
                 return false;
 
-            return otherT._str == _str;
+            return otherT._data == _data;
         }
 
         public override string DebugString()
         {
-            return string.Format("'{0}' (string)", _str);
+            return string.Format("'{0}' (string)", _data);
         }
 
         public override ValueKind Kind

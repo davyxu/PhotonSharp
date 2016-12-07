@@ -72,11 +72,11 @@ namespace Photon
 
         static bool ResolveFuncEntry(Package pkg, string name, Command cmd)
         {
-            var proc = pkg.Exe.GetFuncByName(new ObjectName(pkg.Name, name));
+            var func = pkg.Exe.GetFuncByName(new ObjectName(pkg.Name, name));
 
-            if ( proc != null )
+            if ( func != null )
             {
-                cmd.DataA = proc.ID;
+                cmd.DataA = func.ID;
                 return true;
             }
 

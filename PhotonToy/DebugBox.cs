@@ -258,7 +258,7 @@ namespace PhotonToy
             });
 
 
-            _vm.Run(_exe );
+            _vm.Execute(_exe, "main", "main" );
 
             CallBreak(_vm, false);
 

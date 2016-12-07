@@ -4,10 +4,54 @@ namespace Photon
 {
     public static class Convertor
     {
+        #region native类型转值类型
+
         public static object Integer32ToValue(Int32 v)
         {
             return new ValueNumber((float)v);
         }
+        public static object Float32ToValue(float v)
+        {
+            return new ValueNumber(v);
+        }
+
+        public static object BoolToValue(bool v)
+        {
+            return new ValueBool(v);
+        }
+
+        public static object StringToValue(string s)
+        {
+            return new ValueString(s);
+        }
+
+        internal static Value NativeValueToValue(object v)
+        {
+            Type vt = v.GetType();
+
+            if (vt == typeof(Int32))
+            {
+                return new ValueNumber((float)(int)v);
+            }
+            else if (vt == typeof(float))
+            {
+                return new ValueNumber((float)v);
+            }
+            else if (vt == typeof(string))
+            {
+                return new ValueString((string)v);
+            }
+            else if (vt == typeof(bool))
+            {
+                return new ValueBool((bool)v);
+            }
+            
+            throw new RuntimeException("Unsupport native type: "+ vt.ToString());            
+        }
+
+        #endregion
+
+        #region 值类型转native类型
 
         public static Int32 ValueToInteger32(object v)
         {
@@ -18,16 +62,8 @@ namespace Photon
                 throw new RuntimeException("Expect 'Number' value");
             }
 
-            return (Int32)real.Raw;
+            return (Int32)real.RawValue;
         }
-
-
-
-        public static object Float32ToValue(float v)
-        {
-            return new ValueNumber(v);
-        }
-
 
         public static float ValueToFloat32(object v)
         {
@@ -38,12 +74,7 @@ namespace Photon
                 throw new RuntimeException("Expect 'Number' value");
             }
 
-            return real.Raw;
-        }
-
-        public static object BoolToValue(bool v)
-        {
-            return new ValueBool(v);
+            return real.RawValue;
         }
 
         public static bool ValueToBool(object v)
@@ -55,14 +86,8 @@ namespace Photon
                 throw new RuntimeException("Expect 'Bool' value");
             }
 
-            return real.Raw;
+            return real.RawValue;
         }
-
-        public static object StringToValue(string s)
-        {
-            return new ValueString(s);
-        }
-
 
         public static string ValueToString(object v)
         {
@@ -73,7 +98,7 @@ namespace Photon
                 throw new RuntimeException("Expect 'String' value");
             }
 
-            return real.Raw;
+            return real.RawValue;
         }
 
         public static object ValueToObject(object v)
@@ -88,6 +113,14 @@ namespace Photon
             return real.Raw;
         }
 
+        internal static object ValueToNativeValue( Value v )
+        {
+            return v.Raw;
+        }
+
+        #endregion
+
+        #region 内部转换
 
         internal static ValueObject CastObject(Value v )
         {
@@ -174,5 +207,7 @@ namespace Photon
             
             return string.Empty;
         }
+
+        #endregion
     }
 }

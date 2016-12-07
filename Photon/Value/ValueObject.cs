@@ -24,10 +24,7 @@ namespace Photon
             return Value.Nil;
         }
 
-        internal virtual object Raw
-        {
-            get { return null; }
-        }
+
 
 
     }

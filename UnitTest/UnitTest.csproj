@@ -49,7 +49,7 @@
     </Compile>
     <Compile Include="ClassTest.cs" />
     <Compile Include="NativeClassTest.cs" />
-    <Compile Include="DelegateTest.cs" />
+    <Compile Include="DelegateExecuteTest.cs" />
     <Compile Include="DataStackBalanceTest.cs" />
     <Compile Include="NativeClassWrapper.cs">
       <SubType>Code</SubType>

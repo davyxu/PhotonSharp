@@ -1,14 +1,13 @@
-﻿
-
-using SharpLexer;
+﻿using SharpLexer;
 using System.Collections.Generic;
+
 namespace Photon
 {
     public class RuntimeFrame
     {
         public int PC;
 
-        internal ValuePhoFunc CmdSet;
+        internal ValuePhoFunc Func;
 
         internal int DataStackBase;
 
@@ -21,26 +20,26 @@ namespace Photon
 
         public int FuncID
         {
-            get { return CmdSet.ID; }
+            get { return Func.ID; }
         }
         public string FuncName
         {
-            get { return CmdSet.Name.EntryName; }
+            get { return Func.Name.EntryName; }
         }
 
         public TokenPos FuncDefPos
         {
-            get { return CmdSet.DefPos; }
+            get { return Func.DefPos; }
         }
 
         public string PkgName
         {
-            get { return CmdSet.Name.PackageName; }
+            get { return Func.Name.PackageName; }
         }
 
         public List<Command> Commands
         {
-            get { return CmdSet.Commands; }
+            get { return Func.Commands; }
         }
 
         public TokenPos CodePos
@@ -56,22 +55,22 @@ namespace Photon
 
         internal RuntimeFrame(ValuePhoFunc cs)
         {            
-            CmdSet = cs; 
+            Func = cs; 
         }
 
         internal Command GetCurrCommand()
         {
-            if (PC >= CmdSet.Commands.Count || PC < 0)
+            if (PC >= Func.Commands.Count || PC < 0)
             {
                 return null;
             }
 
-            return CmdSet.Commands[PC];
+            return Func.Commands[PC];
         }
 
         public string DebugString()
         {
-            return string.Format("{0} {1}", CodePos, CmdSet.Name);
+            return string.Format("{0} {1}", CodePos, Func.Name);
         }
 
         public override string ToString()

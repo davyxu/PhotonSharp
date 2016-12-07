@@ -4,7 +4,7 @@ namespace Photon
 {
     class InstructionBinaryMath : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
             var b = Convertor.ValueToFloat32(vm.DataStack.Pop());
@@ -12,7 +12,7 @@ namespace Photon
             float c;
 
             // 栈顺序是反的, 需要倒过来
-            var result = ExecuteOn2Value(cmd, b, a, out c );
+            var result = ExecuteOn2Value(vm, cmd, b, a, out c );
 
             vm.DataStack.Push(new ValueNumber(c));
 
@@ -20,7 +20,7 @@ namespace Photon
         }
 
 
-        public virtual bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public virtual bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = 0;
 
@@ -31,14 +31,14 @@ namespace Photon
 
     class InstructionUnaryMath : Instruction
     {
-        public override bool Execute(Command cmd)
+        public override bool Execute(VMachine vm, Command cmd)
         {
             var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
 
             float c;
 
             // 栈顺序是反的, 需要倒过来
-            var result = ExecuteOnValue(cmd, a, out c);
+            var result = ExecuteOnValue(vm,cmd, a, out c);
 
             vm.DataStack.Push(new ValueNumber(c));
 
@@ -46,7 +46,7 @@ namespace Photon
         }
 
 
-        public virtual bool ExecuteOnValue(Command cmd, float a, out float x)
+        public virtual bool ExecuteOnValue(VMachine vm,Command cmd, float a, out float x)
         {
             x = 0;
 
@@ -57,7 +57,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.MINUS)]
     class CmdMinus : InstructionUnaryMath
     {
-        public override bool ExecuteOnValue(Command cmd, float a, out float x)
+        public override bool ExecuteOnValue(VMachine vm,Command cmd, float a, out float x)
         {
             x = -a;
 
@@ -71,7 +71,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.ADD)]
     class CmdAdd : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a + b;
 
@@ -82,7 +82,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.SUB)]
     class CmdSub : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a - b;
 
@@ -93,7 +93,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.MUL)]
     class CmdMul : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a * b ;
 
@@ -104,7 +104,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.DIV)]
     class CmdDiv : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a / b ;
 
@@ -115,7 +115,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.GT)]
     class CmdGT : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a > b ? 1 : 0;
 
@@ -125,8 +125,8 @@ namespace Photon
 
     [Instruction(Cmd = Opcode.GE)]
     class CmdGE : InstructionBinaryMath
-    {            
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+    {
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a >= b ? 1 : 0;
 
@@ -138,7 +138,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LT)]
     class CmdLT : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a < b ? 1 : 0;
 
@@ -149,7 +149,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.LE)]
     class CmdLE : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a <= b ? 1 : 0;
 
@@ -161,7 +161,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.EQ)]
     class CmdEQ : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a == b ? 1 : 0;
 
@@ -172,7 +172,7 @@ namespace Photon
     [Instruction(Cmd = Opcode.NE)]
     class CmdNE : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(Command cmd, float a, float b, out float x)
+        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
         {
             x = a != b ? 1 : 0;
 

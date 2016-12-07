@@ -50,6 +50,10 @@ namespace Photon
             get { return string.Empty; }
         }
 
+        internal virtual object Raw
+        {
+            get { throw new System.NotImplementedException(); }
+        }
      
     }
 

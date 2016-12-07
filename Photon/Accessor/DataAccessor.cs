@@ -14,34 +14,25 @@ namespace Photon
             throw new NotImplementedException();
         }
 
+        public virtual string DebugString(int index)
+        {
+            return Get(index).DebugString();
+        }
+
         public ValueKind GetValueKind( int index )
         {
             return Get(index).Kind;
         }
 
-        public virtual string DebugString( int index )
-        {
-            return Get(index).DebugString();
-        }
 
         public Int32 GetInteger32(int index)
         {
             return (Int32)Convertor.ValueToFloat32(Get(index));
         }
 
-
-        internal void SetInteger32(int index, Int32 v)
-        {
-            Set(index, new ValueNumber((float)v));
-        }
-
         public bool GetBool(int index)
         {
             return Convertor.ValueToBool(Get(index));
-        }
-        internal void SetBool(int index, bool v)
-        {
-            Set(index, new ValueBool(v));
         }
 
         public float GetFloat32(int index)
@@ -49,19 +40,9 @@ namespace Photon
             return Convertor.ValueToFloat32(Get(index));
         }
 
-        internal void SetFloat32(int index, float v)
-        {
-            Set(index, new ValueNumber(v));
-        }
-
         public string GetString(int index)
         {
             return Convertor.ValueToString(Get(index));
-        }
-
-        public void SetString(int index, string v)
-        {
-            Set(index, new ValueString(v));
         }
 
         internal Value GetValue(int index)
@@ -77,6 +58,28 @@ namespace Photon
         public bool IsNil(int index)
         {
             return Get(index).Kind == ValueKind.Nil;
+        }
+
+
+        internal void SetInteger32(int index, Int32 v)
+        {
+            Set(index, new ValueNumber((float)v));
+        }
+
+       
+        internal void SetBool(int index, bool v)
+        {
+            Set(index, new ValueBool(v));
+        }
+
+        internal void SetFloat32(int index, float v)
+        {
+            Set(index, new ValueNumber(v));
+        }
+
+        public void SetString(int index, string v)
+        {
+            Set(index, new ValueString(v));
         }
 
         internal void SetNil(int index)

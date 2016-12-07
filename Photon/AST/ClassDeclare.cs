@@ -68,7 +68,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            _class = new ValuePhoClassType(  new ObjectName(param.Pkg.Name, Name.Name));
+            _class = new ValuePhoClassType( new ObjectName(param.Pkg.Name, Name.Name));
 
             foreach( var m in Member )
             {

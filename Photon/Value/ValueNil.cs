@@ -13,14 +13,14 @@ namespace Photon
             return "(nil)";
         }
 
-        public override string ToString()
-        {
-            return "nil";
-        }
-
         public override ValueKind Kind
         {
             get { return ValueKind.Nil; }
+        }
+
+        internal override object Raw
+        {
+            get { return null; }
         }
     }
 }

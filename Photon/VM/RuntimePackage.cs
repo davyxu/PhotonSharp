@@ -25,11 +25,26 @@ namespace Photon
 
         Value GetRegisterValue(string name)
         {
+            if (_pkg == null)
+                return Value.Nil;
+
             var symbol = _pkg.TopScope.FindRegister(name);
             if (symbol == null)
                 return Value.Nil;
 
             return Reg.Get(symbol.RegIndex) as Value;
+        }
+
+        void SetRegisterValue(string name, object v)
+        {
+            if (_pkg == null)
+                return;
+
+            var symbol = _pkg.TopScope.FindRegister(name);
+            if (symbol == null)
+                return;
+
+            Reg.Set(symbol.RegIndex, v as Value);
         }
 
 

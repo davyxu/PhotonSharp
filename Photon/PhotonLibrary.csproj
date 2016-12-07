@@ -72,9 +72,9 @@
     </Compile>
     <Compile Include="Builtin\MapWrapper.cs" />
     <Compile Include="Model\NativeType.cs" />
-    <Compile Include="TypeInterface\SymbolAccessor.cs" />
-    <Compile Include="TypeInterface\StackAccessor.cs" />
-    <Compile Include="TypeInterface\Convertor.cs" />
+    <Compile Include="Accessor\RegisterAccessor.cs" />
+    <Compile Include="Accessor\StackAccessor.cs" />
+    <Compile Include="Accessor\Convertor.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />
     <Compile Include="CodeGen\Printer.cs" />
@@ -110,13 +110,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\OpCode.cs" />
     <Compile Include="Model\Token.cs" />
-    <Compile Include="TypeInterface\DataAccessor.cs" />
+    <Compile Include="Accessor\DataAccessor.cs" />
     <Compile Include="VM\Instruction.cs" />
     <Compile Include="VM\InstructionFlow.cs" />
     <Compile Include="VM\InstructionMath.cs" />
     <Compile Include="VM\InstructionStore.cs" />
     <Compile Include="VM\DataStack.cs" />
     <Compile Include="Value\Value.cs" />
+    <Compile Include="VM\RuntimeContext.cs" />
     <Compile Include="VM\RuntimeFrame.cs" />
     <Compile Include="VM\Register.cs" />
     <Compile Include="VM\RuntimePackage.cs" />

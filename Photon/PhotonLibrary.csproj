@@ -85,6 +85,8 @@
     <Compile Include="CodeGen\Collector.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Value\ValueBool.cs" />
+    <Compile Include="Value\ValueFloat64.cs" />
+    <Compile Include="Value\ValueInteger64.cs" />
     <Compile Include="Value\ValueInteger32.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />

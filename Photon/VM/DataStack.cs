@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-
+﻿
 namespace Photon
 {
     public partial class DataStack : DataAccessor

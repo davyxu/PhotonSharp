@@ -9,9 +9,9 @@ namespace Photon
         {
             var targetPC = cmd.DataA;
 
-            var d = Convertor.ValueToFloat32(vm.DataStack.Pop());
+            var x = Convertor.ValueToBool(vm.DataStack.Pop());
 
-            if ( d == 0 )
+            if ( x == false)
             {
                 vm.CurrFrame.PC = targetPC;                
                 return false;

@@ -27,7 +27,12 @@ namespace Photon
 
         public Int32 GetInteger32(int index)
         {
-            return (Int32)Convertor.ValueToFloat32(Get(index));
+            return Convertor.ValueToInteger32(Get(index));
+        }
+
+        public Int64 GetInteger64(int index)
+        {
+            return Convertor.ValueToInteger64(Get(index));
         }
 
         public bool GetBool(int index)
@@ -38,6 +43,11 @@ namespace Photon
         public float GetFloat32(int index)
         {
             return Convertor.ValueToFloat32(Get(index));
+        }
+
+        public double GetFloat64(int index)
+        {
+            return Convertor.ValueToFloat64(Get(index));
         }
 
         public string GetString(int index)
@@ -63,10 +73,14 @@ namespace Photon
 
         internal void SetInteger32(int index, Int32 v)
         {
-            Set(index, new ValueFloat32((float)v));
+            Set(index, new ValueInteger32(v));
         }
 
-       
+        internal void SetInteger64(int index, Int64 v)
+        {
+            Set(index, new ValueInteger64(v));
+        }
+
         internal void SetBool(int index, bool v)
         {
             Set(index, new ValueBool(v));
@@ -75,6 +89,10 @@ namespace Photon
         internal void SetFloat32(int index, float v)
         {
             Set(index, new ValueFloat32(v));
+        }
+        internal void SetFloat64(int index, double v)
+        {
+            Set(index, new ValueFloat64(v));
         }
 
         public void SetString(int index, string v)

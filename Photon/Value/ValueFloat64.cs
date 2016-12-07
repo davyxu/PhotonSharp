@@ -1,16 +1,16 @@
 ﻿
 namespace Photon
 {
-    class ValueFloat32 : Value
+    class ValueFloat64 : Value
     {
-        float _data = 0;
+        double _data = 0;
 
-        public ValueFloat32( float data )
+        public ValueFloat64( double data )
         {
             _data = data;
         }
 
-        public float RawValue
+        public double RawValue
         {
             get { return _data; }
         }
@@ -22,7 +22,7 @@ namespace Photon
 
         public override bool Equals(object other)
         {
-            var otherT = other as ValueFloat32;
+            var otherT = other as ValueFloat64;
             if (otherT == null)
                 return false;
 
@@ -30,29 +30,29 @@ namespace Photon
         }
         public override string DebugString()
         {
-            return _data.ToString() + " (float32)";
+            return _data.ToString() + " (double32)";
         }
 
         public override ValueKind Kind
         {
-            get { return ValueKind.Float32; }
+            get { return ValueKind.Float64; }
         }
 
         internal override Value BinaryOperate(Opcode code, Value other)
         {
             var a = RawValue;
-            var b = Convertor.ValueToFloat32(other);
+            var b = Convertor.ValueToFloat64(other);
 
             switch (code)
             {
                 case Opcode.ADD:
-                    return new ValueFloat32(a + b);
+                    return new ValueFloat64(a + b);
                 case Opcode.SUB:
-                    return new ValueFloat32(a - b);
+                    return new ValueFloat64(a - b);
                 case Opcode.MUL:
-                    return new ValueFloat32(a * b);
+                    return new ValueFloat64(a * b);
                 case Opcode.DIV:
-                    return new ValueFloat32(a / b);
+                    return new ValueFloat64(a / b);
                 case Opcode.GT:
                     return new ValueBool(a > b);
                 case Opcode.GE:
@@ -77,7 +77,7 @@ namespace Photon
             switch (code)
             {
                 case Opcode.MINUS:
-                    return new ValueFloat32(-a);
+                    return new ValueFloat64(-a);
                 default:
                     throw new RuntimeException("Unknown unary operator:" + code.ToString());
             }

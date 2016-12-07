@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 
 namespace Photon
 {
@@ -6,49 +6,26 @@ namespace Photon
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
-            var b = Convertor.ValueToFloat32(vm.DataStack.Pop());
+            var b = vm.DataStack.Pop();
+            var a = vm.DataStack.Pop();
 
-            float c;
+            var x = a.BinaryOperate(cmd.Op, b);
 
-            // 栈顺序是反的, 需要倒过来
-            var result = ExecuteOn2Value(vm, cmd, b, a, out c );
-
-            vm.DataStack.Push(new ValueFloat32(c));
-
-            return result;
-        }
-
-
-        public virtual bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = 0;
+            vm.DataStack.Push(x);
 
             return true;
         }
-
     }
 
     class InstructionUnaryMath : Instruction
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var a = Convertor.ValueToFloat32(vm.DataStack.Pop());
+            var a = vm.DataStack.Pop();
 
-            float c;
+            var x = a.UnaryOperate(cmd.Op);
 
-            // 栈顺序是反的, 需要倒过来
-            var result = ExecuteOnValue(vm,cmd, a, out c);
-
-            vm.DataStack.Push(new ValueFloat32(c));
-
-            return result;
-        }
-
-
-        public virtual bool ExecuteOnValue(VMachine vm,Command cmd, float a, out float x)
-        {
-            x = 0;
+            vm.DataStack.Push(x);
 
             return true;
         }
@@ -57,127 +34,57 @@ namespace Photon
     [Instruction(Cmd = Opcode.MINUS)]
     class CmdMinus : InstructionUnaryMath
     {
-        public override bool ExecuteOnValue(VMachine vm,Command cmd, float a, out float x)
-        {
-            x = -a;
-
-            return true;
-        }
     }
-
-
 
 
     [Instruction(Cmd = Opcode.ADD)]
     class CmdAdd : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a + b;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.SUB)]
     class CmdSub : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a - b;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.MUL)]
     class CmdMul : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a * b ;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.DIV)]
     class CmdDiv : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a / b ;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.GT)]
     class CmdGT : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a > b ? 1 : 0;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.GE)]
     class CmdGE : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a >= b ? 1 : 0;
-
-            return true;
-        }
-
     }
 
     [Instruction(Cmd = Opcode.LT)]
     class CmdLT : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a < b ? 1 : 0;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.LE)]
     class CmdLE : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a <= b ? 1 : 0;
-
-            return true;
-        }
-
     }
 
     [Instruction(Cmd = Opcode.EQ)]
     class CmdEQ : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a == b ? 1 : 0;
-
-            return true;
-        }
     }
 
     [Instruction(Cmd = Opcode.NE)]
     class CmdNE : InstructionBinaryMath
     {
-        public override bool ExecuteOn2Value(VMachine vm, Command cmd, float a, float b, out float x)
-        {
-            x = a != b ? 1 : 0;
-
-            return true;
-        }
     }
 
 

@@ -5,7 +5,9 @@ namespace Photon
     {
         Nil = 0,
         Float32,
+        Float64,
         Integer32,
+        Integer64,
         Bool,
         String,
         Func,        
@@ -22,7 +24,7 @@ namespace Photon
         Value GetKeyValue(Value k);        
     }
 
-    partial class Value
+    class Value
     {
         public override bool Equals(object obj)
         {
@@ -34,6 +36,11 @@ namespace Photon
         public override string ToString()
         {
             return DebugString();
+        }
+
+        public override int GetHashCode()
+        {
+            return Raw.GetHashCode();
         }
 
         public virtual string DebugString( )
@@ -55,9 +62,18 @@ namespace Photon
         {
             get { throw new System.NotImplementedException(); }
         }
+
+        internal virtual Value BinaryOperate(Opcode code, Value other)
+        {
+            throw new RuntimeException("Expect numeral value");
+        }
+
+        internal virtual Value UnaryOperate(Opcode code)
+        {
+            throw new RuntimeException("Expect numeral value");
+        }
      
     }
-
 
 
 

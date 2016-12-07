@@ -43,7 +43,7 @@ namespace UnitTest
                     testbox.Error("ret value not match");
                 }
 
-                if ( (float)retValue[0] != 3.0 )
+                if ( (System.Int32)retValue[0] != 3 )
                 {
                     testbox.Error("ret value not match");
                 }

@@ -15,7 +15,7 @@ namespace Photon
     {
         public static bool OutputToDebugger = true;
 
-        public static bool OutputToConsole = true;
+        public static bool OutputToConsole = false;
 
         public static void WriteLine(LogLevel level, string msg)
         {

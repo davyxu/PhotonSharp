@@ -8,11 +8,23 @@ namespace Photon
 
         public static object Integer32ToValue(Int32 v)
         {
-            return new ValueFloat32((float)v);
+            return new ValueInteger32(v);
         }
+
+        public static object Integer64ToValue(Int64 v)
+        {
+            return new ValueInteger64(v);
+        }
+
+
         public static object Float32ToValue(float v)
         {
             return new ValueFloat32(v);
+        }
+
+        public static object Float64ToValue(double v)
+        {
+            return new ValueFloat64(v);
         }
 
         public static object BoolToValue(bool v)
@@ -31,11 +43,19 @@ namespace Photon
 
             if (vt == typeof(Int32))
             {
-                return new ValueFloat32((float)(int)v);
+                return new ValueInteger32((Int32)v);
+            }
+            else if (vt == typeof(float))
+            {
+                return new ValueInteger64((Int64)v);
             }
             else if (vt == typeof(float))
             {
                 return new ValueFloat32((float)v);
+            }
+            else if (vt == typeof(double))
+            {
+                return new ValueFloat64((double)v);
             }
             else if (vt == typeof(string))
             {
@@ -55,14 +75,26 @@ namespace Photon
 
         public static Int32 ValueToInteger32(object v)
         {
-            var real = (v as ValueFloat32);
+            var real = (v as ValueInteger32);
 
             if (real == null)
             {
-                throw new RuntimeException("Expect 'Number' value");
+                throw new RuntimeException("Expect 'Integer32' value");
             }
 
-            return (Int32)real.RawValue;
+            return real.RawValue;
+        }
+
+        public static Int64 ValueToInteger64(object v)
+        {
+            var real = (v as ValueInteger64);
+
+            if (real == null)
+            {
+                throw new RuntimeException("Expect 'Integer64' value");
+            }
+
+            return real.RawValue;
         }
 
         public static float ValueToFloat32(object v)
@@ -71,7 +103,19 @@ namespace Photon
 
             if (real == null)
             {
-                throw new RuntimeException("Expect 'Number' value");
+                throw new RuntimeException("Expect 'Float32' value");
+            }
+
+            return real.RawValue;
+        }
+
+        public static double ValueToFloat64(object v)
+        {
+            var real = (v as ValueFloat64);
+
+            if (real == null)
+            {
+                throw new RuntimeException("Expect 'Float64' value");
             }
 
             return real.RawValue;
@@ -184,9 +228,17 @@ namespace Photon
             {
                 return "Integer32";
             }
+            else if (t == typeof(Int64))
+            {
+                return "Integer64";
+            }
             else if ( t == typeof(float))
             {
                 return "Float32";
+            }
+            else if (t == typeof(double))
+            {
+                return "Float64";
             }
             else if (t == typeof(string))
             {

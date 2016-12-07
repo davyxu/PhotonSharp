@@ -1,7 +1,6 @@
 ﻿using SharpLexer;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Photon
 {

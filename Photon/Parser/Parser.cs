@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using SharpLexer;
+﻿using SharpLexer;
 
 namespace Photon
 {

@@ -1,4 +1,5 @@
 ﻿using SharpLexer;
+using System;
 
 namespace Photon
 {
@@ -30,6 +31,11 @@ namespace Photon
             param.CS.Add(new Command(Opcode.LOADK, _constIndex)).SetComment(c.ToString()).SetCodePos(Pos);
         }
 
+        static bool IsFloat( string s )
+        {
+            return s.IndexOf('.') != -1;
+        }
+
         Value Lit2Const()
         {
             Value c = null;
@@ -38,11 +44,23 @@ namespace Photon
             {
                 case TokenType.Number:
                     {
-                        float v;
-                        if (!float.TryParse(Value, out v))
-                            return null;
+                        if (IsFloat(Value))
+                        {
+                            float v;
+                            if (!float.TryParse(Value, out v))
+                                return null;
 
-                        c = new ValueFloat32(v);
+                            c = new ValueFloat32(v);
+                        }
+                        else
+                        {
+                            Int32 v;
+                            if (!Int32.TryParse(Value, out v))
+                                return null;
+
+                            c = new ValueInteger32(v);
+                        }
+                        
                     }
                     break;
                 case TokenType.QuotedString:

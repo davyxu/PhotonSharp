@@ -179,7 +179,7 @@ namespace Photon
         {
             if (ShowDebugInfo)
             {
-                Debug.WriteLine(string.Format("============ Run entry{0} ============", func.Name));
+                Logger.DebugLine(string.Format("============ Run entry{0} ============", func.Name));
             }
 
             rtpkg.Reg.SetUsedCount(func.RegCount);
@@ -207,9 +207,9 @@ namespace Photon
                 if (ShowDebugInfo)
                 {
                     
-                    Debug.WriteLine("{0}|{1}", cmd.CodePos, _exe.QuerySourceLine(cmd.CodePos));
-                    Debug.WriteLine("---------------------");
-                    Debug.WriteLine("{0,5} {1,2}| {2} {3}", _currFrame.Func.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
+                    Logger.DebugLine("{0}|{1}", cmd.CodePos, _exe.QuerySourceLine(cmd.CodePos));
+                    Logger.DebugLine("---------------------");
+                    Logger.DebugLine("{0,5} {1,2}| {2} {3}", _currFrame.Func.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
                 }
 
                 // 源码行有变化时
@@ -248,7 +248,7 @@ namespace Photon
                     // 数据栈信息
                     DataStack.DebugPrint();
 
-                    Debug.WriteLine("");
+                    Logger.DebugLine("");
                 }
 
             }
@@ -256,7 +256,7 @@ namespace Photon
 
             if (ShowDebugInfo)
             {
-                Debug.WriteLine("============ VM End ============");
+                Logger.DebugLine("============ VM End ============");
             }
         
 

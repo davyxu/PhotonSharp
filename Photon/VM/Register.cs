@@ -75,7 +75,7 @@ namespace Photon
                 {
                     var v = _values[i];
 
-                    Debug.WriteLine("{0}{1}: {2}", _usage, i, v.ToString());
+                    Logger.DebugLine("{0}{1}: {2}", _usage, i, v.ToString());
                 }
             }
             else
@@ -83,7 +83,7 @@ namespace Photon
                 for (int i = 0; i < _usedSlot; i++)
                 {
 
-                    Debug.WriteLine(DebugString(i));
+                    Logger.DebugLine(DebugString(i));
                 }
             }
 

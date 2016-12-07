@@ -39,16 +39,16 @@ namespace Photon
 
         public void DebugPrint( )
         {
-            Debug.WriteLine("constant:");
+            Logger.DebugLine("constant:");
 
             int index = 0;
             foreach (var c in _cset)
             {
-                Debug.WriteLine("C{0}: {1}", index, c.ToString());
+                Logger.DebugLine("C{0}: {1}", index, c.ToString());
                 index++;
             }
 
-            Debug.WriteLine("");
+            Logger.DebugLine("");
         }
     }
 }

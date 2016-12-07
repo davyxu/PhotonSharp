@@ -180,7 +180,7 @@ namespace Photon
  
                 var v = _values[i];
 
-                Debug.WriteLine("[stack] {0}: {1}", i, v.ToString());
+                Logger.DebugLine("[stack] {0}: {1}", i, v.ToString());
             }
         }
     }

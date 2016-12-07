@@ -196,6 +196,15 @@ namespace Photon
             RegisterNativeClass(ass.GetType(className), pkgNameRegTo);
         }
 
+        internal static T GetCustomAttribute<T>(Type type) where T : class
+        {
+            object[] objs = type.GetCustomAttributes(typeof(T), false);
+            if (objs.Length > 0)
+                return (T)objs[0];
+
+            return null;
+        }
+
         public void RegisterNativeClass( Type classType, string pkgNameRegTo )
         {
             if (!classType.IsClass)
@@ -212,7 +221,7 @@ namespace Photon
             }
 
             Type instClass;
-            var classAttr = classType.GetCustomAttribute<NativeWrapperClassAttribute>();
+            var classAttr = GetCustomAttribute<NativeWrapperClassAttribute>(classType);
             // 自动生成代码绑定
             if (classAttr != null)
             {
@@ -241,11 +250,11 @@ namespace Photon
             // 语法树
             foreach (var pkg in _packages)
             {
-                Debug.WriteLine(string.Format("============= {0} id: {1} =============", pkg.Name, pkg.ID));
+                Logger.DebugLine(string.Format("============= {0} id: {1} =============", pkg.Name, pkg.ID));
                 pkg.DebugPrint();
             }
 
-            Debug.WriteLine("");
+            Logger.DebugLine("");
 
             if (Constants.Count > 0)
             {
@@ -260,13 +269,13 @@ namespace Photon
                 var cs = p as ValuePhoFunc;
                 if (cs != null)
                 {
-                    Debug.WriteLine(string.Format("{0} id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
+                    Logger.DebugLine(string.Format("{0} id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
                     cs.DebugPrint(this);
                 }
                 var del = p as ValueNativeFunc;
                 if (del != null)
                 {
-                    Debug.WriteLine(string.Format("{0} id: {1}", del.Name, del.ID));
+                    Logger.DebugLine(string.Format("{0} id: {1}", del.Name, del.ID));
                 }
             }
         }

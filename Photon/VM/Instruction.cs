@@ -34,13 +34,22 @@ namespace Photon
         // 指令集
         Instruction[] _instruction = new Instruction[(int)Opcode.MAX];
 
+        internal static T GetCustomAttribute<T>(Type type) where T : class
+        {
+            object[] objs = type.GetCustomAttributes(typeof(T), false);
+            if (objs.Length > 0)
+                return (T)objs[0];
+
+            return null;
+        }
+
         internal InstructionSet(VMachine vm)
         {
             var ass = Assembly.GetExecutingAssembly();
 
             foreach (var t in ass.GetTypes())
             {
-                var att = t.GetCustomAttribute<InstructionAttribute>();
+                var att = GetCustomAttribute<InstructionAttribute>(t);
                 if (att == null)
                     continue;
 

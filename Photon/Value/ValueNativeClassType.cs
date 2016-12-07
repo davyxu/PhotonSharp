@@ -34,9 +34,18 @@ namespace Photon
             _scope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
         }
 
+        internal static T GetCustomAttribute<T>(MemberInfo mi) where T : class
+        {
+            object[] objs = mi.GetCustomAttributes(typeof(T), false);
+            if (objs.Length > 0)
+                return (T)objs[0];
 
+            return null;
+        }
 
-        static void IterateMember(Type typeToScan, MemberInfo[] minfo, Action<string, MemberInfo, NativeEntryAttribute> callback )
+        delegate void IterateCallback(string memberName, MemberInfo mi, NativeEntryAttribute attr);
+
+        static void IterateMember(Type typeToScan, MemberInfo[] minfo, IterateCallback callback)
         {
             foreach (var m in minfo)
             {
@@ -44,7 +53,7 @@ namespace Photon
                 if (m.DeclaringType != typeToScan)
                     continue;
 
-                var attr = m.GetCustomAttribute<NativeEntryAttribute>();    
+                var attr = GetCustomAttribute<NativeEntryAttribute>(m);    
 
                 string memberName;
                 if (attr != null && !string.IsNullOrEmpty(attr.EntryName))
@@ -110,7 +119,7 @@ namespace Photon
                             symb.Decl = null;
                             symb.Usage = SymbolUsage.Func;
 
-                            var dele = m.CreateDelegate(typeof(NativeFunction)) as NativeFunction;
+                            var dele = Delegate.CreateDelegate(typeof(NativeFunction), m) as NativeFunction;
 
                             if (attr.Type == NativeEntryType.StaticFunc)
                             {
@@ -138,7 +147,7 @@ namespace Photon
                         break;
                     case NativeEntryType.Property:
                         {
-                            var dele = m.CreateDelegate(typeof(NativeProperty)) as NativeProperty;
+                            var dele = Delegate.CreateDelegate(typeof(NativeProperty), m) as NativeProperty;
 
                             _member.Add(ci, dele);
                         }

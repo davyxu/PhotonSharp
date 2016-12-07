@@ -102,7 +102,7 @@ namespace Photon
 
         static void PrintAST(Node n, string indent = "")
         {
-            Debug.WriteLine(indent + n.ToString());
+            Logger.DebugLine(indent + n.ToString());
 
             foreach (var c in n.Child())
             {
@@ -115,17 +115,17 @@ namespace Photon
             if (AST != null )
             {
                 // 语法树
-                Debug.WriteLine("ast:");
+                Logger.DebugLine("ast:");
                 PrintAST(AST);
-                Debug.WriteLine("");
+                Logger.DebugLine("");
             }
             
             if (_top != null )
             {
                 // 符号
-                Debug.WriteLine("symbols:");
+                Logger.DebugLine("symbols:");
                 _top.DebugPrint("");
-                Debug.WriteLine("");
+                Logger.DebugLine("");
             }
 
         }

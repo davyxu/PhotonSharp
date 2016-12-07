@@ -5,6 +5,24 @@ namespace Photon
 {
     class WrapperCodeCollector
     {
+        internal static T GetCustomAttribute<T>(PropertyInfo pi) where T : class
+        {
+            object[] objs = pi.GetCustomAttributes(typeof(T), false);
+            if (objs.Length > 0)
+                return (T)objs[0];
+
+            return null;
+        }
+
+        internal static T GetCustomAttribute<T>(MethodInfo mi) where T : class
+        {            
+            object[] objs = mi.GetCustomAttributes(typeof(T), false);
+            if (objs.Length > 0)
+                return (T)objs[0];
+
+            return null;
+        }
+
         internal static void CollectClassInfo(WrapperGenPackage genPkg, Type cls, string filename)
         {
             if ( !cls.IsClass)
@@ -24,7 +42,7 @@ namespace Photon
                 if (propInfo.DeclaringType != cls)
                     continue;
 
-                if (propInfo.GetCustomAttribute<NoGenWrapperAttribute>() != null)
+                if (GetCustomAttribute<NoGenWrapperAttribute>(propInfo) != null)
                 {
                     continue;
                 }
@@ -49,13 +67,13 @@ namespace Photon
                 if (methodInfo.IsSpecialName)
                     continue;
 
-                var attr = methodInfo.GetCustomAttribute<NativeEntryAttribute>();
+                var attr = GetCustomAttribute<NativeEntryAttribute>(methodInfo);
                 // 有标签的掠过， 无需生成
                 if (attr != null)
                     continue;
 
                 // 不生成wrapper
-                if (methodInfo.GetCustomAttribute<NoGenWrapperAttribute>() != null)
+                if (GetCustomAttribute<NoGenWrapperAttribute>(methodInfo) != null)
                 {
                     continue;
                 }

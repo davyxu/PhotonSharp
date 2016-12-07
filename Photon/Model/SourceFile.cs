@@ -62,15 +62,15 @@ namespace Photon
 
         public void DebugPrint( )
         {
-            Debug.WriteLine("source:");
+            Logger.DebugLine("source:");
             var lineCount = 0;
             foreach( var line in _sourceLine )
             {
                 lineCount++;
-                Debug.Print("{0} {1}", lineCount, line);
+                Logger.DebugLine(string.Format("{0} {1}", lineCount, line));
             }
 
-            Debug.WriteLine("");
+            Logger.DebugLine("");
         }
     }
 }

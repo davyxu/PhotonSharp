@@ -18,7 +18,7 @@ namespace Photon
             _entry = entry;
         }
 
-        public override string ToString()
+        public override string DebugString()
         {
             return string.Format("{0}", Name);
         }

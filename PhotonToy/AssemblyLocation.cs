@@ -1,7 +1,7 @@
-﻿
-using Photon;
+﻿using Photon;
 using SharpLexer;
 using System.Collections.Generic;
+
 namespace PhotonToy
 {
     public struct AssemblyLocation

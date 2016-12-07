@@ -27,7 +27,7 @@ namespace UnitTest
             testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
 
             testbox.RunFile("Delegate.pho")
-                .CheckGlobalRegEqualNumber(0, 3);                
+                .CheckGlobalVarMatchValue("a", 3);
         }
     }
 }

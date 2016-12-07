@@ -10,57 +10,29 @@ namespace UnitTest
         {
             if (GenAllFile)
             {
-                Compiler.InitBuildin(); 
+                Compiler.GenerateBuildinFiles(); 
             }
 
-            TestContainer();
+            new TestBox().RunFile("Math.pho")
+                .CheckGlobalVarMatchValue("a", -1);
 
-            TestNativeClass();
-
-            TestDelegate();
+            new TestBox().RunFile("SwapVar.pho")
+                .CheckGlobalVarMatchValue("x", 2)
+                .CheckGlobalVarMatchValue("y", 1);
 
             TestDataStackBalance();
 
+            TestFuncPackage();
 
-            new TestBox().RunFile("ClassInherit.pho")
-                .CheckGlobalRegEqualString(1, "cat");
+            TestDelegate();
 
-            new TestBox().RunFile("Class.pho")
-                .CheckGlobalRegEqualNumber(1, 5);
+            TestFlow();
 
-            new TestBox().RunFile("Math.pho")
-                .CheckGlobalRegEqualNumber(0, -1);
+            TestClass();
 
-            new TestBox().RunFile("ComplexClosure.pho")
-                .CheckGlobalRegEqualNumber(2, 15 );
+            TestNativeClass();
 
-            new TestBox().RunFile("Package.pho")
-                .CheckGlobalRegEqualNumber(0, 3);
-
-            new TestBox().RunFile("Closure.pho")
-                .CheckGlobalRegEqualNumber(1, 12);
-
-            new TestBox().RunFile("Scope.pho")
-                .CheckGlobalRegEqualNumber(0, 1)
-                .CheckGlobalRegEqualNumber(1, 1);
-            
-            new TestBox().RunFile("ForLoop.pho")
-                .CheckGlobalRegEqualNumber(0, 8);
-
-            new TestBox().RunFile("If.pho")
-                .CheckGlobalRegEqualNumber(0, 1)
-                .CheckGlobalRegEqualNumber(1, 5);
-
-            new TestBox().RunFile("MultiCall.pho")
-                .CheckGlobalRegEqualNumber(0, 15);
-
-            new TestBox().RunFile("SwapVar.pho")
-                .CheckGlobalRegEqualNumber(0, 2)
-                .CheckGlobalRegEqualNumber(1, 1);
-
-            new TestBox().RunFile("WhileLoop.pho")
-                .CheckGlobalRegEqualNumber(0, 3);
-
+            TestContainer();
         }
     }
 }

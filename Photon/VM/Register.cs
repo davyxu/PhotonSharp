@@ -8,6 +8,7 @@ namespace Photon
         Value[] _values;
         int _usedSlot = 0;
         string _usage;
+        Scope _scope;
 
         internal Register( string usage, int maxReg )
         {
@@ -19,6 +20,11 @@ namespace Photon
         public int Count
         {
             get { return _usedSlot; }
+        }
+
+        internal void AttachScope(Scope s)
+        {
+            _scope = s;
         }
 
         internal void SetUsedCount( int count )
@@ -51,14 +57,38 @@ namespace Photon
             return string.Format("{0} used:{1}", _usage, _usedSlot);
         }
 
-        public void DebugPrint()
-        {            
-            for (int i = 0; i < _usedSlot; i++)
-            {
-                var v = _values[i];
+        public override string DebugString(int index)
+        {
+            var v = Get(index);
 
-                Debug.WriteLine("{0}{1}: {2}", _usage, i, v.ToString());
+            var symbol = _scope.FindRegisterByIndex(index);
+
+
+            return string.Format("{0}{1} ({2}): {3}", _usage, index, symbol != null ? symbol.Name:"#NA", v.ToString());
+        }
+
+        public void DebugPrint( )
+        {   
+            if ( _scope == null )
+            {
+                for (int i = 0; i < _usedSlot; i++)
+                {
+                    var v = _values[i];
+
+                    Debug.WriteLine("{0}{1}: {2}", _usage, i, v.ToString());
+                }
             }
+            else
+            {
+                for (int i = 0; i < _usedSlot; i++)
+                {
+
+                    Debug.WriteLine(DebugString(i));
+                }
+            }
+
+
+
         }
     }
 }

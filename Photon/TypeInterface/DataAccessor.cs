@@ -19,7 +19,7 @@ namespace Photon
             return Get(index).Kind;
         }
 
-        public string DebugString( int index )
+        public virtual string DebugString( int index )
         {
             return Get(index).DebugString();
         }

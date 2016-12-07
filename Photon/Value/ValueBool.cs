@@ -25,12 +25,7 @@ namespace Photon
         }
         public override string DebugString()
         {
-            return _data.ToString() + "(bool)";
-        }
-
-        public override string ToString()
-        {
-            return _data.ToString();
+            return _data.ToString() + " (bool)";
         }
 
         public override ValueKind Kind

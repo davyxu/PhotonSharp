@@ -27,7 +27,7 @@ namespace Photon
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
-        List<Symbol> _regs = new List<Symbol>();
+        Dictionary<string, Symbol> _regByName = new Dictionary<string, Symbol>();
 
         List<Scope> _child = new List<Scope>();
 
@@ -71,6 +71,28 @@ namespace Photon
             return string.Format("{0} {1}", _type.ToString(), _defpos );
         }
 
+        internal Symbol FindRegister(string name)
+        {
+            Symbol ret;
+            if (_regByName.TryGetValue(name, out ret))
+            {
+                return ret;
+            }
+
+            return null;
+        }
+
+        internal Symbol FindRegisterByIndex(int regIndex )
+        {
+            foreach (var reg in _regByName)
+            {
+                if (reg.Value.RegIndex == regIndex)
+                    return reg.Value;
+            }
+
+            return null;
+        }
+
         internal Symbol FindSymbol(string name) 
         {
            Symbol ret;
@@ -101,7 +123,7 @@ namespace Photon
 
         public int RegCount
         {
-            get{return _regs.Count; }
+            get{return _regByName.Count; }
            
         }
 
@@ -210,7 +232,7 @@ namespace Photon
 
                 symbol.RegBelong = regBound;
 
-                regBound._regs.Add(symbol);
+                regBound._regByName.Add(symbol.Name, symbol);
             }
             else
             {

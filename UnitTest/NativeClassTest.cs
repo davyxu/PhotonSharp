@@ -57,11 +57,12 @@ namespace UnitTest
             testbox.Exe.RegisterNativeClass(Assembly.GetExecutingAssembly(), "UnitTest.NativeClassWrapper", "NativeClassTest");
 
             testbox.RunFile("NativeClass.pho")
-                .CheckGlobalRegEqualString(1, "cat")
-                .CheckGlobalRegEqualNumber(2, 89)
-                .CheckGlobalRegEqualString(3, "xx")
-                .CheckGlobalRegEqualString(4, "wa")
-                .CheckGlobalRegEqualString(5, "HP");
+                .CheckGlobalVarMatchKind("x", ValueKind.NativeClassInstance)
+                .CheckGlobalVarMatchValue("b", "cat")
+                .CheckGlobalVarMatchValue("c", 89)
+                .CheckGlobalVarMatchValue("d", "xx")
+                .CheckGlobalVarMatchValue("e", "wa")
+                .CheckGlobalVarMatchValue("f", "HP");                
         }
     }
 }

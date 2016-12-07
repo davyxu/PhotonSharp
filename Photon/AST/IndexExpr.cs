@@ -45,12 +45,12 @@ namespace Photon
             if ( param.LHS )
             {
                 // 赋值
-                param.CS.Add(new Command(Opcode.SETI));
+                param.CS.Add(new Command(Opcode.SETI)).SetCodePos(LBrackPos);
             }
             else
             {
                 // 取值
-                param.CS.Add(new Command(Opcode.LOADI));
+                param.CS.Add(new Command(Opcode.LOADI)).SetCodePos(LBrackPos);
             }
 
             

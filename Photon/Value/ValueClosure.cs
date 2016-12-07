@@ -55,7 +55,6 @@ namespace Photon
             return string.Format("{0} (closure)", _func.ToString());
         }
 
-
     }
 
  

@@ -75,7 +75,7 @@ namespace Photon
             var initPos = TokenPos.Init;
             initPos.SourceName = NormalizeFileName(packageFileName);
 
-            var cs = new ValuePhoFunc( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, true);
+            var cs = new ValuePhoFunc( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, parser.PackageScope);
 
             exe.AddFunc(cs);
 
@@ -93,7 +93,7 @@ namespace Photon
             cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
         }
 
-        public static void InitBuildin()
+        public static void GenerateBuildinFiles()
         {
             Array.GenerateWrapper();
             Map.GenerateWrapper();

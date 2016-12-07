@@ -35,15 +35,14 @@ namespace UnitTest
                 "DataStackBalanceTest");
 
             testbox.RunFile("DataStackBalance.pho")
-                .CheckGlobalRegEqualNumber(0, 2)
-                .CheckGlobalRegEqualNumber(1, 4)
-                .CheckGlobalRegEqualNil(2)
-                .CheckGlobalRegEqualNumber(3, 3)
-                .CheckGlobalRegEqualNumber(4, 1)
-                .CheckGlobalRegEqualNumber(5, 9)
-                .CheckGlobalRegEqualNil(6)
-                .CheckGlobalRegEqualNumber(7, 2)
-                .CheckGlobalRegEqualNumber(8, 4);  
+                .CheckGlobalVarMatchValue("a", 2)
+                .CheckGlobalVarMatchValue("b", 4)
+                .CheckGlobalVarMatchKind("c", ValueKind.Nil)
+                .CheckGlobalVarMatchValue("e", 1)
+                .CheckGlobalVarMatchValue("m", 9)
+                .CheckGlobalVarMatchKind("n", ValueKind.Nil)
+                .CheckGlobalVarMatchValue("p", 2)
+                .CheckGlobalVarMatchValue("q", 4);                
         }
     }
 }

@@ -11,21 +11,21 @@ namespace Photon
 
         int _regCount;
 
-        bool _isGlobal;
+        Scope _scope;
 
         TokenPos _defpos;
 
-        internal ValuePhoFunc(ObjectName name, TokenPos codepos, int regCount, bool isGlobal)
+        internal ValuePhoFunc(ObjectName name, TokenPos codepos, int regCount, Scope s)
             : base(name)
         {            
             _regCount = regCount;
-            _isGlobal = isGlobal;
+            _scope = s;
             _defpos = codepos;            
         }
 
-        internal bool IsGlobal
+        internal Scope Scope
         {
-            get { return _isGlobal; }
+            get { return _scope; }
         }
 
         public int RegCount

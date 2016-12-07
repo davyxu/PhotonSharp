@@ -68,7 +68,7 @@ namespace Photon
 
         public override ValueKind Kind
         {
-            get { return ValueKind.ClassInstance; }
+            get { return ValueKind.NativeClassInstance; }
         }
 
 

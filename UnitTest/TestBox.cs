@@ -52,11 +52,14 @@ namespace UnitTest
             return Compile(filename, filename);
         }
 
-
-
         public TestBox RunFile( string filename )
         {                        
             return CompileFile(filename ).Run().CheckStackClear();
+        }
+
+        public RuntimePackage MainPackage
+        {
+            get { return _vm.GetRuntimePackageByName("main"); }
         }
 
         public void Error( string info )
@@ -73,66 +76,47 @@ namespace UnitTest
             }
 
             return this;
-        }        
-
-
-        public TestBox CheckLocalRegEqualNumber(int index, float num)
-        {
-            return CheckRegEqualNumber(index, num, _vm.LocalReg);
         }
 
-        public TestBox CheckGlobalRegEqualNumber(int index, float num)
+        public TestBox CheckGlobalVarMatchKind( string name, ValueKind kind )
         {
-            return CheckRegEqualNumber(index, num, _vm.GetRuntimePackageByName("main").Reg);
-        }
-
-        public TestBox CheckGlobalRegEqualNil(int index)
-        {
-            return CheckRegEqualNil(index, _vm.GetRuntimePackageByName("main").Reg);
-        }
-
-        public TestBox CheckGlobalRegEqualString(int index, string s)
-        {
-            return TestRegEqualString(index, s, _vm.GetRuntimePackageByName("main").Reg);
-        }
-
-        TestBox CheckRegEqualNil(int index,  Register reg)
-        {
-            var v = reg.IsNil(index);
-
-            if (!v)
+            var symbolKind = MainPackage.GetVarKind(name);
+            if (symbolKind != kind)
             {
-                Error(string.Format("value not equal on index: {0}, expect nil", index));
-                return this;
+                Error("CheckGlobalSymbolMatchKind failed, name: " + name);
             }
 
             return this;
         }
 
-        TestBox CheckRegEqualNumber(int index, float num, Register reg )
+        public TestBox CheckGlobalVarMatchValue(string name, object value)
         {
-            var v = reg.GetFloat32( index );            
+            bool equal = false;
 
-            if (v != num)
+            if ( value.GetType() == typeof(int))
             {
-                Error(string.Format("value not equal on index: {0}, expect {1}", index, num));
-                return this;
+                equal = (MainPackage.GetVarAsInteger32(name) == (int)value);
+            }
+            else if (value.GetType() == typeof(float))
+            {
+                equal = (MainPackage.GetVarAsFloat32(name) == (float)value);
+            }
+            else if (value.GetType() == typeof(string))
+            {
+                equal = (MainPackage.GetVarAsString(name) == (string)value);
+            }
+            else if (value.GetType() == typeof(bool))
+            {
+                equal = (MainPackage.GetVarAsBool(name) == (bool)value);
+            }
+
+            if ( !equal )
+            {
+                Error("CheckGlobalSymbolMatchValue failed, name: " + name);
             }
 
             return this;
         }
 
-        TestBox TestRegEqualString(int index, string str, Register reg)
-        {
-            var v = reg.GetString(index);
-
-            if (v != str)
-            {
-                Error(string.Format("value not equal on index: {0}, expect {1}", index, str));
-                return this;
-            }
-
-            return this;
-        }
     }
 }

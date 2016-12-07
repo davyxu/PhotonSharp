@@ -46,7 +46,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new ValuePhoFunc(new ObjectName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new ValuePhoFunc(new ObjectName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), TypeInfo.ScopeInfo);
 
             var proc = param.Exe.AddFunc(newset);
 

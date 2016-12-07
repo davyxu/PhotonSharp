@@ -1,12 +1,10 @@
 var arr = new(Array)
 
-arr.Add(1)
+arr.Add(199)
 
- arr[0] = 1
+ arr[0] = 120
  
  var x = arr[0]
-
-/*
 
 var g = arr.Get(0)
 
@@ -16,4 +14,3 @@ var count = arr.Count
 
 var v, ok = arr.TryGet(119)
 
-*/

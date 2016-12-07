@@ -124,11 +124,11 @@ namespace Photon
             _hook[(int)hook] = callback;
         }
 
-        internal void EnterFrame( ValuePhoFunc cmdSet )
+        internal void EnterFrame( ValuePhoFunc func )
         {
             CallHook(DebugHook.Call);
 
-            var newFrame = new RuntimeFrame(cmdSet);
+            var newFrame = new RuntimeFrame(func);
 
             _currFrame = newFrame;
 
@@ -139,6 +139,7 @@ namespace Photon
             rr.Max = _regBase + newFrame.CmdSet.RegCount;
 
             LocalReg.SetUsedCount(rr.Max);
+            LocalReg.AttachScope(func.Scope);
   
         }
 

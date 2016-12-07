@@ -64,7 +64,7 @@ namespace Photon
                 on.ClassName = ClassName.Name;
             }
 
-            var newset = new ValuePhoFunc(on, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), false);
+            var newset = new ValuePhoFunc(on, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), TypeInfo.ScopeInfo);
             _bodyCS = newset;
 
             _proc = param.Exe.AddFunc(newset);

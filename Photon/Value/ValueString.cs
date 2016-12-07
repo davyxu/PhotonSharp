@@ -29,11 +29,6 @@ namespace Photon
             return string.Format("'{0}' (string)", _str);
         }
 
-        public override string ToString()
-        {
-            return _str;
-        }
-
         public override ValueKind Kind
         {
             get { return ValueKind.String; }

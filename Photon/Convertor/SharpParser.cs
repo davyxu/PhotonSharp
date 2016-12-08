@@ -165,12 +165,6 @@ namespace Photon
                 break;
             }
             
-
-
-            if (CurrTokenType == SharpTokenType.Unknown)
-            {
-                throw new CompileException("unknown token", CurrTokenPos);
-            }
         }
 
         SharpTokenType CurrTokenType
@@ -330,7 +324,7 @@ func FindMagDefbuff( a ){
             WriteString(className);
             WriteString(".");
 
-            Expect(SharpTokenType.Int);
+            Next();
 
             // 函数名
             WriteToken(); 
@@ -438,7 +432,8 @@ func FindMagDefbuff( a ){
                         {                            
                             Next();
 
-                            if ( CurrTokenType == SharpTokenType.Int )
+                            if ( CurrTokenType == SharpTokenType.Int ||
+                                CurrTokenType == SharpTokenType.Float)
                             {
                                 var varName = CurrTokenValue;
                                 Next();

@@ -14,7 +14,6 @@ namespace Photon
 
         }
 
-
         internal void AddMethod( int nameKey, ValueFunc proc )
         {
             _member.Add(nameKey, proc );
@@ -52,6 +51,11 @@ namespace Photon
                 return false;
 
             return _name.Equals(other._name);
+        }
+
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
         }
 
         internal override ValueObject CreateInstance()

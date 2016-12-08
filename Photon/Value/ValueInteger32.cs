@@ -29,6 +29,11 @@ namespace Photon
 
             return otherT._data == _data;
         }
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
+
         public override string DebugString()
         {
             return _data.ToString() + " (int32)";
@@ -39,7 +44,7 @@ namespace Photon
             get { return ValueKind.Integer32; }
         }
 
-        internal override Value BinaryOperate(Opcode code, Value other )
+        internal override Value OperateBinary(Opcode code, Value other )
         {
             var a = RawValue;
 
@@ -52,11 +57,11 @@ namespace Photon
                     b = (other as ValueInteger32).RawValue;
                     break;
                 case ValueKind.Integer64:
-                    return new ValueInteger64((Int64)this.RawValue).BinaryOperate(code, other);
+                    return new ValueInteger64((Int64)this.RawValue).OperateBinary(code, other);
                 case ValueKind.Float32:
-                    return new ValueFloat32((float)this.RawValue).BinaryOperate(code, other);
+                    return new ValueFloat32((float)this.RawValue).OperateBinary(code, other);
                 case ValueKind.Float64:
-                    return new ValueFloat64((double)this.RawValue).BinaryOperate(code, other);
+                    return new ValueFloat64((double)this.RawValue).OperateBinary(code, other);
                 default:
                     throw new RuntimeException("Binary operator value type not match:" + other.ToString());
             }
@@ -89,7 +94,7 @@ namespace Photon
             }        
         }
 
-        internal override Value UnaryOperate(Opcode code)
+        internal override Value OperateUnary(Opcode code)
         {
             var a = RawValue;            
 

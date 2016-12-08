@@ -32,9 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +121,6 @@
     <Compile Include="VM\InstructionStore.cs" />
     <Compile Include="VM\DataStack.cs" />
     <Compile Include="Value\Value.cs" />
-    <Compile Include="VM\RuntimeContext.cs" />
     <Compile Include="VM\RuntimeFrame.cs" />
     <Compile Include="VM\Register.cs" />
     <Compile Include="VM\RuntimePackage.cs" />

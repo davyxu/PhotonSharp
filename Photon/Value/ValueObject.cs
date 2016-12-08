@@ -4,27 +4,44 @@ namespace Photon
 {
     class ValueObject : Value
     {
-        internal virtual void SetValue( int nameKey, Value v )
+        internal override Value OperateUnary(Opcode code)
         {
+            var con = Raw as IContainer;
+            if (con == null)
+            {
+                throw new RuntimeException("Expect 'IContainer'");
+            }
 
+            switch (code)
+            {
+                case Opcode.LEN:
+                    return new ValueInteger32(con.GetCount());
+                default:
+                    throw new RuntimeException("Unknown binary operator:" + code.ToString());
+            }
         }
 
-        internal virtual Value GetValue(int nameKey)
+        internal override void OperateSetKeyValue(Value k, Value v)
         {
-            return Value.Nil;
+            var con = Raw as IContainer;
+            if (con == null)
+            {
+                throw new RuntimeException("Expect 'IContainer'");
+            }
+
+            con.SetKeyValue(k, v);
         }
 
-        internal virtual void SetKeyValue(Value k, Value v)
+        internal override Value OperateGetKeyValue(Value k)
         {
+            var con = Raw as IContainer;
+            if (con == null)
+            {
+                throw new RuntimeException("Expect 'IContainer'");
+            }
 
+            return con.GetKeyValue(k);
         }
-
-        internal virtual Value GetKeyValue(Value k)
-        {
-            return Value.Nil;
-        }
-
-
 
 
     }

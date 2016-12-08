@@ -10,7 +10,7 @@ var g = arr.Get(0)
 
 arr.Set(0, "hello")
 
-var count = arr.Count
+var count = len(arr)
 
 var v, ok = arr.TryGet(119)
 

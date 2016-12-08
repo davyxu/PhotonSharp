@@ -20,6 +20,18 @@ namespace Photon
             get { return _data; }
         }
 
+        internal override Value OperateUnary(Opcode code)
+        {
+            switch (code)
+            {
+                case Opcode.LEN:
+                    return new ValueInteger32(_data.Length);
+                default:
+                    throw new RuntimeException("Unknown binary operator:" + code.ToString());
+            }
+            
+        }
+
         public override bool Equals(object other)
         {
             var otherT = other as ValueString;
@@ -27,6 +39,11 @@ namespace Photon
                 return false;
 
             return otherT._data == _data;
+        }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
         }
 
         public override string DebugString()

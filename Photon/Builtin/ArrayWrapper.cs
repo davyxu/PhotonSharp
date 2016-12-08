@@ -8,17 +8,6 @@ namespace Photon
 	[NativeWrapperClass(typeof(Photon.Array))]
 	public class ArrayWrapper
 	{
-		[NativeEntry(NativeEntryType.Property)]
-		public static void Count(object phoIns, ref object value, bool isGet )
-		{
-			var phoClassIns = phoIns as Array;
-			
-			if (isGet)
-			{
-				value = Convertor.Integer32ToValue(phoClassIns.Count);
-			}
-		}
-		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int Add( VMachine phoVM )
 		{

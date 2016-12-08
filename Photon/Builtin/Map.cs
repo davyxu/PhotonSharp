@@ -32,6 +32,13 @@ namespace Photon
             return Value.Nil;
         }
 
+        [NoGenWrapper]
+        public int GetCount()
+        {
+            return _data.Count;
+        }
+
+
         public bool ContainsKey(Value k)
         {
             return _data.ContainsKey(k);
@@ -45,11 +52,6 @@ namespace Photon
         public void Clear()
         {
             _data.Clear();            
-        }
-
-        public int Count
-        {
-            get { return _data.Count; }
         }
 
         internal static void Register( Executable exe )

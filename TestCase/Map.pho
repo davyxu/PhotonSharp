@@ -1,3 +1,4 @@
 var map = new(Map)
 map["hello"] = 1678
-var c = map["hello"]
+var x = map["hello"]
+var c = len(map)

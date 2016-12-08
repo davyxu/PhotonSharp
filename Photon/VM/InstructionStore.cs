@@ -42,6 +42,84 @@ namespace Photon
         }
     }
 
+    [Instruction(Cmd = Opcode.LOADG)]
+    class CmdLoadG : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+
+            Value v = vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB);
+
+            vm.DataStack.Push(v);
+
+            return true;
+        }
+        public override string Print(Command cmd)
+        {
+            return string.Format("Pkg: {0}  Reg: {1}", cmd.DataA, cmd.DataB);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADI)]
+    class CmdLoadI : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            var obj = vm.DataStack.Pop();
+
+            var key = vm.DataStack.Pop();
+
+            var value = obj.OperateGetKeyValue(key);
+
+            vm.DataStack.Push(value);
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Empty;
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADU)]
+    class CmdLoadU : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            int regIndex = cmd.DataA;
+
+            var v = vm.CurrFrame.Closure.GetValue(regIndex);
+
+            vm.DataStack.Push(v);
+
+            return true;
+        }
+        public override string Print(Command cmd)
+        {
+            return string.Format("UpValue: {0}", cmd.DataA);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.LOADM)]
+    class CmdLoadM : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            var ci = vm.DataStack.Pop();
+
+            vm.DataStack.Push(ci.OperateGetMemberValue(cmd.DataA));
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("MemberKey: {0}", cmd.DataA);
+        }
+    }
+
+
     [Instruction(Cmd = Opcode.SETR)]
     class CmdSetR : Instruction
     {
@@ -65,23 +143,7 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.LOADG)]
-    class CmdLoadG : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
 
-            Value v = vm.GetRuntimePackage(cmd.DataA).Reg.Get(cmd.DataB);
-
-            vm.DataStack.Push(v);
-
-            return true;
-        }
-        public override string Print( Command cmd)
-        {
-            return string.Format("Pkg: {0}  Reg: {1}", cmd.DataA, cmd.DataB);
-        }
-    }
 
     [Instruction(Cmd = Opcode.SETG)]
     class CmdSetG : Instruction
@@ -101,40 +163,18 @@ namespace Photon
         }
     }
 
-    [Instruction(Cmd = Opcode.LOADI)]
-    class CmdLoadI : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            var obj = Convertor.CastContainer(vm.DataStack.Pop());
-
-            var key = vm.DataStack.Pop();
-
-            var value = obj.GetKeyValue(key);
-
-            vm.DataStack.Push(value);
-
-            return true;
-        }
-
-        public override string Print( Command cmd)
-        {
-            return string.Empty;
-        }
-    }
-
     [Instruction(Cmd = Opcode.SETI)]
     class CmdSetI : Instruction
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var obj = Convertor.CastContainer(vm.DataStack.Pop());
+            var obj = vm.DataStack.Pop();
 
             var key = vm.DataStack.Pop();
 
             var value = vm.DataStack.Pop();
 
-            obj.SetKeyValue(key, value);            
+            obj.OperateSetKeyValue(key, value);            
 
             return true;
         }
@@ -145,14 +185,55 @@ namespace Photon
         }
     }
 
+    [Instruction(Cmd = Opcode.SETU)]
+    class CmdSetU : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+
+            var regIndex = cmd.DataA;
+
+            var d = vm.DataStack.Pop();
+
+            vm.CurrFrame.Closure.SetValue(regIndex, d);
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("UpValue: {0}", cmd.DataA);
+        }
+    }
+
+    [Instruction(Cmd = Opcode.SETM)]
+    class CmdSetM : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            var obj = vm.DataStack.Pop();
+
+            var v = vm.DataStack.Pop();
+
+            obj.OperateSetMemberValue(cmd.DataA, v);
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("MemberKey: {0}", cmd.DataA);
+        }
+    }
+
     [Instruction(Cmd = Opcode.SEL)]
     class CmdSelect : Instruction
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var c = Convertor.CastObject(vm.DataStack.Pop());
+           // var c = Convertor.CastObject(vm.DataStack.Pop());
 
-            vm.DataStack.Push(c.GetValue(cmd.DataA));
+           // vm.DataStack.Push(c.GetValue(cmd.DataA));
 
             return true;
         }
@@ -209,46 +290,6 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.LOADU)]
-    class CmdLoadU : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            int regIndex =  cmd.DataA;
-
-            var v = vm.CurrFrame.Closure.GetValue(regIndex);            
-
-            vm.DataStack.Push(v);
-
-            return true;
-        }
-        public override string Print( Command cmd)
-        {
-            return string.Format("UpValue: {0}", cmd.DataA);
-        }
-    }
-
-    [Instruction(Cmd = Opcode.SETU)]
-    class CmdSetU : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            
-            var regIndex = cmd.DataA;
-
-            var d = vm.DataStack.Pop();
-
-            vm.CurrFrame.Closure.SetValue(regIndex, d );            
-
-            return true;
-        }
-
-        public override string Print( Command cmd)
-        {
-            return string.Format("UpValue: {0}", cmd.DataA);
-        }
-    }
-
     [Instruction(Cmd = Opcode.LOADF)]
     class CmdLoadF : Instruction
     {
@@ -304,42 +345,7 @@ namespace Photon
     }
 
 
-    [Instruction(Cmd = Opcode.LOADM)]
-    class CmdLoadM : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            var ci = Convertor.CastObject(vm.DataStack.Pop());
 
-            vm.DataStack.Push(ci.GetValue(cmd.DataA));
 
-            return true;
-        }
-
-        public override string Print(Command cmd)
-        {
-            return string.Format("MemberKey: {0}", cmd.DataA);
-        }
-    }
-
-    [Instruction(Cmd = Opcode.SETM)]
-    class CmdSetM : Instruction
-    {
-        public override bool Execute(VMachine vm, Command cmd)
-        {
-            var ci = Convertor.CastObject(vm.DataStack.Pop());
-
-            var v = vm.DataStack.Pop();
-
-            ci.SetValue(cmd.DataA, v);
-
-            return true;
-        }
-
-        public override string Print(Command cmd)
-        {
-            return string.Format("MemberKey: {0}", cmd.DataA);
-        }
-    }
 
 }

@@ -42,7 +42,7 @@ namespace Photon
 
         Executable _exe;
 
-        InstructionSet _insset;
+        static InstructionSet _insset;
 
         public State State 
         {
@@ -99,7 +99,10 @@ namespace Photon
 
         public VMachine()
         {
-            _insset = new InstructionSet(this);
+            if (_insset == null)
+            {
+                _insset = new InstructionSet(this);
+            }
         }
 
         public void SetHook(DebugHook hook, Action<VMachine> callback )

@@ -21,16 +21,13 @@ namespace Photon
     {
         void SetKeyValue(Value k, Value v);
 
-        Value GetKeyValue(Value k);        
+        Value GetKeyValue(Value k);
+
+        int GetCount();
     }
 
     class Value
-    {
-        public override bool Equals(object obj)
-        {
- 	         return false;
-        }        
-
+    {     
         internal static Value Nil = new ValueNil();
 
         public override string ToString()
@@ -38,10 +35,6 @@ namespace Photon
             return DebugString();
         }
 
-        public override int GetHashCode()
-        {
-            return Raw.GetHashCode();
-        }
 
         public virtual string DebugString( )
         {
@@ -63,16 +56,37 @@ namespace Photon
             get { throw new System.NotImplementedException(); }
         }
 
-        internal virtual Value BinaryOperate(Opcode code, Value other)
+        internal virtual Value OperateBinary(Opcode code, Value other)
         {
-            throw new RuntimeException("Expect numeral value");
+            throw new RuntimeException("Expect 'OperateBinary' operand");
         }
 
-        internal virtual Value UnaryOperate(Opcode code)
+        internal virtual Value OperateUnary(Opcode code)
         {
-            throw new RuntimeException("Expect numeral value");
+            throw new RuntimeException("Expect 'OperateUnary' operand");
         }
-     
+
+        // 动态获取
+        internal virtual void OperateSetKeyValue(Value k, Value v)
+        {
+            throw new RuntimeException("Expect 'OperateSetKeyValue' operand");
+        }
+
+        internal virtual Value OperateGetKeyValue(Value k)
+        {
+            throw new RuntimeException("Expect 'OperateGetKeyValue' operand");
+        }
+
+        // 编译期确认的成员函数和变量
+        internal virtual void OperateSetMemberValue(int nameKey, Value v)
+        {
+            throw new RuntimeException("Expect 'OperateSetMemberValue' operand");
+        }
+
+        internal virtual Value OperateGetMemberValue(int nameKey)
+        {
+            throw new RuntimeException("Expect 'OperateGetMemberValue' operand");
+        }
     }
 
 

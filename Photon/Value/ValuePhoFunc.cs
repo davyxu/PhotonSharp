@@ -58,6 +58,20 @@ namespace Photon
             get { return _cmds.Count; }
         }
 
+        public override bool Equals(object other)
+        {
+            var otherT = other as ValuePhoFunc;
+            if (otherT == null)
+                return false;
+
+            return otherT._cmds.Equals( _cmds );
+        }
+
+        public override int GetHashCode()
+        {
+            return _cmds.GetHashCode();
+        }
+
         internal override bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)
         {
             // 更换当前上下文

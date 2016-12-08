@@ -9,7 +9,7 @@ namespace Photon
             var b = vm.DataStack.Pop();
             var a = vm.DataStack.Pop();
 
-            var x = a.BinaryOperate(cmd.Op, b);
+            var x = a.OperateBinary(cmd.Op, b);
 
             vm.DataStack.Push(x);
 
@@ -75,12 +75,17 @@ namespace Photon
         {
             var a = vm.DataStack.Pop();
 
-            var x = a.UnaryOperate(cmd.Op);
+            var x = a.OperateUnary(cmd.Op);
 
             vm.DataStack.Push(x);
 
             return true;
         }
+    }
+
+    [Instruction(Cmd = Opcode.LEN)]
+    class CmdLen : InstructionUnaryMath
+    {
     }
 
     [Instruction(Cmd = Opcode.MINUS)]
@@ -107,4 +112,6 @@ namespace Photon
     class CmdFloat64 : InstructionUnaryMath
     {
     }
+
+
 }

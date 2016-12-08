@@ -81,7 +81,7 @@ namespace Photon
             var nativeClass = c as ValueNativeClassType;
             if ( nativeClass != null )
             {
-                _classTypeByNativeType.Add(nativeClass.Raw, c);
+                _classTypeByNativeType.Add(nativeClass.RawValue, c);
             }
 
             _classType.Add(c);

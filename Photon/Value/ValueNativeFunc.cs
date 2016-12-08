@@ -18,6 +18,20 @@ namespace Photon
             _data = entry;
         }
 
+        public override bool Equals(object other)
+        {
+            var otherT = other as ValueNativeFunc;
+            if (otherT == null)
+                return false;
+
+            return otherT._data == _data;
+        }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
+
         internal override object Raw
         {
             get { return _data; }

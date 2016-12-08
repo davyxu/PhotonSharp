@@ -97,9 +97,10 @@ namespace Photon
             return Get(key);
         }
 
-        public int Count
+        [NoGenWrapper]
+        public int GetCount( )
         {
-            get { return _data.Count; }
+            return _data.Count;
         }
 
         internal static void Register( Executable exe )

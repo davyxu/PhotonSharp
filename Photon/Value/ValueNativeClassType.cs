@@ -7,13 +7,13 @@ namespace Photon
 {
     class ValueNativeClassType : ValueClassType
     {                           
-        Type _type;
+        Type _data;
 
         Package _pkg;
 
-        internal Type Raw
+        internal Type RawValue
         {
-            get { return _type; }
+            get { return _data; }
         }
 
         internal Package Pkg
@@ -28,7 +28,7 @@ namespace Photon
         internal ValueNativeClassType(Package pkg, Type type, ObjectName name )
             : base( name )
         {                        
-            _type = type;
+            _data = type;
             _pkg = pkg;
 
             _scope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
@@ -183,7 +183,7 @@ namespace Photon
 
         internal override ValueObject CreateInstance()
         {
-            var obj = Activator.CreateInstance(_type);
+            var obj = Activator.CreateInstance(_data);
 
             return new ValueNativeClassIns(this, obj);
         }        
@@ -194,7 +194,12 @@ namespace Photon
             if (other == null)
                 return false;
 
-            return _type.Equals(other._type);
+            return _data.Equals(other._data);
+        }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
         }
 
         public override string DebugString()
@@ -204,7 +209,7 @@ namespace Photon
 
         public override string TypeName
         {
-            get { return _type.Name; }
+            get { return _data.Name; }
         }
 
         public override ValueKind Kind

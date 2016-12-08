@@ -22,5 +22,11 @@ namespace Photon
         {
             get { return null; }
         }
+
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

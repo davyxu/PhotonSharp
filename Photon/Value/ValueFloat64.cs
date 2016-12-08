@@ -29,6 +29,12 @@ namespace Photon
 
             return otherT._data == _data;
         }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
+
         public override string DebugString()
         {
             return _data.ToString() + " (double32)";
@@ -39,7 +45,7 @@ namespace Photon
             get { return ValueKind.Float64; }
         }
 
-        internal override Value BinaryOperate(Opcode code, Value other)
+        internal override Value OperateBinary(Opcode code, Value other)
         {
             var a = RawValue;
 
@@ -49,11 +55,11 @@ namespace Photon
             switch (other.Kind)
             {
                 case ValueKind.Integer32:
-                    return new ValueInteger32((Int32)this.RawValue).BinaryOperate(code, other);
+                    return new ValueInteger32((Int32)this.RawValue).OperateBinary(code, other);
                 case ValueKind.Integer64:
-                    return new ValueInteger64((Int64)this.RawValue).BinaryOperate(code, other);                    
+                    return new ValueInteger64((Int64)this.RawValue).OperateBinary(code, other);                    
                 case ValueKind.Float32:
-                    return new ValueFloat32((float)this.RawValue).BinaryOperate(code, other);
+                    return new ValueFloat32((float)this.RawValue).OperateBinary(code, other);
                 case ValueKind.Float64:
                     b = (other as ValueFloat64).RawValue;
                     break;
@@ -88,7 +94,7 @@ namespace Photon
             }
         }
 
-        internal override Value UnaryOperate(Opcode code)
+        internal override Value OperateUnary(Opcode code)
         {
             var a = RawValue;
 

@@ -6,36 +6,36 @@ namespace Photon
     {
         ValueNativeClassType _type;        
 
-        object _nativeIns;
+        object _data;
 
         internal override object Raw
         {
-            get { return _nativeIns; }
+            get { return _data; }
         }
 
         internal ValueNativeClassIns(ValueNativeClassType t, object nativeIns )
         {
             _type = t;
-            _nativeIns = nativeIns;
+            _data = nativeIns;
         }
 
-        internal override void SetValue( int nameKey, Value v )
-        {
+
+        internal override void OperateSetMemberValue(int nameKey, Value v)
+        {            
             object obj = _type.GetMember(nameKey);
 
             var fastProp = obj as NativeProperty;
             if (fastProp != null)
             {
                 object retValue = v;
-                fastProp(_nativeIns, ref retValue, false);
+                fastProp(_data, ref retValue, false);
                 return;
             }
 
-            throw new RuntimeException("member not exists: "+ _type.Key2Name(nameKey));
+            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));
         }
 
-
-        internal override Value GetValue(int nameKey)
+        internal override Value OperateGetMemberValue(int nameKey)
         {
             object obj = _type.GetMember(nameKey);
             var func = obj as ValueNativeFunc;
@@ -46,14 +46,26 @@ namespace Photon
             if (fastProp != null)
             {
                 object retValue = null;
-                fastProp(_nativeIns, ref retValue, true);
+                fastProp(_data, ref retValue, true);
                 return retValue as Value;
             }
 
-            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));            
+            throw new RuntimeException("member not exists: " + _type.Key2Name(nameKey));     
         }
 
+        public override bool Equals(object other)
+        {
+            var otherT = other as ValueNativeClassIns;
+            if (otherT == null)
+                return false;
 
+            return otherT._data == _data;
+        }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
 
         public override string DebugString()
         {

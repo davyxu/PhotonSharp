@@ -25,6 +25,11 @@ namespace Photon
             return _name.Equals(other._name);
         }
 
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
+
         public override string TypeName
         {
             get { return Name.ToString(); }

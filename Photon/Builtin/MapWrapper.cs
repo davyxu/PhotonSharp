@@ -8,17 +8,6 @@ namespace Photon
 	[NativeWrapperClass(typeof(Photon.Map))]
 	public class MapWrapper
 	{
-		[NativeEntry(NativeEntryType.Property)]
-		public static void Count(object phoIns, ref object value, bool isGet )
-		{
-			var phoClassIns = phoIns as Map;
-			
-			if (isGet)
-			{
-				value = Convertor.Integer32ToValue(phoClassIns.Count);
-			}
-		}
-		
 		[NativeEntry(NativeEntryType.ClassMethod)]
 		public static int ContainsKey( VMachine phoVM )
 		{

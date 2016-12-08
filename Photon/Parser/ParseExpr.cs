@@ -273,6 +273,7 @@ namespace Photon
                 case TokenType.Int64:
                 case TokenType.Float32:
                 case TokenType.Float64:
+                case TokenType.Len:
                     {
                         Next();
                         Expect(TokenType.LBracket);

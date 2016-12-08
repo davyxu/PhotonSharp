@@ -28,6 +28,12 @@ namespace Photon
 
             return otherT._data == _data;
         }
+
+        public override int GetHashCode()
+        {
+            return _data.GetHashCode();
+        }
+
         public override string DebugString()
         {
             return _data.ToString() + " (bool)";

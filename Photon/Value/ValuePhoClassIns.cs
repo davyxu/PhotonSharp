@@ -13,15 +13,16 @@ namespace Photon
             _type = t;
         }
 
-        internal override void SetValue(int nameKey, Value v)
+
+        internal override void OperateSetMemberValue(int nameKey, Value v)
         {
             Value tt;
-            if (!_type.GetVirtualMember( nameKey, out tt ))
+            if (!_type.GetVirtualMember(nameKey, out tt))
             {
                 throw new RuntimeException("member not exists");
             }
 
-            if ( tt.Kind == ValueKind.Func )
+            if (tt.Kind == ValueKind.Func)
             {
                 throw new RuntimeException("member function is immutable");
             }
@@ -38,7 +39,7 @@ namespace Photon
             }
         }
 
-        internal override Value GetValue(int nameKey)
+        internal override Value OperateGetMemberValue(int nameKey)
         {
             // 从类型虚表中取
             Value tt;

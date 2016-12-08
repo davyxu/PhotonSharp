@@ -38,6 +38,7 @@
     <Compile Include="AST\NewExpr.cs" />
     <Compile Include="AST\ClassDeclare.cs" />
     <Compile Include="AST\ImportStmt.cs" />
+    <Compile Include="AST\ParenExpr.cs" />
     <Compile Include="Build\CompileParameter.cs" />
     <Compile Include="Build\Compiler.cs" />
     <Compile Include="AST\DelegateDeclare.cs" />
@@ -71,6 +72,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Builtin\MapWrapper.cs" />
+    <Compile Include="Convertor\SharpParser.cs" />
     <Compile Include="Model\NativeType.cs" />
     <Compile Include="Accessor\RegisterAccessor.cs" />
     <Compile Include="Accessor\StackAccessor.cs" />

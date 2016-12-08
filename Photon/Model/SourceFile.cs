@@ -54,6 +54,11 @@ namespace Photon
                 return string.Empty;
             }
 
+            var final =line - 1;
+
+            if (final < 0 || final >= _sourceLine.Count)
+                return string.Empty;
+
             return _sourceLine[line - 1];
         }
 

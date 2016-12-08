@@ -63,6 +63,8 @@ namespace Photon
 
         Expr ParseOperand(bool lhs)
         {
+            var defPos = CurrTokenPos;
+
             switch (CurrTokenType)
             {
                 case TokenType.Identifier:
@@ -82,20 +84,26 @@ namespace Photon
                     }
                 case TokenType.LBracket:
                     {
-
-                    }
-                    break;
-                case TokenType.Func: // a = func( ) {}
-                    {
-                        var funcPos = CurrTokenPos;
                         Next();
 
-                        var scope = OpenScope(ScopeType.Closure, funcPos );
+                        var x = ParseExpr(false);
+
+                        var rparenPos = CurrTokenPos;
+                        Expect(TokenType.RBracket);
+
+                        return new ParenExpr(x, defPos, rparenPos);
+                    }
+                case TokenType.Func: // a = func( ) {}
+                    {
+                        
+                        Next();
+
+                        var scope = OpenScope(ScopeType.Closure, defPos );
                         var paramlist = ParseParameters(scope, false);
 
                         var body = ParseBody(scope);
 
-                        var funclit = new FuncLit(body, new FuncType( funcPos, paramlist, scope) );
+                        var funclit = new FuncLit(body, new FuncType( defPos, paramlist, scope) );
 
                         return funclit;
                     }                    
@@ -277,7 +285,7 @@ namespace Photon
                     {
                         Next();
                         Expect(TokenType.LBracket);
-                        var x = ParsePrimaryExpr(false);
+                        var x = ParseExpr(false);
                         Expect(TokenType.RBracket);
                         return new UnaryExpr(x, op, oppos);
                     }

@@ -20,9 +20,16 @@ func Cat.foo( self ){
 	self.type = "cat"
 }
 
+func Cat.callParent( self ){
+	//base.foo( self )
+	return self.type
+}
+
 
 var c = new(Cat)
 
 c.foo( )
 
 var k = c.out( )
+
+var p = c.callParent( )

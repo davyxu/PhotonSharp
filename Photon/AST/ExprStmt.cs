@@ -1,5 +1,4 @@
-﻿
-using SharpLexer;
+﻿using SharpLexer;
 using System.Collections.Generic;
 
 namespace Photon

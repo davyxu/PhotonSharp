@@ -58,8 +58,8 @@ namespace Photon
             lex.AddMatcher(new KeywordMatcher(TokenType.Is, "is"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Int32, "int32"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Int64, "int64"));
-            lex.AddMatcher(new KeywordMatcher(TokenType.Int32, "float32"));
-            lex.AddMatcher(new KeywordMatcher(TokenType.Int64, "float64"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Float32, "float32"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Float64, "float64"));
 
             lex.AddMatcher(new IdentifierMatcher(TokenType.Identifier));
             lex.AddMatcher(new UnknownMatcher(TokenType.Unknown));

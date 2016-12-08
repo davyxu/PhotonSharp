@@ -432,15 +432,25 @@ func FindMagDefbuff( a ){
                         {                            
                             Next();
 
-                            if ( CurrTokenType == SharpTokenType.Int ||
-                                CurrTokenType == SharpTokenType.Float)
+                            var currType = CurrTokenType;
+                            if (currType == SharpTokenType.Int ||
+                                currType == SharpTokenType.Float)
                             {
                                 var varName = CurrTokenValue;
                                 Next();
 
                                 if ( CurrTokenType == SharpTokenType.RBracket )
                                 {
-                                    WriteString("int32");
+                                    if (currType == SharpTokenType.Int)
+                                    {
+                                        WriteString("int32");
+                                    }
+                                    else if (currType == SharpTokenType.Float)
+                                    {
+                                        WriteString("float32");
+                                    }
+                                    
+                                    
                                 }
                                 else
                                 {

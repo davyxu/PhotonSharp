@@ -41,15 +41,15 @@ namespace Photon
                     throw new CompileException("undefined symbol: " + xident.Name, DotPos);
                 }
 
-
-                switch( xident.Symbol.Usage )
+                // a.Do()的a 放入
+                switch (xident.Symbol.Usage)
                 {
                     case SymbolUsage.Parameter:
                     case SymbolUsage.Variable:
                         {
                             X.Compile(param.SetLHS(false));
                             return 1;
-                        }                     
+                        }
                 }
             }
 

@@ -19,7 +19,7 @@ namespace PhotonCompiler
 
         static int Main(string[] args)
         {
-            bool a = true;
+            bool a = false;
             if (a)
             {
                 SharpParser sp = new SharpParser();

@@ -51,6 +51,7 @@ namespace Photon
         Class,          // class
         New,            // new
         Is,             // is
+        Base,           // base
         Int32,          // int32
         Int64,          // int64
         Float32,        // float32

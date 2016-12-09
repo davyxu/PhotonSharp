@@ -49,13 +49,11 @@ namespace Photon
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var argCount = cmd.DataA;
-
             var obj = vm.DataStack.Pop();
 
             var func = Convertor.CastFunc(obj);
 
-            return func.Invoke(vm, argCount, cmd.DataB, obj as ValueClosure);            
+            return func.Invoke(vm, cmd.DataA, cmd.DataB, obj as ValueClosure);            
         }
 
         public override string Print(Command cmd)

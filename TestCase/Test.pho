@@ -1,1 +1,37 @@
-var a = 2 * (1 + 2) * 4
+
+class Animal {
+	type
+}
+
+func Animal.foo( self ){
+	self.type = "animal"
+}
+
+func Animal.out( self ){
+	return self.type
+}
+
+
+class Cat : Animal{
+
+}
+
+func Cat.foo( self ){
+	self.type = "cat"
+}
+
+func Cat.callParent( self ){
+	
+	base.foo( self )
+	
+	return self.type
+}
+
+
+var c = new(Cat)
+
+c.foo( 2)
+
+var k = c.out( )
+
+var p = c.callParent( )

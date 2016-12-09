@@ -55,6 +55,22 @@ namespace Photon
         {
             get { return ValueKind.String; }
         }
+
+        internal override Value OperateBinary(Opcode code, Value other)
+        {            
+            var a = RawValue;
+
+            var b = Convertor.ValueToString(other);            
+
+
+            switch (code)
+            {
+                case Opcode.ADD:
+                    return new ValueString(a + b);
+                default:
+                    throw new RuntimeException("Unknown binary operator:" + code.ToString());
+            }
+        }
     }
 
 

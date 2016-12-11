@@ -83,12 +83,12 @@ namespace Photon
 
         List<Ident> ParseParameters( Scope s, bool isMethod )
         {
-            Expect(TokenType.LBracket);
+            Expect(TokenType.LParen);
 
             List<Ident> p = new List<Ident>();
 
 
-            if (CurrTokenType != TokenType.RBracket )
+            if (CurrTokenType != TokenType.RParen )
             {
                 while (true)
                 {
@@ -118,28 +118,13 @@ namespace Photon
                 }
             }
             
-            Expect(TokenType.RBracket);
+            Expect(TokenType.RParen);
 
             return p;
         }
 
 
-        BlockStmt ParseBody(Scope s) 
-        {
-            var lpos = CurrTokenPos;
-            Expect(TokenType.LBrace);
 
-            _topScope = s;
-
-            var list = ParseStatmentList();
-
-            CloseScope();
-
-            var rpos = CurrTokenPos;
-            Expect(TokenType.RBrace);
-
-            return new BlockStmt(list, lpos, rpos);
-        }
 
         Stmt ParseVarDecl()
         {

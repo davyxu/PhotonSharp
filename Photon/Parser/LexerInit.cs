@@ -30,14 +30,14 @@ namespace Photon
             lex.AddMatcher(new SignMatcher(TokenType.Sub, "-"));
             lex.AddMatcher(new SignMatcher(TokenType.Mul, "*"));
             lex.AddMatcher(new SignMatcher(TokenType.Div, "/"));
-            lex.AddMatcher(new SignMatcher(TokenType.LBracket, "("));
-            lex.AddMatcher(new SignMatcher(TokenType.RBracket, ")"));
+            lex.AddMatcher(new SignMatcher(TokenType.LParen, "("));
+            lex.AddMatcher(new SignMatcher(TokenType.RParen, ")"));
             lex.AddMatcher(new SignMatcher(TokenType.Comma, ","));
             lex.AddMatcher(new SignMatcher(TokenType.Dot, "."));
             lex.AddMatcher(new SignMatcher(TokenType.Colon, ":"));            
             lex.AddMatcher(new SignMatcher(TokenType.SemiColon, ";"));
-            lex.AddMatcher(new SignMatcher(TokenType.LSqualBracket, "["));
-            lex.AddMatcher(new SignMatcher(TokenType.RSqualBracket, "]"));
+            lex.AddMatcher(new SignMatcher(TokenType.LBracket, "["));
+            lex.AddMatcher(new SignMatcher(TokenType.RBracket, "]"));
 
 
             lex.AddMatcher(new KeywordMatcher(TokenType.Nil, "nil"));

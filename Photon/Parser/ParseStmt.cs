@@ -19,6 +19,23 @@ namespace Photon
             return list;
         }
 
+        BlockStmt ParseBody(Scope s)
+        {
+            var lpos = CurrTokenPos;
+            Expect(TokenType.LBrace);
+
+            _topScope = s;
+
+            var list = ParseStatmentList();
+
+            CloseScope();
+
+            var rpos = CurrTokenPos;
+            Expect(TokenType.RBrace);
+
+            return new BlockStmt(list, lpos, rpos);
+        }
+
         void ParseChunk()
         {
             var lpos = CurrTokenPos;
@@ -67,7 +84,7 @@ namespace Photon
                 case TokenType.Identifier:
                 case TokenType.Number:
                 case TokenType.QuotedString:
-                case TokenType.LBracket:
+                case TokenType.LParen:
                 case TokenType.Add:
                 case TokenType.Sub:
                 case TokenType.Base:
@@ -90,7 +107,7 @@ namespace Photon
                     return ParseClassDecl();
             }
 
-            throw new CompileException("Invalid statement", CurrTokenPos);
+            throw new CompileException("Invalid statement:" + CurrTokenType, CurrTokenPos);
         }
 
         IfStmt ParseIfStmt()

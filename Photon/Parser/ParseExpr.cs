@@ -88,14 +88,14 @@ namespace Photon
                         Next();
                         return x;
                     }
-                case TokenType.LBracket:
+                case TokenType.LParen:
                     {
                         Next();
 
                         var x = ParseExpr(false);
 
                         var rparenPos = CurrTokenPos;
-                        Expect(TokenType.RBracket);
+                        Expect(TokenType.RParen);
 
                         return new ParenExpr(x, defPos, rparenPos);
                     }
@@ -121,21 +121,21 @@ namespace Photon
         CallExpr ParseCallExpr( Expr func )
         {
             var lpos = CurrTokenPos;
-            Expect(TokenType.LBracket);
+            Expect(TokenType.LParen);
 
-            if (CurrTokenType != TokenType.RBracket)
+            if (CurrTokenType != TokenType.RParen)
             {
                 var args = ParseRHSList();
 
                 var rpos = CurrTokenPos;
-                Expect(TokenType.RBracket);
+                Expect(TokenType.RParen);
 
 
                 return new CallExpr(func, args, _topScope, lpos, rpos );
             }
 
             var rpos2 = CurrTokenPos;
-            Expect(TokenType.RBracket);
+            Expect(TokenType.RParen);
 
             // 空参数
             return new CallExpr(func, new List<Expr>(), _topScope, lpos, rpos2);
@@ -228,7 +228,7 @@ namespace Photon
                         }
                         break;
                         // a[index]
-                    case TokenType.LSqualBracket:
+                    case TokenType.LBracket:
                         {
                             var lpos = CurrTokenPos;
 
@@ -239,12 +239,12 @@ namespace Photon
                             var index = ParseRHSList();
 
                             var rpos = CurrTokenPos;
-                            Expect(TokenType.RSqualBracket);
+                            Expect(TokenType.RBracket);
 
                             x = new IndexExpr(x, index[0], lpos, rpos);
                         }
                         break;
-                    case TokenType.LBracket: 
+                    case TokenType.LParen: 
                         {
                             callTimes++;
 
@@ -290,15 +290,15 @@ namespace Photon
                 case TokenType.Len:
                     {
                         Next();
-                        Expect(TokenType.LBracket);
+                        Expect(TokenType.LParen);
                         var x = ParseExpr(false);
-                        Expect(TokenType.RBracket);
+                        Expect(TokenType.RParen);
                         return new UnaryExpr(x, op, oppos);
                     }
                 case TokenType.New:
                     {
                         Next();
-                        Expect(TokenType.LBracket);
+                        Expect(TokenType.LParen);
 
                         Ident pkgName = null;
                         Ident className;
@@ -318,7 +318,7 @@ namespace Photon
                             className = nameA;
                         }
 
-                        Expect(TokenType.RBracket);
+                        Expect(TokenType.RParen);
 
 
                         return new NewExpr(className, pkgName, oppos);

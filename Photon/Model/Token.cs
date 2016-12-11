@@ -29,10 +29,10 @@ namespace Photon
         Dot,            // .        
         Colon,          // :
         SemiColon,      // ;
-        LBracket,       // (
-        RBracket,       // )
-        LSqualBracket,  // [
-        RSqualBracket,  // ]
+        LParen,         // (
+        RParen,         // )
+        LBracket,       // [
+        RBracket,       // ]
         LBrace,         // {
         RBrace,         // }
         Len,            // len

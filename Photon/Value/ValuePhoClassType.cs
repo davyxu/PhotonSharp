@@ -24,6 +24,21 @@ namespace Photon
             _member.Add(nameKey, new ValueNil());
         }
 
+        internal bool GetBaseMember(int nameKey, out Value v)
+        {
+            v = Value.Nil;
+
+            if (Parent == null)
+                return true;
+
+            if (Parent._member.TryGetValue(nameKey, out v))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         internal bool GetVirtualMember( int nameKey, out Value v )
         {
             v = Value.Nil;

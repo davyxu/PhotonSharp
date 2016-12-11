@@ -28,15 +28,7 @@ namespace Photon
             }
 
 
-            Value existV;
-            if (_memberVar.TryGetValue(nameKey, out existV))
-            {
-                existV = v;
-            }
-            else
-            {
-                _memberVar.Add(nameKey, v);
-            }
+            _memberVar[nameKey] = v;            
         }
 
         internal override Value OperateGetMemberValue(int nameKey)
@@ -44,6 +36,31 @@ namespace Photon
             // 从类型虚表中取
             Value tt;
             if (!_type.GetVirtualMember(nameKey, out tt))
+            {
+                throw new RuntimeException("member not exists");
+            }
+
+            // 函数优先返回
+            if (tt.Kind == ValueKind.Func)
+            {
+                return tt;
+            }
+
+
+            Value existV;
+            if (_memberVar.TryGetValue(nameKey, out existV))
+            {
+                return existV;
+            }
+
+            return Value.Nil;
+        }
+
+        internal Value GetBaseValue(int nameKey)
+        {
+            // 从类型虚表中取
+            Value tt;
+            if (!_type.GetBaseMember(nameKey, out tt))
             {
                 throw new RuntimeException("member not exists");
             }

@@ -21,8 +21,8 @@ func Cat.foo( self ){
 }
 
 func Cat.callParent( self ){
-	//base.foo( self )
-	return self.type
+		base.foo( self )
+		return self.type
 }
 
 

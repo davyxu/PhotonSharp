@@ -49,14 +49,20 @@ namespace Photon
             
             if ( CurrTokenType == TokenType.LBrace )
             {
+                
 
-                var body = ParseBody(scope);
-
-                var decl = new FuncDeclare(funcName, body, new FuncType(funcPos, paramlist, scope) );
+                var decl = new FuncDeclare(funcName, new FuncType(funcPos, paramlist, scope));
                 decl.ClassName = className;
 
-
                 funcName.Symbol = Declare(decl, funcAtScope, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
+
+
+                decl.Body = ParseBody(scope);
+
+                decl.BuildRelation();
+
+
+                
 
                 return decl;
             }

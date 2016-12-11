@@ -75,6 +75,12 @@ namespace Photon
 
                         return x;
                     }
+                case TokenType.Base:
+                    {
+                        Next();
+
+                        return new BaseLit(defPos);
+                    }                    
                 case TokenType.Number:
                 case TokenType.QuotedString:
                     {

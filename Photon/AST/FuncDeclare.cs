@@ -16,16 +16,13 @@ namespace Photon
 
         ValueFunc _proc;
 
-        ValuePhoFunc _bodyCS;
+        internal ValuePhoFunc bodyCS;
 
-        public FuncDeclare(Ident name, BlockStmt body, FuncType ft )
+        public FuncDeclare(Ident name, FuncType ft )
         {
             Name = name;
-            Body = body;
 
             TypeInfo = ft;
-
-            BuildRelation();
         }
 
 
@@ -61,11 +58,17 @@ namespace Photon
 
             if (ClassName != null)
             {
+                // 成员函数必须有至少1个参数(self)
+                if (TypeInfo.Params.Count < 1)
+                {
+                    throw new CompileException("Expect 'self' in method", TypeInfo.FuncPos);
+                }
+
                 on.ClassName = ClassName.Name;
             }
 
             var newset = new ValuePhoFunc(on, TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), TypeInfo.ScopeInfo);
-            _bodyCS = newset;
+            bodyCS = newset;
 
             _proc = param.Exe.AddFunc(newset);
 

@@ -119,6 +119,24 @@ namespace Photon
         }
     }
 
+    [Instruction(Cmd = Opcode.LOADB)]
+    class CmdLoadB : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            var ci = Convertor.CastClassInstance(vm.DataStack.Pop());
+
+            vm.DataStack.Push(ci.GetBaseValue(cmd.DataA));
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("BaseMemberKey: {0}", cmd.DataA);
+        }
+    }
+
 
     [Instruction(Cmd = Opcode.SETR)]
     class CmdSetR : Instruction

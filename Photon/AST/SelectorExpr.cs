@@ -56,6 +56,43 @@ namespace Photon
             return 0;
         }
 
+        Ident GetFuncSelf()
+        {
+            Node n = this.Parent;
+
+            while(!(n is FuncDeclare))
+            {
+                if (n == null)
+                    break;
+
+                n = n.Parent;
+            }
+
+            FuncDeclare funcD = n as FuncDeclare;
+            if ( funcD == null )
+            {
+                throw new CompileException("'base' should be used in class method", DotPos);
+            }
+
+            if (funcD.TypeInfo.Params.Count == 0)
+            {
+                throw new CompileException("Expect 'self' in method", funcD.TypeInfo.FuncPos);
+            }
+
+            var selfIDent = funcD.TypeInfo.Params[0];
+            if ( selfIDent.Symbol == null )
+            {
+                throw new CompileException("invalid method param", funcD.TypeInfo.FuncPos);
+            }
+
+            if ( selfIDent.Symbol.Usage != SymbolUsage.SelfParameter )
+            {
+                throw new CompileException("invalid self method param", funcD.TypeInfo.FuncPos);
+            }
+
+            return selfIDent;
+        }
+
         internal override void Compile(CompileParameter param)
         {
             var xident = X as Ident;
@@ -105,6 +142,18 @@ namespace Photon
                         throw new CompileException("unknown symbol usage", DotPos);
                 }
 
+            }
+            else if ( X is BaseLit )
+            {
+                // 提供一个self, 因为LOADB会吃掉self
+                GetFuncSelf().Compile(param.SetLHS(false));
+
+
+                var ci = param.Exe.Constants.AddString(Selector.Name);
+
+                // 无法推导X类型, 所以这里只能用动态方法直接加载,或设置
+                param.CS.Add(new Command(Opcode.LOADB, ci))
+                    .SetCodePos(DotPos).SetComment(Selector.Name);
             }
             else
             {

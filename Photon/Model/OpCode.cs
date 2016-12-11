@@ -35,6 +35,7 @@ namespace Photon
         LOADU,  // S[Top] = U[I]           // Upvalue
         LOADF,  // S[Top] = F[PackageID + CmdSetID]        
         LOADM,  // S[Top] = Class[C].Member[I]
+        LOADB,  // S[Top] = base Class[C].Member[I]
         LOADI,
         SETR,   // R[I] = S[I+1]
         SETG,   // G[I] = S[I+1]

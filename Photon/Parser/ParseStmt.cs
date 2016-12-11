@@ -70,6 +70,7 @@ namespace Photon
                 case TokenType.LBracket:
                 case TokenType.Add:
                 case TokenType.Sub:
+                case TokenType.Base:
                     return ParseSimpleStmt();
                 case TokenType.Func:
                     return ParseFuncDecl();

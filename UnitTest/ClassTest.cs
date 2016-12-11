@@ -13,7 +13,8 @@ namespace UnitTest
 
             new TestBox().RunFile("ClassInherit.pho")
                 .CheckGlobalVarMatchKind("c", ValueKind.ClassInstance)
-                .CheckGlobalVarMatchValue("k", "cat");                
+                .CheckGlobalVarMatchValue("k", "cat")
+                .CheckGlobalVarMatchValue("p", "animal");                
         }
     }
 }

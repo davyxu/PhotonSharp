@@ -38,10 +38,27 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
+            int index = 0;
+            bool preHasNonImportStmt = false;
 
             foreach (var b in Stmts)
             {
+
+                if ( b is ImportStmt )
+                {
+                    if ( preHasNonImportStmt )
+                    {
+                        throw new CompileException("'import' should at beginning of file", LBracePos);
+                    }
+                }
+                else
+                {
+                    preHasNonImportStmt = true;
+                }
+
+
                 b.Compile(param.SetLHS(false));
+                index++;
             }
         }
     }

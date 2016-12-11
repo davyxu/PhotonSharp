@@ -184,11 +184,12 @@ namespace Photon
             
 
             var pkgName = new List<BasicLit>();
-            pkgName.Add(new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos));
 
-            var n =new ImportStmt(pkgName, defpos);
+            var n = new ImportStmt(pkgName, defpos);
 
             Declare(n, _global, tk.Value, defpos, SymbolUsage.Package);
+
+            pkgName.Add(new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos));
 
             // 如果包存在, 就不会在定义
             var pkg = Exe.GetPackageByName(tk.Value);

@@ -2,35 +2,43 @@
 
 namespace Photon
 {
-    internal partial class Parser
+    class ScopeManager
     {
         Scope _topScope;
         Scope _global;
 
-        public Scope PackageScope
+        internal Scope PackageScope
         {
             get { return _global; }
         }
 
-        void InitScope( )
+        internal Scope TopScope
+        {
+            get { return _topScope; }
+            set { _topScope = value; }
+        }
+
+
+
+        internal ScopeManager()
         {
             OpenScope( ScopeType.Package, TokenPos.Invalid );
             _global = _topScope;
         }
 
-        Scope OpenScope( ScopeType type, TokenPos pos )
+        internal Scope OpenScope(ScopeType type, TokenPos pos)
         {
             var s = new Scope(_topScope, type, pos );
             _topScope = s;
             return s;
         }
 
-        void CloseScope( )
+        internal void CloseScope()
         {
             _topScope = _topScope.Outter;
         }
 
-        Scope OpenClassScope( string name, TokenPos pos )
+        internal Scope OpenClassScope(string name, TokenPos pos)
         {
             var exists = GetClassScope(name);
             if ( exists != null )
@@ -45,7 +53,7 @@ namespace Photon
             return s;
         }
 
-        Scope GetClassScope(string name)
+        internal Scope GetClassScope(string name)
         {
             foreach( var s in _global.Child )
             {
@@ -58,7 +66,7 @@ namespace Photon
             return null;
         }
 
-        static internal Symbol Declare(Node n, Scope s, string name, TokenPos pos, SymbolUsage usage )
+        internal static Symbol Declare(Node declareNode, Scope s, string name, TokenPos pos, SymbolUsage usage )
         {
             var pre = s.FindSymbol(name);
             if ( pre != null )
@@ -68,16 +76,16 @@ namespace Photon
 
             Symbol data = new Symbol();
             data.Name = name;
-            data.Decl = n;
+            data.Decl = declareNode;
             data.DefinePos = pos;
             data.Usage = usage;
             
 
             s.Insert(data );
 
-            if ( n != null )
+            if ( declareNode != null )
             {
-                var ident = n as Ident;
+                var ident = declareNode as Ident;
 
                 if (ident == null)
                     return data;
@@ -88,7 +96,7 @@ namespace Photon
             return data;
         }
 
-        void Resolve( Node x, Scope beginScope = null )
+        internal void Resolve(Node x, Scope beginScope = null)
         {
             var ident = x as Ident;
 

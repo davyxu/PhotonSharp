@@ -36,10 +36,8 @@ namespace Photon
             return _cset[index];
         }
 
-        public void DebugPrint( )
+        internal void DebugPrint( )
         {
-            Logger.DebugLine("constant:");
-
             int index = 0;
             foreach (var c in _cset)
             {

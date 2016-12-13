@@ -24,11 +24,11 @@ namespace Photon
             var lpos = CurrTokenPos;
             Expect(TokenType.LBrace);
 
-            _topScope = s;
+            ScopeMgr.TopScope = s;
 
             var list = ParseStatmentList();
 
-            CloseScope();
+            ScopeMgr.CloseScope();
 
             var rpos = CurrTokenPos;
             Expect(TokenType.RBrace);
@@ -36,15 +36,7 @@ namespace Photon
             return new BlockStmt(list, lpos, rpos);
         }
 
-        void ParseChunk()
-        {
-            var lpos = CurrTokenPos;
-            var list = ParseStatmentList();
-            var rpos = CurrTokenPos;
-
-            _chunk.Add(new BlockStmt(list, lpos, rpos));            
-        }
-
+       
         ReturnStmt ParseReturnStmt()
         {
             var defpos = CurrTokenPos;
@@ -65,11 +57,11 @@ namespace Photon
             var defPos = CurrTokenPos;
             Expect(TokenType.LBrace);
 
-            OpenScope(ScopeType.Block, defPos);
+            ScopeMgr.OpenScope(ScopeType.Block, defPos);
 
             var list = ParseStatmentList();
 
-            CloseScope();
+            ScopeMgr.CloseScope();
 
             var rpos = CurrTokenPos;
             Expect(TokenType.RBrace);
@@ -101,8 +93,6 @@ namespace Photon
                     return ParseForStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
-                case TokenType.Import:
-                    return ParseImportStmt();
                 case TokenType.Class:
                     return ParseClassDecl();
             }
@@ -139,7 +129,7 @@ namespace Photon
         {
             var ident = ParseIdent();
 
-            Declare(ident, _topScope, ident.Name, ident.DefinePos, SymbolUsage.Variable);
+            ScopeManager.Declare(ident, ScopeMgr.TopScope, ident.Name, ident.DefinePos, SymbolUsage.Variable);
 
             var assignPos = CurrTokenPos;
 
@@ -155,7 +145,7 @@ namespace Photon
             var defPos = CurrTokenPos;
             Expect(TokenType.For);
 
-            OpenScope( ScopeType.For, defPos );
+            ScopeMgr.OpenScope( ScopeType.For, defPos );
 
             var init = ParseForInit();
            
@@ -170,7 +160,7 @@ namespace Photon
 
             var body = ParseBlockStmt();
 
-            CloseScope();
+            ScopeMgr.CloseScope();
 
             var condtion = conStmt as ExprStmt;
 
@@ -190,34 +180,35 @@ namespace Photon
             return new WhileStmt(condition, body, defpos);
         }
 
-        ImportStmt ParseImportStmt( )
+        List<ImportStmt> ParseImportStmt( )
         {
-            var defpos = CurrTokenPos;
-            Expect(TokenType.Import);
-            
-            
-            var tk = Expect(TokenType.QuotedString);
+            var importList = new List<ImportStmt>();
 
-            
-
-            var pkgName = new List<BasicLit>();
-
-            var n = new ImportStmt(pkgName, defpos);
-
-            Declare(n, _global, tk.Value, defpos, SymbolUsage.Package);
-
-            pkgName.Add(new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos));
-
-            // 如果包存在, 就不会在定义
-            var pkg = Exe.GetPackageByName(tk.Value);
-            if (pkg == null)
+            while (CurrTokenType == TokenType.Import &&
+                 CurrTokenType != TokenType.EOF)
             {
-                Compiler.Import(_exe, _loader, tk.Value, tk.Value, ImportMode.Directory);
+                var defpos = CurrTokenPos;
+                Expect(TokenType.Import);
+
+
+                var tk = Expect(TokenType.QuotedString);
+
+                var pkgName = new BasicLit(tk.Value, (TokenType)tk.MatcherID, tk.Pos);
+
+                var n = new ImportStmt(pkgName, defpos);
+                importList.Add(n);
+
+                ScopeManager.Declare(n, ScopeMgr.PackageScope, tk.Value, defpos, SymbolUsage.Package);
+
+                // 如果包存在, 就不会在定义
+                var pkg = Exe.GetPackageByName(tk.Value);
+                if (pkg == null)
+                {
+                    Compiler.Import(_exe, _loader, tk.Value, tk.Value, ImportMode.Directory);
+                }
             }
 
-            
-
-            return n;
+            return importList;
         }
     }
 }

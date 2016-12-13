@@ -28,6 +28,10 @@ namespace Photon
             return false;
         }
 
+        internal virtual void DebugPrint(Executable exe )
+        {
+
+        }
         
         public override ValueKind Kind
         {

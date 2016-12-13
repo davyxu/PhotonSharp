@@ -5,13 +5,6 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-
-    public class File
-    {
-        public SourceFile Source;
-    }
-
-
     public class Executable
     {
 
@@ -19,9 +12,6 @@ namespace Photon
 
         // 所有函数执行体
         List<ValueFunc> _func = new List<ValueFunc>();
-
-        // 源码
-        List<File> _file = new List<File>();
 
         // 类
         List<ValueClassType> _classType = new List<ValueClassType>();
@@ -36,11 +26,6 @@ namespace Photon
             Map.Register(this);
         }
 
-        public List<File> FileList
-        {
-            get { return _file; }
-        }
-
         internal ConstantSet Constants
         {
             get { return _constSet; }
@@ -48,23 +33,21 @@ namespace Photon
 
         internal string QuerySourceLine(TokenPos pos)
         {
-            foreach (var f in _file)
+            foreach (var p in _packages)
             {
-                if (f.Source.Name == pos.SourceName)
+                foreach (var f in p.FileList)
                 {
-                    return f.Source.GetLine(pos.Line);
+                    if (f.Source.Name == pos.SourceName)
+                    {
+                        return f.Source.GetLine(pos.Line);
+                    }
                 }
             }
+
 
             return string.Empty;
         }
 
-        internal void AddSource(SourceFile source)
-        {
-            var f = new File();
-            f.Source = source;
-            _file.Add(f);
-        }
 
 
         internal ValueFunc AddFunc(ValueFunc f)
@@ -119,14 +102,15 @@ namespace Photon
             return null;
         }
 
-        internal Package AddPackage( string name, Scope top )
+        internal Package AddPackage( Package pkg )
         {
-            if ( GetPackageByName(name) != null )
+            if ( GetPackageByName(pkg.Name) != null )
             {
-                throw new RuntimeException("duplicate register package, name: " + name);
-            }
+                throw new RuntimeException("duplicate register package, name: " + pkg.Name);
+            }            
 
-            var pkg = new Package( _packages.Count,  name, this, top);
+            pkg.ID = _packages.Count;
+            pkg.Exe = this;
 
             _packages.Add(pkg);
 
@@ -178,12 +162,14 @@ namespace Photon
 
         public SourceFile GetSourceFile(string filename)
         {
-
-            foreach (var f in FileList)
+            foreach(var p in _packages )
             {
-                if (f.Source.Name == filename)
+                foreach (var f in p.FileList)
                 {
-                    return f.Source;
+                    if (f.Source.Name == filename)
+                    {
+                        return f.Source;
+                    }
                 }
             }
 
@@ -213,10 +199,8 @@ namespace Photon
 
             var pkg = GetPackageByName(pkgNameRegTo);
             if (pkg == null)
-            {
-                Scope pkgScope = new Scope(null, ScopeType.Package, TokenPos.Init);
-
-                pkg = AddPackage(pkgNameRegTo, pkgScope);
+            {                
+                pkg = AddPackage(new Package(pkgNameRegTo) );
             }
 
             Type instClass;
@@ -250,13 +234,20 @@ namespace Photon
             foreach (var pkg in _packages)
             {
                 Logger.DebugLine(string.Format("============= {0} id: {1} =============", pkg.Name, pkg.ID));
-                pkg.DebugPrint();
+
+                pkg.PrintAST();
+
+                pkg.PrintSymbols();
+
+                pkg.PrintInitEntry();
             }
 
             Logger.DebugLine("");
 
             if (Constants.Count > 0)
             {
+                Logger.DebugLine("Constant:");
+
                 // 常量
                 Constants.DebugPrint();
             }
@@ -265,17 +256,8 @@ namespace Photon
             // 汇编
             foreach (var p in _func)
             {
-                var cs = p as ValuePhoFunc;
-                if (cs != null)
-                {
-                    Logger.DebugLine(string.Format("{0} id: {1} regs: {2}", cs, cs.ID, cs.RegCount));
-                    cs.DebugPrint(this);
-                }
-                var del = p as ValueNativeFunc;
-                if (del != null)
-                {
-                    Logger.DebugLine(string.Format("{0} id: {1}", del.Name, del.ID));
-                }
+                Logger.DebugLine(p.DebugString());
+                p.DebugPrint(this);
             }
         }
     }

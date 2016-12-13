@@ -1,3 +1,8 @@
 import "MyPackage"
+
+// add.pho
 var c = MyPackage.AddValue( 1, 2 )
+
+// sub.pho
+var s = MyPackage.SubValue( 5, 2 )
 

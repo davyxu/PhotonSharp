@@ -12,7 +12,7 @@ namespace Photon
 
             Expect(TokenType.Func);
 
-            var scope = OpenScope(ScopeType.Function, funcPos );
+            var scope = ScopeMgr.OpenScope(ScopeType.Function, funcPos);
 
             Ident funcName;
             Ident className = null ;
@@ -29,18 +29,18 @@ namespace Photon
 
                 className = NameA;
                 
-                funcAtScope = GetClassScope(className.Name);
+                funcAtScope = ScopeMgr.GetClassScope(className.Name);
 
                 // 主定义文件还未出现， 所以暂时创建空的scope
                 if ( funcAtScope == null )
                 {
-                    funcAtScope = OpenClassScope(className.Name, funcPos);
-                    CloseScope();
+                    funcAtScope = ScopeMgr.OpenClassScope(className.Name, funcPos);
+                    ScopeMgr.CloseScope();
                 }
             }
             else
             {
-                funcAtScope = _global;
+                funcAtScope = ScopeMgr.PackageScope;
                 funcName = NameA;
             }
 
@@ -54,7 +54,7 @@ namespace Photon
                 var decl = new FuncDeclare(funcName, new FuncType(funcPos, paramlist, scope));
                 decl.ClassName = className;
 
-                funcName.Symbol = Declare(decl, funcAtScope, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
+                funcName.Symbol = ScopeManager.Declare(decl, funcAtScope, funcName.Name, funcName.DefinePos, SymbolUsage.Func);
 
 
                 decl.Body = ParseBody(scope);
@@ -69,12 +69,12 @@ namespace Photon
             else
             {
                 // 声明已经结束
-                CloseScope();
+                ScopeMgr.CloseScope();
 
                 // 函数前置声明
                 var decl = new DelegateDeclare(funcName, new FuncType(funcPos, paramlist, scope) );
 
-                funcName.Symbol = Declare(decl, _global, funcName.Name, funcName.DefinePos, SymbolUsage.Delegate);
+                funcName.Symbol = ScopeManager.Declare(decl, ScopeMgr.PackageScope, funcName.Name, funcName.DefinePos, SymbolUsage.Delegate);
 
                 return decl;
             }
@@ -107,7 +107,7 @@ namespace Photon
                     }
 
 
-                    Declare(param, s, param.Name, param.DefinePos, usage);
+                    ScopeManager.Declare(param, s, param.Name, param.DefinePos, usage);
 
                     if (CurrTokenType != TokenType.Comma)
                     {
@@ -135,7 +135,7 @@ namespace Photon
 
             foreach( var i in idents )
             {
-                Declare(i, _topScope, i.Name, i.DefinePos, SymbolUsage.Variable);
+                ScopeManager.Declare(i, ScopeMgr.TopScope, i.Name, i.DefinePos, SymbolUsage.Variable);
             }
 
             List<Expr> values = new List<Expr>();
@@ -170,7 +170,7 @@ namespace Photon
 
             var className = ParseIdent();
 
-            var scope = OpenClassScope( className.Name, defpos);
+            var scope = ScopeMgr.OpenClassScope(className.Name, defpos);
 
             
             Ident parentName = null;
@@ -193,17 +193,17 @@ namespace Photon
                 decl.ColonPos = colonPos;
             }
 
-            className.Symbol = Declare(decl, _global, className.Name, className.DefinePos, SymbolUsage.Class);
+            className.Symbol = ScopeManager.Declare(decl, ScopeMgr.PackageScope, className.Name, className.DefinePos, SymbolUsage.Class);
 
             while (CurrTokenType != TokenType.RBrace)
             {
                 var param = ParseIdent();
-                memberVar.Add(param);                
+                memberVar.Add(param);
 
-                Declare(param, scope, param.Name, param.DefinePos, SymbolUsage.Member);                
+                ScopeManager.Declare(param, scope, param.Name, param.DefinePos, SymbolUsage.Member);                
             }
 
-            CloseScope();
+            ScopeMgr.CloseScope();
 
             Next();
 

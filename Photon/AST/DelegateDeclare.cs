@@ -33,10 +33,6 @@ namespace Photon
         internal override void Compile(CompileParameter param)
         {
             param.Exe.AddFunc(new ValueNativeFunc( new ObjectName( param.Pkg.Name, Name.Name ) ) );            
-
-           // var c = new ValueDelegate( );            
-
-           // param.Exe.AddDelegate(Name.Name, c);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Photon
 
         public override string DebugString()
         {
-            return string.Format("{0}", Name);
+            return string.Format("{0} id: {1}", Name, ID);
         }
 
         internal override bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)

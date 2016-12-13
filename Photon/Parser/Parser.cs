@@ -6,13 +6,13 @@ namespace Photon
     {
         Lexer _lexer;
 
-        Token _token;
-
-        Chunk _chunk = new Chunk();
+        Token _token;        
 
         Executable _exe;
 
         ContentLoader _loader;
+
+        ScopeManager _scopemgr;
 
         internal Executable Exe
         {
@@ -24,26 +24,31 @@ namespace Photon
             get { return _loader; }
         }
 
-        public Chunk Chunk
+        internal ScopeManager ScopeMgr
         {
-            get { return _chunk; }
+            get { return _scopemgr; }
         }
 
-        public Parser(Executable exe, ContentLoader loader)
+        public Parser(Executable exe, ContentLoader loader, ScopeManager scopemgr)
         {
             _exe = exe;
             _loader = loader;
-
-            InitScope();
+            _scopemgr = scopemgr;
         }
 
-        public void Parse(SourceFile file)
+        public FileNode ParseFile(SourceFile file)
         {
             _lexer = NewLexer(file);
 
             Next();
 
-            ParseChunk();
+            var importList = ParseImportStmt( );
+
+            var lpos = CurrTokenPos;
+            var list = ParseStatmentList();
+            var rpos = CurrTokenPos;
+
+            return new FileNode(new BlockStmt(list, lpos, rpos), importList);            
         }
 
         public override string ToString()

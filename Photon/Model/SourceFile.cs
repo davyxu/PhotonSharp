@@ -62,7 +62,10 @@ namespace Photon
             return _sourceLine[line - 1];
         }
 
-
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public void DebugPrint( )
         {

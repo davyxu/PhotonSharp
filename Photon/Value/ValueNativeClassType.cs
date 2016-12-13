@@ -32,6 +32,7 @@ namespace Photon
             _pkg = pkg;
 
             _scope = new Scope(_pkg.TopScope, ScopeType.Class, TokenPos.Init);
+            _scope.ClassName = _data.Name;
         }
 
         internal static T GetCustomAttribute<T>(MemberInfo mi) where T : class

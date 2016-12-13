@@ -17,7 +17,7 @@ namespace Photon
 
         public static bool OutputToConsole = false;
 
-        public static void WriteLine(LogLevel level, string msg)
+        static void WriteLine(LogLevel level, string msg)
         {
             if (OutputToDebugger)
             {
@@ -28,7 +28,7 @@ namespace Photon
             {
                 Console.WriteLine(msg);
             }
-        }
+        }        
 
         public static void DebugLine(string fmt, params object[] args)
         {

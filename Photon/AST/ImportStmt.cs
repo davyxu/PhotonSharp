@@ -4,15 +4,14 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-
-    internal class ImportStmt : Stmt
+    class ImportStmt : Stmt
     {
-        public List<BasicLit> Sources = new List<BasicLit>();
+        public BasicLit Source;
         public TokenPos ImportPos;
 
-        public ImportStmt(List<BasicLit> list, TokenPos pos)
+        public ImportStmt(BasicLit src, TokenPos pos)
         {
-            Sources = list;
+            Source = src;
             ImportPos = pos;
 
             BuildRelation();
@@ -20,10 +19,7 @@ namespace Photon
 
         public override IEnumerable<Node> Child()
         {
-            foreach (var s in Sources)
-            {
-                yield return s;
-            }
+            yield return Source;
         }
 
         public override string ToString()

@@ -9,18 +9,65 @@ namespace Photon
 
         int _id;
 
-        // 调试Symbol
-        Chunk _chunk;
+        // 源码
+        List<CodeFile> _code = new List<CodeFile>();
 
         // 父级
         Executable _exe;
 
         // 包的作用域
-        Scope _top;
+        ScopeManager _scopeManager;
 
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
 
+        internal ValuePhoFunc InitEntry
+        {
+            get;
+            set;
+        }
+
+        internal List<CodeFile> FileList
+        {
+            get { return _code; }
+        }
+
+        internal Executable Exe
+        {
+            get { return _exe; }
+            set { _exe = value; }
+        }
+
+        internal int ID
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        internal Scope TopScope
+        {
+            get { return _scopeManager.TopScope; }
+        }
+
+        internal Scope PackageScope
+        {
+            get { return _scopeManager.PackageScope; }
+        }
+
+        internal ScopeManager ScopeMgr
+        {
+            get { return _scopeManager; }
+        }
+
+        internal Package( string name )
+        {
+            _name = name;            
+            _scopeManager = new ScopeManager();
+        }
 
         // 第二次pass
         internal void ResolveNode()
@@ -32,43 +79,17 @@ namespace Photon
 
         }
 
-        internal Chunk AST
+        internal void AddCode(CodeFile code)
         {
-            get { return _chunk; }
-            set { _chunk = value; }
+            _code.Add(code);
         }
 
-        internal Executable Exe
+        internal void Compile(CompileParameter param)
         {
-            get { return _exe; }
-        }
-
-
-
-        internal int ID
-        {
-            get { return _id; }
-        }
-
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        internal Scope TopScope
-        {
-            get { return _top; }
-        }
-
-
-
-        internal Package( int id, string name, Executable exe, Scope s )
-        {
-            _exe = exe;
-            _name = name;
-            _id = id;
-            _top = s;
+            foreach (var f in _code)
+            {
+                f.AST.Compile(param);
+            }
         }
 
         public override string ToString()
@@ -96,8 +117,6 @@ namespace Photon
             _secondPass.Add(ctx);
         }
 
-
-
         static void PrintAST(Node n, string indent = "")
         {
             Logger.DebugLine(indent + n.ToString());
@@ -108,24 +127,36 @@ namespace Photon
             }
         }
 
-        internal void DebugPrint(  )
+        internal void PrintAST()
         {
-            if (AST != null )
+            foreach (var f in FileList)
             {
                 // 语法树
-                Logger.DebugLine("ast:");
-                PrintAST(AST);
+                Logger.DebugLine(string.Format("'{0}' AST:", f.Source.Name));
+                PrintAST(f.AST);
                 Logger.DebugLine("");
             }
-            
-            if (_top != null )
+        }
+
+        internal void PrintSymbols(  )
+        {            
+            if (TopScope != null )
             {
                 // 符号
-                Logger.DebugLine("symbols:");
-                _top.DebugPrint("");
+                Logger.DebugLine("Symbols:");
+                TopScope.DebugPrint("");
                 Logger.DebugLine("");
             }
 
+        }
+
+        internal void PrintInitEntry()
+        {
+            if (InitEntry == null)
+                return;
+
+            Logger.DebugLine(InitEntry.DebugString());
+            InitEntry.DebugPrint(Exe);
         }
     }
 }

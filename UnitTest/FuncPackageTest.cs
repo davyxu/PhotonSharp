@@ -23,7 +23,8 @@ namespace UnitTest
                 .CheckGlobalVarMatchValue("y", 15);
 
             new TestBox().RunFile("Package.pho")
-                .CheckGlobalVarMatchValue("c", 3);
+                .CheckGlobalVarMatchValue("c", 3)
+                .CheckGlobalVarMatchValue("s", 3);
         }
     }
 }

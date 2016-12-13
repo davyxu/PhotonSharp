@@ -190,6 +190,7 @@ namespace Photon
 
             CurrFrame.ReceiverCount = retValueCount;
 
+            // 数据栈转寄存器
             if (argCount > 0)
             {
                 MoveArgStack2Local(argCount);
@@ -208,7 +209,6 @@ namespace Photon
 
                 if (ShowDebugInfo)
                 {
-                    
                     Logger.DebugLine("{0}|{1}", cmd.CodePos, _exe.QuerySourceLine(cmd.CodePos));
                     Logger.DebugLine("---------------------");
                     Logger.DebugLine("{0,5} {1,2}| {2} {3}", _currFrame.Func.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
@@ -241,7 +241,7 @@ namespace Photon
                 if (ShowDebugInfo)
                 {
 
-                    GetRuntimePackage(0).Reg.DebugPrint();
+                    rtpkg.Reg.DebugPrint();
 
                     // 寄存器信息
                     LocalReg.DebugPrint();
@@ -264,30 +264,54 @@ namespace Photon
 
         }
 
-        public object[] Execute(Executable exe, string pkgname, string entryName, object[] paramToExec = null, int retValueCount = 0)
+        void InitialCall()
         {
-            _exe = exe;
             _callStack.Clear();
             _dataStack.Clear();
 
-            if (paramToExec != null)
+            // 依赖包按依赖顺序初始化
+            for (int i = 0; i < _exe.PackageCount; i++)
             {
-                foreach (var obj in paramToExec)
+                var pkg = _exe.GetPackage(i);
+
+                // 已经创建过了 
+                if (i < _package.Count)
+                    continue;
+
+                var rtPkg = new RuntimePackage(pkg);
+
+                _package.Add(rtPkg);
+
+                if (pkg.InitEntry != null)
                 {
-                    var v = Convertor.NativeValueToValue(obj);
-                    _dataStack.Push(v);
+                    // 执行包的全局入口( 只会还行一次)
+                    ExecuteFunc(rtPkg, pkg.InitEntry, 0, 0);
                 }
             }
-            
+        }
 
-            // 包全局寄存器初始化
-            // TODO 按import顺序, 顺序初始, 调用init
-            for (int i = 0; i < exe.PackageCount; i++)
+        void ObjectListToDataStack(object[] paramToExec)
+        {
+            if (paramToExec == null)
+                return;
+
+            // 参数转到栈上
+            foreach (var obj in paramToExec)
             {
-                var pkg = exe.GetPackage(i);
-                _package.Add(new RuntimePackage(pkg));
+                var v = Convertor.NativeValueToValue(obj);
+                _dataStack.Push(v);
             }
+        }
 
+        public void Execute( Executable exe )
+        {
+            _exe = exe;
+            InitialCall();
+        }
+
+        public object[] Execute(Executable exe, string pkgname, string entryName, object[] paramToExec = null, int retValueCount = 0)
+        {
+            Execute(exe);
 
             // 找到包入口
             var func = _exe.GetFuncByName(new ObjectName(pkgname, entryName)) as ValuePhoFunc;
@@ -295,6 +319,9 @@ namespace Photon
             {
                 throw new RuntimeException("unknown start package name: " + pkgname);
             }
+
+            // 参数转到栈上
+            ObjectListToDataStack(paramToExec);            
 
             var rtpkg = GetRuntimePackageByName(pkgname);
 

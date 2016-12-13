@@ -71,7 +71,7 @@ namespace Photon
                     {
                         var x = ParseIdent();
 
-                        Resolve(x);
+                        ScopeMgr.Resolve(x);
 
                         return x;
                     }
@@ -104,7 +104,7 @@ namespace Photon
                         
                         Next();
 
-                        var scope = OpenScope(ScopeType.Closure, defPos );
+                        var scope = ScopeMgr.OpenScope(ScopeType.Closure, defPos);
                         var paramlist = ParseParameters(scope, false);
 
                         var body = ParseBody(scope);
@@ -131,14 +131,14 @@ namespace Photon
                 Expect(TokenType.RParen);
 
 
-                return new CallExpr(func, args, _topScope, lpos, rpos );
+                return new CallExpr(func, args, ScopeMgr.TopScope, lpos, rpos );
             }
 
             var rpos2 = CurrTokenPos;
             Expect(TokenType.RParen);
 
             // 空参数
-            return new CallExpr(func, new List<Expr>(), _topScope, lpos, rpos2);
+            return new CallExpr(func, new List<Expr>(), ScopeMgr.TopScope, lpos, rpos2);
         }
 
         void ResolveSelectorElement( Expr x, Ident sel, TokenPos dotpos )
@@ -170,7 +170,7 @@ namespace Photon
                         }
 
 
-                        Resolve(sel, pkg.TopScope);
+                        ScopeMgr.Resolve(sel, pkg.TopScope);
                     }
                     break;
                 // 实例.函数名
@@ -206,7 +206,7 @@ namespace Photon
                             var dotpos = CurrTokenPos;
                             Next();
 
-                            Resolve(x);
+                            ScopeMgr.Resolve(x);
 
 
 
@@ -232,7 +232,7 @@ namespace Photon
                         {
                             var lpos = CurrTokenPos;
 
-                            Resolve(x);
+                            ScopeMgr.Resolve(x);
 
                             Next();
 
@@ -254,7 +254,7 @@ namespace Photon
                                 throw new CompileException("invalid call statement", CurrTokenPos);
                             }
 
-                            Resolve(x);
+                            ScopeMgr.Resolve(x);
 
                             x = ParseCallExpr(x);                            
                         }
@@ -345,12 +345,12 @@ namespace Photon
 
                     Next();
 
-                    Resolve(x);
+                    ScopeMgr.Resolve(x);
 
                     var y = ParseBinaryExpr(false, prec + 1);
-                    
-                    
-                    Resolve(y);
+
+
+                    ScopeMgr.Resolve(y);
 
                     x = new BinaryExpr(x, y, op, oppos);
                 }
@@ -385,7 +385,7 @@ namespace Photon
 
             foreach( var x in list )
             {
-                Resolve(x);
+                ScopeMgr.Resolve(x);
             }
 
             return list;
@@ -397,7 +397,7 @@ namespace Photon
 
             foreach (var x in list)
             {
-                Resolve(x);
+                ScopeMgr.Resolve(x);
             }
 
             return list;

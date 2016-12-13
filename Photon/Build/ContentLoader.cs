@@ -3,28 +3,19 @@ namespace Photon
 {
     public class ContentLoader
     {
-        internal Parser _parser;
-        internal Executable _exe;
-
-        internal void Init(Parser parser, Executable exe)
+        public void AddSource(Package pkg, object parser, string content, string sourceName)
         {
-            _parser = parser;
-            _exe = exe;
-        }
-
-        public void AddSource(string content, string sourceName)
-        {
-            if (_parser == null || _exe == null)
-                return;
-
             SourceFile srcfile = new SourceFile(content, sourceName);
 
-            _exe.AddSource(srcfile);
+            var code = new CodeFile();
+           
+            code.Source = srcfile;
+            code.AST = (parser as Parser).ParseFile(srcfile);
 
-            _parser.Parse(srcfile);
+            pkg.AddCode(code);
         }
 
-        public virtual void Load(string sourceName, ImportMode mode)
+        public virtual void Load(Package pkg, object parser, string sourceName, ImportMode mode)
         {
             throw new System.NotImplementedException();
         }

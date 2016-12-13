@@ -20,20 +20,20 @@ namespace Photon
 
         internal static void Import(Executable exe, ContentLoader loader, string packageName,  string sourceName, ImportMode mode )
         {
-            var parser = new Parser(exe, loader );
+            var pkg = new Package(packageName);
 
-            loader.Init(parser, exe);
+            var parser = new Parser(exe, loader, pkg.ScopeMgr);            
 
-            var pkg = exe.AddPackage(packageName, parser.PackageScope);
+            loader.Load(pkg, parser, sourceName, mode);
 
-            loader.Load(sourceName, mode);
+            exe.AddPackage(pkg);
 
             var initPos = TokenPos.Init;
             initPos.SourceName = sourceName;
 
-            var cs = new ValuePhoFunc( new ObjectName( pkg.Name, pkg.Name ), initPos, parser.PackageScope.RegCount, parser.PackageScope);
-
-            exe.AddFunc(cs);
+            // 全局入口( 不进入函数列表, 只在Package上保存 )
+            var cs = new ValuePhoFunc(new ObjectName(pkg.Name, "init"), initPos, pkg.PackageScope.RegCount, pkg.PackageScope);
+            pkg.InitEntry = cs;            
 
             var param = new CompileParameter();
 
@@ -41,10 +41,7 @@ namespace Photon
             param.CS = cs;
             param.Exe = exe;
 
-            // 遍历AST,生成代码
-            parser.Chunk.Compile(param);
-
-            param.Pkg.AST = parser.Chunk;
+            pkg.Compile(param);
             
             cs.Add(new Command(Opcode.EXIT).SetCodePos(parser.CurrTokenPos));
         }

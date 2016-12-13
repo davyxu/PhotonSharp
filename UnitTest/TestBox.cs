@@ -39,7 +39,7 @@ namespace UnitTest
             Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            _vm.Execute(_exe, "main", "main");
+            _vm.Execute(_exe );
 
             Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            

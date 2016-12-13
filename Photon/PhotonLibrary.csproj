@@ -55,7 +55,7 @@
     <Compile Include="AST\IndexExpr.cs" />
     <Compile Include="AST\UnaryExpr.cs" />
     <Compile Include="AST\Ident.cs" />
-    <Compile Include="AST\Chunk.cs" />
+    <Compile Include="AST\FileNode.cs" />
     <Compile Include="AST\ExprStmt.cs" />
     <Compile Include="AST\AssignStmt.cs" />
     <Compile Include="AST\BlockStmt.cs" />
@@ -63,7 +63,8 @@
     <Compile Include="AST\ForStmt.cs" />
     <Compile Include="AST\WhileStmt.cs" />
     <Compile Include="AST\IfStmt.cs" />
-    <Compile Include="AST\Scope.cs" />
+    <Compile Include="Model\CodeFile.cs" />
+    <Compile Include="Model\Scope.cs" />
     <Compile Include="AST\Node.cs" />
     <Compile Include="Build\ContentLoader.cs" />
     <Compile Include="Build\FileLoader.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="Parser\ParseExpr.cs" />
     <Compile Include="Parser\ParseDecl.cs" />
     <Compile Include="Parser\ParseStmt.cs" />
-    <Compile Include="Parser\ScopeSet.cs" />
+    <Compile Include="Model\ScopeManager.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\OpCode.cs" />

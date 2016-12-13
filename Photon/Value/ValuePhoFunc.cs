@@ -50,7 +50,7 @@ namespace Photon
 
         public override string DebugString()
         {
-            return string.Format("{0} {1}", Name, _defpos);
+            return string.Format("{0} {1} id: {2} regs: {3}", Name, _defpos, ID, RegCount);
         }
 
         internal int CurrCmdID
@@ -91,8 +91,8 @@ namespace Photon
             return false;
         }
 
-        public void DebugPrint( Executable exe)
-        {
+        internal override void DebugPrint( Executable exe)
+        {            
             int index = 0;
 
             int currLine = 0;

@@ -177,7 +177,15 @@ namespace Photon
 
         public void DebugPrint( string indent )
         {
-            Logger.DebugLine(indent + _type.ToString());
+            if (string.IsNullOrEmpty(ClassName))
+            {
+                Logger.DebugLine(indent + _type.ToString());
+            }
+            else
+            {
+                Logger.DebugLine(string.Format("{0}{1} '{2}'",indent, _type.ToString(), ClassName));
+            }
+            
 
             foreach( var kv in _symbolByName )
             {

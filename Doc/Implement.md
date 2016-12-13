@@ -56,3 +56,18 @@ Local寄存器整个虚拟机只有1份, 所有包共用
 
 类成员函数调用时, 第一个参数为self
 
+# 层次
+一个Executable包含N个包, 1个ScopeManager
+每个包有N个SourceFile和对应的FileNode
+FileNode间共享ScopeManager的Scope信息
+
+
+# init和main
+lua的每个文件的全局部分=init/main
+
+但是init和main可以让代码的声明和运行清晰
+
+# hot patch与import
+lua可以做hot patch. 前一个文件跑着的时候, vm没释放时可以直接再次加载另外一个文件并混合前面的vm状态继续执行
+
+pho不支持这个特性. 但是可以做函数的edit & continue技术

@@ -16,7 +16,11 @@ namespace UnitTest
                 testbox.RunFile("Map.pho")
                     .CheckGlobalVarMatchKind("map", ValueKind.NativeClassInstance)
                     .CheckGlobalVarMatchValue("x", 1678)
-                    .CheckGlobalVarMatchValue("c", 1);
+                    .CheckGlobalVarMatchValue("c", 1)
+                    .CheckGlobalVarMatchKind("sugar", ValueKind.NativeClassInstance)
+                    .CheckGlobalVarMatchValue("sugarlen", 2)
+                    .CheckGlobalVarMatchValue("sugarA", 12345)
+                    .CheckGlobalVarMatchValue("sugarB", "world");
             }
 
             {

@@ -47,6 +47,7 @@ namespace Photon
         CLOSURE, //  创建闭包
         NEW,    // C[I] -> ClassInstance
         SETA,   // Array = S[I], S[I+1]..
+        SETD,   // Map = S[I], S[I+1]..
 
         // 流程控制        
         CALL,  // S[I](S[I+1], ... ) 栈交换

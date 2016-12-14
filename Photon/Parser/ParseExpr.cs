@@ -61,6 +61,22 @@ namespace Photon
             return list;
         }
 
+        BasicLit ParseBasicLit()
+        {
+            switch (CurrTokenType)
+            {
+                case TokenType.Number:
+                case TokenType.QuotedString:
+                    {
+                        var x = new BasicLit(_token.Value, CurrTokenType, CurrTokenPos);
+                        Next();
+                        return x;
+                    }
+            }
+
+            throw new CompileException("Expect Literal value", CurrTokenPos);
+        }
+
         Expr ParseOperand(bool lhs)
         {
             var defPos = CurrTokenPos;
@@ -99,15 +115,25 @@ namespace Photon
 
                         return new ParenExpr(x, defPos, rparenPos);
                     }
-                case TokenType.LBracket: // a = [] 数据初始化
+                case TokenType.LBracket: // a = [] 数组初始化
                     {
                         Next();
 
-                        List<Expr> values = new List<Expr>();
+                        List<BasicLit> values = new List<BasicLit>();
 
-                        if (CurrTokenType != TokenType.RBracket)
+                        while (CurrTokenType != TokenType.RBracket &&
+                                CurrTokenType != TokenType.EOF)
                         {
-                            values = ParseRHSList();
+                            values.Add(ParseBasicLit());
+
+
+                            if (CurrTokenType == TokenType.RBracket ||
+                                CurrTokenType == TokenType.EOF)
+                            {
+                                break;
+                            }
+
+                            Expect(TokenType.Comma);
                         }
 
                        
@@ -115,7 +141,39 @@ namespace Photon
                         Expect(TokenType.RBracket);
 
                         return new ArrayExpr(values, defPos, rPos);
-                    }                    
+                    }
+                case TokenType.LBrace: // a = {} Map初始化
+                    {
+                        Next();
+
+                        Dictionary<BasicLit, Expr> mapValues = new Dictionary<BasicLit, Expr>();
+
+                        while (CurrTokenType != TokenType.RBrace &&
+                                CurrTokenType != TokenType.EOF)
+                        {
+                            var key = ParseBasicLit();
+
+                            Expect(TokenType.Colon);
+
+                            var value = ParseRHS();
+
+                            mapValues.Add(key, value);
+
+                            if (CurrTokenType == TokenType.RBrace ||
+                                CurrTokenType == TokenType.EOF)
+                            {
+                                break;
+                            }
+
+                            Expect(TokenType.Comma);
+                        }
+
+
+                        var rPos = CurrTokenPos;
+                        Expect(TokenType.RBrace);
+
+                        return new MapExpr(mapValues, defPos, rPos);
+                    }      
                 case TokenType.Func: // a = func( ) {}
                     {
                         

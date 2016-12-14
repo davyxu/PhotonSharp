@@ -7,6 +7,11 @@ namespace Photon
     {
         Dictionary<Value, Value> _data = new Dictionary<Value, Value>();
 
+        internal Dictionary<Value, Value> Raw
+        {
+            get { return _data; }
+        }
+
         [NoGenWrapper]
         public void SetKeyValue(Value k, Value v)
         {

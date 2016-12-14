@@ -2,3 +2,15 @@ var map = new(Map)
 map["hello"] = 1678
 var x = map["hello"]
 var c = len(map)
+
+
+var w = "world"
+
+var sugar = {
+	1 : 12345,
+	"hello": w,
+}
+
+var sugarlen = len(sugar)
+var sugarA = sugar[1]
+var sugarB = sugar["hello"]

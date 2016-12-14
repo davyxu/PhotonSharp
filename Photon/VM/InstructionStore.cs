@@ -244,6 +244,44 @@ namespace Photon
         }
     }
 
+
+    [Instruction(Cmd = Opcode.SETA)]
+    class CmdSetA : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            int valueCount = cmd.DataA;
+
+            var arr = Convertor.CastObject(vm.DataStack.Get(-valueCount - 1)).Raw as Array;
+            if (arr == null)
+            {
+                throw new RuntimeException("Expect 'Builtin.Array' value");
+            }
+
+            
+
+            arr.Raw.Clear();
+
+            arr.Raw.Capacity = valueCount;
+
+            var argBegin = vm.DataStack.Count - valueCount;
+
+            for( int i = 0;i<valueCount;i++)
+            {
+                arr.Raw.Add(vm.DataStack.Get(argBegin + i ));
+            }
+
+            vm.DataStack.PopMulti(valueCount);
+
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("MemberKey: {0}", cmd.DataA);
+        }
+    }
+
     [Instruction(Cmd = Opcode.SEL)]
     class CmdSelect : Instruction
     {

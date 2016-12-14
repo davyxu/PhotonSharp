@@ -7,9 +7,14 @@ namespace Photon
     {
         List<Value> _data = new List<Value>();
 
+        internal List<Value> Raw
+        {
+            get { return _data; }
+        }
+
         public void Add(Value v)
         {
-            _data.Add(v);
+            _data.Add(v);            
         }
 
         public void Remove(Value v)
@@ -50,7 +55,7 @@ namespace Photon
 
         public Value Get(int index)
         {
-            if (index > 0 || index >= _data.Count)
+            if (index < 0 || index >= _data.Count)
             {
                 throw new RuntimeException("Array out of bound");
             }

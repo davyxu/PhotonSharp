@@ -46,6 +46,7 @@ namespace Photon
         LINKU,  // 让Upvalue与寄存器建立引用
         CLOSURE, //  创建闭包
         NEW,    // C[I] -> ClassInstance
+        SETA,   // Array = S[I], S[I+1]..
 
         // 流程控制        
         CALL,  // S[I](S[I+1], ... ) 栈交换

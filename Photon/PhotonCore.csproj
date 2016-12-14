@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{129399C8-6ED0-47DA-8829-5781D54C2A48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Photon</RootNamespace>
+    <AssemblyName>Photon</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AST\BaseLit.cs" />
+    <Compile Include="AST\ArrayExpr.cs" />
+    <Compile Include="AST\NewExpr.cs" />
+    <Compile Include="AST\ClassDeclare.cs" />
+    <Compile Include="AST\ImportStmt.cs" />
+    <Compile Include="AST\ParenExpr.cs" />
+    <Compile Include="AST\ConstDeclareStmt.cs" />
+    <Compile Include="Build\CompileParameter.cs" />
+    <Compile Include="Build\Compiler.cs" />
+    <Compile Include="AST\DelegateDeclare.cs" />
+    <Compile Include="AST\FuncType.cs" />
+    <Compile Include="AST\FuncLit.cs" />
+    <Compile Include="AST\Symbol.cs" />
+    <Compile Include="AST\VarDeclareStmt.cs" />
+    <Compile Include="AST\CallExpr.cs" />
+    <Compile Include="AST\FuncDeclare.cs" />
+    <Compile Include="AST\BasicLit.cs" />
+    <Compile Include="AST\SelectorExpr.cs" />
+    <Compile Include="AST\BinaryExpr.cs" />
+    <Compile Include="AST\IndexExpr.cs" />
+    <Compile Include="AST\UnaryExpr.cs" />
+    <Compile Include="AST\Ident.cs" />
+    <Compile Include="AST\FileNode.cs" />
+    <Compile Include="AST\ExprStmt.cs" />
+    <Compile Include="AST\AssignStmt.cs" />
+    <Compile Include="AST\BlockStmt.cs" />
+    <Compile Include="AST\ReturnStmt.cs" />
+    <Compile Include="AST\ForStmt.cs" />
+    <Compile Include="AST\WhileStmt.cs" />
+    <Compile Include="AST\IfStmt.cs" />
+    <Compile Include="Builtin\Array.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Builtin\ArrayWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Builtin\Map.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Builtin\MapWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CodeFile.cs" />
+    <Compile Include="Model\Scope.cs" />
+    <Compile Include="AST\Node.cs" />
+    <Compile Include="Build\ContentLoader.cs" />
+    <Compile Include="Build\FileLoader.cs" />
+    <Compile Include="Model\NativeType.cs" />
+    <Compile Include="Accessor\RegisterAccessor.cs" />
+    <Compile Include="Accessor\StackAccessor.cs" />
+    <Compile Include="Accessor\Convertor.cs" />
+    <Compile Include="Utility\CodePrinter.cs" />
+    <Compile Include="CodeGen\Generator.cs" />
+    <Compile Include="CodeGen\Printer.cs" />
+    <Compile Include="CodeGen\Model.cs" />
+    <Compile Include="CodeGen\Collector.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Value\ValueBool.cs" />
+    <Compile Include="Value\ValueFloat64.cs" />
+    <Compile Include="Value\ValueInteger64.cs" />
+    <Compile Include="Value\ValueInteger32.cs" />
+    <Compile Include="Value\ValuePhoFunc.cs" />
+    <Compile Include="Model\Command.cs" />
+    <Compile Include="Model\Constant.cs" />
+    <Compile Include="Value\ValueNativeFunc.cs" />
+    <Compile Include="Model\Exception.cs" />
+    <Compile Include="Model\ObjectName.cs" />
+    <Compile Include="Model\Package.cs" />
+    <Compile Include="Parser\LexerInit.cs" />
+    <Compile Include="Model\SourceFile.cs" />
+    <Compile Include="Value\ValuePhoClassType.cs" />
+    <Compile Include="Value\ValueNativeClassIns.cs" />
+    <Compile Include="Value\ValuePhoClassIns.cs" />
+    <Compile Include="Value\ValueNativeClassType.cs" />
+    <Compile Include="Value\ValueClosure.cs" />
+    <Compile Include="Value\ValueFunc.cs" />
+    <Compile Include="Value\ValueNil.cs" />
+    <Compile Include="Value\ValueClassType.cs" />
+    <Compile Include="Value\ValueString.cs" />
+    <Compile Include="Value\ValueObject.cs" />
+    <Compile Include="Value\ValueFloat32.cs" />
+    <Compile Include="Model\Executable.cs" />
+    <Compile Include="Parser\ParseExpr.cs" />
+    <Compile Include="Parser\ParseDecl.cs" />
+    <Compile Include="Parser\ParseStmt.cs" />
+    <Compile Include="Model\ScopeManager.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\OpCode.cs" />
+    <Compile Include="Model\Token.cs" />
+    <Compile Include="Accessor\DataAccessor.cs" />
+    <Compile Include="VM\Instruction.cs" />
+    <Compile Include="VM\InstructionFlow.cs" />
+    <Compile Include="VM\InstructionMath.cs" />
+    <Compile Include="VM\InstructionStore.cs" />
+    <Compile Include="VM\DataStack.cs" />
+    <Compile Include="Value\Value.cs" />
+    <Compile Include="VM\RuntimeFrame.cs" />
+    <Compile Include="VM\Register.cs" />
+    <Compile Include="VM\RuntimePackage.cs" />
+    <Compile Include="VM\VMachine.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharpLexer\SharpLexer\SharpLexer.csproj">
+      <Project>{5138a406-5b76-4d5e-b889-257224e1fb2f}</Project>
+      <Name>SharpLexer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

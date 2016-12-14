@@ -28,7 +28,11 @@ namespace UnitTest
                     .CheckGlobalVarMatchValue("g", 120)
                     .CheckGlobalVarMatchValue("count", 1)
                     .CheckGlobalVarMatchKind("v", ValueKind.Nil)
-                    .CheckGlobalVarMatchValue("ok", false);
+                    .CheckGlobalVarMatchValue("ok", false)
+                    .CheckGlobalVarMatchKind("sugar", ValueKind.NativeClassInstance)
+                    .CheckGlobalVarMatchValue("sugarlen", 2)
+                    .CheckGlobalVarMatchValue("sugar1", 1)
+                    .CheckGlobalVarMatchValue("sugar2", 2);
             }
             
         }

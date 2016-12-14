@@ -2,9 +2,9 @@ var arr = new(Array)
 
 arr.Add(199)
 
- arr[0] = 120
+arr[0] = 120
  
- var x = arr[0]
+var x = arr[0]
 
 var g = arr.Get(0)
 
@@ -14,3 +14,10 @@ var count = len(arr)
 
 var v, ok = arr.TryGet(119)
 
+var sugar = [1,2]
+
+var sugarlen = len(sugar)
+
+var sugar1 = sugar[0]
+
+var sugar2 = sugar[1]

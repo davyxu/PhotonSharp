@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{80DA4E87-05D
 		Doc\VM.md = Doc\VM.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonLibrary", "Photon\PhotonLibrary.csproj", "{129399C8-6ED0-47DA-8829-5781D54C2A48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonCore", "Photon\PhotonCore.csproj", "{129399C8-6ED0-47DA-8829-5781D54C2A48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLexer", "..\SharpLexer\SharpLexer\SharpLexer.csproj", "{5138A406-5B76-4D5E-B889-257224E1FB2F}"
 EndProject
@@ -27,6 +27,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonCompiler", "PhotonCompiler\PhotonCompiler.csproj", "{0ACC0994-F7F2-4CE8-AC21-306712CF6A0A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{28ADD91D-2B96-4257-BC74-37F15192E998}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{BF07360B-C64F-4C84-93A7-1EC57E8341C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

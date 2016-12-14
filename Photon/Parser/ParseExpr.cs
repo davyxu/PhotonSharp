@@ -67,7 +67,7 @@ namespace Photon
 
             switch (CurrTokenType)
             {
-                case TokenType.Identifier:
+                case TokenType.Identifier: // a = b
                     {
                         var x = ParseIdent();
 
@@ -75,7 +75,7 @@ namespace Photon
 
                         return x;
                     }
-                case TokenType.Base:
+                case TokenType.Base: // a= base.foo()
                     {
                         Next();
 
@@ -88,7 +88,7 @@ namespace Photon
                         Next();
                         return x;
                     }
-                case TokenType.LParen:
+                case TokenType.LParen: // () 括号表达式
                     {
                         Next();
 
@@ -99,6 +99,23 @@ namespace Photon
 
                         return new ParenExpr(x, defPos, rparenPos);
                     }
+                case TokenType.LBracket: // a = [] 数据初始化
+                    {
+                        Next();
+
+                        List<Expr> values = new List<Expr>();
+
+                        if (CurrTokenType != TokenType.RBracket)
+                        {
+                            values = ParseRHSList();
+                        }
+
+                       
+                        var rPos = CurrTokenPos;
+                        Expect(TokenType.RBracket);
+
+                        return new ArrayExpr(values, defPos, rPos);
+                    }                    
                 case TokenType.Func: // a = func( ) {}
                     {
                         
@@ -297,35 +314,42 @@ namespace Photon
                     }
                 case TokenType.New:
                     {
-                        Next();
-                        Expect(TokenType.LParen);
-
-                        Ident pkgName = null;
-                        Ident className;
-
-                        Ident nameA = ParseIdent();
-                        Ident nameB;
-
-                        if (CurrTokenType == TokenType.Dot)
-                        {
-                            Next();
-                            nameB = ParseIdent();
-                            className = nameB;
-                            pkgName = nameA;
-                        }
-                        else
-                        {
-                            className = nameA;
-                        }
-
-                        Expect(TokenType.RParen);
-
-
-                        return new NewExpr(className, pkgName, oppos);
+                        return ParseNewExpr();
                     }
             }
 
             return ParsePrimaryExpr(lhs);
+        }
+
+        Expr ParseNewExpr()
+        {
+            var oppos = CurrTokenPos;
+
+            Expect(TokenType.New);
+            Expect(TokenType.LParen);
+
+            Ident pkgName = null;
+            Ident className;
+
+            Ident nameA = ParseIdent();
+            Ident nameB;
+
+            if (CurrTokenType == TokenType.Dot)
+            {
+                Next();
+                nameB = ParseIdent();
+                className = nameB;
+                pkgName = nameA;
+            }
+            else
+            {
+                className = nameA;
+            }
+
+            Expect(TokenType.RParen);
+
+
+            return new NewExpr(className, pkgName, oppos);
         }
 
         Expr ParseBinaryExpr(bool lhs, int prec1)

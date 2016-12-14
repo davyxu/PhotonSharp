@@ -70,6 +70,12 @@ namespace Photon
             get { return _exe; }
         }
 
+        internal ConstantSet Constants
+        {
+            get;
+            set;
+        }
+
         public RuntimeFrame CurrFrame
         {
             get { return _currFrame; }
@@ -174,6 +180,23 @@ namespace Photon
         public void Stop( )
         {
             _currFrame.PC = -1;
+        }
+
+        internal static Value MiniExec(ValuePhoFunc func, ConstantSet consts)
+        {
+            var vm = new VMachine();
+
+            vm.Constants = consts;
+
+            foreach (var cmd in func.Commands)
+            {
+                if (!_insset.ExecCode(vm, cmd))
+                {
+                    break;
+                }
+            }
+
+            return vm.DataStack.Get(-1);
         }
 
 
@@ -306,6 +329,7 @@ namespace Photon
         public void Execute( Executable exe )
         {
             _exe = exe;
+            Constants = exe.Constants;
             InitialCall();
         }
 

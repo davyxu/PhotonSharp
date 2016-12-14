@@ -45,7 +45,7 @@ namespace Photon
             }
             else
             {
-                int nameKey = param.Exe.Constants.AddString(Name.Name);
+                int nameKey = param.Constants.AddString(Name.Name);
                 var cc = c as ValuePhoClassType;
                 cc.AddMethod(nameKey, _proc);
             } 
@@ -77,7 +77,7 @@ namespace Photon
                 param.NextPassToResolve(this);
             }            
 
-            var funcParam = param.SetLHS(false).SetComdSet(newset);
+            var funcParam = param.SetLHS(false).SetCmdSet(newset);
             Body.Compile(funcParam);
 
             TypeInfo.GenDefaultRet(Body.Child(), funcParam);

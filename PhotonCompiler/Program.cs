@@ -18,14 +18,7 @@ namespace PhotonCompiler
         }
 
         static int Main(string[] args)
-        {
-            bool a = false;
-            if (a)
-            {
-                SharpParser sp = new SharpParser();
-                sp.Start(System.IO.File.ReadAllText("skill.cs"));
-            }
-                        
+        {                        
             if ( args.Length < 2 )
             {
                 Help();

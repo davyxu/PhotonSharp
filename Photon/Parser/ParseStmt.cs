@@ -93,6 +93,8 @@ namespace Photon
                     return ParseForStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
+                case TokenType.Const:
+                    return ParseConstDecl();
                 case TokenType.Class:
                     return ParseClassDecl();
             }

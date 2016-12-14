@@ -7,7 +7,7 @@ namespace Photon
     {
         public override bool Execute(VMachine vm, Command cmd)
         {            
-            var c = vm.Exec.Constants.Get(cmd.DataA);
+            var c = vm.Constants.Get(cmd.DataA);
 
             vm.DataStack.Push(c);
 

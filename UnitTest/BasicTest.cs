@@ -16,6 +16,9 @@ namespace UnitTest
                 .CheckGlobalVarMatchValue("x", 2)
                 .CheckGlobalVarMatchValue("y", 1);
 
+            new TestBox().RunFile("Constant.pho")
+                .CheckGlobalVarMatchValue("b", 22);                
+
         }
     }
 }

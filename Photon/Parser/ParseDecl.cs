@@ -124,6 +124,25 @@ namespace Photon
         }
 
 
+        Stmt ParseConstDecl()
+        {
+            var defpos = CurrTokenPos;
+            Expect(TokenType.Const);
+
+            var ident = ParseIdent();
+
+            ScopeManager.Declare(ident, ScopeMgr.TopScope, ident.Name, ident.DefinePos, SymbolUsage.Constant);
+
+            List<Expr> values = new List<Expr>();
+
+            var assignPos = CurrTokenPos;
+
+            Expect(TokenType.Assign);
+
+            var value = ParseExpr(false);
+
+            return new ConstDeclareStmt(ident, value, defpos);
+        }
 
 
         Stmt ParseVarDecl()

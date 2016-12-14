@@ -8,6 +8,7 @@ namespace Photon
         Delegate,
         Func,
         Variable,
+        Constant,
         SelfParameter,
         Parameter,
         Member,

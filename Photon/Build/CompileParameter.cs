@@ -13,7 +13,8 @@ namespace Photon
         internal Package Pkg;
         internal Executable Exe;
         internal ValuePhoFunc CS;
-        internal bool LHS;
+        internal ConstantSet Constants;
+        internal bool LHS;        
 
         internal CompileParameter SetLHS(bool lhs)
         {
@@ -22,12 +23,13 @@ namespace Photon
             return copy;
         }
 
-        internal CompileParameter SetComdSet(ValuePhoFunc cs)
+        internal CompileParameter SetCmdSet(ValuePhoFunc cs)
         {
             var copy = (CompileParameter)this.MemberwiseClone();
             copy.CS = cs;
             return copy;
         }
+
         internal CompileParameter SetPackage(Package pkg)
         {
             var copy = (CompileParameter)this.MemberwiseClone();
@@ -35,6 +37,10 @@ namespace Photon
             return copy;
         }
 
+        internal CompileParameter Clone( )
+        {            
+            return (CompileParameter)this.MemberwiseClone();
+        }
 
         internal void NextPassToResolve(Node n)
         {

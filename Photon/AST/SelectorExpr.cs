@@ -129,7 +129,7 @@ namespace Photon
                             X.Compile(param.SetLHS(false));
 
 
-                            var ci = param.Exe.Constants.AddString(Selector.Name);
+                            var ci = param.Constants.AddString(Selector.Name);
 
                             Opcode cm = param.LHS ? Opcode.SETM : Opcode.LOADM;
 
@@ -149,7 +149,7 @@ namespace Photon
                 GetFuncSelf().Compile(param.SetLHS(false));
 
 
-                var ci = param.Exe.Constants.AddString(Selector.Name);
+                var ci = param.Constants.AddString(Selector.Name);
 
                 // 无法推导X类型, 所以这里只能用动态方法直接加载,或设置
                 param.CS.Add(new Command(Opcode.LOADB, ci))
@@ -160,7 +160,7 @@ namespace Photon
                 // 动态表达式, 需要用指令解析
                 X.Compile(param);
 
-                var ci = param.Exe.Constants.AddString(Selector.Name);
+                var ci = param.Constants.AddString(Selector.Name);
 
                 param.CS.Add(new Command(Opcode.SEL, ci))
                     .SetCodePos(DotPos).SetComment(Selector.Name);

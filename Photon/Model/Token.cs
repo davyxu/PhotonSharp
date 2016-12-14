@@ -39,6 +39,7 @@ namespace Photon
         Func,           // func
         Nil,            // nil
         Var,            // var
+        Const,          // const
         Return,         // return
         If,             // if
         Else,           // else

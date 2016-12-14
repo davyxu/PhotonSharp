@@ -40,6 +40,7 @@ namespace Photon
             param.Pkg = pkg;
             param.CS = cs;
             param.Exe = exe;
+            param.Constants = exe.Constants;
 
             pkg.Compile(param);
             

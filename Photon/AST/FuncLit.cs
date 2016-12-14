@@ -52,7 +52,7 @@ namespace Photon
 
             param.CS.Add(new Command(Opcode.CLOSURE, proc.ID)).SetCodePos(TypeInfo.FuncPos);
 
-            var funcParam = param.SetLHS(false).SetComdSet(newset);
+            var funcParam = param.SetLHS(false).SetCmdSet(newset);
 
             // 深度遍历, 所以最终引用层会先被遍历到
             Body.Compile(funcParam);

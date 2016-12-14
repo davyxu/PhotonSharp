@@ -72,7 +72,7 @@ namespace Photon
 
             foreach( var m in Member )
             {
-                var ki = param.Exe.Constants.AddString(m.Name);
+                var ki = param.Constants.AddString(m.Name);
 
                 _class.AddMemeber(ki, m.Name);
             }

@@ -26,7 +26,7 @@ namespace Photon
         internal override void Compile(CompileParameter param)
         {
             var c = Lit2Const( );
-            _constIndex = param.Exe.Constants.Add(c);
+            _constIndex = param.Constants.Add(c);
 
             param.CS.Add(new Command(Opcode.LOADK, _constIndex)).SetComment(c.ToString()).SetCodePos(Pos);
         }

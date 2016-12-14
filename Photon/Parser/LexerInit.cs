@@ -44,6 +44,7 @@ namespace Photon
             lex.AddMatcher(new KeywordMatcher(TokenType.Len, "len"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Func, "func"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Var, "var"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Const, "const"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
             lex.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));

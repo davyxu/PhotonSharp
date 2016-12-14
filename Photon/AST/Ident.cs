@@ -213,6 +213,12 @@ namespace Photon
 
                             }
                             break;
+                        case SymbolUsage.Constant:
+                            {
+                                CmdGen.Op = Opcode.LOADK;
+                                CmdGen.DataA = Symbol.RegIndex;
+                            }
+                            break;
                         default:
                             throw new CompileException("Unknown usage", DefinePos);
                     }

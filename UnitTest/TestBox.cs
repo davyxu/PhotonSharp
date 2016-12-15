@@ -20,6 +20,10 @@ namespace UnitTest
         {
             get { return _exe; }
         }
+        public TestBox()
+        {
+            _exe.RegisterBuiltinPackage();
+        }
 
         public TestBox Compile( string caseName, string src )
         {

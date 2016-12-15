@@ -32,8 +32,9 @@ namespace Photon
             initPos.SourceName = sourceName;
 
             // 全局入口( 不进入函数列表, 只在Package上保存 )
-            var cs = new ValuePhoFunc(new ObjectName(pkg.Name, "init"), initPos, pkg.PackageScope.RegCount, pkg.PackageScope);
-            pkg.InitEntry = cs;            
+            var cs = new ValuePhoFunc(new ObjectName(pkg.Name, "@init"), initPos, pkg.PackageScope.RegCount, pkg.PackageScope);
+            pkg.InitEntry = cs;
+            exe.AddFunc(cs);
 
             var param = new CompileParameter();
 
@@ -50,6 +51,7 @@ namespace Photon
         public static Executable CompileFile(string filename)
         {
             Executable exe = new Executable();
+            exe.RegisterBuiltinPackage();
 
             Compiler.Compile(exe, new FileLoader(Directory.GetCurrentDirectory()), filename);
 

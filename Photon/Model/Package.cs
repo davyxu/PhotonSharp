@@ -3,7 +3,7 @@
 namespace Photon
 {
 
-    public class Package
+    public partial class Package : IPhoSerializable
     {
         string _name;
 
@@ -63,6 +63,11 @@ namespace Photon
             get { return _scopeManager; }
         }
 
+        public Package( )
+        {        
+            _scopeManager = new ScopeManager();
+        }
+
         internal Package( string name )
         {
             _name = name;            
@@ -115,6 +120,13 @@ namespace Photon
             ctx.parameter = cp;
 
             _secondPass.Add(ctx);
+        }
+
+        public void Serialize(BinarySerializer serializer)
+        {
+            serializer
+                .Serialize(ref _name)
+                .Serialize(ref _id);
         }
 
         static void PrintAST(Node n, string indent = "")

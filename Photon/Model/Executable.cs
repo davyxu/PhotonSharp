@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public class Executable
+    public partial class Executable : IPhoSerializable
     {
 
         List<Package> _packages = new List<Package>();
@@ -20,7 +20,8 @@ namespace Photon
         // 常量表
         ConstantSet _constSet = new ConstantSet();
 
-        public Executable()
+
+        public void RegisterBuiltinPackage()
         {
             Array.Register(this);
             Map.Register(this);
@@ -225,6 +226,15 @@ namespace Photon
             }
 
             AddClassType(lanClass);
+        }
+
+        public void Serialize(BinarySerializer serializer)
+        {
+            serializer
+                .Serialize(ref _constSet)
+                .Serialize(ref _packages)
+                .Serialize(ref _func);
+                
         }
 
 

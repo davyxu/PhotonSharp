@@ -14,12 +14,26 @@ namespace Photon
 
         TokenPos _defpos;
 
+        // 序列化用, 不要删除
+        public ValuePhoFunc()
+        {
+
+        }
+
         internal ValuePhoFunc(ObjectName name, TokenPos codepos, int regCount, Scope s)
             : base(name)
         {            
             _regCount = regCount;
             _scope = s;
             _defpos = codepos;            
+        }
+
+
+        public override void Serialize(BinarySerializer serializer)
+        {
+            base.Serialize(serializer);
+
+            serializer.Serialize(ref _regCount);
         }
 
         internal Scope Scope

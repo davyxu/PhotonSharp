@@ -2,7 +2,7 @@
 
 namespace Photon
 {
-    class ConstantSet : DataAccessor
+    class ConstantSet : DataAccessor, IPhoSerializable
     {
         List<Value> _cset = new List<Value>();
 
@@ -46,6 +46,12 @@ namespace Photon
             }
 
             Logger.DebugLine("");
+        }
+
+        public void Serialize(BinarySerializer serializer)
+        {
+            serializer
+                .Serialize(ref _cset);
         }
     }
 }

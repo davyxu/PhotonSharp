@@ -87,6 +87,7 @@
     <Compile Include="Accessor\RegisterAccessor.cs" />
     <Compile Include="Accessor\StackAccessor.cs" />
     <Compile Include="Accessor\Convertor.cs" />
+    <Compile Include="Serialize\BinarySerializer.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />
     <Compile Include="CodeGen\Printer.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Value\ValueInteger32.cs" />
     <Compile Include="Value\ValuePhoFunc.cs" />
     <Compile Include="Model\Command.cs" />
-    <Compile Include="Model\Constant.cs" />
+    <Compile Include="Model\ConstantSet.cs" />
     <Compile Include="Value\ValueNativeFunc.cs" />
     <Compile Include="Model\Exception.cs" />
     <Compile Include="Model\ObjectName.cs" />

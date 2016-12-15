@@ -26,7 +26,7 @@ namespace Photon
         int GetCount();
     }
 
-    class Value
+    class Value: IPhoSerializable
     {     
         internal static Value Nil = new ValueNil();
 
@@ -86,6 +86,11 @@ namespace Photon
         internal virtual Value OperateGetMemberValue(int nameKey)
         {
             throw new RuntimeException("Expect 'OperateGetMemberValue' operand");
+        }
+
+        public virtual void Serialize(BinarySerializer serializer)
+        {
+            throw new System.NotImplementedException();
         }
     }
 

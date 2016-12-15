@@ -1,7 +1,7 @@
 ﻿
 namespace Photon
 {
-    internal struct ObjectName
+    internal struct ObjectName : IPhoSerializable
     {
         public string PackageName;
         public string EntryName;
@@ -30,6 +30,14 @@ namespace Photon
             return PackageName == other.PackageName && 
                 EntryName == other.EntryName && 
                 ClassName == other.ClassName;
+        }
+
+        public void Serialize(BinarySerializer serializer)
+        {
+            serializer
+                .Serialize(ref PackageName)
+                .Serialize(ref EntryName)
+                .Serialize(ref ClassName);
         }
 
         public override int GetHashCode()

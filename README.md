@@ -69,6 +69,7 @@
 	}
 	
 	func Animal.out( self ){
+		base.foo( self )
 		return self.type
 	}
 	
@@ -90,7 +91,7 @@
 	
 	// 数组，映射支持
 	
-	var arr = new(Array)
+	var arr = []
 
 	arr.Add(1)
 
@@ -107,11 +108,11 @@
 	var v, ok = arr.TryGet(119)
 
 	// 映射支持
-	var map = new(Map)
-	
-	map["hello"] = 1678
-	
-	var c = map["hello"]
+
+	var sugar = {
+		1 : 12345,
+		"hello": "world",
+	}
 
 ```
 

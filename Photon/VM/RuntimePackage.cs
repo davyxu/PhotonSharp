@@ -28,7 +28,7 @@ namespace Photon
             if (_pkg == null)
                 return Value.Nil;
 
-            var symbol = _pkg.TopScope.FindRegister(name);
+            var symbol = _pkg.PackageScope.FindRegister(name);
             if (symbol == null)
                 return Value.Nil;
 
@@ -40,7 +40,7 @@ namespace Photon
             if (_pkg == null)
                 return;
 
-            var symbol = _pkg.TopScope.FindRegister(name);
+            var symbol = _pkg.PackageScope.FindRegister(name);
             if (symbol == null)
                 return;
 

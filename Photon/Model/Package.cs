@@ -21,11 +21,7 @@ namespace Photon
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
 
-        internal ValuePhoFunc InitEntry
-        {
-            get;
-            set;
-        }
+        internal ValuePhoFunc InitEntry = ValuePhoFunc.Empty;        
 
         internal List<CodeFile> FileList
         {
@@ -122,11 +118,12 @@ namespace Photon
             _secondPass.Add(ctx);
         }
 
-        public void Serialize(BinarySerializer serializer)
+        public void Serialize(BinarySerializer ser)
         {
-            serializer
+            ser
                 .Serialize(ref _name)
-                .Serialize(ref _id);
+                .Serialize(ref _id)
+                .Serialize(ref InitEntry);            
         }
 
         static void PrintAST(Node n, string indent = "")

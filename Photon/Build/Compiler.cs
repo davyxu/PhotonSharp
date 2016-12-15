@@ -34,7 +34,6 @@ namespace Photon
             // 全局入口( 不进入函数列表, 只在Package上保存 )
             var cs = new ValuePhoFunc(new ObjectName(pkg.Name, "@init"), initPos, pkg.PackageScope.RegCount, pkg.PackageScope);
             pkg.InitEntry = cs;
-            exe.AddFunc(cs);
 
             var param = new CompileParameter();
 

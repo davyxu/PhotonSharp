@@ -4,7 +4,7 @@ using System.Text;
 namespace Photon
 {
 
-    public class Command
+    public class Command : IPhoSerializable
     {
         internal Opcode Op;
 
@@ -80,6 +80,11 @@ namespace Photon
             get { return _pos; }
         }
 
+        public Command()
+        {
+
+        }
+
         internal Command(Opcode op, int data)
         {
             Op = op;
@@ -92,6 +97,21 @@ namespace Photon
             DataA = dataA;
             DataB = dataB;            
         }
+
+        public void Serialize(BinarySerializer ser)
+        {
+
+            ser
+                .SerializeEnum(ref Op)
+                .Serialize(ref this._comment);
+
+            for (int i = 0; i < MaxDataCount;i++ )
+            {
+                ser.Serialize(ref this._data[i]);
+            }
+                
+        }
+
 
         internal Command SetComment( string text )
         {

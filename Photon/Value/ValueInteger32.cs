@@ -27,9 +27,9 @@ namespace Photon
             get { return _data; }
         }
 
-        public override void Serialize(BinarySerializer serializer)
+        public override void Serialize(BinarySerializer ser)
         {
-            serializer.Serialize(ref _data);
+            ser.Serialize(ref _data);
         }
 
         public override bool Equals(object other)

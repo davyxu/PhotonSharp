@@ -38,12 +38,28 @@ namespace UnitTest
             return this;
         }
 
+        static Executable SerTestExecuable(Executable inExe)
+        {
+            MemoryStream stream = new MemoryStream();
+
+            inExe.Serialize(new BinarySerializer(stream, false));
+
+            stream.Position = 0;
+
+            Executable newExec = new Executable();
+            newExec.Serialize(new Photon.BinarySerializer(stream, true));
+
+            return newExec;
+        }
+
         public TestBox Run( )
         {
             Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            _vm.Execute(_exe );
+            //var newExe = SerTestExecuable(_exe);
+
+            _vm.Execute(_exe);
 
             Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            

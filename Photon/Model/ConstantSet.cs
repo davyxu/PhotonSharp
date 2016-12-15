@@ -48,9 +48,9 @@ namespace Photon
             Logger.DebugLine("");
         }
 
-        public void Serialize(BinarySerializer serializer)
+        public void Serialize(BinarySerializer ser)
         {
-            serializer
+            ser
                 .Serialize(ref _cset);
         }
     }

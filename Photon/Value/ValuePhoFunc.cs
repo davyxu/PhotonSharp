@@ -8,6 +8,8 @@ namespace Photon
     {
         List<Command> _cmds = new List<Command>();
 
+        internal static ValuePhoFunc Empty = new ValuePhoFunc();
+
         int _regCount;
 
         Scope _scope;
@@ -29,11 +31,13 @@ namespace Photon
         }
 
 
-        public override void Serialize(BinarySerializer serializer)
+        public override void Serialize(BinarySerializer ser)
         {
-            base.Serialize(serializer);
+            base.Serialize(ser);
 
-            serializer.Serialize(ref _regCount);
+            ser
+                .Serialize(ref _regCount)
+                .Serialize(ref _cmds);
         }
 
         internal Scope Scope

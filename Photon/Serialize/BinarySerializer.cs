@@ -7,7 +7,7 @@ namespace Photon
 {
     public interface IPhoSerializable
     {
-        void Serialize(BinarySerializer serializer);
+        void Serialize(BinarySerializer ser);
     }
 
     public class BinarySerializer
@@ -52,6 +52,20 @@ namespace Photon
             return this;
         }
 
+        public BinarySerializer Serialize(ref float data)
+        {
+            if (IsLoading)
+            {
+                data = _reader.ReadSingle();
+            }
+            else
+            {
+                _writer.Write(data);
+            }
+
+            return this;
+        }
+
         public BinarySerializer Serialize(ref string data)
         {
             if (IsLoading)
@@ -60,8 +74,35 @@ namespace Photon
             }
             else
             {
-                _writer.Write(data);
+                if ( string.IsNullOrEmpty(data) )
+                {                    
+                    _writer.Write(string.Empty);
+                }
+                else
+                {
+                    _writer.Write(data);
+                }
+                
             }
+
+            return this;
+        }
+
+        public BinarySerializer SerializeEnum<T>(ref T data) where T : struct , IConvertible
+        {
+            if (IsLoading)
+            {
+                Int32 value = 0;
+                this.Serialize(ref value);
+
+                data = (T)Enum.ToObject(data.GetType(), value);
+            }
+            else
+            {
+                Int32 value = Convert.ToInt32(data);
+                this.Serialize(ref value);
+            }
+
 
             return this;
         }
@@ -122,6 +163,9 @@ namespace Photon
 
             return this;
         }
+
+
+     
     }
 
 }

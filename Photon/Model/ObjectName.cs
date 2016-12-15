@@ -32,9 +32,9 @@ namespace Photon
                 ClassName == other.ClassName;
         }
 
-        public void Serialize(BinarySerializer serializer)
+        public void Serialize(BinarySerializer ser)
         {
-            serializer
+            ser
                 .Serialize(ref PackageName)
                 .Serialize(ref EntryName)
                 .Serialize(ref ClassName);

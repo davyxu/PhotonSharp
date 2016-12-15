@@ -228,15 +228,12 @@ namespace Photon
             AddClassType(lanClass);
         }
 
-        public void Serialize(BinarySerializer serializer)
+        public void Serialize(BinarySerializer ser)
         {
-            serializer
-                .Serialize(ref _constSet)
-                .Serialize(ref _packages)
-                .Serialize(ref _func);
-                
+            ser.Serialize(ref _constSet)
+               .Serialize(ref _func)
+               .Serialize(ref _packages);
         }
-
 
         public void DebugPrint()
         {

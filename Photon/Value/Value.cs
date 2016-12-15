@@ -88,7 +88,7 @@ namespace Photon
             throw new RuntimeException("Expect 'OperateGetMemberValue' operand");
         }
 
-        public virtual void Serialize(BinarySerializer serializer)
+        public virtual void Serialize(BinarySerializer ser)
         {
             throw new System.NotImplementedException();
         }

@@ -28,9 +28,9 @@ namespace Photon
             _name = name;
         }
 
-        public override void Serialize(BinarySerializer serializer)
+        public override void Serialize(BinarySerializer ser)
         {
-            serializer
+            ser
                 .Serialize(ref ID)
                 .Serialize(ref _name);
         }

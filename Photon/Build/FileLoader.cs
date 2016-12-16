@@ -9,33 +9,32 @@ namespace Photon
 
         string NormalizeFileName(string filename)
         {
-            //filename = filename.ToLower();
+            filename = filename.Replace('\\', '/');
+            string final;
 
-            //string final;
+            if (Path.IsPathRooted(filename))
+            {
+                if (filename.IndexOf(_path) == 0)
+                {
+                    final = filename.Substring(_path.Length);
+                }
+                else
+                {
+                    throw new Exception("file should under PHOPATH");
+                }
+            }
+            else
+            {
+                final = filename;
+            }
 
-            //if (Path.IsPathRooted(filename))
-            //{
-            //    if (filename.IndexOf(_path) == 0)
-            //    {
-            //        final = filename.Substring(_path.Length);
-            //    }
-            //    else
-            //    {
-            //        throw new Exception("file should under PHOPATH");
-            //    }
-            //}
-            //else
-            //{
-            //    final = filename;
-            //}
-
-            return filename.Replace('\\', '/');
+            return final;
         }
 
         // 工作路径
         public FileLoader(string phoPath)
         {
-            _path = phoPath + "/";
+            _path = phoPath.Replace('\\', '/') + "/";
         }
 
         public override void Load(Package pkg, object parser, string sourceName, ImportMode mode)

@@ -20,6 +20,12 @@ namespace Photon
         GreatThan,      // >
         LessEqual,      // <=
         GreatEqual,     // >=
+        AddAssign,      // +=
+        SubAssign,      // -=
+        MulAssign,      // *=
+        QuoAssign,      // /=
+        Increase,       // ++
+        Decrease,       // --
         Not,            // !
         Add,            // +
         Sub,            // -

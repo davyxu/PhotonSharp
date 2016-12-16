@@ -20,6 +20,8 @@ namespace Photon
 
         // 单目元操作
         MINUS,
+        INC,
+        DEC,
         NOT,
         LEN,
         INT32,

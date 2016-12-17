@@ -173,7 +173,7 @@ namespace Photon
                     lhs.Add( id );
                 }
 
-                return new AssignStmt(lhs, values, assignPos);
+                return new AssignStmt(lhs, values, assignPos, TokenType.Assign);
             }
 
             return new VarDeclareStmt(idents, defpos);

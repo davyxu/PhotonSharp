@@ -334,6 +334,7 @@ namespace Photon
                             x = ParseCallExpr(x);                            
                         }
                         break;
+   
                     default:
                         parsing = false;
                         break;
@@ -497,14 +498,41 @@ namespace Photon
             var x = ParseLHSList();
 
             var assignPos = CurrTokenPos;
-            if (CurrTokenType == TokenType.Assign)
+            var op = CurrTokenType;
+            switch( CurrTokenType )
             {
-                Next();
+                case TokenType.Assign:
+                case TokenType.AddAssign:
+                case TokenType.SubAssign:
+                case TokenType.MulAssign:
+                case TokenType.QuoAssign:
+                    {
+                        Next();
 
-                var y = ParseRHSList();
+                        var y = ParseRHSList();
 
-                return new AssignStmt(x, y, assignPos);
+                        return new AssignStmt(x, y, assignPos, op);
+                    }
             }
+
+
+            if (x.Count > 1)
+            {
+                throw new CompileException("1 expression", CurrTokenPos);
+            }
+
+            var optype = CurrTokenType;
+            switch( CurrTokenType )
+            {
+                case TokenType.Increase:
+                case TokenType.Decrease:
+                    {
+                        var oppos = CurrTokenPos;
+                        Next();
+                        return new IncDecStmt(x[0], optype, oppos);
+                    }
+            }
+
 
             // 函数调用
             return new ExprStmt( x, CurrTokenPos );

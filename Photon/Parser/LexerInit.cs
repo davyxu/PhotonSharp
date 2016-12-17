@@ -19,6 +19,12 @@ namespace Photon
             lex.AddMatcher(new SignMatcher(TokenType.LBrace, "{"));
             lex.AddMatcher(new SignMatcher(TokenType.RBrace, "}"));
             lex.AddMatcher(new SignMatcher(TokenType.Equal, "=="));
+            lex.AddMatcher(new SignMatcher(TokenType.Increase, "++"));
+            lex.AddMatcher(new SignMatcher(TokenType.Decrease, "--"));
+            lex.AddMatcher(new SignMatcher(TokenType.AddAssign, "+="));
+            lex.AddMatcher(new SignMatcher(TokenType.SubAssign, "-="));
+            lex.AddMatcher(new SignMatcher(TokenType.MulAssign, "*="));
+            lex.AddMatcher(new SignMatcher(TokenType.QuoAssign, "/="));            
             lex.AddMatcher(new SignMatcher(TokenType.GreatEqual, ">="));
             lex.AddMatcher(new SignMatcher(TokenType.LessEqual, "<="));
             lex.AddMatcher(new SignMatcher(TokenType.NotEqual, "!="));

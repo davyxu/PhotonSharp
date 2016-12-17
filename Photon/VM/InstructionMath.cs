@@ -93,6 +93,18 @@ namespace Photon
     {
     }
 
+    [Instruction(Cmd = Opcode.INC)]
+    class CmdInc : InstructionUnaryMath
+    {
+    }
+
+
+    [Instruction(Cmd = Opcode.DEC)]
+    class CmdDec : InstructionUnaryMath
+    {
+    }
+
+
     [Instruction(Cmd = Opcode.INT32)]
     class CmdInt32 : InstructionUnaryMath
     {

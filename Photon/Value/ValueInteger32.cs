@@ -110,8 +110,12 @@ namespace Photon
             {
                 case Opcode.MINUS:
                     return new ValueInteger32(-a);
+                case Opcode.INC:
+                    return new ValueInteger32(++a);
+                case Opcode.DEC:
+                    return new ValueInteger32(--a);
                 case Opcode.INT32:
-                    return this;
+                    return this;                
                 case Opcode.INT64:
                     return new ValueInteger64((Int64)a);
                 case Opcode.FLOAT32:

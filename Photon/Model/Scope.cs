@@ -22,14 +22,18 @@ namespace Photon
 
         [PhoSerialize]
         ScopeType _type;
+
+        [PhoSerialize]
         TokenPos _defpos;
        
         public string ClassName;
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
+        [PhoSerialize]
         Dictionary<string, Symbol> _regByName = new Dictionary<string, Symbol>();
 
+        [PhoSerialize]
         List<Scope> _child = new List<Scope>();
 
         internal List<Scope> Child

@@ -90,6 +90,11 @@
     <Compile Include="Accessor\Convertor.cs" />
     <Compile Include="Serialize\BinaryDeserializer.cs" />
     <Compile Include="Serialize\BinarySerializer.cs" />
+    <Compile Include="Serialize\GenericDictSerializer.cs" />
+    <Compile Include="Serialize\GenericListSerializer.cs" />
+    <Compile Include="Serialize\StringSerializer.cs" />
+    <Compile Include="Serialize\Integer32Serializer.cs" />
+    <Compile Include="Serialize\TypeSerializer.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />
     <Compile Include="CodeGen\Printer.cs" />

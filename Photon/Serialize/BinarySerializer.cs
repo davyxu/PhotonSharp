@@ -12,7 +12,7 @@ namespace Photon
 
     }
 
-   
+
     public class BinarySerializer
     {
         BinaryWriter _writer;

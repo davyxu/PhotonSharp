@@ -22,7 +22,7 @@ namespace UnitTest
                 bs.SerializeValue(typeof(Executable),a);
                 f.Close();
             }
-
+             
             using (FileStream f = new FileStream("ser.bin", FileMode.Open))
             {
                 var bs = new BinaryDeserializer(f);

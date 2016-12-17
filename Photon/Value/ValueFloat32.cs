@@ -4,6 +4,7 @@ namespace Photon
 {
     class ValueFloat32 : Value
     {
+        [PhoSerialize]
         float _data = 0;
 
         public ValueFloat32()
@@ -24,11 +25,6 @@ namespace Photon
         internal override object Raw
         {
             get { return _data; }
-        }
-
-        public override void Serialize(BinarySerializer ser)
-        {
-            ser.Serialize(ref _data);
         }
 
         public override bool Equals(object other)

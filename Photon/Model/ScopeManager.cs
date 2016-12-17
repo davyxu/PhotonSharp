@@ -2,9 +2,12 @@
 
 namespace Photon
 {
-    class ScopeManager : IPhoSerializable
+
+    class ScopeManager
     {
         Scope _topScope;
+
+        [PhoSerialize]
         Scope _global;
 
         internal Scope PackageScope
@@ -20,15 +23,10 @@ namespace Photon
 
 
 
-        internal ScopeManager()
+        public ScopeManager()
         {
             OpenScope( ScopeType.Package, TokenPos.Invalid );
             _global = _topScope;
-        }
-
-        public void Serialize(BinarySerializer ser)
-        {
-            ser.Serialize(ref _global);
         }
 
         internal Scope OpenScope(ScopeType type, TokenPos pos)

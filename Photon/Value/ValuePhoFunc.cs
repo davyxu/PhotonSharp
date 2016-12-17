@@ -6,15 +6,17 @@ namespace Photon
 
     class ValuePhoFunc : ValueFunc
     {
+        [PhoSerialize]
         List<Command> _cmds = new List<Command>();
-
-        internal static ValuePhoFunc Empty = new ValuePhoFunc();
-
+      
+        [PhoSerialize]
         int _regCount;
 
         Scope _scope;
 
         TokenPos _defpos;
+
+        internal static ValuePhoFunc Empty = new ValuePhoFunc();
 
         // 序列化用, 不要删除
         public ValuePhoFunc()
@@ -28,16 +30,6 @@ namespace Photon
             _regCount = regCount;
             _scope = s;
             _defpos = codepos;            
-        }
-
-
-        public override void Serialize(BinarySerializer ser)
-        {
-            base.Serialize(ser);
-
-            ser
-                .Serialize(ref _regCount)
-                .Serialize(ref _cmds);
         }
 
         internal Scope Scope

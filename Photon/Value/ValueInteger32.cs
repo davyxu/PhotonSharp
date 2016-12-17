@@ -4,6 +4,7 @@ namespace Photon
 {
     class ValueInteger32 : Value
     {
+        [PhoSerialize]
         Int32 _data = 0;
 
         // 序列化用, 不要删除
@@ -27,10 +28,6 @@ namespace Photon
             get { return _data; }
         }
 
-        public override void Serialize(BinarySerializer ser)
-        {
-            ser.Serialize(ref _data);
-        }
 
         public override bool Equals(object other)
         {

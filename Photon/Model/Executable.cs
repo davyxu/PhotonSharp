@@ -5,20 +5,28 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    public partial class Executable : IPhoSerializable
+    public partial class Executable
     {
+        // 常量表
+        [PhoSerialize]
+        ConstantSet _constSet = new ConstantSet();
 
-        List<Package> _packages = new List<Package>();
-
+        
         // 所有函数执行体
+        [PhoSerialize]
         List<ValueFunc> _func = new List<ValueFunc>();
+
+        
+        [PhoSerialize]
+        List<Package> _packages = new List<Package>();
 
         // 类
         List<ValueClassType> _classType = new List<ValueClassType>();
+
+        
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
 
-        // 常量表
-        ConstantSet _constSet = new ConstantSet();
+
 
 
         public void RegisterBuiltinPackage()
@@ -228,12 +236,6 @@ namespace Photon
             AddClassType(lanClass);
         }
 
-        public void Serialize(BinarySerializer ser)
-        {
-            ser.Serialize(ref _constSet)
-               .Serialize(ref _func)
-               .Serialize(ref _packages);
-        }
 
         public void DebugPrint()
         {

@@ -1,6 +1,5 @@
 ﻿using Photon;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace UnitTest
 {
@@ -15,25 +14,26 @@ namespace UnitTest
                 Compiler.GenerateBuildinFiles(); 
             }
 
-            //Executable a = Compiler.CompileFile("Constant.pho");
+            Executable a = Compiler.CompileFile("Constant.pho");
 
-            //using (FileStream f = new FileStream("ser.bin", FileMode.Create))
-            //{                
-            //    a.Serialize(new Photon.BinarySerializer(f, false));
-            //    f.Close();
-            //}
+            using (FileStream f = new FileStream("ser.bin", FileMode.Create))
+            {
+                var bs = new BinarySerializer( f);
+                bs.SerializeValue(typeof(Executable),a);
+                f.Close();
+            }
 
-            //using (FileStream f = new FileStream("ser.bin", FileMode.Open))
-            //{
-            //    Executable newa = new Executable();
-            //    newa.Serialize(new Photon.BinarySerializer(f, true));
-            //    f.Close();
+            using (FileStream f = new FileStream("ser.bin", FileMode.Open))
+            {
+                var bs = new BinaryDeserializer(f);
+                var newa = bs.DeserializeValue<Executable>();
+                f.Close();
 
-            //    var vm = new VMachine();
-            //    vm.ShowDebugInfo = true;
-                
-            //    vm.Execute(newa);
-            //}
+                var vm = new VMachine();
+                vm.ShowDebugInfo = true;
+
+                vm.Execute(newa);
+            }
 
 
             TestBasic();

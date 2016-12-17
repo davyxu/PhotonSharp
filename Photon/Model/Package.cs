@@ -3,10 +3,12 @@
 namespace Photon
 {
 
-    public partial class Package : IPhoSerializable
+    public partial class Package
     {
+        [PhoSerialize]
         string _name;
 
+        [PhoSerialize]
         int _id;
 
         // 源码
@@ -16,11 +18,13 @@ namespace Photon
         Executable _exe;
 
         // 包的作用域
+        [PhoSerialize]
         ScopeManager _scopeManager;
 
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
 
+        [PhoSerialize]
         internal ValuePhoFunc InitEntry = ValuePhoFunc.Empty;        
 
         internal List<CodeFile> FileList
@@ -116,14 +120,6 @@ namespace Photon
             ctx.parameter = cp;
 
             _secondPass.Add(ctx);
-        }
-
-        public void Serialize(BinarySerializer ser)
-        {
-            ser
-                .Serialize(ref _name)
-                .Serialize(ref _id)
-                .Serialize(ref InitEntry);            
         }
 
         static void PrintAST(Node n, string indent = "")

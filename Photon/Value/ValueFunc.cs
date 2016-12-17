@@ -4,9 +4,12 @@ namespace Photon
 {
     class ValueFunc : Value
     {
+        [PhoSerialize]
         internal int ID;
 
+        [PhoSerialize]
         ObjectName _name;
+
         public ObjectName Name
         {
             get { return _name; }
@@ -26,13 +29,6 @@ namespace Photon
         internal ValueFunc(ObjectName name)
         {
             _name = name;
-        }
-
-        public override void Serialize(BinarySerializer ser)
-        {
-            ser
-                .Serialize(ref ID)
-                .Serialize(ref _name);
         }
 
         internal virtual bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)

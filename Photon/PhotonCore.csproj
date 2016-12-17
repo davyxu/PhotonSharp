@@ -87,6 +87,7 @@
     <Compile Include="Accessor\RegisterAccessor.cs" />
     <Compile Include="Accessor\StackAccessor.cs" />
     <Compile Include="Accessor\Convertor.cs" />
+    <Compile Include="Serialize\BinaryDeserializer.cs" />
     <Compile Include="Serialize\BinarySerializer.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />

@@ -3,6 +3,7 @@ namespace Photon
 {
     class ValueString : Value
     {
+        [PhoSerialize]
         string _data;
 
         public ValueString()
@@ -23,11 +24,6 @@ namespace Photon
         internal override object Raw
         {
             get { return _data; }
-        }
-
-        public override void Serialize(BinarySerializer ser)
-        {
-            ser.Serialize(ref _data);
         }
 
         internal override Value OperateUnary(Opcode code)

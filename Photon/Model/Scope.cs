@@ -16,9 +16,11 @@ namespace Photon
         Class,
     }
 
-    class Scope : IPhoSerializable
+    class Scope
     {
-        Scope _outter;        
+        Scope _outter;
+
+        [PhoSerialize]
         ScopeType _type;
         TokenPos _defpos;
        
@@ -41,11 +43,10 @@ namespace Photon
             set { _defpos = value; }
         }
 
-        public void Serialize(BinarySerializer ser)
+        public Scope()
         {
-            ser.SerializeEnum(ref _type);
-        }
 
+        }
 
         public Scope(Scope outter, ScopeType type, TokenPos pos )
         {

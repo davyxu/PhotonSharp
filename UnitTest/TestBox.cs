@@ -40,16 +40,16 @@ namespace UnitTest
 
         static Executable SerTestExecuable(Executable inExe)
         {
-            MemoryStream stream = new MemoryStream();
+            //MemoryStream stream = new MemoryStream();
 
-            inExe.Serialize(new BinarySerializer(stream, false));
+            //inExe.Serialize(new BinarySerializer(stream, false));
 
-            stream.Position = 0;
+            //stream.Position = 0;
 
-            Executable newExec = new Executable();
-            newExec.Serialize(new Photon.BinarySerializer(stream, true));
+            //Executable newExec = new Executable();
+            //newExec.Serialize(new Photon.BinarySerializer(stream, true));
 
-            return newExec;
+            return null;
         }
 
         public TestBox Run( )

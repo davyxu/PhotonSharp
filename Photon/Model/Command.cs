@@ -4,21 +4,22 @@ using System.Text;
 namespace Photon
 {
 
-    public class Command : IPhoSerializable
+    public class Command
     {
+        [PhoSerialize]
         internal Opcode Op;
 
         const int MaxDataCount = 2;
 
+        [PhoSerialize]
         int[] _data = new int[MaxDataCount];
         bool[] _dataUsed = new bool[MaxDataCount];
 
-
+        [PhoSerialize]
         string _comment;
 
         TokenPos _pos;
               
-
         internal int DataA
         {
             get
@@ -96,20 +97,6 @@ namespace Photon
             Op = op;
             DataA = dataA;
             DataB = dataB;            
-        }
-
-        public void Serialize(BinarySerializer ser)
-        {
-
-            ser
-                .SerializeEnum(ref Op)
-                .Serialize(ref this._comment);
-
-            for (int i = 0; i < MaxDataCount;i++ )
-            {
-                ser.Serialize(ref this._data[i]);
-            }
-                
         }
 
 

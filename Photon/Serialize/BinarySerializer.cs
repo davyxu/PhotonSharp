@@ -1,171 +1,112 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
 namespace Photon
 {
-    public interface IPhoSerializable
+    // 不生成自动绑定类
+    public sealed class PhoSerializeAttribute : Attribute
     {
-        void Serialize(BinarySerializer ser);
+
     }
 
+   
     public class BinarySerializer
     {
         BinaryWriter _writer;
-        BinaryReader _reader;
 
-        public BinarySerializer(Stream s, bool loading)
+        public BinarySerializer(Stream s)
         {
-            if (loading)
-            {
-                _reader = new BinaryReader(s);
-            }
-            else
-            {
-                _writer = new BinaryWriter(s);
-            }
-
+            _writer = new BinaryWriter(s);
         }
 
-        public bool IsLoading
-        {
-            get { return _writer == null; }
-        }
-
-        public Stream Stream
-        {
-            get { return _writer.BaseStream; }
-        }
-
-        public BinarySerializer Serialize(ref int data)
-        {
-            if (IsLoading)
+        public void SerializeValue(Type ft, object ins  )
+        {                     
+            if ( ft == typeof(int))
             {
-                data = _reader.ReadInt32();
+                _writer.Write((int)ins);
             }
-            else
+            else if (ft == typeof(string))
             {
-                _writer.Write(data);
-            }
-
-            return this;
-        }
-
-        public BinarySerializer Serialize(ref float data)
-        {
-            if (IsLoading)
-            {
-                data = _reader.ReadSingle();
-            }
-            else
-            {
-                _writer.Write(data);
-            }
-
-            return this;
-        }
-
-        public BinarySerializer Serialize(ref string data)
-        {
-            if (IsLoading)
-            {
-                data = _reader.ReadString();
-            }
-            else
-            {
-                if ( string.IsNullOrEmpty(data) )
-                {                    
+                if ( string.IsNullOrEmpty((string)ins))
+                {
                     _writer.Write(string.Empty);
                 }
                 else
                 {
-                    _writer.Write(data);
+                    _writer.Write((string)ins);
                 }
-                
-            }
-
-            return this;
-        }
-
-        public BinarySerializer SerializeEnum<T>(ref T data) where T : struct , IConvertible
-        {
-            if (IsLoading)
+            }            
+            else if ( ft.IsGenericType )
             {
-                Int32 value = 0;
-                this.Serialize(ref value);
-
-                data = (T)Enum.ToObject(data.GetType(), value);
-            }
-            else
-            {
-                Int32 value = Convert.ToInt32(data);
-                this.Serialize(ref value);
-            }
-
-
-            return this;
-        }
-
-        // 序列化对象
-        public BinarySerializer Serialize<T>(ref T data) where T : IPhoSerializable
-        {
-            if (IsLoading)
-            {
-                string name = string.Empty;
-                this.Serialize(ref name);
-
-                data = (T)Activator.CreateInstance(Assembly.GetExecutingAssembly().FullName, name).Unwrap();
-            }
-            else
-            {                
-                string name = data.GetType().FullName;
-                this.Serialize(ref name);
-            }
-
-            data.Serialize(this);
-
-            return this;
-        }
-
-        // 列表
-        public BinarySerializer Serialize<T>(ref List<T> listdata) where T : IPhoSerializable
-        {
-            if (listdata == null)
-            {
-                listdata = new List<T>();
-            }
-
-            int size = 0;
-
-            if (IsLoading)
-            {
-                Serialize(ref size);
-
-                for (int i = 0; i < size; i++)
+                if ( ft.GetGenericTypeDefinition() == typeof(List<>))
                 {
-                    T v = default(T);
-                    Serialize(ref v);                    
-                    listdata.Add(v);
+                    SerializeValue(typeof(int),(ins as ICollection).Count);                    
+                   
+                    foreach (var listItem in ins as IEnumerable)
+                    {
+                        SerializeValue(listItem.GetType(), listItem);
+                    }
+
+                }
+                else if (ft.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+                {
+                    SerializeValue(typeof(int), (ins as ICollection).Count);
+                    
+                    foreach (DictionaryEntry dictItem in ins as IDictionary)
+                    {
+                        SerializeValue(dictItem.Key.GetType(), dictItem.Key);
+                        SerializeValue(dictItem.Value.GetType(), dictItem.Value);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Serialize failed, unknown type " + ft.ToString());
+                }
+            }
+            else if (ft.IsArray )
+            {
+                var arr = ins as System.Array;
+
+                SerializeValue(typeof(int), arr.Length);
+
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    var obj = arr.GetValue(i);
+                    SerializeValue(ft.GetElementType(), obj);
+                }
+            }
+            else if (ft.IsEnum )
+            {
+                SerializeValue(typeof(int),Convert.ToInt32(ins));
+            }
+            else if (ft.IsClass)
+            {
+                SerializeValue(typeof(string), ft.FullName);
+
+                int serfieldCount = 0;
+
+                // 只遍历私有成员
+                foreach (var mi in ft.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (mi.IsDefined(typeof(PhoSerializeAttribute), false))
+                    { 
+                        SerializeValue(mi.FieldType, mi.GetValue(ins));
+                        serfieldCount++;
+                    }
+                }
+
+                if ( serfieldCount == 0 )
+                {
+                    throw new Exception("zero serialize " + ft.ToString());
                 }
             }
             else
             {
-                size = listdata.Count;
-                Serialize(ref size);
-
-                for (int i = 0; i < listdata.Count;i++ )
-                {
-                    var data = listdata[i];
-                    Serialize(ref data);
-                }
+                throw new Exception("Serialize failed, unknown type " + ft.ToString());
             }
-
-            return this;
         }
-
-
-     
     }
-
 }

@@ -1,9 +1,10 @@
 ﻿
+using MarkSerializer;
 namespace Photon
 {
     class ValueString : Value
     {
-        [PhoSerialize]
+        [MarkSerialize]
         string _data;
 
         public ValueString()

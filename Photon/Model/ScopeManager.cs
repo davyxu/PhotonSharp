@@ -1,4 +1,5 @@
 ﻿using SharpLexer;
+using MarkSerializer;
 
 namespace Photon
 {
@@ -7,7 +8,7 @@ namespace Photon
     {
         Scope _topScope;
 
-        [PhoSerialize]
+        [MarkSerialize]
         Scope _global;
 
         internal Scope PackageScope

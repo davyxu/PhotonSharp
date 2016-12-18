@@ -21,10 +21,10 @@ namespace Photon
             BuildRelation();
         }
 
-        public AssignStmt(Expr lhs, Expr rhs, TokenPos assignPos)
+        public AssignStmt(Expr lhs, Expr rhs, TokenPos assignPos, TokenType op)
         {
             AssignPos = assignPos;
-
+            Op = op;
             LHS.Add(lhs);
          
             RHS.Add(rhs);

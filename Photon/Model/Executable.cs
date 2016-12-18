@@ -2,32 +2,28 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using MarkSerializer;
+using System.IO;
 
 namespace Photon
 {
     public partial class Executable
     {
         // 常量表
-        [PhoSerialize]
+        [MarkSerialize]
         ConstantSet _constSet = new ConstantSet();
 
-        
         // 所有函数执行体
-        [PhoSerialize]
+        [MarkSerialize]
         List<ValueFunc> _func = new List<ValueFunc>();
 
-        
-        [PhoSerialize]
+        [MarkSerialize]
         List<Package> _packages = new List<Package>();
 
         // 类
         List<ValueClassType> _classType = new List<ValueClassType>();
 
-        
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
-
-
-
 
         public void RegisterBuiltinPackage()
         {
@@ -56,8 +52,6 @@ namespace Photon
 
             return string.Empty;
         }
-
-
 
         internal ValueFunc AddFunc(ValueFunc f)
         {            
@@ -234,6 +228,36 @@ namespace Photon
             }
 
             AddClassType(lanClass);
+        }
+
+        static bool typeReady;
+
+        static void PrepareBinaryTypes()
+        {
+            if (typeReady)
+            {
+                return;
+            }
+
+            BinaryTypeSet.Register(new TokenPosSerializer());
+
+            typeReady = true;
+        }
+
+        public static void Serialize(Executable exe, Stream stream )
+        {
+            PrepareBinaryTypes();
+
+            var bs = new BinarySerializer(stream);
+            bs.Serialize<Executable>(exe);
+        }
+
+        public static Executable Deserialize(Stream stream)
+        {
+            PrepareBinaryTypes();
+
+            var bs = new BinaryDeserializer(stream);
+            return bs.Deserialize<Executable>();
         }
 
 

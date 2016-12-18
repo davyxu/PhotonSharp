@@ -1,7 +1,7 @@
 # PhotonSharp
 一个结构易读的完整脚本系统
 
-语言特性
+## 语言特性
 
 * 无类型
 
@@ -19,7 +19,15 @@
 
 * 通用的词法分析器
 
-语言一览
+* 抽象语法树
+
+* 序列化输出编译内容
+
+* 抽象内容加载器
+
+* 抽象虚拟机及指令
+
+## 语言一览
 
 ```golang
 	// 函数调用(支持多返回值)
@@ -126,6 +134,14 @@
 
 数据栈, 调用栈和本地,包寄存器查看
 
+# 第三方工程依赖
+https://github.com/davyxu/SharpLexer
+
+https://github.com/davyxu/MarkSerializer
+
+# 运行
+
+设置工程工作目录为PhotonSharp\TestCase
 	
 # 备注
 

@@ -1,15 +1,16 @@
 ﻿
+using MarkSerializer;
 namespace Photon
 {
     internal struct ObjectName
     {
-        [PhoSerialize]
+        [MarkSerialize]
         public string PackageName;
 
-        [PhoSerialize]
+        [MarkSerialize]
         public string EntryName;
 
-        [PhoSerialize]
+        [MarkSerialize]
         public string ClassName;
 
         internal static readonly  ObjectName Empty = new ObjectName(string.Empty, string.Empty, string.Empty);

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MarkSerializer;
+using System;
 
 namespace Photon
 {
     class ValueFloat32 : Value
     {
-        [PhoSerialize]
+        [MarkSerialize]
         float _data = 0;
 
         public ValueFloat32()

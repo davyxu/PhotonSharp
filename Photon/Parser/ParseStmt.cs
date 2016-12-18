@@ -139,7 +139,7 @@ namespace Photon
 
             var expr = ParseRHS();
 
-            return new AssignStmt( ident, expr, assignPos );
+            return new AssignStmt(ident, expr, assignPos, TokenType.Assign);
         }
 
         ForStmt ParseForStmt()

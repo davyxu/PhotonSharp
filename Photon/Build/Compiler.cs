@@ -11,7 +11,7 @@ namespace Photon
 
     public class Compiler
     {
-        public static void GenerateBuildinFiles()
+        public static void GenerateBuiltinFiles()
         {
             Array.GenerateWrapper();
             Map.GenerateWrapper();

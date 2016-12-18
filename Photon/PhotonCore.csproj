@@ -88,13 +88,7 @@
     <Compile Include="Accessor\RegisterAccessor.cs" />
     <Compile Include="Accessor\StackAccessor.cs" />
     <Compile Include="Accessor\Convertor.cs" />
-    <Compile Include="Serialize\BinaryDeserializer.cs" />
-    <Compile Include="Serialize\BinarySerializer.cs" />
-    <Compile Include="Serialize\GenericDictSerializer.cs" />
-    <Compile Include="Serialize\GenericListSerializer.cs" />
-    <Compile Include="Serialize\StringSerializer.cs" />
-    <Compile Include="Serialize\Integer32Serializer.cs" />
-    <Compile Include="Serialize\TypeSerializer.cs" />
+    <Compile Include="Serializer\TokenPosSerializer.cs" />
     <Compile Include="Utility\CodePrinter.cs" />
     <Compile Include="CodeGen\Generator.cs" />
     <Compile Include="CodeGen\Printer.cs" />
@@ -147,6 +141,10 @@
     <Compile Include="VM\VMachine.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MarkSerializer\MarkSerializer\MarkSerializer.csproj">
+      <Project>{a853de6b-97d7-4a0f-8561-940a4f267c02}</Project>
+      <Name>MarkSerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharpLexer\SharpLexer\SharpLexer.csproj">
       <Project>{5138a406-5b76-4d5e-b889-257224e1fb2f}</Project>
       <Name>SharpLexer</Name>

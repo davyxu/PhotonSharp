@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using MarkSerializer;
+using System.Collections.Generic;
 
 namespace Photon
 {
     class ConstantSet : DataAccessor
     {
-        [PhoSerialize]
+        [MarkSerialize]
         List<Value> _cset = new List<Value>();
 
         internal int Add(Value inc)

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTest</RootNamespace>
     <AssemblyName>UnitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,10 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -63,6 +60,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MarkSerializer\MarkSerializer\MarkSerializer.csproj">
+      <Project>{a853de6b-97d7-4a0f-8561-940a4f267c02}</Project>
+      <Name>MarkSerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Photon\PhotonLibrary.csproj">
       <Project>{129399c8-6ed0-47da-8829-5781d54c2a48}</Project>
       <Name>PhotonLibrary</Name>

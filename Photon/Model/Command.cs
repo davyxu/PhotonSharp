@@ -1,4 +1,5 @@
-﻿using SharpLexer;
+﻿using MarkSerializer;
+using SharpLexer;
 using System.Text;
 
 namespace Photon
@@ -6,16 +7,16 @@ namespace Photon
 
     public class Command
     {
-        [PhoSerialize]
+        [MarkSerialize]
         internal Opcode Op;
 
         const int MaxDataCount = 2;
 
-        [PhoSerialize]
+        [MarkSerialize]
         int[] _data = new int[MaxDataCount];
         bool[] _dataUsed = new bool[MaxDataCount];
 
-        [PhoSerialize]
+        [MarkSerialize]
         string _comment;
 
         TokenPos _pos;

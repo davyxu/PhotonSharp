@@ -1,15 +1,16 @@
 ﻿using SharpLexer;
 using System.Collections.Generic;
+using MarkSerializer;
 
 namespace Photon
 {
 
     class ValuePhoFunc : ValueFunc
     {
-        [PhoSerialize]
+        [MarkSerialize]
         List<Command> _cmds = new List<Command>();
       
-        [PhoSerialize]
+        [MarkSerialize]
         int _regCount;
 
         Scope _scope;

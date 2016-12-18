@@ -1,13 +1,14 @@
 ﻿
+using MarkSerializer;
 using SharpLexer;
 namespace Photon
 {
     class ValueFunc : Value
     {
-        [PhoSerialize]
+        [MarkSerialize]
         internal int ID;
 
-        [PhoSerialize]
+        [MarkSerialize]
         ObjectName _name;
 
         public ObjectName Name

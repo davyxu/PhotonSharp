@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using MarkSerializer;
 
 namespace Photon
 {
 
     public partial class Package
     {
-        [PhoSerialize]
+        [MarkSerialize]
         string _name;
 
-        [PhoSerialize]
+        [MarkSerialize]
         int _id;
 
         // 源码
@@ -18,13 +19,13 @@ namespace Photon
         Executable _exe;
 
         // 包的作用域
-        [PhoSerialize]
+        [MarkSerialize]
         ScopeManager _scopeManager;
 
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
 
-        [PhoSerialize]
+        [MarkSerialize]
         internal ValuePhoFunc InitEntry = ValuePhoFunc.Empty;        
 
         internal List<CodeFile> FileList

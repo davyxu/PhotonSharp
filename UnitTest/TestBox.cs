@@ -40,16 +40,14 @@ namespace UnitTest
 
         static Executable SerTestExecuable(Executable inExe)
         {
-            //MemoryStream stream = new MemoryStream();
 
-            //inExe.Serialize(new BinarySerializer(stream, false));
+            MemoryStream stream = new MemoryStream();
 
-            //stream.Position = 0;
+            Executable.Serialize(inExe, stream);            
 
-            //Executable newExec = new Executable();
-            //newExec.Serialize(new Photon.BinarySerializer(stream, true));
+            stream.Position = 0;
 
-            return null;
+            return Executable.Deserialize(stream);
         }
 
         public TestBox Run( )
@@ -57,9 +55,9 @@ namespace UnitTest
             Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            //var newExe = SerTestExecuable(_exe);
+            var newExe = SerTestExecuable(_exe);
 
-            _vm.Execute(_exe);
+            _vm.Execute(newExe);
 
             Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            

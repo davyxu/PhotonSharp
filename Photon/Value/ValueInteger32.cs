@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MarkSerializer;
+using System;
 
 namespace Photon
 {
     class ValueInteger32 : Value
     {
-        [PhoSerialize]
+        [MarkSerialize]
         Int32 _data = 0;
 
         // 序列化用, 不要删除

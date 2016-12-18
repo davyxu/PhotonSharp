@@ -1,4 +1,5 @@
-﻿using SharpLexer;
+﻿using MarkSerializer;
+using SharpLexer;
 using System;
 using System.Collections.Generic;
 
@@ -20,20 +21,20 @@ namespace Photon
     {
         Scope _outter;
 
-        [PhoSerialize]
+        [MarkSerialize]
         ScopeType _type;
 
-        [PhoSerialize]
+        [MarkSerialize]
         TokenPos _defpos;
        
         public string ClassName;
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
-        [PhoSerialize]
+        [MarkSerialize]
         Dictionary<string, Symbol> _regByName = new Dictionary<string, Symbol>();
 
-        [PhoSerialize]
+        [MarkSerialize]
         List<Scope> _child = new List<Scope>();
 
         internal List<Scope> Child

@@ -1,5 +1,6 @@
 ﻿using Photon;
 using System.IO;
+using MarkSerializer;
 
 namespace UnitTest
 {
@@ -9,31 +10,31 @@ namespace UnitTest
 
         static void TestCase()
         {
+
             if (GenAllFile)
             {
-                Compiler.GenerateBuildinFiles(); 
+                Compiler.GenerateBuiltinFiles(); 
             }
 
-            Executable a = Compiler.CompileFile("Constant.pho");
+            //Executable a = Compiler.CompileFile("Constant.pho");
 
-            using (FileStream f = new FileStream("ser.bin", FileMode.Create))
-            {
-                var bs = new BinarySerializer( f);
-                bs.SerializeValue(typeof(Executable),a);
-                f.Close();
-            }
-             
-            using (FileStream f = new FileStream("ser.bin", FileMode.Open))
-            {
-                var bs = new BinaryDeserializer(f);
-                var newa = bs.DeserializeValue<Executable>();
-                f.Close();
+            //using (FileStream f = new FileStream("ser.bin", FileMode.Create))
+            //{
+            //    Executable.Serialize(a, f);                
+            //    f.Close();
+            //}
 
-                var vm = new VMachine();
-                vm.ShowDebugInfo = true;
 
-                vm.Execute(newa);
-            }
+            //using (FileStream f = new FileStream("ser.bin", FileMode.Open))
+            //{
+            //    var newa = Executable.Deserialize(f);
+            //    f.Close();
+
+            //    var vm = new VMachine();
+            //    vm.ShowDebugInfo = true;
+
+            //    vm.Execute(newa);
+            //}
 
 
             TestBasic();

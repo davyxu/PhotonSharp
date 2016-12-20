@@ -3,7 +3,7 @@ namespace Photon
 {
     class ValueClassType : Value
     {
-        internal int ID { get; set; }
+        internal int ID = -1;
 
         protected ObjectName _name;
         public ObjectName Name

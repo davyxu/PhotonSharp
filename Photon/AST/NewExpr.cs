@@ -38,7 +38,8 @@ namespace Photon
             return "NewExpr";
         }
 
-        void ResolveClassName(CompileParameter param, int pass)
+
+        internal override void Compile(CompileParameter param)
         {
             ObjectName on = ObjectName.Empty;
             on.EntryName = ClassName.Name;
@@ -49,43 +50,14 @@ namespace Photon
             else
             {
                 on.PackageName = param.Pkg.Name;
-            }            
+            }    
 
-            var c = param.Exe.GetClassTypeByName(on);
-            if ( c == null )
-            {
-                on.PackageName = "Builtin";
-                c = param.Exe.GetClassTypeByName(on);
-            }
+            _cmd = param.CS.Add(new Command(Opcode.NEW))                
+                .SetCodePos(NewPos);
 
-            
-
-            if ( pass == 1 )
-            {
-                param.NextPassToResolve(this);
-                return;
-            }
-            else if (c == null)
-            {
-                throw new CompileException("class entry not found: " + ClassName.Name, NewPos);
-            }
-
-            _cmd.DataA = c.ID;
+            _cmd.EntryName = on;
 
             _cmd.SetComment(on.ToString());
-        }
-
-        internal override void Resolve(CompileParameter param)
-        {
-            ResolveClassName(param, 2);
-        }
-
-        internal override void Compile(CompileParameter param)
-        {
-            ResolveClassName(param, 1);
-
-            _cmd = param.CS.Add(new Command(Opcode.NEW, -1))                
-                .SetCodePos(NewPos);
         }
     }
 }

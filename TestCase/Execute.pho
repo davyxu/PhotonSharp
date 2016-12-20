@@ -1,4 +1,4 @@
 
 func foo( a , b ){
-	return a + b, new(Array)
+	return a + b, new(Builtin.Array)
 }

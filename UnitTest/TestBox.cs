@@ -11,11 +11,7 @@ namespace UnitTest
 
         string _caseName;
 
-        public bool SerializeTest
-        {
-            get;
-            set;
-        }
+        public static bool SerializeTest = false;
 
         public VMachine VM
         {

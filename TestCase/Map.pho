@@ -1,4 +1,4 @@
-var map = new(Map)
+var map = new(Builtin.Map)
 map["hello"] = 1678
 var x = map["hello"]
 var c = len(map)

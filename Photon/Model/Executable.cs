@@ -12,54 +12,64 @@ namespace Photon
         // 常量表        
         ConstantSet _constSet = new ConstantSet();
 
-        // 所有包函数, 类成员函数, 闭包, 外部函数执行体                
-        Dictionary<ObjectName, ValueFunc> _funcByName = new Dictionary<ObjectName, ValueFunc>();
+        // 所有包函数, 类成员函数, 闭包
+        Dictionary<ObjectName, ValueFunc> _phoFuncByName = new Dictionary<ObjectName, ValueFunc>();
+
+        // 外部函数执行体                
+        Dictionary<ObjectName, ValueFunc> _nativeFuncByName = new Dictionary<ObjectName, ValueFunc>();
         
         // 所有包
         List<Package> _packages = new List<Package>();
 
-        // 类
-        List<ValueClassType> _classType = new List<ValueClassType>();
+        // 类        
+        Dictionary<ObjectName, ValueClassType> _classByName = new Dictionary<ObjectName, ValueClassType>();
 
+        // native类索引
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
 
-        IEnumerable<ValuePhoFunc> GetCommandSet( )
+        // 生成函数列表, 建立id
+        internal List<Value> GenEntryList()
         {
-            foreach( var kv in _funcByName )
-            {
-                var cmdset = kv.Value as ValuePhoFunc;
-                if (cmdset != null )
-                {
-                    yield return cmdset;
-                }
-            }
-        }
-
-        // 将加载函数时对应的指令中的函数入口与实际的函数连接, 放入数组中供VM使用
-        internal List<ValueFunc> LinkFuncEntryPoint()
-        {
-            var arr = new List<ValueFunc>();
-
-            var phoFuncArr = new List<ValuePhoFunc>();
+            var arr = new List<Value>();
 
             // 添加所有的函数
-            foreach (var kv in _funcByName)
+            foreach (var kv in _phoFuncByName)
             {
-                int funcLinkID = arr.Count;
-                kv.Value.ID = funcLinkID;
+                int linkid = arr.Count;
+                kv.Value.ID = linkid;
                 arr.Add(kv.Value);
-
-                var cmdset = kv.Value as ValuePhoFunc;
-                if (cmdset != null)
-                {
-                    phoFuncArr.Add(cmdset);
-                }
             }
 
-            // 所有脚本函数处理指令中函数入口
-            foreach (var func in phoFuncArr)
+            // 添加所有的函数
+            foreach (var kv in _nativeFuncByName)
             {
-                func.LinkCommandLoadFunc(this);
+                int linkid = arr.Count;
+                kv.Value.ID = linkid;
+                arr.Add(kv.Value);
+            }
+
+            // 添加所有的类
+            foreach (var kv in _classByName)
+            {
+                int linkid = arr.Count;
+                kv.Value.ID = linkid;
+                arr.Add(kv.Value);
+            }
+
+            return arr;
+        }
+
+
+        // 将加载函数时对应的指令中的函数入口与实际的函数连接, 放入数组中供VM使用
+        internal void LinkEntryPoint()
+        {            
+            var phoFuncArr = new List<ValuePhoFunc>();
+
+            // 所有脚本函数处理指令中函数入口
+            foreach (var kv in _phoFuncByName)
+            {
+                var phoFunc = kv.Value as ValuePhoFunc;
+                phoFunc.LinkCommandEntry(this);                
             }
 
             // 包入口函数处理指令中函数入口
@@ -67,25 +77,23 @@ namespace Photon
             {
                 if ( pkg.InitEntry != null )
                 {
-                    pkg.InitEntry.LinkCommandLoadFunc(this);
+                    pkg.InitEntry.LinkCommandEntry(this);
                 }
             }
-
-            return arr;
         }
 
 
         public void Serialize(BinarySerializer ser)
         {
             ser.Serialize<ConstantSet>(_constSet);
-            ser.Serialize<Dictionary<ObjectName, ValueFunc>>(_funcByName);
+            ser.Serialize<Dictionary<ObjectName, ValueFunc>>(_phoFuncByName);
             ser.Serialize<List<Package>>(_packages);
         }
 
         public void Deserialize(BinaryDeserializer ser)
         {
             _constSet = ser.Deserialize<ConstantSet>();
-            _funcByName = ser.Deserialize<Dictionary<ObjectName, ValueFunc>>();
+            _phoFuncByName = ser.Deserialize<Dictionary<ObjectName, ValueFunc>>();
             _packages = ser.Deserialize<List<Package>>();
         }
 
@@ -119,8 +127,20 @@ namespace Photon
         }
 
         internal ValueFunc AddFunc(ValueFunc f)
-        {                           
-            _funcByName.Add(f.Name, f);
+        {
+            if ( f is ValuePhoFunc )
+            {
+                _phoFuncByName.Add(f.Name, f);
+            }
+            else if( f is ValueNativeFunc )
+            {
+                _nativeFuncByName.Add(f.Name, f);
+            }
+            else
+            {
+                throw new Exception("unknown func type " + f.TypeName);
+            }
+            
 
             return f;
         }
@@ -133,24 +153,20 @@ namespace Photon
                 _classTypeByNativeType.Add(nativeClass.RawValue, c);
             }
 
-            _classType.Add(c);
-
-            c.ID = _classType.Count - 1;
+            
+            _classByName.Add(c.Name, c);            
 
             return c;
         }
 
-        internal ValueClassType GetClassType(int cid)
-        {
-            return _classType[cid];
-        }
+
 
         internal ValueClassType GetClassTypeByName(ObjectName name)
         {
-            foreach( var c in _classType )
+            ValueClassType clsType;
+            if ( _classByName.TryGetValue( name, out clsType) )
             {
-                if (c.Name.Equals( name))
-                    return c;
+                return clsType;
             }
 
             return null;
@@ -200,7 +216,12 @@ namespace Photon
         internal ValueFunc GetFuncByName(ObjectName name)
         {
             ValueFunc f;
-            if (_funcByName.TryGetValue(name, out f ))
+            if (_phoFuncByName.TryGetValue(name, out f ))
+            {
+                return f;
+            }
+
+            if (_nativeFuncByName.TryGetValue(name, out f))
             {
                 return f;
             }
@@ -342,7 +363,7 @@ namespace Photon
 
 
             // 汇编
-            foreach (var kv in _funcByName)
+            foreach (var kv in _phoFuncByName)
             {
                 Logger.DebugLine(kv.Value.DebugString());
                 kv.Value.DebugPrint(this);

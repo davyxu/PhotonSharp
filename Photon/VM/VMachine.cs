@@ -31,15 +31,15 @@ namespace Photon
         // 运行帧栈
         Stack<RuntimeFrame> _callStack = new Stack<RuntimeFrame>();
 
-        // 所有函数入口点
-        List<ValueFunc> _funcList = new List<ValueFunc>();
+        // 所有函数,类入口点
+        List<Value> _entryList = new List<Value>();        
 
         // 当前运行帧
         RuntimeFrame _currFrame;
 
+        // 调试hook
         Action<VMachine>[] _hook = new Action<VMachine>[(int)DebugHook.MAX];
 
-        
         // 运行状态
         State _state = State.Standby;
 
@@ -203,7 +203,7 @@ namespace Photon
         }
 
 
-        internal void ExecuteFunc(RuntimePackage rtpkg, ValuePhoFunc func, int argCount, int retValueCount)
+        internal void ExecuteFunc(Executable exe, RuntimePackage rtpkg, ValuePhoFunc func, int argCount, int retValueCount)
         {
             if (func.Commands.Count == 0)
                 return;
@@ -238,7 +238,7 @@ namespace Photon
 
                 if (ShowDebugInfo)
                 {
-                    Logger.DebugLine("{0}|{1}", cmd.CodePos, _exe.QuerySourceLine(cmd.CodePos));
+                    Logger.DebugLine("{0}|{1}", cmd.CodePos, exe.QuerySourceLine(cmd.CodePos));
                     Logger.DebugLine("---------------------");
                     Logger.DebugLine("{0,5} {1,2}| {2} {3}", _currFrame.Func.Name, _currFrame.PC, cmd.Op.ToString(), _insset.InstructToString(cmd) );
                 }
@@ -295,19 +295,22 @@ namespace Photon
 
 
 
-        void InitialCall()
+        void InitialCall(Executable exe)
         {
             _callStack.Clear();
             _dataStack.Clear();
 
             // 为了防止用户在Executable new之后添加其他的函数
             // 所以链接过程在第一次调用时, 虽然耗时
-            _funcList = _exe.LinkFuncEntryPoint();
+            _entryList = exe.GenEntryList();            
+
+            // 将指令中所有的entry互相链接
+            exe.LinkEntryPoint();
 
             // 依赖包按依赖顺序初始化
-            for (int i = 0; i < _exe.PackageCount; i++)
+            for (int i = 0; i < exe.PackageCount; i++)
             {
-                var pkg = _exe.GetPackage(i);
+                var pkg = exe.GetPackage(i);
 
                 // 已经创建过了 
                 if (i < _package.Count)
@@ -320,17 +323,18 @@ namespace Photon
                 if (pkg.InitEntry != null)
                 {
                     // 执行包的全局入口( 只会还行一次)
-                    ExecuteFunc(rtPkg, pkg.InitEntry, 0, 0);
+                    ExecuteFunc(exe, rtPkg, pkg.InitEntry, 0, 0);
                 }
             }
 
             
         }
 
-        internal ValueFunc GetFunc(int funcid)
+        internal Value GetEntry(int funcid)
         {
-            return _funcList[funcid];
+            return _entryList[funcid];
         }
+
 
         void ObjectListToDataStack(object[] paramToExec)
         {
@@ -349,7 +353,7 @@ namespace Photon
         {
             _exe = exe;
             Constants = exe.Constants;
-            InitialCall();
+            InitialCall(exe);
         }
 
         public object[] Execute(Executable exe, string pkgname, string entryName, object[] paramToExec = null, int retValueCount = 0)
@@ -357,7 +361,7 @@ namespace Photon
             Execute(exe);
 
             // 找到包入口
-            var func = _exe.GetFuncByName(new ObjectName(pkgname, entryName)) as ValuePhoFunc;
+            var func = exe.GetFuncByName(new ObjectName(pkgname, entryName)) as ValuePhoFunc;
             if (func == null)
             {
                 throw new RuntimeException("unknown start package name: " + pkgname);
@@ -370,7 +374,7 @@ namespace Photon
 
             var argCount = paramToExec != null ? paramToExec.Length:0;            
 
-            ExecuteFunc(rtpkg, func, argCount, retValueCount);
+            ExecuteFunc(exe, rtpkg, func, argCount, retValueCount);
 
             if (retValueCount > 0 )
             {

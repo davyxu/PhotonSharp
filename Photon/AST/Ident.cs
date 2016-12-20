@@ -164,7 +164,7 @@ namespace Photon
                             {
                                 CmdGen.Op = Opcode.LOADF;
 
-                                CmdGen.FuncEntryName = new ObjectName(param.Pkg.Name, Name);
+                                CmdGen.EntryName = new ObjectName(param.Pkg.Name, Name);
  
                                 // 函数入口, 留到VM链接时处理
 

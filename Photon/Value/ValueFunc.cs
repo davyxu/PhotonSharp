@@ -21,13 +21,13 @@ namespace Photon
         internal int OutputValueCount { get; set; }
 
 
-        public void Serialize(BinarySerializer ser)
+        public virtual void Serialize(BinarySerializer ser)
         {
             ser.Serialize<int>(ID);
             ser.Serialize<ObjectName>(_name);
         }
 
-        public void Deserialize(BinaryDeserializer ser)
+        public virtual void Deserialize(BinaryDeserializer ser)
         {
             ID = ser.Deserialize<int>();
             _name = ser.Deserialize<ObjectName>();

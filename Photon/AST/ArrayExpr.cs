@@ -35,15 +35,8 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-
-
-            var c = param.Exe.GetClassTypeByName(new ObjectName("Builtin", "Array"));
-            if (c == null)
-            {
-                throw new CompileException("'Builtin.Array' not exists", LBracketPos);
-            }
-
-            param.CS.Add(new Command(Opcode.NEW, c.ID)).SetCodePos(LBracketPos).SetComment("Builtin.Array");
+            var cmd = param.CS.Add(new Command(Opcode.NEW )).SetCodePos(LBracketPos).SetComment("Builtin.Array");
+            cmd.EntryName = new ObjectName("Builtin", "Array");
 
 
             foreach (var v in Values)

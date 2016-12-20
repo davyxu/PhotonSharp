@@ -51,7 +51,7 @@ namespace Photon
             var proc = param.Exe.AddFunc(newset);
 
             var closureCmd = new Command(Opcode.CLOSURE).SetCodePos(TypeInfo.FuncPos);
-            closureCmd.FuncEntryName = newset.Name;
+            closureCmd.EntryName = newset.Name;
 
             param.CS.Add(closureCmd);
 

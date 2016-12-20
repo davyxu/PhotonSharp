@@ -37,14 +37,8 @@ namespace Photon
         internal override void Compile(CompileParameter param)
         {
 
-
-            var c = param.Exe.GetClassTypeByName(new ObjectName("Builtin", "Map"));
-            if (c == null)
-            {
-                throw new CompileException("'Builtin.Map' not exists", LBracePos);
-            }
-
-            param.CS.Add(new Command(Opcode.NEW, c.ID)).SetCodePos(LBracePos).SetComment("Builtin.Map");
+            var cmd = param.CS.Add(new Command(Opcode.NEW )).SetCodePos(LBracePos).SetComment("Builtin.Map");
+            cmd.EntryName = new ObjectName("Builtin", "Map");
 
 
             var kvParam = param.SetLHS(false);

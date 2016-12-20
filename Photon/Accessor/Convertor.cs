@@ -189,6 +189,18 @@ namespace Photon
             return real;
         }
 
+        internal static ValueClassType CastClassType(Value v)
+        {
+            var real = (v as ValueClassType);
+
+            if (real == null)
+            {
+                throw new RuntimeException("Expect 'Class Type' value");
+            }
+
+            return real;
+        }
+
         internal static ValueFunc CastFunc(Value v)
         {
             var real = (v as ValueFunc);

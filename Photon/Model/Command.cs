@@ -18,20 +18,25 @@ namespace Photon
 
         TokenPos _pos;
 
-        internal ObjectName FuncEntryName;
+        // 类名/函数名
+        internal ObjectName EntryName;
 
         public void Serialize(BinarySerializer ser)
         {
             ser.Serialize<Opcode>(Op);
             ser.Serialize<int[]>(_data);
+            ser.Serialize<bool[]>(_dataUsed);
             ser.Serialize<string>(_comment);
+            ser.Serialize<ObjectName>(EntryName);
         }
 
         public void Deserialize(BinaryDeserializer ser)
         {
             Op = ser.Deserialize<Opcode>();
             _data = ser.Deserialize<int[]>();
+            _dataUsed = ser.Deserialize<bool[]>();
             _comment = ser.Deserialize<string>();
+            EntryName = ser.Deserialize<ObjectName>();
         }
 
 

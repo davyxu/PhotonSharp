@@ -17,7 +17,7 @@ namespace Photon
 
         internal static ValuePhoFunc Empty = new ValuePhoFunc();
 
-        public void Serialize(BinarySerializer ser)
+        public override void Serialize(BinarySerializer ser)
         {
             base.Serialize(ser);
 
@@ -25,7 +25,7 @@ namespace Photon
             ser.Serialize<int>(_regCount);
         }
 
-        public void Deserialize(BinaryDeserializer ser)
+        public override void Deserialize(BinaryDeserializer ser)
         {
             base.Deserialize(ser);
 
@@ -98,7 +98,7 @@ namespace Photon
             return _cmds.GetHashCode();
         }
 
-        internal void LinkCommandLoadFunc(Executable exe)
+        internal void LinkCommandEntry(Executable exe)
         {
             foreach (var cmd in Commands)
             {
@@ -107,10 +107,21 @@ namespace Photon
                     case Opcode.LOADF:
                     case Opcode.CLOSURE:
                         {
-                            var entry = exe.GetFuncByName(cmd.FuncEntryName);
+                            var entry = exe.GetFuncByName(cmd.EntryName);
                             if (entry == null)
                             {
-                                throw new RuntimeException("func entry not found: " + cmd.FuncEntryName);
+                                throw new RuntimeException("func entry not found: " + cmd.EntryName);
+                            }
+
+                            cmd.DataA = entry.ID;
+                        }
+                        break;
+                    case Opcode.NEW:                    
+                        {
+                            var entry = exe.GetClassTypeByName(cmd.EntryName);
+                            if (entry == null)
+                            {
+                                throw new RuntimeException("func entry not found: " + cmd.EntryName);
                             }
 
                             cmd.DataA = entry.ID;

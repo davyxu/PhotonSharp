@@ -1,29 +1,40 @@
-﻿using SharpLexer;
+﻿using MarkSerializer;
+using SharpLexer;
 using System;
-using System.Reflection;
 using System.Collections.Generic;
-using MarkSerializer;
 using System.IO;
+using System.Reflection;
 
 namespace Photon
 {
-    public partial class Executable
+    public partial class Executable : IMarkSerializable
     {
-        // 常量表
-        [MarkSerialize]
+        // 常量表        
         ConstantSet _constSet = new ConstantSet();
 
-        // 所有函数执行体
-        [MarkSerialize]
-        List<ValueFunc> _func = new List<ValueFunc>();
-
-        [MarkSerialize]
+        // 所有函数执行体        
+        Dictionary<int, ValueFunc> _funcByID = new Dictionary<int, ValueFunc>();
+        
         List<Package> _packages = new List<Package>();
 
         // 类
         List<ValueClassType> _classType = new List<ValueClassType>();
 
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<ConstantSet>(_constSet);
+            ser.Serialize<Dictionary<int, ValueFunc>>(_funcByID);
+            ser.Serialize<List<Package>>(_packages);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _constSet = ser.Deserialize<ConstantSet>();
+            _funcByID = ser.Deserialize<Dictionary<int, ValueFunc>>();
+            _packages = ser.Deserialize<List<Package>>();
+        }
 
         public void RegisterBuiltinPackage()
         {
@@ -54,10 +65,10 @@ namespace Photon
         }
 
         internal ValueFunc AddFunc(ValueFunc f)
-        {            
-            _func.Add(f);
+        {   
+            f.ID = _funcByID.Count + 1;
 
-            f.ID = _func.Count - 1;
+            _funcByID.Add( f.ID, f);
 
             return f;
         }
@@ -136,16 +147,16 @@ namespace Photon
 
         internal ValueFunc GetFunc( int funcid )
         {
-            return _func[funcid];            
+            return _funcByID[funcid];            
         }
 
         internal ValueFunc GetFuncByName(ObjectName name)
         {           
-            foreach( var func in _func )
+            foreach( var kv in _funcByID )
             {
-                if ( func.Name.Equals( name ) )
+                if ( kv.Value.Name.Equals( name ) )
                 {
-                    return func;
+                    return kv.Value;
                 }
 
             }
@@ -287,10 +298,10 @@ namespace Photon
 
 
             // 汇编
-            foreach (var p in _func)
+            foreach (var p in _funcByID)
             {
-                Logger.DebugLine(p.DebugString());
-                p.DebugPrint(this);
+                Logger.DebugLine(p.Value.DebugString());
+                p.Value.DebugPrint(this);
             }
         }
     }

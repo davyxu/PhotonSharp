@@ -4,12 +4,23 @@ using MarkSerializer;
 namespace Photon
 {
 
-    class ScopeManager
+    class ScopeManager : IMarkSerializable
     {
         Scope _topScope;
-
-        [MarkSerialize]
+        
         Scope _global;
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<Scope>(_global);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _global = ser.Deserialize<Scope>();
+        }
+
 
         internal Scope PackageScope
         {

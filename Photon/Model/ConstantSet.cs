@@ -3,10 +3,21 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    class ConstantSet : DataAccessor
-    {
-        [MarkSerialize]
+    class ConstantSet : DataAccessor, IMarkSerializable
+    {     
         List<Value> _cset = new List<Value>();
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<List<Value>>(_cset);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _cset = ser.Deserialize<List<Value>>();
+        }
+
 
         internal int Add(Value inc)
         {

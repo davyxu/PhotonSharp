@@ -3,10 +3,20 @@ using System;
 
 namespace Photon
 {
-    class ValueInteger32 : Value
-    {
-        [MarkSerialize]
+    class ValueInteger32 : Value, IMarkSerializable
+    {        
         Int32 _data = 0;
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<Int32>(_data);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _data = ser.Deserialize<Int32>();
+        }
+
 
         // 序列化用, 不要删除
         public ValueInteger32()

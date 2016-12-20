@@ -5,12 +5,10 @@ using MarkSerializer;
 namespace Photon
 {
 
-    class ValuePhoFunc : ValueFunc
-    {
-        [MarkSerialize]
+    class ValuePhoFunc : ValueFunc, IMarkSerializable
+    {      
         List<Command> _cmds = new List<Command>();
-      
-        [MarkSerialize]
+              
         int _regCount;
 
         Scope _scope;
@@ -18,6 +16,19 @@ namespace Photon
         TokenPos _defpos;
 
         internal static ValuePhoFunc Empty = new ValuePhoFunc();
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<List<Command>>(_cmds);
+            ser.Serialize<int>(_regCount);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _cmds = ser.Deserialize<List<Command>>();
+            _regCount = ser.Deserialize<int>();
+        }
+
 
         // 序列化用, 不要删除
         public ValuePhoFunc()

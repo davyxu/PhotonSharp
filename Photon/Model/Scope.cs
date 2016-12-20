@@ -17,25 +17,39 @@ namespace Photon
         Class,
     }
 
-    class Scope
+    class Scope : IMarkSerializable
     {
         Scope _outter;
-
-        [MarkSerialize]
+        
         ScopeType _type;
-
-        [MarkSerialize]
+        
         TokenPos _defpos;
        
         public string ClassName;
 
         Dictionary<string, Symbol> _symbolByName = new Dictionary<string, Symbol>();
 
-        [MarkSerialize]
         Dictionary<string, Symbol> _regByName = new Dictionary<string, Symbol>();
 
-        [MarkSerialize]
         List<Scope> _child = new List<Scope>();
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<ScopeType>(_type);
+            ser.Serialize<TokenPos>(_defpos);
+            ser.Serialize<Dictionary<string, Symbol>>(_regByName);
+            ser.Serialize<List<Scope>>(_child);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _type = ser.Deserialize<ScopeType>();
+            _defpos = ser.Deserialize<TokenPos>();
+            _regByName = ser.Deserialize<Dictionary<string, Symbol>>();
+            _child = ser.Deserialize<List<Scope>>();
+        }
+
 
         internal List<Scope> Child
         {

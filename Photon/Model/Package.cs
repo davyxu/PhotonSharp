@@ -4,12 +4,10 @@ using MarkSerializer;
 namespace Photon
 {
 
-    public partial class Package
-    {
-        [MarkSerialize]
+    public partial class Package : IMarkSerializable
+    {        
         string _name;
-
-        [MarkSerialize]
+     
         int _id;
 
         // 源码
@@ -18,14 +16,12 @@ namespace Photon
         // 父级
         Executable _exe;
 
-        // 包的作用域
-        [MarkSerialize]
+        // 包的作用域        
         ScopeManager _scopeManager;
 
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
-
-        [MarkSerialize]
+        
         internal ValuePhoFunc InitEntry = ValuePhoFunc.Empty;        
 
         internal List<CodeFile> FileList
@@ -73,6 +69,23 @@ namespace Photon
         {
             _name = name;            
             _scopeManager = new ScopeManager();
+        }
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<string>(_name);
+            ser.Serialize<int>(_id);
+            ser.Serialize<ScopeManager>(_scopeManager);
+            ser.Serialize<ValuePhoFunc>(InitEntry);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _name = ser.Deserialize<string>();
+            _id = ser.Deserialize<int>();
+            _scopeManager = ser.Deserialize<ScopeManager>();
+            InitEntry = ser.Deserialize<ValuePhoFunc>();
         }
 
         // 第二次pass

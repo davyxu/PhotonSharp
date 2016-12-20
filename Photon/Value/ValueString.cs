@@ -2,10 +2,19 @@
 using MarkSerializer;
 namespace Photon
 {
-    class ValueString : Value
-    {
-        [MarkSerialize]
+    class ValueString : Value, IMarkSerializable
+    {        
         string _data;
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<string>(_data);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            _data = ser.Deserialize<string>();
+        }
 
         public ValueString()
         {

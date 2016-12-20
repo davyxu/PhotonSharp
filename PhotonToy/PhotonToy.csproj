@@ -83,6 +83,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MarkSerializer\MarkSerializer\MarkSerializer.csproj">
+      <Project>{a853de6b-97d7-4a0f-8561-940a4f267c02}</Project>
+      <Name>MarkSerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharpLexer\SharpLexer\SharpLexer.csproj">
       <Project>{5138a406-5b76-4d5e-b889-257224e1fb2f}</Project>
       <Name>SharpLexer</Name>

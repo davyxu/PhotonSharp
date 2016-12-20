@@ -5,22 +5,34 @@ using System.Text;
 namespace Photon
 {
 
-    public class Command
+    public class Command : IMarkSerializable
     {
-        [MarkSerialize]
         internal Opcode Op;
 
         const int MaxDataCount = 2;
 
-        [MarkSerialize]
         int[] _data = new int[MaxDataCount];
         bool[] _dataUsed = new bool[MaxDataCount];
-
-        [MarkSerialize]
+        
         string _comment;
 
         TokenPos _pos;
-              
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<Opcode>(Op);
+            ser.Serialize<int[]>(_data);
+            ser.Serialize<string>(_comment);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            Op = ser.Deserialize<Opcode>();
+            _data = ser.Deserialize<int[]>();
+            _comment = ser.Deserialize<string>();
+        }
+
+
         internal int DataA
         {
             get

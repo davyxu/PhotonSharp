@@ -11,6 +11,12 @@ namespace UnitTest
 
         string _caseName;
 
+        public bool SerializeTest
+        {
+            get;
+            set;
+        }
+
         public VMachine VM
         {
             get { return _vm; }
@@ -55,9 +61,17 @@ namespace UnitTest
             Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
             _vm.ShowDebugInfo = true;
 
-            var newExe = SerTestExecuable(_exe);
+            if (SerializeTest)
+            {
+                var newExe = SerTestExecuable(_exe);
 
-            _vm.Execute(newExe);
+                _vm.Execute(newExe);
+            }
+            else
+            {
+                _vm.Execute(_exe);
+            }
+            
 
             Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
             _vm.DataStack.DebugPrint();            

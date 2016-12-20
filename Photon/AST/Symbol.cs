@@ -18,7 +18,7 @@ namespace Photon
     }
 
 
-    internal class Symbol
+    internal class Symbol : IMarkSerializable
     {
         [MarkSerialize]
         public string Name;
@@ -34,7 +34,24 @@ namespace Photon
         public Scope RegBelong;
 
         [MarkSerialize]
-        public SymbolUsage Usage;        
+        public SymbolUsage Usage;
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<string>(Name);
+            ser.Serialize<TokenPos>(DefinePos);
+            ser.Serialize<int>(RegIndex);
+            ser.Serialize<SymbolUsage>(Usage);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            Name = ser.Deserialize<string>();
+            DefinePos = ser.Deserialize<TokenPos>();
+            RegIndex = ser.Deserialize<int>();
+            Usage = ser.Deserialize<SymbolUsage>();
+        }
 
         public bool IsGlobal
         {

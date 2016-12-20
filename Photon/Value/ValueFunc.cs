@@ -3,12 +3,10 @@ using MarkSerializer;
 using SharpLexer;
 namespace Photon
 {
-    class ValueFunc : Value
+    class ValueFunc : Value, IMarkSerializable
     {
-        [MarkSerialize]
-        internal int ID;
-
-        [MarkSerialize]
+        internal int ID = -1;
+        
         ObjectName _name;
 
         public ObjectName Name
@@ -21,6 +19,20 @@ namespace Photon
 
         // 返回值数量
         internal int OutputValueCount { get; set; }
+
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<int>(ID);
+            ser.Serialize<ObjectName>(_name);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            ID = ser.Deserialize<int>();
+            _name = ser.Deserialize<ObjectName>();
+        }
+
 
         public ValueFunc()
         {

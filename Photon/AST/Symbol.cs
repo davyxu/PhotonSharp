@@ -19,21 +19,17 @@ namespace Photon
 
 
     internal class Symbol : IMarkSerializable
-    {
-        [MarkSerialize]
+    {        
         public string Name;
-
-        [MarkSerialize]
+     
         public TokenPos DefinePos;
 
         public Node Decl;
-
-        [MarkSerialize]
+        
         public int RegIndex;
 
         public Scope RegBelong;
-
-        [MarkSerialize]
+        
         public SymbolUsage Usage;
 
 

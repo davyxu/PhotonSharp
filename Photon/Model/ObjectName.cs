@@ -2,18 +2,30 @@
 using MarkSerializer;
 namespace Photon
 {
-    internal struct ObjectName
-    {
-        [MarkSerialize]
+    internal struct ObjectName : IMarkSerializable
+    {        
         public string PackageName;
-
-        [MarkSerialize]
+        
         public string EntryName;
-
-        [MarkSerialize]
+        
         public string ClassName;
 
         internal static readonly  ObjectName Empty = new ObjectName(string.Empty, string.Empty, string.Empty);
+
+        public void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize<string>(PackageName);
+            ser.Serialize<string>(EntryName);
+            ser.Serialize<string>(ClassName);
+        }
+
+        public void Deserialize(BinaryDeserializer ser)
+        {
+            PackageName = ser.Deserialize<string>();
+            EntryName = ser.Deserialize<string>();
+            ClassName = ser.Deserialize<string>();
+        }
+
 
         internal ObjectName(string pkg, string entry)
         {
@@ -45,6 +57,7 @@ namespace Photon
 
         public override string ToString()
         {
+
             if ( string.IsNullOrEmpty(ClassName) )
             {
                 return string.Format("{0}.{1}", PackageName, EntryName);

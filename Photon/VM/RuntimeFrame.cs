@@ -24,8 +24,9 @@ namespace Photon
         }
         public string FuncName
         {
-            get { return Func.Name.EntryName; }
+            get { return Func.Name.ToString(); }
         }
+
 
         public TokenPos FuncDefPos
         {

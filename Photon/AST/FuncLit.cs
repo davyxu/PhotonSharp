@@ -46,11 +46,14 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var newset = new ValuePhoFunc(new ObjectName(param.Pkg.Name, "closure"), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), TypeInfo.ScopeInfo);
+            var newset = new ValuePhoFunc(param.Pkg.GenClosureName(), TypeInfo.FuncPos, TypeInfo.ScopeInfo.CalcUsedReg(), TypeInfo.ScopeInfo);
 
             var proc = param.Exe.AddFunc(newset);
 
-            param.CS.Add(new Command(Opcode.CLOSURE, proc.ID)).SetCodePos(TypeInfo.FuncPos);
+            var closureCmd = new Command(Opcode.CLOSURE).SetCodePos(TypeInfo.FuncPos);
+            closureCmd.FuncEntryName = newset.Name;
+
+            param.CS.Add(closureCmd);
 
             var funcParam = param.SetLHS(false).SetCmdSet(newset);
 

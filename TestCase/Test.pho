@@ -1,3 +1,9 @@
-var a = 10
-a/=7
-//a = a +1
+
+
+var a = func(a , b){
+	return a+b
+}
+
+var c = a
+
+c( 1, 2)

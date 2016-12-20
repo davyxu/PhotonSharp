@@ -31,6 +31,9 @@ namespace Photon
         // 运行帧栈
         Stack<RuntimeFrame> _callStack = new Stack<RuntimeFrame>();
 
+        // 所有函数入口点
+        List<ValueFunc> _funcList = new List<ValueFunc>();
+
         // 当前运行帧
         RuntimeFrame _currFrame;
 
@@ -202,9 +205,12 @@ namespace Photon
 
         internal void ExecuteFunc(RuntimePackage rtpkg, ValuePhoFunc func, int argCount, int retValueCount)
         {
+            if (func.Commands.Count == 0)
+                return;
+
             if (ShowDebugInfo)
             {
-                Logger.DebugLine(string.Format("============ Run entry{0} ============", func.Name));
+                Logger.DebugLine(string.Format("============ Run '{0}' ============", func.Name));
             }
 
             rtpkg.Reg.SetUsedCount(func.RegCount);
@@ -287,10 +293,16 @@ namespace Photon
 
         }
 
+
+
         void InitialCall()
         {
             _callStack.Clear();
             _dataStack.Clear();
+
+            // 为了防止用户在Executable new之后添加其他的函数
+            // 所以链接过程在第一次调用时, 虽然耗时
+            _funcList = _exe.LinkFuncEntryPoint();
 
             // 依赖包按依赖顺序初始化
             for (int i = 0; i < _exe.PackageCount; i++)
@@ -311,6 +323,13 @@ namespace Photon
                     ExecuteFunc(rtPkg, pkg.InitEntry, 0, 0);
                 }
             }
+
+            
+        }
+
+        internal ValueFunc GetFunc(int funcid)
+        {
+            return _funcList[funcid];
         }
 
         void ObjectListToDataStack(object[] paramToExec)

@@ -18,6 +18,8 @@ namespace Photon
 
         TokenPos _pos;
 
+        internal ObjectName FuncEntryName;
+
         public void Serialize(BinarySerializer ser)
         {
             ser.Serialize<Opcode>(Op);
@@ -37,7 +39,10 @@ namespace Photon
         {
             get
             {
-                return _data[0];
+                if (_dataUsed[0])
+                    return _data[0];
+                else
+                    return -1;
             }
 
             set
@@ -51,7 +56,10 @@ namespace Photon
         {
             get
             {
-                return _data[1];
+                if (_dataUsed[1])
+                    return _data[1];
+                else
+                    return -1;
             }
 
             set
@@ -148,6 +156,8 @@ namespace Photon
                 sb.Append(DataB);
                 sb.Append(" ");
             }
+
+ 
            
             if ( !string.IsNullOrEmpty(Comment) )
             {

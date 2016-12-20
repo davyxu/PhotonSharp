@@ -12,9 +12,10 @@ namespace Photon
         // 常量表        
         ConstantSet _constSet = new ConstantSet();
 
-        // 所有函数执行体        
-        Dictionary<int, ValueFunc> _funcByID = new Dictionary<int, ValueFunc>();
+        // 所有包函数, 类成员函数, 闭包, 外部函数执行体                
+        Dictionary<ObjectName, ValueFunc> _funcByName = new Dictionary<ObjectName, ValueFunc>();
         
+        // 所有包
         List<Package> _packages = new List<Package>();
 
         // 类
@@ -22,17 +23,69 @@ namespace Photon
 
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
 
+        IEnumerable<ValuePhoFunc> GetCommandSet( )
+        {
+            foreach( var kv in _funcByName )
+            {
+                var cmdset = kv.Value as ValuePhoFunc;
+                if (cmdset != null )
+                {
+                    yield return cmdset;
+                }
+            }
+        }
+
+        // 将加载函数时对应的指令中的函数入口与实际的函数连接, 放入数组中供VM使用
+        internal List<ValueFunc> LinkFuncEntryPoint()
+        {
+            var arr = new List<ValueFunc>();
+
+            var phoFuncArr = new List<ValuePhoFunc>();
+
+            // 添加所有的函数
+            foreach (var kv in _funcByName)
+            {
+                int funcLinkID = arr.Count;
+                kv.Value.ID = funcLinkID;
+                arr.Add(kv.Value);
+
+                var cmdset = kv.Value as ValuePhoFunc;
+                if (cmdset != null)
+                {
+                    phoFuncArr.Add(cmdset);
+                }
+            }
+
+            // 所有脚本函数处理指令中函数入口
+            foreach (var func in phoFuncArr)
+            {
+                func.LinkCommandLoadFunc(this);
+            }
+
+            // 包入口函数处理指令中函数入口
+            foreach (var pkg in _packages)
+            {
+                if ( pkg.InitEntry != null )
+                {
+                    pkg.InitEntry.LinkCommandLoadFunc(this);
+                }
+            }
+
+            return arr;
+        }
+
+
         public void Serialize(BinarySerializer ser)
         {
             ser.Serialize<ConstantSet>(_constSet);
-            ser.Serialize<Dictionary<int, ValueFunc>>(_funcByID);
+            ser.Serialize<Dictionary<ObjectName, ValueFunc>>(_funcByName);
             ser.Serialize<List<Package>>(_packages);
         }
 
         public void Deserialize(BinaryDeserializer ser)
         {
             _constSet = ser.Deserialize<ConstantSet>();
-            _funcByID = ser.Deserialize<Dictionary<int, ValueFunc>>();
+            _funcByName = ser.Deserialize<Dictionary<ObjectName, ValueFunc>>();
             _packages = ser.Deserialize<List<Package>>();
         }
 
@@ -41,6 +94,7 @@ namespace Photon
             Array.Register(this);
             Map.Register(this);
         }
+             
 
         internal ConstantSet Constants
         {
@@ -65,10 +119,8 @@ namespace Photon
         }
 
         internal ValueFunc AddFunc(ValueFunc f)
-        {   
-            f.ID = _funcByID.Count + 1;
-
-            _funcByID.Add( f.ID, f);
+        {                           
+            _funcByName.Add(f.Name, f);
 
             return f;
         }
@@ -145,22 +197,14 @@ namespace Photon
             return null;
         }
 
-        internal ValueFunc GetFunc( int funcid )
-        {
-            return _funcByID[funcid];            
-        }
-
         internal ValueFunc GetFuncByName(ObjectName name)
-        {           
-            foreach( var kv in _funcByID )
+        {
+            ValueFunc f;
+            if (_funcByName.TryGetValue(name, out f ))
             {
-                if ( kv.Value.Name.Equals( name ) )
-                {
-                    return kv.Value;
-                }
-
+                return f;
             }
-            
+
             return null;
         }
 
@@ -298,10 +342,10 @@ namespace Photon
 
 
             // 汇编
-            foreach (var p in _funcByID)
+            foreach (var kv in _funcByName)
             {
-                Logger.DebugLine(p.Value.DebugString());
-                p.Value.DebugPrint(this);
+                Logger.DebugLine(kv.Value.DebugString());
+                kv.Value.DebugPrint(this);
             }
         }
     }

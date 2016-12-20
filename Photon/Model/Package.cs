@@ -88,6 +88,14 @@ namespace Photon
             InitEntry = ser.Deserialize<ValuePhoFunc>();
         }
 
+        int _closureCount;
+        internal ObjectName GenClosureName()
+        {
+            _closureCount++;
+
+            return new ObjectName(this.Name, "closure" + _closureCount.ToString());
+        }
+
         // 第二次pass
         internal void ResolveNode()
         {

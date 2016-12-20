@@ -98,7 +98,7 @@ namespace Photon
         {
             // 占位
             CmdGen = param.CS.Add(new Command(Opcode.NOP))
-                .SetComment(Name)
+                .SetComment(string.Format("{0}.{1}", param.Pkg.Name, Name))
                 .SetCodePos(DefinePos);
 
             GenCode(param, 1);
@@ -164,21 +164,9 @@ namespace Photon
                             {
                                 CmdGen.Op = Opcode.LOADF;
 
-                                if (!ResolveFuncEntry(param.Pkg, Name, CmdGen))
-                                {
-                                    // 不是本package, 或者函数在本package后面定义, 延迟到下次pass进行解析
-
-                                    if (pass == 1)
-                                    {
-                                        param.NextPassToResolve(this);
-                                    }
-                                    else
-                                    {
-                                        throw new CompileException(string.Format("unsolved function name {0}", Name), DefinePos);
-                                    }
-
-                                    
-                                }
+                                CmdGen.FuncEntryName = new ObjectName(param.Pkg.Name, Name);
+ 
+                                // 函数入口, 留到VM链接时处理
 
                             }
                             break;

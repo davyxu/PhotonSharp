@@ -5,7 +5,7 @@ using MarkSerializer;
 namespace Photon
 {
 
-    class ValuePhoFunc : ValueFunc, IMarkSerializable
+    class ValuePhoFunc : ValueFunc
     {      
         List<Command> _cmds = new List<Command>();
               
@@ -19,12 +19,16 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
+            base.Serialize(ser);
+
             ser.Serialize<List<Command>>(_cmds);
             ser.Serialize<int>(_regCount);
         }
 
         public void Deserialize(BinaryDeserializer ser)
         {
+            base.Deserialize(ser);
+
             _cmds = ser.Deserialize<List<Command>>();
             _regCount = ser.Deserialize<int>();
         }
@@ -92,6 +96,30 @@ namespace Photon
         public override int GetHashCode()
         {
             return _cmds.GetHashCode();
+        }
+
+        internal void LinkCommandLoadFunc(Executable exe)
+        {
+            foreach (var cmd in Commands)
+            {
+                switch( cmd.Op )
+                {
+                    case Opcode.LOADF:
+                    case Opcode.CLOSURE:
+                        {
+                            var entry = exe.GetFuncByName(cmd.FuncEntryName);
+                            if (entry == null)
+                            {
+                                throw new RuntimeException("func entry not found: " + cmd.FuncEntryName);
+                            }
+
+                            cmd.DataA = entry.ID;
+                        }
+                        break;
+                }                
+
+               
+            }
         }
 
         internal override bool Invoke(VMachine vm, int argCount, int receiverCount, ValueClosure closure)

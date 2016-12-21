@@ -21,14 +21,13 @@ namespace UnitTest
     {
         static void TestDelegateExecute()
         {
+            new TestBox().RegisterRunFile(delegate(Executable exe)
             {
-                var testbox = new TestBox();
 
-                testbox.Exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
+                exe.RegisterNativeClass(typeof(DelegateTest), "DelegateTest");
 
-                testbox.RunFile("Delegate.pho")
-                    .CheckGlobalVarMatchValue("a", 3);
-            }
+            }, "Delegate.pho")
+                .CheckGlobalVarMatchValue("a", 3);         
 
 
             {

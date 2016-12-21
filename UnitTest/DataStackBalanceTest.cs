@@ -28,13 +28,14 @@ namespace UnitTest
             {
                 WrapperCodeGenerator.GenerateClass(typeof(DataStackBalanceTest), "UnitTest", "../UnitTest/DataStackBalanceTestWrapper.cs");
             }
+            
 
-            var testbox = new TestBox();
-            testbox.Exe.RegisterNativeClass(Assembly.GetEntryAssembly(),
+            new TestBox().RegisterRunFile(delegate(Executable exe)
+            {
+                exe.RegisterNativeClass(Assembly.GetEntryAssembly(),
                 "UnitTest.DataStackBalanceTestWrapper",
-                "DataStackBalanceTest");
-
-            testbox.RunFile("DataStackBalance.pho")
+                    "DataStackBalanceTest");
+            },"DataStackBalance.pho")
                 .CheckGlobalVarMatchValue("a", 2)
                 .CheckGlobalVarMatchValue("b", 4)
                 .CheckGlobalVarMatchKind("c", ValueKind.Nil)

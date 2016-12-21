@@ -42,7 +42,6 @@ namespace UnitTest
 
         static Executable SerTestExecuable(Executable inExe)
         {
-
             MemoryStream stream = new MemoryStream();
 
             Executable.Serialize(inExe, stream);            
@@ -89,7 +88,31 @@ namespace UnitTest
 
         public TestBox RunFile( string filename )
         {                        
-            return CompileFile(filename ).Run().CheckStackClear();
+            CompileFile(filename );
+
+            Run();
+
+            CheckStackClear();
+
+            return this;
+        }
+
+        public delegate void RegisterFuncCallback( Executable exe);
+
+        RegisterFuncCallback _registerCallback;
+
+        public TestBox RegisterRunFile(RegisterFuncCallback callback, string filename  )
+        {
+            callback(_exe);
+            _registerCallback = callback;
+
+            CompileFile(filename);
+
+            Run();
+
+            CheckStackClear();
+
+            return this;
         }
 
         public RuntimePackage MainPackage

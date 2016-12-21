@@ -49,12 +49,15 @@ namespace UnitTest
             stream.Position = 0;
 
             Executable newExe = new Executable();
+
+            Executable.Serialize(stream, ref newExe, true);
+
             if (_registerCallback != null)
             {
                 _registerCallback(newExe);
-                }
+            }
 
-            Executable.Serialize(stream, ref newExe, true);
+            newExe.DebugPrint();        
 
             return newExe;
         }

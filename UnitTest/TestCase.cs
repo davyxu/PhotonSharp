@@ -43,7 +43,7 @@ namespace UnitTest
             //}
 
 
-            //TestBasic();
+            TestBasic();
 
             TestDataStackBalance();
 

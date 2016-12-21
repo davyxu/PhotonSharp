@@ -3,7 +3,7 @@ using MarkSerializer;
 using SharpLexer;
 namespace Photon
 {
-    class ValueFunc : Value, IMarkSerializable
+    class ValueFunc : Value
     {
         internal int ID = -1;
         
@@ -21,7 +21,7 @@ namespace Photon
         internal int OutputValueCount { get; set; }
 
 
-        public virtual void Serialize(BinarySerializer ser)
+        public override void Serialize(BinarySerializer ser)
         {
             ser.Serialize(ref ID);
             ser.Serialize(ref _name);

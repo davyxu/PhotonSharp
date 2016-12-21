@@ -3,11 +3,11 @@ using System;
 
 namespace Photon
 {
-    class ValueFloat32 : Value, IMarkSerializable
+    class ValueFloat32 : Value
     {        
         float _data = 0;
 
-        public void Serialize(BinarySerializer ser)
+        public override void Serialize(BinarySerializer ser)
         {
             ser.Serialize(ref _data);
         }        

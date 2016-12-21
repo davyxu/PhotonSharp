@@ -1,4 +1,5 @@
 ﻿
+using MarkSerializer;
 namespace Photon
 {
     public enum ValueKind
@@ -26,7 +27,7 @@ namespace Photon
         int GetCount();
     }
 
-    class Value
+    class Value : IMarkSerializable
     {     
         internal static Value Nil = new ValueNil();
 
@@ -35,6 +36,10 @@ namespace Photon
             return DebugString();
         }
 
+        public virtual void Serialize(BinarySerializer ser)
+        {
+            
+        }
 
         public virtual string DebugString( )
         {

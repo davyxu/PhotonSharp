@@ -20,7 +20,7 @@ namespace Photon
 
         internal static void Import(Executable exe, ContentLoader loader, string packageName,  string sourceName, ImportMode mode )
         {
-            var pkg = new Package(packageName);
+            var pkg = new Package(packageName, false);
 
             var parser = new Parser(exe, loader, pkg.ScopeMgr);            
 

@@ -28,8 +28,6 @@ namespace Photon
             set { _topScope = value; }
         }
 
-
-
         public ScopeManager()
         {
             OpenScope( ScopeType.Package, TokenPos.Invalid );

@@ -10,6 +10,8 @@ namespace Photon
      
         int _id;
 
+        bool _native;
+
         // 源码
         List<CodeFile> _code = new List<CodeFile>();
 
@@ -55,6 +57,12 @@ namespace Photon
             get { return _scopeManager.PackageScope; }
         }
 
+
+        internal bool IsNative
+        {
+            get { return _native; }
+        }
+
         internal ScopeManager ScopeMgr
         {
             get { return _scopeManager; }
@@ -65,9 +73,10 @@ namespace Photon
             _scopeManager = new ScopeManager();
         }
 
-        internal Package( string name )
+        internal Package( string name, bool native )
         {
-            _name = name;            
+            _name = name;
+            _native = native;
             _scopeManager = new ScopeManager();
         }
 

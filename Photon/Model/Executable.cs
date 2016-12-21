@@ -20,12 +20,38 @@ namespace Photon
         
         // 所有包
         List<Package> _packages = new List<Package>();
+        List<Package> _nativePackages = new List<Package>();
 
         // 类        
         Dictionary<ObjectName, ValueClassType> _classByName = new Dictionary<ObjectName, ValueClassType>();
+        Dictionary<ObjectName, ValueClassType> _nativeClassByName = new Dictionary<ObjectName, ValueClassType>();
 
         // native类索引
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
+
+
+
+        bool needinit = true;
+        public void Serialize(BinarySerializer ser)
+        {
+            if (needinit)
+            {
+                TypeSerializerSet.Instance.Register(new TokenPosSerializer());
+
+                needinit = false;
+            }
+
+            ser.Serialize(ref _constSet);
+            ser.Serialize(ref _phoFuncByName);
+            ser.Serialize(ref _classByName);
+            ser.Serialize(ref _packages);
+        }
+
+        public void RegisterBuiltinPackage()
+        {
+            Array.Register(this);
+            Map.Register(this);
+        }
 
         // 生成函数列表, 建立id
         internal List<Value> GenEntryList()
@@ -56,53 +82,42 @@ namespace Photon
                 arr.Add(kv.Value);
             }
 
+            // 添加所有的类
+            foreach (var kv in _nativeClassByName)
+            {
+                int linkid = arr.Count;
+                kv.Value.ID = linkid;
+                arr.Add(kv.Value);
+            }
+
+
             return arr;
         }
 
 
         // 将加载函数时对应的指令中的函数入口与实际的函数连接, 放入数组中供VM使用
         internal void LinkEntryPoint()
-        {            
+        {
             var phoFuncArr = new List<ValuePhoFunc>();
 
             // 所有脚本函数处理指令中函数入口
             foreach (var kv in _phoFuncByName)
             {
                 var phoFunc = kv.Value as ValuePhoFunc;
-                phoFunc.LinkCommandEntry(this);                
+                phoFunc.LinkCommandEntry(this);
             }
 
             // 包入口函数处理指令中函数入口
             foreach (var pkg in _packages)
             {
-                if ( pkg.InitEntry != null )
+                if (pkg.InitEntry != null)
                 {
                     pkg.InitEntry.LinkCommandEntry(this);
                 }
             }
         }
 
-        bool needinit = true;
-        public void Serialize(BinarySerializer ser)
-        {
-            if (needinit)
-            {
-                TypeSerializerSet.Instance.Register(new TokenPosSerializer());
 
-                needinit = false;
-            }
-
-            ser.Serialize(ref _constSet);
-            ser.Serialize(ref _phoFuncByName);
-            ser.Serialize(ref _packages);
-        }
-
-        public void RegisterBuiltinPackage()
-        {
-            Array.Register(this);
-            Map.Register(this);
-        }
-             
 
         internal ConstantSet Constants
         {
@@ -148,13 +163,15 @@ namespace Photon
         internal ValueClassType AddClassType(ValueClassType c)
         {
             var nativeClass = c as ValueNativeClassType;
-            if ( nativeClass != null )
+            if (nativeClass != null)
             {
                 _classTypeByNativeType.Add(nativeClass.RawValue, c);
+                _nativeClassByName.Add(c.Name, c);
             }
-
-            
-            _classByName.Add(c.Name, c);            
+            else 
+            {
+                _classByName.Add(c.Name, c);            
+            }
 
             return c;
         }
@@ -165,6 +182,11 @@ namespace Photon
         {
             ValueClassType clsType;
             if ( _classByName.TryGetValue( name, out clsType) )
+            {
+                return clsType;
+            }
+
+            if (_nativeClassByName.TryGetValue(name, out clsType))
             {
                 return clsType;
             }
@@ -194,10 +216,17 @@ namespace Photon
             pkg.ID = _packages.Count;
             pkg.Exe = this;
 
-            _packages.Add(pkg);
+            if (pkg.IsNative)
+            {
+                _nativePackages.Add(pkg);
+            }
+            else
+            {
+                _packages.Add(pkg);
+            }
 
+            
             return pkg;
-
         }
 
         internal Package GetPackageByName(string name)
@@ -209,6 +238,15 @@ namespace Photon
                     return pkg;
                 }
             }
+
+            foreach (var pkg in _nativePackages)
+            {
+                if (pkg.Name == name)
+                {
+                    return pkg;
+                }
+            }
+
 
             return null;
         }
@@ -279,7 +317,7 @@ namespace Photon
             var pkg = GetPackageByName(pkgNameRegTo);
             if (pkg == null)
             {                
-                pkg = AddPackage(new Package(pkgNameRegTo) );
+                pkg = AddPackage(new Package(pkgNameRegTo, true) );
             }
 
             Type instClass;

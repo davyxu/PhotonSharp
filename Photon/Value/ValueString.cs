@@ -2,11 +2,11 @@
 using MarkSerializer;
 namespace Photon
 {
-    class ValueString : Value, IMarkSerializable
+    class ValueString : Value
     {        
         string _data;
 
-        public void Serialize(BinarySerializer ser)
+        public override void Serialize(BinarySerializer ser)
         {
             ser.Serialize(ref _data);
         }        

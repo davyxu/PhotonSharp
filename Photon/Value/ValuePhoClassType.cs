@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MarkSerializer;
+using System.Collections.Generic;
 
 namespace Photon
 {
@@ -8,10 +9,22 @@ namespace Photon
 
         internal ValuePhoClassType Parent { get; set; }
 
+        public ValuePhoClassType()
+        {
+
+        }
+
         internal ValuePhoClassType( ObjectName name)
             : base( name )
         {
 
+        }
+
+        public override void Serialize(BinarySerializer ser)
+        {
+            base.Serialize(ser);
+
+            ser.Serialize(ref _member);            
         }
 
         internal void AddMethod( int nameKey, ValueFunc proc )

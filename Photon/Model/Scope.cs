@@ -39,6 +39,7 @@ namespace Photon
             ser.Serialize(ref _type);
             ser.Serialize(ref _defpos);            
             ser.Serialize(ref _regByName);
+            ser.Serialize(ref _symbolByName);// 只是为了调试
             ser.Serialize(ref _child);
         }
 
@@ -84,7 +85,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", _type.ToString(), _defpos );
+            return string.Format("{0} reg: {1} symbol: {2}  {3}", _type.ToString(), _regByName.Count, _symbolByName.Count, _defpos );
         }
 
         internal Symbol FindRegister(string name)

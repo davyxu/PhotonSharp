@@ -1,4 +1,5 @@
 ﻿
+using MarkSerializer;
 namespace Photon
 {
     class ValueClassType : Value
@@ -9,7 +10,19 @@ namespace Photon
         public ObjectName Name
         {
             get { return _name; }
-        }        
+        }
+
+        public ValueClassType()
+        {
+
+        }
+
+        public override void Serialize(BinarySerializer ser)
+        {
+            ser.Serialize(ref ID);
+            ser.Serialize(ref _name);
+        }
+
 
         internal ValueClassType( ObjectName name)
         {            

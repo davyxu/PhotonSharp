@@ -13,13 +13,8 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<Scope>(_global);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _global = ser.Deserialize<Scope>();
-        }
+            ser.Serialize(ref _global);
+        }        
 
 
         internal Scope PackageScope

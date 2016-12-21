@@ -36,20 +36,11 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<ScopeType>(_type);
-            ser.Serialize<TokenPos>(_defpos);
-            ser.Serialize<Dictionary<string, Symbol>>(_regByName);
-            ser.Serialize<List<Scope>>(_child);
+            ser.Serialize(ref _type);
+            ser.Serialize(ref _defpos);            
+            ser.Serialize(ref _regByName);
+            ser.Serialize(ref _child);
         }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _type = ser.Deserialize<ScopeType>();
-            _defpos = ser.Deserialize<TokenPos>();
-            _regByName = ser.Deserialize<Dictionary<string, Symbol>>();
-            _child = ser.Deserialize<List<Scope>>();
-        }
-
 
         internal List<Scope> Child
         {

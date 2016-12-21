@@ -20,14 +20,20 @@ namespace UnitTest
 
             //using (FileStream f = new FileStream("ser.bin", FileMode.Create))
             //{
-            //    Executable.Serialize(a, f);                
+            //    Executable.Serialize(f, ref a, false);                
             //    f.Close();
+
+            //    var vm = new VMachine();
+            //    vm.ShowDebugInfo = true;
+
+            //    vm.Execute(a);
             //}
 
 
             //using (FileStream f = new FileStream("ser.bin", FileMode.Open))
             //{
-            //    var newa = Executable.Deserialize(f);
+            //    Executable newa = new Executable();
+            //    Executable.Serialize(f, ref newa, true);
             //    f.Close();
 
             //    var vm = new VMachine();
@@ -37,7 +43,7 @@ namespace UnitTest
             //}
 
 
-            TestBasic();
+            //TestBasic();
 
             TestDataStackBalance();
 

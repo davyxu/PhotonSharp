@@ -10,13 +10,8 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<List<Value>>(_cset);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _cset = ser.Deserialize<List<Value>>();
-        }
+            ser.Serialize(ref _cset);
+        }        
 
 
         internal int Add(Value inc)

@@ -8,13 +8,8 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<string>(_data);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _data = ser.Deserialize<string>();
-        }
+            ser.Serialize(ref _data);
+        }        
 
         public ValueString()
         {

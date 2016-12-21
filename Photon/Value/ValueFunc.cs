@@ -23,16 +23,9 @@ namespace Photon
 
         public virtual void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<int>(ID);
-            ser.Serialize<ObjectName>(_name);
+            ser.Serialize(ref ID);
+            ser.Serialize(ref _name);
         }
-
-        public virtual void Deserialize(BinaryDeserializer ser)
-        {
-            ID = ser.Deserialize<int>();
-            _name = ser.Deserialize<ObjectName>();
-        }
-
 
         public ValueFunc()
         {

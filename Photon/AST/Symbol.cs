@@ -35,19 +35,12 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<string>(Name);
-            ser.Serialize<TokenPos>(DefinePos);
-            ser.Serialize<int>(RegIndex);
-            ser.Serialize<SymbolUsage>(Usage);
+            ser.Serialize(ref Name);
+            ser.Serialize(ref DefinePos);
+            ser.Serialize(ref RegIndex);
+            ser.Serialize(ref Usage);
         }
 
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            Name = ser.Deserialize<string>();
-            DefinePos = ser.Deserialize<TokenPos>();
-            RegIndex = ser.Deserialize<int>();
-            Usage = ser.Deserialize<SymbolUsage>();
-        }
 
         public bool IsGlobal
         {

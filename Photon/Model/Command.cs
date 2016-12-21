@@ -23,20 +23,11 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<Opcode>(Op);
-            ser.Serialize<int[]>(_data);
-            ser.Serialize<bool[]>(_dataUsed);
-            ser.Serialize<string>(_comment);
-            ser.Serialize<ObjectName>(EntryName);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            Op = ser.Deserialize<Opcode>();
-            _data = ser.Deserialize<int[]>();
-            _dataUsed = ser.Deserialize<bool[]>();
-            _comment = ser.Deserialize<string>();
-            EntryName = ser.Deserialize<ObjectName>();
+            ser.Serialize(ref Op);
+            ser.Serialize(ref _data);
+            ser.Serialize(ref _dataUsed);
+            ser.Serialize(ref _comment);
+            ser.Serialize(ref EntryName);
         }
 
 

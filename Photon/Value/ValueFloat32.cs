@@ -9,13 +9,8 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<float>(_data);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _data = ser.Deserialize<float>();
-        }
+            ser.Serialize(ref _data);
+        }        
 
         public ValueFloat32()
         {

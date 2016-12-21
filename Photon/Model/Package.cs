@@ -22,7 +22,7 @@ namespace Photon
         // 第一次pass无法搞定的node
         List<CompileContext> _secondPass = new List<CompileContext>();
         
-        internal ValuePhoFunc InitEntry = ValuePhoFunc.Empty;        
+        internal ValuePhoFunc InitEntry = null;        
 
         internal List<CodeFile> FileList
         {
@@ -74,18 +74,10 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<string>(_name);
-            ser.Serialize<int>(_id);
-            ser.Serialize<ScopeManager>(_scopeManager);
-            ser.Serialize<ValuePhoFunc>(InitEntry);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _name = ser.Deserialize<string>();
-            _id = ser.Deserialize<int>();
-            _scopeManager = ser.Deserialize<ScopeManager>();
-            InitEntry = ser.Deserialize<ValuePhoFunc>();
+            ser.Serialize(ref _name);
+            ser.Serialize(ref _id);
+            ser.Serialize(ref _scopeManager);
+            ser.Serialize(ref InitEntry);
         }
 
         int _closureCount;

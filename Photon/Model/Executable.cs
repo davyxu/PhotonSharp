@@ -82,19 +82,19 @@ namespace Photon
             }
         }
 
-
+        bool needinit = true;
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<ConstantSet>(_constSet);
-            ser.Serialize<Dictionary<ObjectName, ValueFunc>>(_phoFuncByName);
-            ser.Serialize<List<Package>>(_packages);
-        }
+            if (needinit)
+            {
+                TypeSerializerSet.Instance.Register(new TokenPosSerializer());
 
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _constSet = ser.Deserialize<ConstantSet>();
-            _phoFuncByName = ser.Deserialize<Dictionary<ObjectName, ValueFunc>>();
-            _packages = ser.Deserialize<List<Package>>();
+                needinit = false;
+            }
+
+            ser.Serialize(ref _constSet);
+            ser.Serialize(ref _phoFuncByName);
+            ser.Serialize(ref _packages);
         }
 
         public void RegisterBuiltinPackage()
@@ -306,36 +306,11 @@ namespace Photon
             AddClassType(lanClass);
         }
 
-        static bool typeReady;
-
-        static void PrepareBinaryTypes()
-        {
-            if (typeReady)
-            {
-                return;
-            }
-
-            BinaryTypeSet.Register(new TokenPosSerializer());
-
-            typeReady = true;
+        public static void Serialize(Stream stream, ref Executable exe, bool loading )
+        {            
+            var bs = new BinarySerializer(stream, loading);
+            bs.Serialize<Executable>(ref exe);
         }
-
-        public static void Serialize(Executable exe, Stream stream )
-        {
-            PrepareBinaryTypes();
-
-            var bs = new BinarySerializer(stream);
-            bs.Serialize<Executable>(exe);
-        }
-
-        public static Executable Deserialize(Stream stream)
-        {
-            PrepareBinaryTypes();
-
-            var bs = new BinaryDeserializer(stream);
-            return bs.Deserialize<Executable>();
-        }
-
 
         public void DebugPrint()
         {

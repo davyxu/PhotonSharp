@@ -300,6 +300,8 @@ namespace Photon
             _callStack.Clear();
             _dataStack.Clear();
 
+            Constants = exe.Constants;
+
             // 为了防止用户在Executable new之后添加其他的函数
             // 所以链接过程在第一次调用时, 虽然耗时
             _entryList = exe.GenEntryList();            
@@ -352,7 +354,7 @@ namespace Photon
         public void Execute( Executable exe )
         {
             _exe = exe;
-            Constants = exe.Constants;
+            
             InitialCall(exe);
         }
 

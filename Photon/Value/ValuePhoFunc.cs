@@ -13,24 +13,14 @@ namespace Photon
 
         Scope _scope;
 
-        TokenPos _defpos;
-
-        internal static ValuePhoFunc Empty = new ValuePhoFunc();
+        TokenPos _defpos;        
 
         public override void Serialize(BinarySerializer ser)
         {
             base.Serialize(ser);
 
-            ser.Serialize<List<Command>>(_cmds);
-            ser.Serialize<int>(_regCount);
-        }
-
-        public override void Deserialize(BinaryDeserializer ser)
-        {
-            base.Deserialize(ser);
-
-            _cmds = ser.Deserialize<List<Command>>();
-            _regCount = ser.Deserialize<int>();
+            ser.Serialize(ref _cmds);
+            ser.Serialize(ref _regCount);
         }
 
 

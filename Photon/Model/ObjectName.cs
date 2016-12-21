@@ -14,18 +14,10 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<string>(PackageName);
-            ser.Serialize<string>(EntryName);
-            ser.Serialize<string>(ClassName);
+            ser.Serialize(ref PackageName);
+            ser.Serialize(ref EntryName);
+            ser.Serialize(ref ClassName);
         }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            PackageName = ser.Deserialize<string>();
-            EntryName = ser.Deserialize<string>();
-            ClassName = ser.Deserialize<string>();
-        }
-
 
         internal ObjectName(string pkg, string entry)
         {

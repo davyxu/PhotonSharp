@@ -11,7 +11,7 @@ namespace UnitTest
 
         string _caseName;
 
-        public static bool SerializeTest = false;
+        public static bool SerializeTest = true;
 
         public VMachine VM
         {
@@ -44,11 +44,19 @@ namespace UnitTest
         {
             MemoryStream stream = new MemoryStream();
 
-            Executable.Serialize(inExe, stream);            
+            Executable.Serialize(stream, ref inExe, false );            
 
             stream.Position = 0;
 
-            return Executable.Deserialize(stream);
+            Executable newExe = new Executable();
+            if (_registerCallback != null)
+            {
+                _registerCallback(newExe);
+                }
+
+            Executable.Serialize(stream, ref newExe, true);
+
+            return newExe;
         }
 
         public TestBox Run( )
@@ -99,7 +107,7 @@ namespace UnitTest
 
         public delegate void RegisterFuncCallback( Executable exe);
 
-        RegisterFuncCallback _registerCallback;
+        static RegisterFuncCallback _registerCallback;
 
         public TestBox RegisterRunFile(RegisterFuncCallback callback, string filename  )
         {

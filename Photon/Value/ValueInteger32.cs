@@ -9,13 +9,8 @@ namespace Photon
 
         public void Serialize(BinarySerializer ser)
         {
-            ser.Serialize<Int32>(_data);
-        }
-
-        public void Deserialize(BinaryDeserializer ser)
-        {
-            _data = ser.Deserialize<Int32>();
-        }
+            ser.Serialize(ref _data);
+        }        
 
 
         // 序列化用, 不要删除

@@ -7,7 +7,25 @@ namespace Photon
     {
         Dictionary<int, Value> _member = new Dictionary<int, Value>();
 
-        internal ValuePhoClassType Parent { get; set; }
+        internal ValuePhoClassType Parent { get; private set; }
+        internal int ParentID = 0;
+
+        internal override int GetInheritLevel( )
+        {
+            ValuePhoClassType classType = Parent;
+
+            int total = 0;
+
+            while (classType != null)
+            {
+                total++;
+
+                classType = classType.Parent;
+            }
+
+            return total;            
+        }
+
 
         public ValuePhoClassType()
         {
@@ -24,7 +42,15 @@ namespace Photon
         {
             base.Serialize(ser);
 
-            ser.Serialize(ref _member);            
+            ser.Serialize(ref _member);
+            ser.Serialize(ref ParentID);
+                      
+
+        }
+
+        internal override void OnSerializeDone(Executable exe)
+        {
+            Parent = exe.FindClassByPersistantID(ParentID);         
         }
 
         internal void AddMethod( int nameKey, ValueFunc proc )

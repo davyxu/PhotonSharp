@@ -12,6 +12,10 @@ namespace Photon
             get { return _name; }
         }
 
+        internal virtual int GetInheritLevel() { return 0; }
+
+        internal virtual void OnSerializeDone(Executable exe) { }
+
         public ValueClassType()
         {
 

@@ -1,5 +1,5 @@
-﻿
-using MarkSerializer;
+﻿using MarkSerializer;
+
 namespace Photon
 {
     public enum ValueKind

@@ -57,6 +57,9 @@ namespace UnitTest
                 _registerCallback(newExe);
             }
 
+            // 反序列化注册顺序和序列化顺序相反
+            newExe.RegisterBuiltinPackage();
+
             newExe.DebugPrint();        
 
             return newExe;

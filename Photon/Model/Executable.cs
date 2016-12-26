@@ -29,13 +29,21 @@ namespace Photon
         // native类索引
         Dictionary<Type, ValueClassType> _classTypeByNativeType = new Dictionary<Type, ValueClassType>();
 
+        // 类持久化id生成器
+        internal int persistantIDGen = 0;
 
+        internal int GenPersistantID()
+        {
+            persistantIDGen++;
+            return persistantIDGen;
+        }
 
         bool needinit = true;
         public void Serialize(BinarySerializer ser)
         {
             if (needinit)
             {
+                // 外部类型注册
                 TypeSerializerSet.Instance.Register(new TokenPosSerializer());
 
                 needinit = false;
@@ -45,6 +53,15 @@ namespace Photon
             ser.Serialize(ref _phoFuncByName);
             ser.Serialize(ref _classByName);
             ser.Serialize(ref _packages);
+
+            // 序列化完成时, 还有一些延迟处理的, 例如id转指针
+            if (ser.IsLoading)
+            {
+                foreach (var kv in _classByName)
+                {
+                    kv.Value.OnSerializeDone(this);
+                }
+            }
         }
 
         public void RegisterBuiltinPackage()
@@ -75,11 +92,11 @@ namespace Photon
             }
 
             // 添加所有的类
-            foreach (var kv in _classByName)
+            foreach (var kv in SortClassInheritLevel())
             {
-                int linkid = arr.Count;
-                kv.Value.ID = linkid;
-                arr.Add(kv.Value);
+                int linkid = arr.Count;                
+                kv.ID = linkid;
+                arr.Add(kv);
             }
 
             // 添加所有的类
@@ -92,6 +109,24 @@ namespace Photon
 
 
             return arr;
+        }
+
+        // 按照依赖层次排序, 从被依赖最多的开始
+        List<ValueClassType> SortClassInheritLevel()
+        {
+            var classArr = new List<ValueClassType>();
+
+            foreach (var kv in _classByName)
+            {
+                classArr.Add(kv.Value);
+            }
+
+            classArr.Sort(delegate(ValueClassType a, ValueClassType b)
+            {
+                return a.GetInheritLevel().CompareTo(b.GetInheritLevel());
+            });
+
+            return classArr;
         }
 
 
@@ -161,7 +196,7 @@ namespace Photon
         }
 
         internal ValueClassType AddClassType(ValueClassType c)
-        {
+        {            
             var nativeClass = c as ValueNativeClassType;
             if (nativeClass != null)
             {
@@ -174,6 +209,17 @@ namespace Photon
             }
 
             return c;
+        }
+
+        internal ValuePhoClassType FindClassByPersistantID(int id)
+        {
+            foreach (var kv in _classByName)
+            {
+                if (kv.Value.ID == id)
+                    return kv.Value as ValuePhoClassType;
+            }
+
+            return null;
         }
 
 

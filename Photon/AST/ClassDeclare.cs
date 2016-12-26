@@ -47,9 +47,11 @@ namespace Photon
 
         bool ResolveParent(CompileParameter param, int pass )
         {            
-            _class.Parent = param.Exe.GetClassTypeByName( new ObjectName(param.Pkg.Name, ParentName.Name)) as ValuePhoClassType;
-            if (_class.Parent != null)
+            var parent = param.Exe.GetClassTypeByName( new ObjectName(param.Pkg.Name, ParentName.Name)) as ValuePhoClassType;
+            if (parent != null)
             {
+                _class.ParentID = parent.ID;
+
                 return true;
             }
 
@@ -65,10 +67,13 @@ namespace Photon
         {
             ResolveParent(param, 2);
         }
+        
 
         internal override void Compile(CompileParameter param)
         {
             _class = new ValuePhoClassType( new ObjectName(param.Pkg.Name, Name.Name));
+            
+            _class.ID = param.Exe.GenPersistantID();
 
             foreach( var m in Member )
             {

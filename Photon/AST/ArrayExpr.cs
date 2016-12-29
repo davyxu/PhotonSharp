@@ -6,12 +6,12 @@ namespace Photon
 
     internal class ArrayExpr : Expr
     {
-        List<BasicLit> Values = new List<BasicLit>();
+        List<Expr> Values = new List<Expr>();
 
         public TokenPos LBracketPos;
         public TokenPos RBracketPos;
 
-        public ArrayExpr(List<BasicLit> values, TokenPos lbracket, TokenPos rbracket)
+        public ArrayExpr(List<Expr> values, TokenPos lbracket, TokenPos rbracket)
         {
             Values = values;
             LBracketPos = lbracket;

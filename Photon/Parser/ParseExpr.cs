@@ -119,12 +119,12 @@ namespace Photon
                     {
                         Next();
 
-                        List<BasicLit> values = new List<BasicLit>();
+                        List<Expr> values = new List<Expr>();
 
                         while (CurrTokenType != TokenType.RBracket &&
                                 CurrTokenType != TokenType.EOF)
                         {
-                            values.Add(ParseBasicLit());
+                            values.Add(ParseOperand(false));
 
 
                             if (CurrTokenType == TokenType.RBracket ||

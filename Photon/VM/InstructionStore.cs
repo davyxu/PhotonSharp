@@ -425,8 +425,8 @@ namespace Photon
     {
         public override bool Execute(VMachine vm, Command cmd)
         {
-            var ins = Convertor.CastClassType(vm.GetEntry(cmd.DataA)).CreateInstance();            
-                              
+            var ins = Convertor.CastClassType(vm.GetEntry(cmd.DataA)).CreateInstance();
+
             vm.DataStack.Push(ins);
 
             return true;
@@ -440,6 +440,19 @@ namespace Photon
 
 
 
+    [Instruction(Cmd = Opcode.VISIT)]
+    class CmdVisit : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {            
 
+            return true;
+        }
+
+        public override string Print(Command cmd)
+        {
+            return string.Format("ClassNameKey : {0}", cmd.DataA);
+        }
+    }
 
 }

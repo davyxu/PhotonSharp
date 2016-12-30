@@ -50,6 +50,7 @@ namespace Photon
         NEW,    // C[I] -> ClassInstance
         SETA,   // Array = S[I], S[I+1]..
         SETD,   // Map = S[I], S[I+1]..
+        VISIT,  // k, v, iter = VISIT( x, iter )
 
         // 流程控制        
         CALL,  // S[I](S[I+1], ... ) 栈交换

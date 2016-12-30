@@ -1,8 +1,5 @@
-var x = {
-1: func( ){
-	return "hello"
-}
+var a = [ 1, 2, 3]
 
+foreach k, v in a{
+	
 }
-
-var c=  x[1]

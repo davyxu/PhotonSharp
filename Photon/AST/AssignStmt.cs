@@ -70,10 +70,6 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            //if ( LHS.Count != RHS.Count )
-            //{
-            //    throw new CompileException(string.Format("assignment count mismatch {0} = {1}", LHS.Count, RHS.Count ),AssignPos);
-            //}
 
             switch (Op)
             {
@@ -107,10 +103,6 @@ namespace Photon
                     }
                     break;
             }
-
-
-
-
 
             foreach (var e in LHS)
             {                

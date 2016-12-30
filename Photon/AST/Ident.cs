@@ -45,10 +45,12 @@ namespace Photon
 
         public override string ToString()
         {
+            var sb = new StringBuilder();
+
+            sb.Append("Ident ");
+
             if (Symbol != null)
             {
-                var sb = new StringBuilder();
-
                 if (Symbol.RegIndex != -1 )
                 {
                     sb.Append(Symbol);

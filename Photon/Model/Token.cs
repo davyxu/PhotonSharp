@@ -51,6 +51,7 @@ namespace Photon
         Else,           // else
         For,            // for
         Foreach,        // foreach
+        In,             // in
         While,          // while
         Break,          // break
         Continue,       // continue

@@ -91,6 +91,8 @@ namespace Photon
                     return ParseWhileStmt();
                 case TokenType.For:
                     return ParseForStmt();
+                case TokenType.Foreach:
+                    return ParseForeachStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
                 case TokenType.Const:
@@ -140,6 +142,36 @@ namespace Photon
             var expr = ParseRHS();
 
             return new AssignStmt(ident, expr, assignPos, TokenType.Assign);
+        }
+
+        // for k, v in x {}
+        ForeachStmt ParseForeachStmt()
+        {
+            var forPos = CurrTokenPos;
+            Expect(TokenType.Foreach);
+
+            var forscope = ScopeMgr.OpenScope(ScopeType.For, forPos);
+
+            var key = ParseIdent();
+
+            ScopeManager.Declare(key, forscope, key.Name, key.DefinePos, SymbolUsage.Variable);
+
+            Expect(TokenType.Comma);
+
+            var value = ParseIdent();
+
+            ScopeManager.Declare(value, forscope, value.Name, value.DefinePos, SymbolUsage.Variable);
+
+            var InPos = CurrTokenPos;
+            Expect(TokenType.In);
+
+            var x = ParseRHS();
+
+            var body = ParseBlockStmt();
+
+            ScopeMgr.CloseScope();
+
+            return new ForeachStmt(key, value, x, body, forPos, InPos, forscope);
         }
 
         ForStmt ParseForStmt()

@@ -82,26 +82,26 @@ namespace Photon
                 throw new CompileException(string.Format("{0} redeclared, pre define: {1}", name, pre.DefinePos), pos);
             }
 
-            Symbol data = new Symbol();
-            data.Name = name;
-            data.Decl = declareNode;
-            data.DefinePos = pos;
-            data.Usage = usage;
+            Symbol sb = new Symbol();
+            sb.Name = name;
+            sb.Decl = declareNode;
+            sb.DefinePos = pos;
+            sb.Usage = usage;
             
 
-            s.Insert(data );
+            s.Insert(sb );
 
             if ( declareNode != null )
             {
                 var ident = declareNode as Ident;
 
                 if (ident == null)
-                    return data;
+                    return sb;
 
-                ident.Symbol = data;
+                ident.Symbol = sb;
             }
 
-            return data;
+            return sb;
         }
 
         internal void Resolve(Node x, Scope beginScope = null)

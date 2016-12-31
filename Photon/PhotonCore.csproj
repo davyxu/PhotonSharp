@@ -117,7 +117,7 @@
     <Compile Include="Value\ValueFunc.cs" />
     <Compile Include="Value\ValueNil.cs" />
     <Compile Include="Value\ValueClassType.cs" />
-    <Compile Include="Value\ValueIterator.cs" />
+    <Compile Include="Value\ValueArrayIterator.cs" />
     <Compile Include="Value\ValueString.cs" />
     <Compile Include="Value\ValueObject.cs" />
     <Compile Include="Value\ValueFloat32.cs" />
@@ -135,10 +135,10 @@
     <Compile Include="VM\InstructionFlow.cs" />
     <Compile Include="VM\InstructionMath.cs" />
     <Compile Include="VM\InstructionStore.cs" />
-    <Compile Include="VM\DataStack.cs" />
+    <Compile Include="Model\DataStack.cs" />
     <Compile Include="Value\Value.cs" />
     <Compile Include="VM\RuntimeFrame.cs" />
-    <Compile Include="VM\Register.cs" />
+    <Compile Include="Model\Register.cs" />
     <Compile Include="VM\RuntimePackage.cs" />
     <Compile Include="VM\VMachine.cs" />
   </ItemGroup>

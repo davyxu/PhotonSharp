@@ -67,6 +67,7 @@ namespace Photon
             iter.Symbol.Decl = this;
             iter.Symbol.DefinePos = ForPos;
             iter.Symbol.Usage = SymbolUsage.Variable;
+            ScopeInfo.Insert(iter.Symbol);
 
             return iter;
         }
@@ -75,7 +76,30 @@ namespace Photon
         // 
         internal override void Compile(CompileParameter param)
         {
-           
+            var iterVar = DelcareIteratorVar();
+
+            var loopStart = param.CS.CurrCmdID;
+
+            X.Compile(param);
+
+            iterVar.Compile(param);
+
+            var jmpCmd = param.CS.Add(new Command(Opcode.VISIT, -1 )).SetCodePos(ForPos);
+
+            Key.Compile(param.SetLHS(true));
+
+            Value.Compile(param.SetLHS(true));
+
+            iterVar.Compile(param.SetLHS(true));
+
+            Body.Compile(param.SetLHS(false));
+
+
+            param.CS.Add(new Command(Opcode.JMP, loopStart))
+                .SetCodePos(ForPos);
+
+            // 循环结束
+            jmpCmd.DataA = param.CS.CurrCmdID;
         }
 
     }

@@ -444,7 +444,36 @@ namespace Photon
     class CmdVisit : Instruction
     {
         public override bool Execute(VMachine vm, Command cmd)
-        {            
+        {
+            var iterObj = vm.DataStack.Pop();
+            var x = vm.DataStack.Pop();
+
+            var arr = Convertor.CastObject(x).Raw as Array;
+            if ( arr != null )
+            {
+                ValueArrayIterator iter;
+                
+                if ( iterObj.Equals(Value.Nil))
+                {
+                    iter = new ValueArrayIterator(arr);
+                }
+                else
+                {
+                    iter = iterObj as ValueArrayIterator;
+                    if ( iter == null )
+                    {
+                        throw new RuntimeException("Require array iterator");
+                    }
+
+                    iter.Next();
+                }
+
+                if ( !iter.Iterate(vm.DataStack) )
+                {
+                    vm.CurrFrame.PC = cmd.DataA;
+                    return false;
+                }
+            }
 
             return true;
         }

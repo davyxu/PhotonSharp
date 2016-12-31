@@ -58,7 +58,7 @@ namespace Photon
 
             Condition.Compile(param.SetLHS(false));
 
-            var jzCmd = param.CS.Add(new Command(Opcode.JZ, 0))
+            var jzCmd = param.CS.Add(new Command(Opcode.JZ, -1 ))
                 .SetCodePos(ForPos);
 
             Body.Compile(param.SetLHS(false));

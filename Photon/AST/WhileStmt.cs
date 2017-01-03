@@ -4,19 +4,16 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    internal class WhileStmt : Stmt
+    internal class WhileStmt : LoopStmt
     {
-        public Expr Condition;
+        public Expr Condition;   
 
-        public BlockStmt Body;
-
-        public TokenPos WhilePos;        
-
-        public WhileStmt(Expr con, BlockStmt body, TokenPos whilepos)
+        public WhileStmt(Expr con, TokenPos defpos, Scope s, BlockStmt body)
         {
             Condition = con;
+            Pos = defpos;
+            ScopeInfo = s;
             Body = body;
-            WhilePos = whilepos;
 
             BuildRelation();
         }
@@ -35,21 +32,24 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            var loopStart = param.CS.CurrCmdID;
+            LoopBeginCmdID = param.CS.CurrCmdID;
             
             Condition.Compile(param.SetLHS(false));
 
             var jzCmd = param.CS.Add(new Command(Opcode.JZ, 0))
-                .SetCodePos(WhilePos);
+                .SetCodePos(Pos)
+                .SetComment("while condition");
 
             param.LHS = false;
             Body.Compile(param.SetLHS(false));
 
-            param.CS.Add(new Command(Opcode.JMP, loopStart))
-                .SetCodePos(WhilePos);
+            param.CS.Add(new Command(Opcode.JMP, LoopBeginCmdID))
+                .SetCodePos(Pos)
+                .SetComment("while loop");                
 
             // false body跳入
-            jzCmd.DataA = param.CS.CurrCmdID;
+            LoopEndCmdID = param.CS.CurrCmdID;
+            jzCmd.DataA = LoopEndCmdID;
         }
 
     }

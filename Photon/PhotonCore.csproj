@@ -39,7 +39,7 @@
     <Compile Include="AST\BreakStmt.cs" />
     <Compile Include="AST\ForRangeStmt.cs" />
     <Compile Include="AST\IncDecStmt.cs" />
-    <Compile Include="AST\LoopTypes.cs" />
+    <Compile Include="AST\LoopStmt.cs" />
     <Compile Include="AST\MapExpr.cs" />
     <Compile Include="AST\BaseLit.cs" />
     <Compile Include="AST\ArrayExpr.cs" />

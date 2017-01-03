@@ -188,7 +188,7 @@ namespace Photon
                                 throw new CompileException("Expect key & value in for-range", CurrTokenPos);
                             }
 
-                            return new ForRangeStmt(idents[0], idents[1], x, opPos, new LoopTypes(defPos, forscope, body) );
+                            return new ForRangeStmt(idents[0], idents[1], x, opPos, defPos, forscope, body );
                         }
                     default:
                         throw new CompileException("Expect '=' or 'in' in for statement", CurrTokenPos);                        
@@ -223,7 +223,7 @@ namespace Photon
                 condition = (s2 as ExprStmt).X[0];
             }
 
-            return new ForStmt(s1, condition, s3, new LoopTypes(defPos, forscope, body2));
+            return new ForStmt(s1, condition, s3, defPos, forscope, body2);
         }
 
         BreakStmt ParseBreakStmt()
@@ -251,7 +251,7 @@ namespace Photon
 
             var body = ParseBlockStmt();
 
-            return new WhileStmt(condition, body, defpos);
+            return new WhileStmt(condition, defpos, null, body);
         }
 
         List<ImportStmt> ParseImportStmt( )

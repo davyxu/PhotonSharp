@@ -4,7 +4,6 @@ for ;n<2; {
 }
 
 
-
 var m = 0
 for ;;m=m+1 {
 	if m > 2{
@@ -13,15 +12,10 @@ for ;;m=m+1 {
 }
 
 
-
-
 var y = 0
 for ;y < 2;y=y+1 {
     
 }
-
-
-
 
 
 var x = 10

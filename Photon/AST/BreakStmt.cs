@@ -16,35 +16,21 @@ namespace Photon
             return string.Format("BreakStmt {0}", Pos);
         }
 
-        static ForStmt FindForStmt(Node start)
-        {
-            Node n = start;
-            while( n != null )
-            {
-                if (n is ForStmt)
-                    return n as ForStmt;
-
-                n = n.Parent;
-            }
-
-            return null;
-        }
-
-        ForStmt nearestForStmt;
+        LoopStmt nearestLoopStmt;
 
         Command cmd;
 
         internal override void Resolve(CompileParameter param)
         {
-            cmd.DataA = nearestForStmt.TypeInfo.EndCmdID;
+            cmd.DataA = nearestLoopStmt.LoopEndCmdID;
         }
 
         internal override void Compile(CompileParameter param)
         {
-            nearestForStmt = FindForStmt(this);
-            if ( nearestForStmt == null )
+            nearestLoopStmt = LoopStmt.FindLoop(this);
+            if ( nearestLoopStmt == null )
             {
-                throw new CompileException("'break' should in for statement", Pos);
+                throw new CompileException("'break' should in loop statement", Pos);
             }
 
             param.NextPassToResolve(this);

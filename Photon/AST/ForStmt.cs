@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Photon
 {
-    internal class ForStmt : Stmt
+    internal class ForStmt : LoopStmt
     {
         public Stmt Init;
 
@@ -12,14 +12,14 @@ namespace Photon
 
         public Stmt Post;
 
-        public LoopTypes TypeInfo;
-
-        public ForStmt(Stmt init, Expr con, Stmt post, LoopTypes types)
+        public ForStmt(Stmt init, Expr con, Stmt post, TokenPos defpos, Scope s, BlockStmt body)
         {
             Condition = con;            
             Init = init;
             Post = post;
-            TypeInfo = types;
+            Pos = defpos;
+            ScopeInfo = s;
+            Body = body;
 
             BuildRelation();
         }
@@ -47,7 +47,7 @@ namespace Photon
                 yield return Post;
             }
 
-            yield return TypeInfo.Body;
+            yield return Body;
         }        
 
         internal override void Compile(CompileParameter param)
@@ -57,7 +57,7 @@ namespace Photon
                 Init.Compile(param.SetLHS(false));
             }
 
-            var loopStart = param.CS.CurrCmdID;
+            LoopBeginCmdID = param.CS.CurrCmdID;
 
             Command jzCmd = null;
 
@@ -66,13 +66,11 @@ namespace Photon
                 Condition.Compile(param.SetLHS(false));
 
                 jzCmd = param.CS.Add(new Command(Opcode.JZ, -1))
-                .SetCodePos(TypeInfo.Pos)
+                .SetCodePos(Pos)
                 .SetComment("for condition");
             }
 
-
-
-            TypeInfo.Body.Compile(param.SetLHS(false));
+            Body.Compile(param.SetLHS(false));
 
             if (Post != null)
             {
@@ -80,8 +78,8 @@ namespace Photon
             }
 
 
-            param.CS.Add(new Command(Opcode.JMP, loopStart))
-                .SetCodePos(TypeInfo.Pos)
+            param.CS.Add(new Command(Opcode.JMP, LoopBeginCmdID))
+                .SetCodePos(Pos)
                 .SetComment("for loop");
 
             // false body跳入
@@ -90,7 +88,7 @@ namespace Photon
                 jzCmd.DataA = param.CS.CurrCmdID;
             }
 
-            TypeInfo.EndCmdID = param.CS.CurrCmdID;
+            LoopEndCmdID = param.CS.CurrCmdID;
         }
 
     }

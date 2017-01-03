@@ -2,3 +2,17 @@ var x = 10
 for i = 1;i < 3;i=i+1 {
     x = x - 1
 }
+
+
+var a = [ 1, 2]
+
+var b = []
+
+foreach k, v in a
+{
+	b.Add( v )
+}
+
+var l = len(b)
+var z = b[0]
+var zz = b[1]

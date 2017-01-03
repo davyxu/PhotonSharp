@@ -234,16 +234,18 @@ namespace Photon
         // 找到能分配寄存器的scope
         static Scope FoundRegAllocableScope( Scope s )
         {
-            Scope regBound = s;
-            while (regBound.Type != ScopeType.Package &&
-                 regBound.Type != ScopeType.Function &&
-                 regBound.Type != ScopeType.Closure)
-            {
+            return s;
 
-                regBound = regBound.Outter;
-            }
+            //Scope regBound = s;
+            //while (regBound.Type != ScopeType.Package &&
+            //     regBound.Type != ScopeType.Function &&
+            //     regBound.Type != ScopeType.Closure)
+            //{
 
-            return regBound;
+            //    regBound = regBound.Outter;
+            //}
+
+            //return regBound;
         }
 
         internal void Insert(Symbol symbol)

@@ -1,9 +1,5 @@
 # 重要, 紧急实现
 
-for 变量改local
-
-map for range
-
 测试流程, native类型的处理
 
 调试版不输出scope

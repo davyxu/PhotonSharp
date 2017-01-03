@@ -38,7 +38,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            Index.Compile(param);
+            Index.Compile(param.SetLHS(false));
 
             X.Compile(param.SetLHS(false));
 

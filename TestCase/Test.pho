@@ -1,0 +1,16 @@
+var dict = {
+	1 : 12345,
+	"hello": 100,
+}
+
+
+var dict2 = {}
+
+for k, v in dict
+{
+	dict2[k] = v
+}
+
+var ldict = len(dict2)
+var dictm1 = dict2[1]
+var dictm2 = dict2["hello"]

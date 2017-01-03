@@ -44,6 +44,7 @@ namespace Photon
         SETU,   // U[I] = * S[I+1]
         SETM,   // Class[C].Member[I] = S[I+1]
         SETI,   // S[Top] = S[I][ S[I+1] ]  key为非字符串
+        INITR,  // 寄存器=nil
         SEL,    // S[Top] = S[I][ P1 ] 显式字符串key调用
         LINKU,  // 让Upvalue与寄存器建立引用
         CLOSURE, //  创建闭包

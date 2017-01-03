@@ -137,6 +137,23 @@ namespace Photon
         }
     }
 
+    [Instruction(Cmd = Opcode.INITR)]
+    class CmdInitR : Instruction
+    {
+        public override bool Execute(VMachine vm, Command cmd)
+        {
+            vm.LocalReg.Set(cmd.DataA, Value.Nil);
+
+            return true;
+        }
+        public override string Print(Command cmd)
+        {
+            int regIndex = cmd.DataA;
+
+            return string.Format("Reg: {0}", regIndex);
+        }
+
+    }
 
     [Instruction(Cmd = Opcode.SETR)]
     class CmdSetR : Instruction
@@ -448,34 +465,14 @@ namespace Photon
             var iterObj = vm.DataStack.Pop();
             var x = vm.DataStack.Pop();
 
-            var arr = Convertor.CastObject(x).Raw as Array;
-            if ( arr != null )
+            if (x.Visit( iterObj, vm.DataStack ))
             {
-                ValueArrayIterator iter;
-                
-                if ( iterObj.Equals(Value.Nil))
-                {
-                    iter = new ValueArrayIterator(arr);
-                }
-                else
-                {
-                    iter = iterObj as ValueArrayIterator;
-                    if ( iter == null )
-                    {
-                        throw new RuntimeException("Require array iterator");
-                    }
-
-                    iter.Next();
-                }
-
-                if ( !iter.Iterate(vm.DataStack) )
-                {
-                    vm.CurrFrame.PC = cmd.DataA;
-                    return false;
-                }
+                return true;
             }
+           
+            vm.CurrFrame.PC = cmd.DataA;            
 
-            return true;
+            return false;
         }
 
         public override string Print(Command cmd)

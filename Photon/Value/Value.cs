@@ -13,6 +13,7 @@ namespace Photon
         String,
         Func,
         ArrayIterator,
+        MapIterator,
         ClassType,
         ClassInstance,
         NativeClassType,
@@ -26,6 +27,8 @@ namespace Photon
         Value GetKeyValue(Value k);
 
         int GetCount();
+
+        ValueIterator GetIterator( );
     }
 
     class Value : IMarkSerializable
@@ -40,6 +43,10 @@ namespace Photon
         public virtual void Serialize(BinarySerializer ser)
         {
             
+        }
+        public virtual bool Visit(Value iter, DataStack ds)
+        {
+            return false;
         }
 
         public virtual string DebugString( )

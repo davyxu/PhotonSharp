@@ -43,6 +43,36 @@ namespace Photon
             return con.GetKeyValue(k);
         }
 
+        public override bool Visit(Value iter, DataStack ds)
+        {
+            var con = Raw as IContainer;
+            if (con == null)
+            {
+                throw new RuntimeException("Expect 'IContainer'");
+            }
+
+            ValueIterator iterObj = null;
+            if (iter.Equals(Value.Nil))
+            {
+                iterObj = con.GetIterator();
+            }
+            else
+            {
+                iterObj = iter as ValueIterator;
+
+                if ( iterObj == null )
+                {
+                    throw new RuntimeException("Expect 'Iterator");
+                }
+
+                iterObj.Next();
+            }
+
+            return iterObj.Iterate(ds);
+        }
+
+
+
 
     }
 

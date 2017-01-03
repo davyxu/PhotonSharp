@@ -70,7 +70,12 @@ namespace Photon
         // 
         internal override void Compile(CompileParameter param)
         {
-            var iterVar = DelcareIteratorVar();
+            var iterVar = DelcareIteratorVar();            
+
+            param.CS.Add(new Command(Opcode.INITR, iterVar.Symbol.RegIndex))
+                .SetCodePos(Pos)
+                .SetComment("init iterator");
+
 
             LoopBeginCmdID = param.CS.CurrCmdID;
 
@@ -78,7 +83,9 @@ namespace Photon
 
             iterVar.Compile(param);
 
-            var jmpCmd = param.CS.Add(new Command(Opcode.VISIT, -1 )).SetCodePos(Pos);
+            var jmpCmd = param.CS.Add(new Command(Opcode.VISIT, -1 ))
+                .SetCodePos(Pos)
+                .SetComment("for kv");
 
             Key.Compile(param.SetLHS(true));
 
@@ -90,7 +97,8 @@ namespace Photon
 
 
             param.CS.Add(new Command(Opcode.JMP, LoopBeginCmdID))
-                .SetCodePos(Pos);
+                .SetCodePos(Pos)
+                .SetComment("for kv loop");
 
             // 循环结束
             LoopEndCmdID = param.CS.CurrCmdID;

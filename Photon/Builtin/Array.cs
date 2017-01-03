@@ -108,6 +108,12 @@ namespace Photon
             return _data.Count;
         }
 
+        [NoGenWrapper]
+        public ValueIterator GetIterator( )
+        {
+            return new ValueArrayIterator(this);
+        }
+
         internal static void Register( Executable exe )
         {
             exe.RegisterNativeClass(Assembly.GetExecutingAssembly(), "Photon.ArrayWrapper", "Builtin");

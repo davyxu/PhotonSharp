@@ -1,39 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using MarkSerializer;
+using System.Collections.Generic;
 
 namespace Photon
 {
-    class ValueArrayIterator : ValueIterator
+    class ValueMapIterator : ValueIterator
     {
-        IEnumerator<Value> _data;
-        int _index;
+        IEnumerator<KeyValuePair<Value, Value>> _data;
+        static KeyValuePair<Value, Value> nullKV = new KeyValuePair<Value, Value>();
 
-        public ValueArrayIterator( Array arr )
+        public ValueMapIterator(Map arr)
         {
             _data = arr.Raw.GetEnumerator();
-            _index = 0;
             _data.MoveNext();
         }
 
         internal override void Next()
         {
             _data.MoveNext();
-            _index++;
         }
 
         // k, v, iter = ITER( x, iter )
         internal override bool Iterate(DataStack ds)
         {
-            if (_data.Current == null)
+            if (_data.Current.Equals(nullKV))
                 return false;
 
-            ds.Push(this); 
-            ds.Push(_data.Current);
-            ds.Push(new ValueInteger32(_index));
+            ds.Push(this);
+            var kv = _data.Current;
+            ds.Push(kv.Value);
+            ds.Push(kv.Key);            
 
             return true;
         }
 
-        public IEnumerator<Value> RawValue
+        public IEnumerator<KeyValuePair<Value, Value>> RawValue
         {
             get { return _data; }
         }
@@ -45,7 +45,7 @@ namespace Photon
 
         public override bool Equals(object other)
         {
-            var otherT = other as ValueArrayIterator;
+            var otherT = other as ValueMapIterator;
             if (otherT == null)
                 return false;
 
@@ -59,12 +59,12 @@ namespace Photon
 
         public override string DebugString()
         {
-            return string.Format("'{0}' (arr iterator)", _data.Current);
+            return string.Format("'{0}' (map iterator)", _data.Current);
         }
 
         public override ValueKind Kind
         {
-            get { return ValueKind.ArrayIterator; }
+            get { return ValueKind.MapIterator; }
         }
     }
 

@@ -3,7 +3,7 @@ namespace Photon
 {
     public partial class RuntimePackage
     {
-        public Register Reg = new Register("G", 10);        
+        public Register Reg = new Register("G", 32);        
 
         Package _pkg;
 

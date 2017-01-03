@@ -1,38 +1,57 @@
-var n = 0
-for ;n<2; {
-	n++
+var m = 0
+for ;m<2; {
+	m++
 }
 
 
-var m = 0
-for ;;m=m+1 {
-	if m > 2{
+var n = 0
+for ;;n=n+1 {
+	if n > 2{
 		break
 	}		
 }
 
 
-var y = 0
-for ;y < 2;y=y+1 {
+var p = 0
+for ;p < 2;p=p+1 {
     
 }
 
 
-var x = 10
+var q = 10
 for i = 1;i < 3;i=i+1 {
-    x = x - 1
+    q = q - 1
 }
 
 
-var a = [ 1, 2]
+var arr = [ 1, 2]
 
-var b = []
+var arr2 = []
 
-for k, v in a
+for k, v in arr
 {
-	b.Add( v )
+	arr2.Add( v )
 }
 
-var l = len(b)
-var z = b[0]
-var zz = b[1]
+var larr = len(arr2)
+var arrm1 = arr2[0]
+var arrm2 = arr2[1]
+
+
+
+var dict = {
+	1 : 12345,
+	"hello": 100,
+}
+
+
+var dict2 = {}
+
+for k, v in dict
+{
+	dict2[k] = v
+}
+
+var ldict = len(dict2)
+var dictm1 = dict2[1]
+var dictm2 = dict2["hello"]

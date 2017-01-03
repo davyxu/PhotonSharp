@@ -43,6 +43,11 @@ namespace Photon
             return _data.Count;
         }
 
+        [NoGenWrapper]
+        public ValueIterator GetIterator()
+        {
+            return new ValueMapIterator(this);            
+        }
 
         public bool ContainsKey(Value k)
         {

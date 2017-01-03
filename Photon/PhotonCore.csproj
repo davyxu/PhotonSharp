@@ -99,6 +99,8 @@
     <Compile Include="CodeGen\Model.cs" />
     <Compile Include="CodeGen\Collector.cs" />
     <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Value\ValueMapIterator.cs" />
+    <Compile Include="Value\ValueIterator.cs" />
     <Compile Include="Value\ValueBool.cs" />
     <Compile Include="Value\ValueFloat64.cs" />
     <Compile Include="Value\ValueInteger64.cs" />
@@ -154,9 +156,6 @@
       <Project>{5138a406-5b76-4d5e-b889-257224e1fb2f}</Project>
       <Name>SharpLexer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,7 +16,7 @@ namespace Photon
 
         internal ValueClosure Closure;
 
-        internal Register Reg = new Register("R", 10);
+        internal Register Reg = new Register("R", 32);
 
         public int FuncID
         {

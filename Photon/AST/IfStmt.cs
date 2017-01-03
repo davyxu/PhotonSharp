@@ -44,12 +44,14 @@ namespace Photon
             Condition.Compile(param.SetLHS(false));
 
             var jnzCmd = param.CS.Add(new Command(Opcode.JZ, 0))
-                .SetCodePos(IfPos);
+                .SetCodePos(IfPos)
+                .SetComment("if condition false");
 
             Body.Compile(param.SetLHS(false));
 
             var jmpCmd = param.CS.Add(new Command(Opcode.JMP, 0))
-                .SetCodePos(IfPos);
+                .SetCodePos(IfPos)
+                .SetComment("if condition true");
 
             // false body跳入
             jnzCmd.DataA = param.CS.CurrCmdID;

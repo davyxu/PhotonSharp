@@ -12,17 +12,14 @@ namespace Photon
 
         public Stmt Post;
 
-        public BlockStmt Body;
+        public LoopTypes TypeInfo;
 
-        public TokenPos ForPos;
-
-        public ForStmt(Stmt init, Expr con, Stmt post, BlockStmt body, TokenPos forpos)
+        public ForStmt(Stmt init, Expr con, Stmt post, LoopTypes types)
         {
-            Condition = con;
-            Body = body;
+            Condition = con;            
             Init = init;
             Post = post;
-            ForPos = forpos;
+            TypeInfo = types;
 
             BuildRelation();
         }
@@ -40,36 +37,60 @@ namespace Photon
                 yield return Init;
             }
 
-            yield return Condition;
+            if (Condition != null)
+            {
+                yield return Condition;
+            }
 
             if (Post != null)
             {
                 yield return Post;
             }
 
-            yield return Body;
-        }
+            yield return TypeInfo.Body;
+        }        
 
         internal override void Compile(CompileParameter param)
         {
-            Init.Compile(param.SetLHS(false));
+            if (Init != null)
+            {
+                Init.Compile(param.SetLHS(false));
+            }
 
             var loopStart = param.CS.CurrCmdID;
 
-            Condition.Compile(param.SetLHS(false));
+            Command jzCmd = null;
 
-            var jzCmd = param.CS.Add(new Command(Opcode.JZ, -1 ))
-                .SetCodePos(ForPos);
+            if (Condition != null)
+            {
+                Condition.Compile(param.SetLHS(false));
 
-            Body.Compile(param.SetLHS(false));
+                jzCmd = param.CS.Add(new Command(Opcode.JZ, -1))
+                .SetCodePos(TypeInfo.Pos)
+                .SetComment("for condition");
+            }
 
-            Post.Compile(param.SetLHS(false));
+
+
+            TypeInfo.Body.Compile(param.SetLHS(false));
+
+            if (Post != null)
+            {
+                Post.Compile(param.SetLHS(false));
+            }
+
 
             param.CS.Add(new Command(Opcode.JMP, loopStart))
-                .SetCodePos(ForPos);
+                .SetCodePos(TypeInfo.Pos)
+                .SetComment("for loop");
 
             // false body跳入
-            jzCmd.DataA = param.CS.CurrCmdID;
+            if (jzCmd != null)
+            {
+                jzCmd.DataA = param.CS.CurrCmdID;
+            }
+
+            TypeInfo.EndCmdID = param.CS.CurrCmdID;
         }
 
     }

@@ -53,8 +53,7 @@ namespace Photon
             lex.AddMatcher(new KeywordMatcher(TokenType.Const, "const"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Return, "return"));
             lex.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
-            lex.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));
-            lex.AddMatcher(new KeywordMatcher(TokenType.Foreach, "foreach"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));            
             lex.AddMatcher(new KeywordMatcher(TokenType.For, "for"));
             lex.AddMatcher(new KeywordMatcher(TokenType.In, "in"));
             lex.AddMatcher(new KeywordMatcher(TokenType.While, "while"));

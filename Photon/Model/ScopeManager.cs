@@ -89,7 +89,7 @@ namespace Photon
             sb.Usage = usage;
             
 
-            s.Insert(sb );
+            s.Insert( sb );
 
             if ( declareNode != null )
             {

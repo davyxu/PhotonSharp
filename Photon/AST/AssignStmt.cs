@@ -48,7 +48,7 @@ namespace Photon
 
         public override string ToString()
         {
-            return "AssignStmt";
+            return string.Format("AssignStmt {0}", Op );
         }
         static Opcode Token2OpCode(TokenType tk)
         {

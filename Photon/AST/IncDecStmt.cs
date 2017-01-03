@@ -56,6 +56,9 @@ namespace Photon
             }
 
             param.CS.Add(new Command(opcode)).SetCodePos(OpPos);
+
+            // 赋值
+            X.Compile(param.SetLHS(true));
         }
     }
 

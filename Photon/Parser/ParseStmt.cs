@@ -89,10 +89,12 @@ namespace Photon
                     return ParseIfStmt();
                 case TokenType.While:
                     return ParseWhileStmt();
+                case TokenType.Break:
+                    return ParseBreakStmt();
+                case TokenType.Continue:
+                    return ParseContinueStmt();
                 case TokenType.For:
                     return ParseForStmt();
-                case TokenType.Foreach:
-                    return ParseForeachStmt();
                 case TokenType.Var:
                     return ParseVarDecl();
                 case TokenType.Const:
@@ -129,77 +131,115 @@ namespace Photon
             return new IfStmt(condition, body, elseBody, defpos);
         }
 
-        Stmt ParseForInit( )
-        {
-            var ident = ParseIdent();
-
-            ScopeManager.Declare(ident, ScopeMgr.TopScope, ident.Name, ident.DefinePos, SymbolUsage.Variable);
-
-            var assignPos = CurrTokenPos;
-
-            Expect( TokenType.Assign );
-
-            var expr = ParseRHS();
-
-            return new AssignStmt(ident, expr, assignPos, TokenType.Assign);
-        }
-
-        // for k, v in x {}
-        ForeachStmt ParseForeachStmt()
-        {
-            var forPos = CurrTokenPos;
-            Expect(TokenType.Foreach);
-
-            var forscope = ScopeMgr.OpenScope(ScopeType.For, forPos);
-
-            var key = ParseIdent();
-
-            ScopeManager.Declare(key, forscope, key.Name, key.DefinePos, SymbolUsage.Variable);
-
-            Expect(TokenType.Comma);
-
-            var value = ParseIdent();
-
-            ScopeManager.Declare(value, forscope, value.Name, value.DefinePos, SymbolUsage.Variable);
-
-            var InPos = CurrTokenPos;
-            Expect(TokenType.In);
-
-            var x = ParseRHS();
-
-            var body = ParseBlockStmt();
-
-            ScopeMgr.CloseScope();
-
-            return new ForeachStmt(key, value, x, body, forPos, InPos, forscope);
-        }
-
-        ForStmt ParseForStmt()
+        Stmt ParseForStmt()
         {
             var defPos = CurrTokenPos;
             Expect(TokenType.For);
 
-            ScopeMgr.OpenScope( ScopeType.For, defPos );
+            var forscope = ScopeMgr.OpenScope(ScopeType.For, defPos);
 
-            var init = ParseForInit();
-           
+            Stmt s1 = null;
+            Stmt s2 = null;
+            Stmt s3 = null;
+
+            // 可能是foreach
+            if (CurrTokenType != TokenType.SemiColon)
+            {
+                var idents = ParseIdentList();
+
+                foreach (var i in idents)
+                {
+                    ScopeManager.Declare(i, ScopeMgr.TopScope, i.Name, i.DefinePos, SymbolUsage.Variable);
+                }
+
+                var opPos = CurrTokenPos;
+
+                switch (CurrTokenType)
+                {
+                        // for numeral
+                    case TokenType.Assign:
+                        {
+                            Next();
+
+                            var values = ParseRHSList();
+
+                            var lhs = new List<Expr>();
+                            foreach (var id in idents)
+                            {
+                                lhs.Add(id);
+                            }
+
+                            s1 = new AssignStmt(lhs, values, opPos, TokenType.Assign);
+                        }
+                        break;
+                    // for k, v in x {}
+                    case TokenType.In:
+                        {
+                            Next();
+
+                            var x = ParseRHS();
+
+                            var body = ParseBlockStmt();
+
+                            ScopeMgr.CloseScope();
+
+                            if (idents.Count != 2)
+                            {
+                                throw new CompileException("Expect key & value in for-range", CurrTokenPos);
+                            }
+
+                            return new ForRangeStmt(idents[0], idents[1], x, opPos, new LoopTypes(defPos, forscope, body) );
+                        }
+                    default:
+                        throw new CompileException("Expect '=' or 'in' in for statement", CurrTokenPos);                        
+                }
+                
+            }
+
+            // s1和s2之间的分号
             Expect(TokenType.SemiColon);
 
+            if ( CurrTokenType != TokenType.SemiColon )
+            {
+                s2 = ParseSimpleStmt();
+            }
 
-            var conStmt = ParseSimpleStmt();
-
+            // s2和s3之间的分号
             Expect(TokenType.SemiColon);
 
-            var post = ParseSimpleStmt();
+            if (CurrTokenType != TokenType.LBrace)
+            {
+                s3 = ParseSimpleStmt();
+            }
 
-            var body = ParseBlockStmt();
+            var body2 = ParseBlockStmt();
 
             ScopeMgr.CloseScope();
 
-            var condtion = conStmt as ExprStmt;
+            Expr condition = null;
 
-            return new ForStmt(init, condtion.X[0], post, body, defPos);
-            
+            if (s2 != null)
+            {
+                condition = (s2 as ExprStmt).X[0];
+            }
+
+            return new ForStmt(s1, condition, s3, new LoopTypes(defPos, forscope, body2));
+        }
+
+        BreakStmt ParseBreakStmt()
+        {
+            var defpos = CurrTokenPos;
+            Expect(TokenType.Break);
+
+            return new BreakStmt(defpos );
+        }
+
+        ContinueStmt ParseContinueStmt()
+        {
+            var defpos = CurrTokenPos;
+            Expect(TokenType.Continue);
+
+            return new ContinueStmt(defpos);
         }
 
         WhileStmt ParseWhileStmt()

@@ -9,3 +9,7 @@ var b = int64(5.0)
 var c = 1 + 2.0
 
 var s = "hello " + "world"
+
+var m = 0
+m++
+m-=2

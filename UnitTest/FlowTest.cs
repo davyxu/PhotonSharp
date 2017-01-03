@@ -7,6 +7,9 @@ namespace UnitTest
         static void TestFlow()
         {
             new TestBox().RunFile("ForLoop.pho")
+                .CheckGlobalVarMatchValue("n", 2)
+                .CheckGlobalVarMatchValue("m", 3)
+                .CheckGlobalVarMatchValue("y", 2)                
                 .CheckGlobalVarMatchValue("x", 8)                
                 .CheckGlobalVarMatchValue("l", 2)
                 .CheckGlobalVarMatchValue("z", 1)

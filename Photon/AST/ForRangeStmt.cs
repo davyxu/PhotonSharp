@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Photon
 {
     // for k, v in x
-    internal class ForeachStmt : Stmt
+    internal class ForRangeStmt : Stmt
     {        
         public Ident Key;
 
@@ -13,23 +13,17 @@ namespace Photon
 
         public Expr X;
 
-        public BlockStmt Body;
-
-        public TokenPos ForPos;
-
         public TokenPos InPos;
 
-        public Scope ScopeInfo;
+        public LoopTypes TypeInfo;
 
-        public ForeachStmt(Ident key, Ident value, Expr x, BlockStmt body, TokenPos forpos, TokenPos inpos, Scope s )
+        public ForRangeStmt(Ident key, Ident value, Expr x, TokenPos inpos, LoopTypes types)
         {
             Key = key;
             Value = value;
-            X = x;
-            Body = body;            
-            ForPos = forpos;
+            X = x;            
             InPos = inpos;
-            ScopeInfo = s;
+            TypeInfo = types;
 
             BuildRelation();
         }
@@ -55,19 +49,19 @@ namespace Photon
 
             yield return X;
 
-            yield return Body;
+            yield return TypeInfo.Body;
         }
 
         Ident DelcareIteratorVar( )
         {
-            var iter = new Ident(new Token(ForPos, null, "@Iterator"));
-            iter.BaseScope = ScopeInfo;
+            var iter = new Ident(new Token(TypeInfo.Pos, null, "@Iterator"));
+            iter.BaseScope = TypeInfo.ScopeInfo;
             iter.Symbol = new Symbol();
             iter.Symbol.Name = iter.Name;
             iter.Symbol.Decl = this;
-            iter.Symbol.DefinePos = ForPos;
+            iter.Symbol.DefinePos = TypeInfo.Pos;
             iter.Symbol.Usage = SymbolUsage.Variable;
-            ScopeInfo.Insert(iter.Symbol);
+            TypeInfo.ScopeInfo.Insert(iter.Symbol);
 
             return iter;
         }
@@ -84,7 +78,7 @@ namespace Photon
 
             iterVar.Compile(param);
 
-            var jmpCmd = param.CS.Add(new Command(Opcode.VISIT, -1 )).SetCodePos(ForPos);
+            var jmpCmd = param.CS.Add(new Command(Opcode.VISIT, -1 )).SetCodePos(TypeInfo.Pos);
 
             Key.Compile(param.SetLHS(true));
 
@@ -92,11 +86,11 @@ namespace Photon
 
             iterVar.Compile(param.SetLHS(true));
 
-            Body.Compile(param.SetLHS(false));
+            TypeInfo.Body.Compile(param.SetLHS(false));
 
 
             param.CS.Add(new Command(Opcode.JMP, loopStart))
-                .SetCodePos(ForPos);
+                .SetCodePos(TypeInfo.Pos);
 
             // 循环结束
             jmpCmd.DataA = param.CS.CurrCmdID;

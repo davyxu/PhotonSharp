@@ -49,8 +49,7 @@ namespace Photon
         Return,         // return
         If,             // if
         Else,           // else
-        For,            // for
-        Foreach,        // foreach
+        For,            // for        
         In,             // in
         While,          // while
         Break,          // break

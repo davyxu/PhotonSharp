@@ -9,10 +9,10 @@ namespace Photon
         string _usage;
         Scope _scope;
 
-        internal Register( string usage, int maxReg )
+        internal Register( string usage )
         {
             _usage = usage;
-            _values = new Value[maxReg];
+            _values = new Value[4];
             Clear();
         }
 
@@ -26,9 +26,22 @@ namespace Photon
             _scope = s;
         }
 
-        internal void SetUsedCount( int count )
+        internal void SetCount( int count )
         {            
-            _usedSlot = count;
+            _usedSlot = count; 
+            if ( count > _values.Length )
+            {
+                var newValues = new Value[2 * count];
+                _values.CopyTo(newValues, 0);
+
+
+                for (int i = _values.Length; i < newValues.Length; i++)
+                {
+                    newValues[i] = Value.Nil;
+                }
+
+                _values = newValues;
+            }
         }
 
         internal override void Set( int index, Value v )

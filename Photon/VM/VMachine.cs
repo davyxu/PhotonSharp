@@ -139,7 +139,7 @@ namespace Photon
 
             _callStack.Push(_currFrame);
                                
-            LocalReg.SetUsedCount(newFrame.Func.RegCount);
+            LocalReg.SetCount(newFrame.Func.RegCount);
 
             LocalReg.AttachScope(func.Scope);  
         }
@@ -213,7 +213,7 @@ namespace Photon
                 Logger.DebugLine(string.Format("============ Run '{0}' ============", func.Name));
             }
 
-            rtpkg.Reg.SetUsedCount(func.RegCount);
+            rtpkg.Reg.SetCount(func.RegCount);
 
             EnterFrame(func);
 

@@ -51,6 +51,7 @@ namespace Photon
             if (parent != null)
             {
                 _class.ParentID = parent.ID;
+                _class.Parent = param.Exe.FindClassByPersistantID(parent.ID);      
 
                 return true;
             }
@@ -71,7 +72,7 @@ namespace Photon
 
         internal override void Compile(CompileParameter param)
         {
-            _class = new ValuePhoClassType( new ObjectName(param.Pkg.Name, Name.Name));
+            _class = new ValuePhoClassType(param.Pkg, new ObjectName(param.Pkg.Name, Name.Name));
             
             _class.ID = param.Exe.GenPersistantID();
 

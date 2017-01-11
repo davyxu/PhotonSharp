@@ -19,12 +19,12 @@ namespace Photon
             Value tt;
             if (!_type.GetVirtualMember(nameKey, out tt))
             {
-                throw new RuntimeException("member not exists");
+                throw new RuntimeException("member not exists:" + _type.Key2Name(nameKey));
             }
 
             if (tt.Kind == ValueKind.Func)
             {
-                throw new RuntimeException("member function is immutable");
+                throw new RuntimeException("member function is immutable:" + _type.Key2Name(nameKey));
             }
 
 
@@ -37,7 +37,7 @@ namespace Photon
             Value tt;
             if (!_type.GetVirtualMember(nameKey, out tt))
             {
-                throw new RuntimeException("member not exists");
+                throw new RuntimeException("member not exists:" + _type.Key2Name(nameKey));
             }
 
             // 函数优先返回
@@ -62,7 +62,7 @@ namespace Photon
             Value tt;
             if (!_type.GetBaseMember(nameKey, out tt))
             {
-                throw new RuntimeException("member not exists");
+                throw new RuntimeException("member not exists:" + _type.Key2Name(nameKey));
             }
 
             // 函数优先返回

@@ -9,16 +9,9 @@ namespace Photon
     {                           
         Type _data;
 
-        Package _pkg;
-
         internal Type RawValue
         {
             get { return _data; }
-        }
-
-        internal Package Pkg
-        {
-            get { return _pkg; }
         }
 
         Dictionary<int, object> _member = new Dictionary<int, object>();
@@ -161,15 +154,6 @@ namespace Photon
             });         
         }
 
-
-        internal string Key2Name(int key)
-        {
-            var v = Pkg.Exe.Constants.Get(key) as ValueString;
-            if (v == null)
-                return string.Empty;
-
-            return v.RawValue;
-        }
 
         internal object GetMember(int nameKey)
         {

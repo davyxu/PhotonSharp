@@ -7,7 +7,7 @@ namespace Photon
     {
         Dictionary<int, Value> _member = new Dictionary<int, Value>();
 
-        internal ValuePhoClassType Parent { get; private set; }
+        internal ValuePhoClassType Parent { get; set; }
         internal int ParentID = 0;
 
         internal override int GetInheritLevel( )
@@ -32,10 +32,10 @@ namespace Photon
 
         }
 
-        internal ValuePhoClassType( ObjectName name)
+        internal ValuePhoClassType(Package pkg, ObjectName name)
             : base( name )
         {
-
+            _pkg = pkg;
         }
 
         public override void Serialize(BinarySerializer ser)

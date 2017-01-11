@@ -1,6 +1,4 @@
-﻿using Photon;
-using System.Collections.Generic;
-namespace UnitTest
+﻿namespace UnitTest
 {
 
     partial class Program
@@ -8,7 +6,6 @@ namespace UnitTest
         static void Main(string[] args)
         {
             TestCase();
-            
         }        
     }
 }

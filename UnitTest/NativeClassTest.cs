@@ -53,9 +53,11 @@ namespace UnitTest
                 WrapperCodeGenerator.GenerateClass(typeof(NativeClass), "UnitTest", "../UnitTest/NativeClassWrapper.cs");
             }
             
-            new TestBox().RegisterRunFile(delegate(Executable exe){
+            new TestBox().RegisterRunFile(delegate(Executable exe)
+            {
                 exe.RegisterNativeClass(Assembly.GetExecutingAssembly(), "UnitTest.NativeClassWrapper", "NativeClassTest");
-            },"NativeClass.pho")
+            },
+            "NativeClass.pho")
                 .CheckGlobalVarMatchKind("x", ValueKind.NativeClassInstance)
                 .CheckGlobalVarMatchValue("b", "cat")
                 .CheckGlobalVarMatchValue("c", 89)

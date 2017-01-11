@@ -7,11 +7,13 @@ namespace UnitTest
     class TestBox
     {
         Executable _exe = new Executable();
-        VMachine _vm = new VMachine();
+        VMachine _vm = new VMachine();        
 
         string _caseName;
 
-        public static bool SerializeTest = true;
+        public static bool SerializeTest = false;
+
+        public static bool ShowDebugInfo = false;
 
         public VMachine VM
         {
@@ -33,9 +35,13 @@ namespace UnitTest
 
             Logger.DebugLine(string.Format("################### {0} ###################", _caseName));
 
-            Compiler.Compile(_exe, new FileLoader(Directory.GetCurrentDirectory()), src);            
+            Compiler.Compile(_exe, new FileLoader(Directory.GetCurrentDirectory()), src);
 
-            _exe.DebugPrint();            
+            if (ShowDebugInfo)
+            {
+                _exe.DebugPrint();            
+            }
+            
 
             return this;
         }
@@ -60,7 +66,11 @@ namespace UnitTest
             // 反序列化注册顺序和序列化顺序相反
             newExe.RegisterBuiltinPackage();
 
-            newExe.DebugPrint();        
+            if (ShowDebugInfo)
+            {
+                newExe.DebugPrint();        
+            }
+            
 
             return newExe;
         }
@@ -68,7 +78,7 @@ namespace UnitTest
         public TestBox Run( )
         {
             Logger.DebugLine(string.Format(">>>>>>>>>Start {0}", _caseName));
-            _vm.ShowDebugInfo = true;
+            _vm.ShowDebugInfo = ShowDebugInfo;
 
             if (SerializeTest)
             {
@@ -83,13 +93,18 @@ namespace UnitTest
             
 
             Logger.DebugLine(string.Format(">>>>>>>>>End {0}", _caseName));
-            _vm.DataStack.DebugPrint();            
 
-            _vm.LocalReg.DebugPrint();
+            if ( ShowDebugInfo )
+            {
+                _vm.DataStack.DebugPrint();
 
-            var G = _vm.GetRuntimePackageByName("main").Reg;
+                _vm.LocalReg.DebugPrint();
+
+                var G = _vm.GetRuntimePackageByName("main").Reg;
+
+                G.DebugPrint();
+            }
             
-            G.DebugPrint();
             return this;
         }
 

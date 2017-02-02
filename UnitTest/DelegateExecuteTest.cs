@@ -33,7 +33,7 @@ namespace UnitTest
             {
                 var testbox = new TestBox();
                 testbox.CompileFile("Execute.pho");
-                testbox.VM.ShowDebugInfo = true;
+                //testbox.VM.ShowDebugInfo = Test;
 
                 var retValue = testbox.VM.Execute(testbox.Exe, "main", "foo", new object[] { 1, 2 }, 2);
 

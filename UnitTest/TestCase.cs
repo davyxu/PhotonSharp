@@ -1,4 +1,5 @@
 ﻿using Photon;
+using System.IO;
 
 namespace UnitTest
 {
@@ -8,6 +9,7 @@ namespace UnitTest
 
         static void TestCase()
         {
+            Directory.SetCurrentDirectory("../../../TestCase");
 
             if (GenAllFile)
             {

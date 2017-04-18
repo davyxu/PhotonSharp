@@ -11,7 +11,7 @@ namespace UnitTest
 
         string _caseName;
 
-        public static bool SerializeTest = false;
+        public static bool SerializeTest = true;
 
         public static bool ShowDebugInfo = false;
 

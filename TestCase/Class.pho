@@ -14,13 +14,13 @@ func Animal.Do( self ){
 
 }
 
-func newAnimal( name ){
+func neAnimal( name ){
 
 	var self = new(Animal)	
 	self.Name = name
 	return self
 }
 
-var a = newAnimal( "cat" )
+var a = neAnimal( "cat" )
 
 var h, n = a.Do( )

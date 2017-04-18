@@ -55,7 +55,7 @@ namespace Photon
             lex.AddMatcher(new KeywordMatcher(TokenType.If, "if"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Else, "else"));            
             lex.AddMatcher(new KeywordMatcher(TokenType.For, "for"));
-            lex.AddMatcher(new KeywordMatcher(TokenType.In, "in"));
+            
             lex.AddMatcher(new KeywordMatcher(TokenType.While, "while"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Break, "break"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Continue, "continue"));
@@ -68,6 +68,7 @@ namespace Photon
             lex.AddMatcher(new KeywordMatcher(TokenType.Int64, "int64"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Float32, "float32"));
             lex.AddMatcher(new KeywordMatcher(TokenType.Float64, "float64"));
+            lex.AddMatcher(new KeywordMatcher(TokenType.In, "in"));
 
             lex.AddMatcher(new IdentifierMatcher(TokenType.Identifier));
             lex.AddMatcher(new UnknownMatcher(TokenType.Unknown));
